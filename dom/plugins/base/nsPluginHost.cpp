@@ -1845,6 +1845,34 @@ static bool ShouldAddPlugin(const nsPluginInfo& info, bool flashOnly) {
   return false;
 }
 
+PRBool nsPluginHost::GhettoBlacklist(nsIFile* pluginFile) {
+  nsCString leaf;
+  const char* leafStr;
+  nsresult rv;
+
+  rv = pluginFile->GetNativeLeafName(leaf);
+  if (NS_FAILED(rv)) {
+    return PR_TRUE;  // fuck 'em. blacklist.
+  }
+
+  leafStr = leaf.get();
+
+  if (!leafStr) {
+    return PR_TRUE;  // fuck 'em. blacklist.
+  }
+
+  // libgnashplugin.so, libflashplayer.so, Flash Player-10.4-10.5.plugin,
+  // NPSWF32.dll, NPSWF64.dll
+  if (strstr(leafStr, "libgnashplugin") == leafStr ||
+      strstr(leafStr, "libflashplayer") == leafStr ||
+      strstr(leafStr, "Flash Player") == leafStr ||
+      strstr(leafStr, "NPSWF") == leafStr) {
+    return PR_FALSE;
+  }
+
+  return PR_TRUE;  // fuck 'em. blacklist.
+}
+
 void nsPluginHost::AddPluginTag(nsPluginTag* aPluginTag) {
   aPluginTag->mNext = mPlugins;
   mPlugins = aPluginTag;
@@ -1970,6 +1998,10 @@ nsresult nsPluginHost::ScanPluginsDirectory(nsIFile* pluginsDir,
       }
     }
     if (isKnownInvalidPlugin) {
+      continue;
+    }
+
+    if (GhettoBlacklist(localfile)) {
       continue;
     }
 
