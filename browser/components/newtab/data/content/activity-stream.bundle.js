@@ -2625,7 +2625,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 
-const FLUENT_FILES = ["branding/brand.ftl", "browser/branding/sync-brand.ftl", "browser/newtab/onboarding.ftl"];
+const FLUENT_FILES = ["branding/tor-browser-brand.ftl", "browser/branding/sync-brand.ftl", "browser/newtab/onboarding.ftl"];
 class OnboardingCard extends react__WEBPACK_IMPORTED_MODULE_1___default.a.PureComponent {
   constructor(props) {
     super(props);
@@ -3332,7 +3332,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 
-const FLUENT_FILES = ["branding/brand.ftl", "browser/branding/brandings.ftl", "browser/branding/sync-brand.ftl", "browser/newtab/onboarding.ftl"]; // From resource://devtools/client/shared/focus.js
+const FLUENT_FILES = ["branding/tor-browser-brand.ftl", "browser/branding/brandings.ftl", "browser/branding/sync-brand.ftl", "browser/newtab/onboarding.ftl"]; // From resource://devtools/client/shared/focus.js
 
 const FOCUSABLE_SELECTOR = ["a[href]:not([tabindex='-1'])", "button:not([disabled]):not([tabindex='-1'])", "iframe:not([tabindex='-1'])", "input:not([disabled]):not([tabindex='-1'])", "select:not([disabled]):not([tabindex='-1'])", "textarea:not([disabled]):not([tabindex='-1'])", "[tabindex]:not([tabindex='-1'])"].join(", ");
 class _Trailhead extends react__WEBPACK_IMPORTED_MODULE_4___default.a.PureComponent {

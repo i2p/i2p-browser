@@ -18,7 +18,7 @@
 	<!-- The empty onload event handler is a hack to get the accept button text applied by Fluent. -->
 
   <linkset>
-    <html:link rel="localization" href="branding/brand.ftl"/>
+    <html:link rel="localization" href="branding/tor-browser-brand.ftl"/>
     <html:link rel="localization" href="toolkit/global/resetProfile.ftl"/>
   </linkset>
 

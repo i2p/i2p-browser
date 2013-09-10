@@ -20,7 +20,7 @@
         persist="screenX screenY width height">
 
   <linkset>
-    <html:link rel="localization" href="branding/brand.ftl"/>
+    <html:link rel="localization" href="branding/tor-browser-brand.ftl"/>
     <html:link rel="localization" href="browser/preferences/siteDataSettings.ftl"/>
   </linkset>
 

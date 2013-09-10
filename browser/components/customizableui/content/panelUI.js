@@ -822,7 +822,7 @@ const PanelUI = {
     this.notificationPanel.hidden = false;
 
     // Insert Fluent files when needed before notification is opened
-    MozXULElement.insertFTLIfNeeded("branding/brand.ftl");
+    MozXULElement.insertFTLIfNeeded("branding/tor-browser-brand.ftl");
     MozXULElement.insertFTLIfNeeded("browser/appMenuNotifications.ftl");
 
     // After Fluent files are loaded into document replace data-lazy-l10n-ids with actual ones

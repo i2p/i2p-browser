@@ -2,7 +2,7 @@ import {ModalOverlay} from "../../components/ModalOverlay/ModalOverlay";
 import React from "react";
 
 const FLUENT_FILES = [
-  "branding/brand.ftl",
+  "branding/tor-browser-brand.ftl",
   "browser/branding/sync-brand.ftl",
   "browser/newtab/onboarding.ftl",
 ];

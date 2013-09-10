@@ -26,7 +26,7 @@
   <xhtml:link rel="shortcut icon"
               href="chrome://mozapps/skin/extensions/extensionGeneric-16.svg"/>
   <linkset>
-    <xhtml:link rel="localization" href="branding/brand.ftl"/>
+    <xhtml:link rel="localization" href="branding/tor-browser-brand.ftl"/>
     <xhtml:link rel="localization" href="toolkit/about/aboutAddons.ftl"/>
   </linkset>
   

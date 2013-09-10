@@ -16,7 +16,7 @@
   <script src="chrome://mozapps/content/preferences/changemp.js"/>
 
   <linkset>
-    <html:link rel="localization" href="branding/brand.ftl"/>
+    <html:link rel="localization" href="branding/tor-browser-brand.ftl"/>
     <html:link rel="localization" href="toolkit/preferences/preferences.ftl"/>
   </linkset>
 

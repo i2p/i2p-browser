@@ -13,7 +13,7 @@ class L10n {
   async init() {
     const locales = Services.locale.appLocalesAsBCP47;
     const generator = L10nRegistry.generateBundles(locales, [
-      "branding/brand.ftl",
+      "branding/tor-browser-brand.ftl",
       "devtools/aboutdebugging.ftl",
     ]);
 

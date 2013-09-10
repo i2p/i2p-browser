@@ -5,7 +5,7 @@ import {OnboardingCard} from "../OnboardingMessage/OnboardingMessage";
 import React from "react";
 
 const FLUENT_FILES = [
-  "branding/brand.ftl",
+  "branding/tor-browser-brand.ftl",
   "browser/branding/brandings.ftl",
   "browser/branding/sync-brand.ftl",
   "browser/newtab/onboarding.ftl",
