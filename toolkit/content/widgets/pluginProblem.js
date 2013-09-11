@@ -45,7 +45,7 @@ this.PluginProblemWidget = class {
             <div class="msgReload">&reloadPlugin.pre;<a class="reloadLink" id="reloadLink" href="">&reloadPlugin.middle;</a>&reloadPlugin.post;</div>
           </div>
 
-          <div class="msg msgManagePlugins"><a class="action-link" id="managePluginsLink" href="">&managePlugins;</a></div>
+          <div class="msg msgManagePlugins"><a class="action-link" id="managePluginsLink" href=""></a></div>
           <div class="submitStatus" id="submitStatus">
             <div class="msg msgPleaseSubmit" id="pleaseSubmit">
               <textarea class="submitComment"

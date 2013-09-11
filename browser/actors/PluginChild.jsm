@@ -529,6 +529,7 @@ class PluginChild extends ActorChild {
     }
 
     let plugin = event.target;
+    let doc = plugin.ownerDocument;
 
     if (!(plugin instanceof Ci.nsIObjectLoadingContent)) {
       return;
@@ -607,13 +608,10 @@ class PluginChild extends ActorChild {
         break;
 
       case "PluginDisabled":
-        let manageLink = this.getPluginUI(plugin, "managePluginsLink");
-        this.addLinkClickCallback(
-          manageLink,
-          "forwardCallback",
-          "managePlugins"
-        );
-        shouldShowNotification = true;
+        // Screw the disabled message. It messes with HTML5 fallback on YouTube
+        let plugin_overlay = doc.getAnonymousElementByAttribute(plugin, "class", "mainBox");
+        if (plugin_overlay != null)
+          plugin_overlay.style.visibility = "hidden";
         break;
 
       case "PluginInstantiated":
