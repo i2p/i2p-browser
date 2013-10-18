@@ -48,15 +48,15 @@ class nsXREDirProvider final : public nsIDirectoryServiceProvider2,
 
   void DoShutdown();
 
-  static nsresult GetUserAppDataDirectory(nsIFile** aFile) {
+  nsresult GetUserAppDataDirectory(nsIFile** aFile) {
     return GetUserDataDirectory(aFile, false);
   }
-  static nsresult GetUserLocalDataDirectory(nsIFile** aFile) {
+  nsresult GetUserLocalDataDirectory(nsIFile** aFile) {
     return GetUserDataDirectory(aFile, true);
   }
 
   // GetUserDataDirectory gets the profile path from gAppData.
-  static nsresult GetUserDataDirectory(nsIFile** aFile, bool aLocal);
+  nsresult GetUserDataDirectory(nsIFile** aFile, bool aLocal);
 
   /* make sure you clone it, if you need to do stuff to it */
   nsIFile* GetGREDir() { return mGREDir; }
@@ -90,9 +90,9 @@ class nsXREDirProvider final : public nsIDirectoryServiceProvider2,
  protected:
   nsresult GetFilesInternal(const char* aProperty,
                             nsISimpleEnumerator** aResult);
-  static nsresult GetUserDataDirectoryHome(nsIFile** aFile, bool aLocal);
-  static nsresult GetSysUserExtensionsDirectory(nsIFile** aFile);
-  static nsresult GetSysUserExtensionsDevDirectory(nsIFile** aFile);
+  nsresult GetUserDataDirectoryHome(nsIFile** aFile, bool aLocal);
+  nsresult GetSysUserExtensionsDirectory(nsIFile** aFile);
+  nsresult GetSysUserExtensionsDevDirectory(nsIFile** aFile);
 #if defined(XP_UNIX) || defined(XP_MACOSX)
   static nsresult GetSystemExtensionsDirectory(nsIFile** aFile);
 #endif
