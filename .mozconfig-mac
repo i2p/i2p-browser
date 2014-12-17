@@ -43,6 +43,8 @@ ac_add_options --disable-debug
 
 ac_add_options --enable-tor-browser-data-outside-app-dir
 ac_add_options --enable-tor-browser-update
+ac_add_options --enable-signmar
+ac_add_options --enable-verify-mar
 
 ac_add_options --disable-crashreporter
 ac_add_options --disable-maintenance-service
