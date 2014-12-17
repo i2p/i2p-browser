@@ -433,6 +433,42 @@ static bool CopyUpdaterIntoUpdateDir(nsIFile* greDir, nsIFile* appDir,
 }
 #endif
 
+#if defined(TOR_BROWSER_UPDATE) && defined(MOZ_VERIFY_MAR_SIGNATURE) && \
+    defined(MAR_NSS) && defined(XP_MACOSX)
+/**
+ * Ideally we would save and restore the original library path value after
+ * the updater finishes its work (and before firefox is re-launched).
+ * Doing so would avoid potential problems like the following bug:
+ *   https://bugzilla.mozilla.org/show_bug.cgi?id=1434033
+ */
+/**
+ * Appends the specified path to the library path.
+ * This is used so that the updater can find libnss3.dylib and other
+ * shared libs.
+ *
+ * @param pathToAppend A new library path to prepend to the dynamic linker's
+ * search path.
+ */
+#include "prprf.h"
+#define PATH_SEPARATOR ":"
+#define LD_LIBRARY_PATH_ENVVAR_NAME "DYLD_LIBRARY_PATH"
+static void AppendToLibPath(const char *pathToAppend) {
+  char *pathValue = getenv(LD_LIBRARY_PATH_ENVVAR_NAME);
+  if (nullptr == pathValue || '\0' == *pathValue) {
+    // Leak the string because that is required by PR_SetEnv.
+    char *s =
+        Smprintf("%s=%s", LD_LIBRARY_PATH_ENVVAR_NAME, pathToAppend).release();
+    PR_SetEnv(s);
+  } else {
+    // Leak the string because that is required by PR_SetEnv.
+    char *s = Smprintf("%s=%s" PATH_SEPARATOR "%s", LD_LIBRARY_PATH_ENVVAR_NAME,
+                       pathToAppend, pathValue)
+                  .release();
+    PR_SetEnv(s);
+  }
+}
+#endif
+
 /**
  * Applies, switches, or stages an update.
  *
@@ -700,6 +736,20 @@ static void ApplyUpdate(nsIFile* greDir, nsIFile* updateDir, nsIFile* appDir,
   if (restart && gSafeMode) {
     PR_SetEnv("MOZ_SAFE_MODE_RESTART=1");
   }
+
+#if defined(TOR_BROWSER_UPDATE) && defined(MOZ_VERIFY_MAR_SIGNATURE) && \
+    defined(MAR_NSS) && defined(XP_MACOSX)
+  // On macOS, append the app directory to the shared library search path
+  // so the system can locate the shared libraries that are needed by the
+  // updater, e.g., libnss3.dylib).
+  nsAutoCString appPath;
+  nsresult rv2 = appDir->GetNativePath(appPath);
+  if (NS_SUCCEEDED(rv2)) {
+    AppendToLibPath(appPath.get());
+  } else {
+    LOG(("ApplyUpdate -- appDir->GetNativePath() failed (0x%x)\n", rv2));
+  }
+#endif
 
   LOG(("spawning updater process [%s]\n", updaterPath.get()));
 #ifdef DEBUG

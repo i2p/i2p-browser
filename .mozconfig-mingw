@@ -14,6 +14,8 @@ ac_add_options --enable-strip
 ac_add_options --enable-official-branding
 
 ac_add_options --enable-tor-browser-update
+ac_add_options --enable-signmar
+ac_add_options --enable-verify-mar
 ac_add_options --disable-bits-download
 
 # Let's make sure no preference is enabling either Adobe's or Google's CDM.
