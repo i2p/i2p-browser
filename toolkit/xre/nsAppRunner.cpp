@@ -1803,6 +1803,14 @@ static nsresult LaunchChild(nsINativeAppSupport* aNative,
   return NS_ERROR_LAUNCHED_CHILD_PROCESS;
 }
 
+enum ProfileStatus {
+  PROFILE_STATUS_OK,
+  PROFILE_STATUS_ACCESS_DENIED,
+  PROFILE_STATUS_READ_ONLY,
+  PROFILE_STATUS_IS_LOCKED,
+  PROFILE_STATUS_OTHER_ERROR
+};
+
 static const char kProfileProperties[] =
     "chrome://mozapps/locale/profile/profileSelection.properties";
 
@@ -1831,11 +1839,12 @@ class ReturnAbortOnError {
 
 }  // namespace
 
-static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
-                                              nsIFile* aProfileLocalDir,
-                                              nsIProfileUnlocker* aUnlocker,
-                                              nsINativeAppSupport* aNative,
-                                              nsIProfileLock** aResult) {
+static ReturnAbortOnError ProfileErrorDialog(nsIFile* aProfileDir,
+                                             nsIFile* aProfileLocalDir,
+                                             ProfileStatus aStatus,
+                                             nsIProfileUnlocker* aUnlocker,
+                                             nsINativeAppSupport* aNative,
+                                             nsIProfileLock** aResult) {
   nsresult rv;
 
   ScopedXPCOMStartup xpcom;
@@ -1862,19 +1871,35 @@ static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
 
     nsAutoString killMessage;
 #ifndef XP_MACOSX
-    rv = sb->FormatStringFromName(
-        aUnlocker ? "restartMessageUnlocker" : "restartMessageNoUnlocker",
-        params, 2, killMessage);
+    static const char16_t kRestartUnlocker[] =
+        MOZ_UTF16("restartMessageUnlocker");
+    static const char16_t kRestartNoUnlocker[] =
+        MOZ_UTF16("restartMessageNoUnlocker");
+    static const char16_t kReadOnly[] = MOZ_UTF16("profileReadOnly");
 #else
-    rv = sb->FormatStringFromName(
-        aUnlocker ? "restartMessageUnlockerMac" : "restartMessageNoUnlockerMac",
-        params, 2, killMessage);
+    static const char16_t kRestartUnlocker[] =
+        MOZ_UTF16("restartMessageUnlockerMac");
+    static const char16_t kRestartNoUnlocker[] =
+        MOZ_UTF16("restartMessageNoUnlockerMac");
+    static const char16_t kReadOnly[] = MOZ_UTF16("profileReadOnlyMac");
 #endif
-    NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
+    static const char16_t kAccessDenied[] = MOZ_UTF16("profileAccessDenied");
+
+    const char16_t* errorKey =
+        aUnlocker ? kRestartUnlocker : kRestartNoUnlocker;
+    if (PROFILE_STATUS_READ_ONLY == aStatus)
+      errorKey = kReadOnly;
+    else if (PROFILE_STATUS_ACCESS_DENIED == aStatus)
+      errorKey = kAccessDenied;
+    sb->FormatStringFromName(errorKey, params, 2, killMessage);
+
+    const char16_t* titleKey = ((PROFILE_STATUS_READ_ONLY == aStatus) ||
+                                (PROFILE_STATUS_ACCESS_DENIED == aStatus))
+                                   ? MOZ_UTF16("profileProblemTitle")
+                                   : MOZ_UTF16("restartTitle");
 
     nsAutoString killTitle;
-    rv = sb->FormatStringFromName("restartTitle", params, 1, killTitle);
-    NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
+    sb->FormatStringFromName(titleKey, params, 1, killTitle);
 
     if (gfxPlatform::IsHeadless()) {
       // TODO: make a way to turn off all dialogs when headless.
@@ -1972,10 +1997,11 @@ static nsresult ProfileMissingDialog(nsINativeAppSupport* aNative) {
   }
 }
 
-static nsresult ProfileLockedDialog(nsIToolkitProfile* aProfile,
-                                    nsIProfileUnlocker* aUnlocker,
-                                    nsINativeAppSupport* aNative,
-                                    nsIProfileLock** aResult) {
+static nsresult ProfileErrorDialog(nsIToolkitProfile* aProfile,
+                                   ProfileStatus aStatus,
+                                   nsIProfileUnlocker* aUnlocker,
+                                   nsINativeAppSupport* aNative,
+                                   nsIProfileLock** aResult) {
   nsCOMPtr<nsIFile> profileDir;
   nsresult rv = aProfile->GetRootDir(getter_AddRefs(profileDir));
   if (NS_FAILED(rv)) return rv;
@@ -1990,8 +2016,8 @@ static nsresult ProfileLockedDialog(nsIToolkitProfile* aProfile,
   rv = aProfile->GetLocalDir(getter_AddRefs(profileLocalDir));
   if (NS_FAILED(rv)) return rv;
 
-  return ProfileLockedDialog(profileDir, profileLocalDir, aUnlocker, aNative,
-                             aResult);
+  return ProfileErrorDialog(profileDir, profileLocalDir, aStatus, aUnlocker,
+                            aNative, aResult);
 }
 
 static const char kProfileManagerURL[] =
@@ -2131,6 +2157,48 @@ static nsresult GetCurrentProfile(nsIToolkitProfileService* aProfileSvc,
   return rv;
 }
 
+// Check for write permission to the profile directory by trying to create a
+// new file (after ensuring that no file with the same name exists).
+static ProfileStatus CheckProfileWriteAccess(nsIFile* aProfileDir) {
+#if defined(XP_UNIX)
+  NS_NAMED_LITERAL_STRING(writeTestFileName, ".parentwritetest");
+#else
+  NS_NAMED_LITERAL_STRING(writeTestFileName, "parent.writetest");
+#endif
+
+  nsCOMPtr<nsIFile> writeTestFile;
+  nsresult rv = aProfileDir->Clone(getter_AddRefs(writeTestFile));
+  if (NS_SUCCEEDED(rv)) rv = writeTestFile->Append(writeTestFileName);
+
+  if (NS_SUCCEEDED(rv)) {
+    bool doesExist = false;
+    rv = writeTestFile->Exists(&doesExist);
+    if (NS_SUCCEEDED(rv) && doesExist) rv = writeTestFile->Remove(true);
+  }
+
+  if (NS_SUCCEEDED(rv)) {
+    rv = writeTestFile->Create(nsIFile::NORMAL_FILE_TYPE, 0666);
+    (void)writeTestFile->Remove(true);
+  }
+
+  ProfileStatus status =
+      NS_SUCCEEDED(rv) ? PROFILE_STATUS_OK : PROFILE_STATUS_OTHER_ERROR;
+  if (NS_ERROR_FILE_ACCESS_DENIED == rv)
+    status = PROFILE_STATUS_ACCESS_DENIED;
+  else if (NS_ERROR_FILE_READ_ONLY == rv)
+    status = PROFILE_STATUS_READ_ONLY;
+
+  return status;
+}
+
+static ProfileStatus CheckProfileWriteAccess(nsIToolkitProfile* aProfile) {
+  nsCOMPtr<nsIFile> profileDir;
+  nsresult rv = aProfile->GetRootDir(getter_AddRefs(profileDir));
+  if (NS_FAILED(rv)) return PROFILE_STATUS_OTHER_ERROR;
+
+  return CheckProfileWriteAccess(profileDir);
+}
+
 static bool gDoMigration = false;
 static bool gDoProfileReset = false;
 static nsAutoCString gResetOldProfileName;
@@ -2261,6 +2329,15 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
       gDoProfileReset = false;
     }
 
+    nsCOMPtr<nsIToolkitProfile> profile;
+    rv = aProfileSvc->GetProfileByName(nsDependentCString(arg),
+                                       getter_AddRefs(profile));
+    if (NS_SUCCEEDED(rv)) {
+      ProfileStatus status = CheckProfileWriteAccess(profile);
+      if (PROFILE_STATUS_OK != status)
+        return ProfileErrorDialog(profile, status, nullptr, aNative, aResult);
+    }
+
     nsCOMPtr<nsIFile> lf;
     rv = XRE_GetFileFromPath(arg, getter_AddRefs(lf));
     NS_ENSURE_SUCCESS(rv, rv);
@@ -2275,12 +2352,17 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
       NS_ENSURE_SUCCESS(rv, rv);
     }
 
+    ProfileStatus status = CheckProfileWriteAccess(lf);
+    if (PROFILE_STATUS_OK != status)
+      return ProfileErrorDialog(lf, lf, status, nullptr, aNative, aResult);
+
     // If a profile path is specified directory on the command line, then
     // assume that the temp directory is the same as the given directory.
     rv = NS_LockProfilePath(lf, lf, getter_AddRefs(unlocker), aResult);
     if (NS_SUCCEEDED(rv)) return rv;
 
-    return ProfileLockedDialog(lf, lf, unlocker, aNative, aResult);
+    return ProfileErrorDialog(lf, lf, PROFILE_STATUS_IS_LOCKED, unlocker,
+                              aNative, aResult);
   }
 
   ar = CheckArg("createprofile", true, &arg);
@@ -2374,8 +2456,8 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
           nsCOMPtr<nsIProfileUnlocker> unlocker;
           rv = profile->Lock(getter_AddRefs(unlocker), &tempProfileLock);
           if (NS_FAILED(rv))
-            return ProfileLockedDialog(profile, unlocker, aNative,
-                                       &tempProfileLock);
+            return ProfileErrorDialog(profile, PROFILE_STATUS_IS_LOCKED,
+                                      unlocker, aNative, &tempProfileLock);
         }
 
         nsresult gotName = profile->GetName(gResetOldProfileName);
@@ -2405,7 +2487,8 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
         return NS_OK;
       }
 
-      return ProfileLockedDialog(profile, unlocker, aNative, aResult);
+      return ProfileErrorDialog(profile, PROFILE_STATUS_IS_LOCKED, unlocker,
+                                aNative, aResult);
     }
 
     if (CanShowProfileManager()) {
@@ -2492,8 +2575,8 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
           nsCOMPtr<nsIProfileUnlocker> unlocker;
           rv = profile->Lock(getter_AddRefs(unlocker), &tempProfileLock);
           if (NS_FAILED(rv))
-            return ProfileLockedDialog(profile, unlocker, aNative,
-                                       &tempProfileLock);
+            return ProfileErrorDialog(profile, PROFILE_STATUS_IS_LOCKED,
+                                      unlocker, aNative, &tempProfileLock);
         }
 
         nsresult gotName = profile->GetName(gResetOldProfileName);
@@ -2515,6 +2598,10 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
           gDoProfileReset = false;
         }
       }
+
+      ProfileStatus status = CheckProfileWriteAccess(profile);
+      if (PROFILE_STATUS_OK != status)
+        return ProfileErrorDialog(profile, status, nullptr, aNative, aResult);
 
       // If you close Firefox and very quickly reopen it, the old Firefox may
       // still be closing down. Rather than immediately showing the
@@ -2541,7 +2628,8 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
       } while (TimeStamp::Now() - start <
                TimeDuration::FromSeconds(kLockRetrySeconds));
 
-      return ProfileLockedDialog(profile, unlocker, aNative, aResult);
+      return ProfileErrorDialog(profile, PROFILE_STATUS_IS_LOCKED, unlocker,
+                                aNative, aResult);
     }
   }
 
@@ -3676,10 +3764,10 @@ ShutdownChecksMode gShutdownChecks = SCM_NOTHING;
 }  // namespace mozilla
 
 static void SetShutdownChecks() {
-// Set default first. On debug builds we crash. On nightly and local
-// builds we record. Nightlies will then send the info via telemetry,
-// but it is usefull to have the data in about:telemetry in local builds
-// too.
+  // Set default first. On debug builds we crash. On nightly and local
+  // builds we record. Nightlies will then send the info via telemetry,
+  // but it is usefull to have the data in about:telemetry in local builds
+  // too.
 
 #ifdef DEBUG
 #if defined(MOZ_CODE_COVERAGE) && defined(XP_WIN)
@@ -3808,7 +3896,7 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
     g_set_prgname(program.get());
   }
 
-    // Initialize GTK here for splash.
+  // Initialize GTK here for splash.
 
 #if defined(MOZ_WIDGET_GTK) && defined(MOZ_X11)
   // Disable XInput2 multidevice support due to focus bugginess.
@@ -3872,8 +3960,8 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
       saveDisplayArg = true;
     }
 
-      // On Wayland disabled builds read X11 DISPLAY env exclusively
-      // and don't care about different displays.
+    // On Wayland disabled builds read X11 DISPLAY env exclusively
+    // and don't care about different displays.
 #if !defined(MOZ_WAYLAND)
     if (!display_name) {
       display_name = PR_GetEnv("DISPLAY");
