@@ -1713,11 +1713,12 @@ static nsresult ProfileMissingDialog(nsINativeAppSupport* aNative) {
   }
 }
 
-static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
-                                              nsIFile* aProfileLocalDir,
-                                              nsIProfileUnlocker* aUnlocker,
-                                              nsINativeAppSupport* aNative,
-                                              nsIProfileLock** aResult) {
+static ReturnAbortOnError ProfileErrorDialog(nsIFile* aProfileDir,
+                                             nsIFile* aProfileLocalDir,
+                                             ProfileStatus aStatus,
+                                             nsIProfileUnlocker* aUnlocker,
+                                             nsINativeAppSupport* aNative,
+                                             nsIProfileLock** aResult) {
   nsresult rv;
 
   bool exists;
@@ -1750,18 +1751,31 @@ static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
 
     nsAutoString killMessage;
 #ifndef XP_MACOSX
-    rv = sb->FormatStringFromName(
-        aUnlocker ? "restartMessageUnlocker" : "restartMessageNoUnlocker",
-        params, 2, killMessage);
+    static const char* kRestartUnlocker = "restartMessageUnlocker";
+    static const char* kRestartNoUnlocker = "restartMessageNoUnlocker";
+    static const char* kReadOnly = "profileReadOnly";
 #else
-    rv = sb->FormatStringFromName(
-        aUnlocker ? "restartMessageUnlockerMac" : "restartMessageNoUnlockerMac",
-        params, 2, killMessage);
+    static const char* kRestartUnlocker = "restartMessageUnlockerMac";
+    static const char* kRestartNoUnlocker = "restartMessageNoUnlockerMac";
+    static const char* kReadOnly = "profileReadOnlyMac";
 #endif
+    static const char* kAccessDenied = "profileAccessDenied";
+
+    const char* errorKey = aUnlocker ? kRestartUnlocker : kRestartNoUnlocker;
+    if (PROFILE_STATUS_READ_ONLY == aStatus)
+      errorKey = kReadOnly;
+    else if (PROFILE_STATUS_ACCESS_DENIED == aStatus)
+      errorKey = kAccessDenied;
+    rv = sb->FormatStringFromName(errorKey, params, 2, killMessage);
     NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
 
+    const char* titleKey = ((PROFILE_STATUS_READ_ONLY == aStatus) ||
+                            (PROFILE_STATUS_ACCESS_DENIED == aStatus))
+                               ? "profileProblemTitle"
+                               : "restartTitle";
+
     nsAutoString killTitle;
-    rv = sb->FormatStringFromName("restartTitle", params, 1, killTitle);
+    rv = sb->FormatStringFromName(titleKey, params, 1, killTitle);
     NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
 
     if (gfxPlatform::IsHeadless()) {
@@ -1923,6 +1937,13 @@ static nsCOMPtr<nsIToolkitProfile> gResetOldProfile;
 static nsresult LockProfile(nsINativeAppSupport* aNative, nsIFile* aRootDir,
                             nsIFile* aLocalDir, nsIToolkitProfile* aProfile,
                             nsIProfileLock** aResult) {
+  ProfileStatus status =
+      (aProfile ? nsToolkitProfileService::CheckProfileWriteAccess(aProfile)
+                : nsToolkitProfileService::CheckProfileWriteAccess(aRootDir));
+  if (PROFILE_STATUS_OK != status)
+    return ProfileErrorDialog(aRootDir, aLocalDir, status, nullptr, aNative,
+                              aResult);
+
   // If you close Firefox and very quickly reopen it, the old Firefox may
   // still be closing down. Rather than immediately showing the
   // "Firefox is running but is not responding" message, we spend a few
@@ -1949,7 +1970,8 @@ static nsresult LockProfile(nsINativeAppSupport* aNative, nsIFile* aRootDir,
   } while (TimeStamp::Now() - start <
            TimeDuration::FromSeconds(kLockRetrySeconds));
 
-  return ProfileLockedDialog(aRootDir, aLocalDir, unlocker, aNative, aResult);
+  return ProfileErrorDialog(aRootDir, aLocalDir, PROFILE_STATUS_IS_LOCKED,
+                            unlocker, aNative, aResult);
 }
 
 // Pick a profile. We need to end up with a profile root dir, local dir and
@@ -1964,7 +1986,8 @@ static nsresult LockProfile(nsINativeAppSupport* aNative, nsIFile* aRootDir,
 static nsresult SelectProfile(nsToolkitProfileService* aProfileSvc,
                               nsINativeAppSupport* aNative, nsIFile** aRootDir,
                               nsIFile** aLocalDir, nsIToolkitProfile** aProfile,
-                              bool* aWasDefaultSelection) {
+                              bool* aWasDefaultSelection,
+                              nsIProfileLock** aResult) {
   StartupTimeline::Record(StartupTimeline::SELECT_PROFILE);
 
   nsresult rv;
@@ -2000,9 +2023,14 @@ static nsresult SelectProfile(nsToolkitProfileService* aProfileSvc,
 
   // Ask the profile manager to select the profile directories to use.
   bool didCreate = false;
-  rv = aProfileSvc->SelectStartupProfile(&gArgc, gArgv, gDoProfileReset,
-                                         aRootDir, aLocalDir, aProfile,
-                                         &didCreate, aWasDefaultSelection);
+  ProfileStatus profileStatus = PROFILE_STATUS_OK;
+  rv = aProfileSvc->SelectStartupProfile(
+      &gArgc, gArgv, gDoProfileReset, aRootDir, aLocalDir, aProfile, &didCreate,
+      aWasDefaultSelection, profileStatus);
+  if (PROFILE_STATUS_OK != profileStatus) {
+    return ProfileErrorDialog(*aRootDir, *aLocalDir, profileStatus, nullptr,
+                              aNative, aResult);
+  }
 
   if (rv == NS_ERROR_SHOW_PROFILE_MANAGER) {
     return ShowProfileManager(aProfileSvc, aNative);
@@ -3946,7 +3974,7 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
   nsCOMPtr<nsIToolkitProfile> profile;
   rv = SelectProfile(mProfileSvc, mNativeApp, getter_AddRefs(mProfD),
                      getter_AddRefs(mProfLD), getter_AddRefs(profile),
-                     &wasDefaultSelection);
+                     &wasDefaultSelection, getter_AddRefs(mProfileLock));
   if (rv == NS_ERROR_LAUNCHED_CHILD_PROCESS || rv == NS_ERROR_ABORT) {
     *aExitFlag = true;
     return 0;
