@@ -3212,12 +3212,24 @@ NS_IMETHODIMP nsPluginHost::Observe(nsISupports* aSubject, const char* aTopic,
     UnloadPlugins();
   }
   if (!strcmp(NS_PREFBRANCH_PREFCHANGE_TOPIC_ID, aTopic)) {
+    NS_ConvertUTF16toUTF8 prefName(someData);
     mPluginsDisabled = Preferences::GetBool("plugin.disable", false);
     // Unload or load plugins as needed
     if (mPluginsDisabled) {
       UnloadPlugins();
     } else {
       LoadPlugins();
+    }
+    if (prefName.Equals("plugin.disable")) {
+      nsCOMPtr<nsIObserverService> obsService =
+          mozilla::services::GetObserverService();
+      if (obsService) {
+        nsAutoString pluginPolicy;
+        pluginPolicy = mPluginsDisabled ? NS_LITERAL_STRING("disabled")
+                                        : NS_LITERAL_STRING("enabled");
+        obsService->NotifyObservers(nullptr, "plugin-policy-changed",
+                                    pluginPolicy.get());
+      }
     }
   }
   if (XRE_IsParentProcess() && (!strcmp("blocklist-updated", aTopic) ||
