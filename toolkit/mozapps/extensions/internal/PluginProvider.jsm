@@ -40,6 +40,7 @@ var PluginProvider = {
   plugins: null,
 
   startup() {
+    Services.obs.addObserver(this, "plugin-policy-changed", false);
     Services.obs.addObserver(this, LIST_UPDATED_TOPIC);
   },
 
@@ -50,6 +51,7 @@ var PluginProvider = {
   shutdown() {
     this.plugins = null;
     Services.obs.removeObserver(this, LIST_UPDATED_TOPIC);
+    Services.obs.removeObserver(this, "plugin-policy-changed");
   },
 
   async observe(aSubject, aTopic, aData) {
@@ -58,6 +60,12 @@ var PluginProvider = {
         if (this.plugins) {
           this.updatePluginList();
         }
+        break;
+      case "plugin-policy-changed":
+        if (!this.plugins)
+          this.plugins ={};
+        this.updatePluginList();
+        AddonManagerPrivate.callManagerListeners("onPluginPolicyChanged");
         break;
     }
   },
