@@ -1083,6 +1083,8 @@ Event::DefaultPrevented(JSContext* aCx) const
   return mEvent->DefaultPreventedByContent() || IsChrome(aCx);
 }
 
+// XXX: We could change this resolution in other subclasses..
+// Keypress in particular...
 double
 Event::TimeStamp() const
 {
@@ -1093,7 +1095,7 @@ double
 Event::TimeStampImpl() const
 {
   if (!sReturnHighResTimeStamp) {
-    return static_cast<double>(mEvent->mTime);
+    return static_cast<double>(mEvent->mTime / 100)*100;
   }
 
   if (mEvent->mTimeStamp.IsNull()) {
@@ -1115,7 +1117,7 @@ Event::TimeStampImpl() const
       return 0.0;
     }
 
-    return perf->GetDOMTiming()->TimeStampToDOMHighRes(mEvent->mTimeStamp);
+    return floor(perf->GetDOMTiming()->TimeStampToDOMHighRes(mEvent->mTimeStamp) / 100.0) * 100.0;
   }
 
   // For dedicated workers, we should make times relative to the navigation
