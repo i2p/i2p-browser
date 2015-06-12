@@ -29,6 +29,10 @@ import java.net.URLConnection;
 import java.util.List;
 
 public class ProxySelector {
+    private static final String TOR_PROXY_ADDRESS = "127.0.0.1";
+    private static final int TOR_SOCKS_PROXY_PORT = 9050;
+    private static final int TOR_HTTP_PROXY_PORT = 8118;
+
     public static URLConnection openConnectionWithProxy(URI uri) throws IOException {
         java.net.ProxySelector ps = java.net.ProxySelector.getDefault();
         Proxy proxy = Proxy.NO_PROXY;
@@ -39,7 +43,26 @@ public class ProxySelector {
             }
         }
 
-        return uri.toURL().openConnection(proxy);
+        /* Ignore the proxy we found from the VM, only use Tor. We can probably
+         * safely use the logic in this class in the future. */
+        return uri.toURL().openConnection(getProxy());
+    }
+
+    public static Proxy getProxy() {
+        // TODO make configurable
+        return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(TOR_PROXY_ADDRESS, TOR_SOCKS_PROXY_PORT));
+    }
+
+    public static String getProxyHostAddress() {
+        return TOR_PROXY_ADDRESS;
+    }
+
+    public static int getSocksProxyPort() {
+        return TOR_SOCKS_PROXY_PORT;
+    }
+
+    public static int getHttpProxyPort() {
+        return TOR_HTTP_PROXY_PORT;
     }
 
     public ProxySelector() {

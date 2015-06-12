@@ -7,6 +7,7 @@ package org.mozilla.mozstumbler.service.utils;
 import android.os.Build;
 import android.util.Log;
 
+import org.mozilla.gecko.util.ProxySelector;
 import org.mozilla.mozstumbler.service.AppGlobals;
 import org.mozilla.mozstumbler.service.Prefs;
 
@@ -16,7 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 
 public abstract class AbstractCommunicator {
 
@@ -72,8 +73,12 @@ public abstract class AbstractCommunicator {
             if (sMozApiKey == null || prefs != null) {
                 sMozApiKey = prefs.getMozApiKey();
             }
-            URL url = new URL(getUrlString() + "?key=" + sMozApiKey);
-            mHttpURLConnection = (HttpURLConnection) url.openConnection();
+
+            /* TBA: This was a URL, but the connection logic would simply
+             * convert the URL into a URI, and then later convert the URI back
+             * into a URL. Creating a URL at the beginning is only wasteful. */
+            URI uri = new URI(getUrlString() + "?key=" + sMozApiKey);
+            mHttpURLConnection = (HttpURLConnection) ProxySelector.openConnectionWithProxy(uri);
             mHttpURLConnection.setRequestMethod("POST");
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException(e);
