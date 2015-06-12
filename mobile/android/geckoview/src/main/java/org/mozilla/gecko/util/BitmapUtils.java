@@ -103,16 +103,9 @@ public final class BitmapUtils {
     public static Bitmap decodeUrl(final URL url) {
         InputStream stream = null;
 
-        try {
-            if ("jar".equals(url.getProtocol())) {
-                final Context context = GeckoAppShell.getApplicationContext();
-                stream = GeckoJarReader.getStream(context, url.toString());
-            } else {
-                stream = url.openStream();
-            }
-        } catch (IOException e) {
-            Log.w(LOGTAG, "decodeUrl: IOException downloading " + url);
-            return null;
+        if ("jar".equals(url.getProtocol())) {
+            final Context context = GeckoAppShell.getApplicationContext();
+            stream = GeckoJarReader.getStream(context, url.toString());
         }
 
         if (stream == null) {

@@ -1810,39 +1810,41 @@ public class GeckoAppShell {
 
     @WrapForJNI
     private static URLConnection getConnection(final String url) {
-        try {
-            String spec;
-            if (url.startsWith("android://")) {
-                spec = url.substring(10);
-            } else {
-                spec = url.substring(8);
-            }
+        // Bug 31144 - Prevent potential proxy-bypass
 
-            // Check if we are loading a package icon.
-            try {
-                if (spec.startsWith("icon/")) {
-                    String[] splits = spec.split("/");
-                    if (splits.length != 2) {
-                        return null;
-                    }
-                    final String pkg = splits[1];
-                    final PackageManager pm = getApplicationContext().getPackageManager();
-                    final Drawable d = pm.getApplicationIcon(pkg);
-                    final Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(d);
-                    return new BitmapConnection(bitmap);
-                }
-            } catch (Exception ex) {
-                Log.e(LOGTAG, "error", ex);
-            }
+        //try {
+        //    String spec;
+        //    if (url.startsWith("android://")) {
+        //        spec = url.substring(10);
+        //    } else {
+        //        spec = url.substring(8);
+        //    }
 
-            // if the colon got stripped, put it back
-            int colon = spec.indexOf(':');
-            if (colon == -1 || colon > spec.indexOf('/')) {
-                spec = spec.replaceFirst("/", ":/");
-            }
-        } catch (Exception ex) {
-            return null;
-        }
+        //    // Check if we are loading a package icon.
+        //    try {
+        //        if (spec.startsWith("icon/")) {
+        //            String[] splits = spec.split("/");
+        //            if (splits.length != 2) {
+        //                return null;
+        //            }
+        //            final String pkg = splits[1];
+        //            final PackageManager pm = getApplicationContext().getPackageManager();
+        //            final Drawable d = pm.getApplicationIcon(pkg);
+        //            final Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(d);
+        //            return new BitmapConnection(bitmap);
+        //        }
+        //    } catch (Exception ex) {
+        //        Log.e(LOGTAG, "error", ex);
+        //    }
+
+        //    // if the colon got stripped, put it back
+        //    int colon = spec.indexOf(':');
+        //    if (colon == -1 || colon > spec.indexOf('/')) {
+        //        spec = spec.replaceFirst("/", ":/");
+        //    }
+        //} catch (Exception ex) {
+        //    return null;
+        //}
         return null;
     }
 

@@ -23,9 +23,11 @@ import org.json.simple.JSONObject;
 import org.mozilla.gecko.background.common.GlobalConstants;
 import org.mozilla.gecko.background.common.log.Logger;
 import org.mozilla.gecko.sync.ExtendedJSONObject;
+import org.mozilla.gecko.util.ProxySelector;
 
 import ch.boye.httpclientandroidlib.Header;
 import ch.boye.httpclientandroidlib.HttpEntity;
+import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.HttpVersion;
 import ch.boye.httpclientandroidlib.client.AuthCache;
@@ -40,6 +42,7 @@ import ch.boye.httpclientandroidlib.client.methods.HttpRequestBase;
 import ch.boye.httpclientandroidlib.client.methods.HttpUriRequest;
 import ch.boye.httpclientandroidlib.client.protocol.ClientContext;
 import ch.boye.httpclientandroidlib.conn.ClientConnectionManager;
+import ch.boye.httpclientandroidlib.conn.params.ConnRoutePNames;
 import ch.boye.httpclientandroidlib.conn.scheme.PlainSocketFactory;
 import ch.boye.httpclientandroidlib.conn.scheme.Scheme;
 import ch.boye.httpclientandroidlib.conn.scheme.SchemeRegistry;
@@ -215,6 +218,10 @@ public class BaseResource implements Resource {
     // We could reuse these client instances, except that we mess around
     // with their parameters… so we'd need a pool of some kind.
     client = new DefaultHttpClient(getConnectionManager());
+    /* TBA: We need a HTTP Proxy here */
+    HttpHost defaultProxy = new HttpHost(ProxySelector.getProxyHostAddress(),
+                                         ProxySelector.getHttpProxyPort());
+    client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, defaultProxy);
 
     // TODO: Eventually we should use Apache HttpAsyncClient. It's not out of alpha yet.
     // Until then, we synchronously make the request, then invoke our delegate's callback.

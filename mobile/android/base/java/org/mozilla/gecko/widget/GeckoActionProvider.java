@@ -23,6 +23,7 @@ import org.mozilla.gecko.overlays.ui.ShareDialog;
 import org.mozilla.gecko.menu.MenuItemSwitcherLayout;
 import org.mozilla.gecko.util.IOUtils;
 import org.mozilla.gecko.util.IntentUtils;
+import org.mozilla.gecko.util.ProxySelector;
 import org.mozilla.gecko.util.ThreadUtils;
 
 import android.content.Context;
@@ -44,7 +45,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -344,9 +346,9 @@ public class GeckoActionProvider {
                 InputStream is = null;
                 try {
                     final byte[] buf = new byte[2048];
-                    final URL url = new URL(src);
+                    final URI uri = new URI(src);
                     final String filename = URLUtil.guessFileName(src, null, type);
-                    is = url.openStream();
+                    is = ProxySelector.openConnectionWithProxy(uri).getInputStream();
 
                     final File imageFile = new File(dir, filename);
                     os = new FileOutputStream(imageFile);
@@ -362,6 +364,8 @@ public class GeckoActionProvider {
                     IOUtils.safeStreamClose(is);
                 }
             }
+        } catch (URISyntaxException ex) {
+            // Handle this the same way as IOException
         } catch (IOException ex) {
             // If something went wrong, we'll just leave the intent un-changed
         } finally {

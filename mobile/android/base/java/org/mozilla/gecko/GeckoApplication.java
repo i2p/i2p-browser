@@ -61,6 +61,7 @@ import org.mozilla.gecko.util.GeckoBundle;
 import org.mozilla.gecko.util.HardwareUtils;
 import org.mozilla.gecko.util.IntentUtils;
 import org.mozilla.gecko.util.PRNGFixes;
+import org.mozilla.gecko.util.ProxySelector;
 import org.mozilla.gecko.util.ShortcutUtils;
 import org.mozilla.gecko.util.ThreadUtils;
 import org.mozilla.geckoview.GeckoRuntime;
@@ -71,7 +72,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 public class GeckoApplication extends Application
@@ -861,11 +862,16 @@ public class GeckoApplication extends Application
                 byte[] buf = Base64.decode(aSrc.substring(dataStart + 1), Base64.DEFAULT);
                 image = BitmapUtils.decodeByteArray(buf);
             } else {
+                URI uri;
                 int byteRead;
                 byte[] buf = new byte[4192];
                 os = new ByteArrayOutputStream();
-                URL url = new URL(aSrc);
-                is = url.openStream();
+                try {
+                    uri = new URI(aSrc);
+                } catch (Exception e) {
+                    return;
+                }
+                is = ProxySelector.openConnectionWithProxy(uri).getInputStream();
 
                 // Cannot read from same stream twice. Also, InputStream from
                 // URL does not support reset. So converting to byte array.
