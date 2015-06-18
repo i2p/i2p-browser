@@ -63,10 +63,13 @@ final class UnusedResourcesUtil {
 
     public static final int[] USED_IN_SUGGESTEDSITES = {
             R.drawable.suggestedsites_amazon,
+            R.drawable.suggestedsites_checktor,
             R.drawable.suggestedsites_facebook,
+            R.drawable.suggestedsites_guardianproject,
             R.drawable.suggestedsites_restricted_fxsupport,
             R.drawable.suggestedsites_restricted_mozilla,
             R.drawable.suggestedsites_twitter,
+            R.drawable.suggestedsites_torproject,
             R.drawable.suggestedsites_webmaker,
             R.drawable.suggestedsites_wikipedia,
             R.drawable.suggestedsites_youtube,
