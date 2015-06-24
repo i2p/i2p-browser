@@ -266,10 +266,11 @@ if 'Android' != CONFIG['OS_TARGET']:
     ]
 else:
     DEFINES['ANDROID'] = True
-    EXTRA_JS_MODULES += [
-        'secondscreen/RokuApp.jsm',
-        'secondscreen/SimpleServiceDiscovery.jsm',
-    ]
+    if not CONFIG['TOR_BROWSER_VERSION']:
+        EXTRA_JS_MODULES += [
+            'secondscreen/RokuApp.jsm',
+            'secondscreen/SimpleServiceDiscovery.jsm',
+        ]
 
 
 if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'windows':
