@@ -3711,7 +3711,7 @@ public class BrowserApp extends GeckoApp
                                 !PrefUtils.getStringSet(prefs,
                                                         ClearOnShutdownPref.PREF,
                                                         new HashSet<String>()).isEmpty();
-        aMenu.findItem(R.id.quit).setVisible(visible);
+        aMenu.findItem(R.id.quit).setVisible(true);
 
         // If tab data is unavailable we disable most of the context menu and related items and
         // return early.
