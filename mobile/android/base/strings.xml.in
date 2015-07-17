@@ -55,6 +55,8 @@
 
   <string name="firstrun_welcome_restricted">&onboard_start_restricted1;</string>
 
+  <string name="sync_not_supported">&sync_not_supported;</string>
+
   <string name="bookmarks_title">&bookmarks_title;</string>
   <string name="history_title">&history_title;</string>
 

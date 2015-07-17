@@ -3,3 +3,5 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <!ENTITY firstrun_urlbar_subtext2 "A modern mobile browser from The Tor Project, the non-profit committed to a free and open web.">
+
+<!ENTITY sync_not_supported "Sync is not currently supported in Tor Browser on Android">
