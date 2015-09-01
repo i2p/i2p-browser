@@ -13,11 +13,13 @@ import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -35,6 +37,9 @@ import android.nfc.NfcEvent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.StrictMode;
@@ -1273,6 +1278,16 @@ public class BrowserApp extends GeckoApp
         }
     }
 
+    private BroadcastReceiver torStatusReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (TextUtils.equals(intent.getAction(), OrbotHelper.ACTION_STATUS)) {
+                GeckoAppShell.setTorStatus(intent);
+            }
+        }
+    };
+
     public void checkStartOrbot() {
         if (!OrbotHelper.isOrbotInstalled(this)) {
             final Intent installOrbotIntent = OrbotHelper.getOrbotInstallIntent(this);
@@ -1293,6 +1308,14 @@ public class BrowserApp extends GeckoApp
             });
             builder.show();
         } else {
+            /* run in thread so Tor status updates will be received while the
+            * Gecko event sync is blocking the main thread */
+            HandlerThread handlerThread = new HandlerThread("torStatusReceiver");
+            handlerThread.start();
+            Looper looper = handlerThread.getLooper();
+            Handler handler = new Handler(looper);
+            registerReceiver(torStatusReceiver, new IntentFilter(OrbotHelper.ACTION_STATUS),
+                null, handler);
             OrbotHelper.requestStartTor(this);
         }
     }
@@ -1334,6 +1357,15 @@ public class BrowserApp extends GeckoApp
 
         for (BrowserAppDelegate delegate : delegates) {
             delegate.onPause(this);
+        }
+
+        if (torStatusReceiver != null)
+        {
+            try {
+                unregisterReceiver(torStatusReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.w(LOGTAG, "Tor status receiver couldn't be unregistered", e);
+            }
         }
     }
 

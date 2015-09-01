@@ -18,10 +18,13 @@ import java.net.Proxy;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -38,6 +41,8 @@ import org.mozilla.gecko.util.IOUtils;
 import org.mozilla.gecko.util.ProxySelector;
 import org.mozilla.gecko.util.ThreadUtils;
 import org.mozilla.geckoview.BuildConfig;
+
+import info.guardianproject.netcipher.proxy.OrbotHelper;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -110,7 +115,11 @@ public class GeckoAppShell
     // We have static members only.
     private GeckoAppShell() { }
 
+    /* Initialize as STATUS_OFF */
+    private static String sTorStatus = OrbotHelper.STATUS_OFF;
+
     private static final CrashHandler CRASH_HANDLER = new CrashHandler() {
+
         @Override
         protected String getAppPackageName() {
             final Context appContext = getAppContext();
@@ -200,6 +209,8 @@ public class GeckoAppShell
     static private int sDensityDpi;
     static private int sScreenDepth;
 
+    static final Queue<Intent> PENDING_URL_INTENTS = new ConcurrentLinkedQueue<Intent>();
+
     /* Is the value in sVibrationEndTime valid? */
     private static boolean sVibrationMaybePlaying;
 
@@ -250,6 +261,16 @@ public class GeckoAppShell
     public static native void notifyUriVisited(String uri);
 
     private static Rect sScreenSize;
+
+    static void sendPendingUrlIntents() {
+        try {
+            Context context = getApplicationContext();
+            while (!PENDING_URL_INTENTS.isEmpty()) {
+                final Intent intent = PENDING_URL_INTENTS.poll();
+                context.startActivity(intent);
+            }
+        } catch (NoSuchElementException e) {}
+    }
 
     @WrapForJNI(stubName = "NotifyObservers", dispatchTo = "gecko")
     private static native void nativeNotifyObservers(String topic, String data);
@@ -1873,5 +1894,16 @@ public class GeckoAppShell
     @WrapForJNI
     public static String getDefaultLocale() {
         return Locale.getDefault().toString();
+    }
+
+    public static void setTorStatus(Intent intent) {
+        sTorStatus = intent.getStringExtra(OrbotHelper.EXTRA_STATUS);
+        if (OrbotHelper.STATUS_ON.equals(sTorStatus)) {
+            sendPendingUrlIntents();
+        }
+    }
+
+    public static String getTorStatus() {
+        return sTorStatus;
     }
 }
