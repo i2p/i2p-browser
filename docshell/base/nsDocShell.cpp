@@ -8144,11 +8144,76 @@ nsresult nsDocShell::CreateContentViewer(const nsACString& aContentType,
     aOpenedChannel->GetURI(getter_AddRefs(mLoadingURI));
   }
   FirePageHideNotification(!mSavingOldViewer);
+
   if (mIsBeingDestroyed) {
     // Force to stop the newly created orphaned viewer.
     viewer->Stop();
     return NS_ERROR_DOCSHELL_DYING;
   }
+
+  // Tor bug 16620: Clear window.name of top-level documents if
+  // there is no referrer. We make an exception for new windows,
+  // e.g., window.open(url, "MyName").
+  bool isNewWindowTarget = false;
+  nsCOMPtr<nsIPropertyBag2> props(do_QueryInterface(aRequest, &rv));
+  if (props) {
+    props->GetPropertyAsBool(NS_LITERAL_STRING("docshell.newWindowTarget"),
+                             &isNewWindowTarget);
+  }
+
+  if (!isNewWindowTarget) {
+    nsCOMPtr<nsIHttpChannel> httpChannel(do_QueryInterface(aOpenedChannel));
+    nsCOMPtr<nsIURI> httpReferrer;
+    if (httpChannel) {
+      nsCOMPtr<nsIReferrerInfo> referrerInfo;
+      rv = httpChannel->GetReferrerInfo(getter_AddRefs(referrerInfo));
+      NS_ENSURE_SUCCESS(rv, rv);
+      if (referrerInfo) {
+        // We want GetComputedReferrer() instead of GetOriginalReferrer(), since
+        // the former takes into consideration referrer policy, protocol
+        // whitelisting...
+        httpReferrer = referrerInfo->GetComputedReferrer();
+      }
+    }
+
+    bool isTopFrame = true;
+    nsCOMPtr<nsIDocShellTreeItem> targetParentTreeItem;
+    rv = GetSameTypeParent(getter_AddRefs(targetParentTreeItem));
+    if (NS_SUCCEEDED(rv) && targetParentTreeItem) {
+      isTopFrame = false;
+    }
+
+#ifdef DEBUG_WINDOW_NAME
+    printf("DOCSHELL %p CreateContentViewer - possibly clearing window.name:\n",
+           this);
+    printf("  current window.name: \"%s\"\n",
+           NS_ConvertUTF16toUTF8(mName).get());
+
+    nsAutoCString curSpec, loadingSpec;
+    if (this->mCurrentURI) mCurrentURI->GetSpec(curSpec);
+    if (mLoadingURI) mLoadingURI->GetSpec(loadingSpec);
+    printf("  current URI: %s\n", curSpec.get());
+    printf("  loading URI: %s\n", loadingSpec.get());
+    printf("  is top document: %s\n", isTopFrame ? "Yes" : "No");
+
+    if (!httpReferrer) {
+      printf("  referrer: None\n");
+    } else {
+      nsAutoCString refSpec;
+      httpReferrer->GetSpec(refSpec);
+      printf("  referrer: %s\n", refSpec.get());
+    }
+#endif
+
+    bool clearName = isTopFrame && !httpReferrer;
+    if (clearName) SetName(NS_LITERAL_STRING(""));
+
+#ifdef DEBUG_WINDOW_NAME
+    printf("  action taken: %s window.name\n",
+           clearName ? "Cleared" : "Preserved");
+#endif
+  }
+
   mLoadingURI = nullptr;
 
   // Set mFiredUnloadEvent = false so that the unload handler for the
