@@ -84,6 +84,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -1101,6 +1102,9 @@ public abstract class GeckoApp extends GeckoActivity
         }
 
         super.onCreate(savedInstanceState);
+
+        // disable screenshots and pic in "recent apps"
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(getLayout());
 
