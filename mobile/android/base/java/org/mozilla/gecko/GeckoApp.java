@@ -139,6 +139,7 @@ public abstract class GeckoApp extends GeckoActivity
     public static final String ACTION_INIT_PW              = "org.mozilla.gecko.INIT_PW";
     public static final String ACTION_SWITCH_TAB           = "org.mozilla.gecko.SWITCH_TAB";
     public static final String ACTION_SHUTDOWN             = "org.mozilla.gecko.SHUTDOWN";
+    public static final String ACTION_PANIC_TRIGGER        = "info.guardianproject.panic.action.TRIGGER";
 
     public static final String INTENT_REGISTER_STUMBLER_LISTENER = "org.mozilla.gecko.STUMBLER_REGISTER_LOCAL_LISTENER";
 
@@ -584,42 +585,50 @@ public abstract class GeckoApp extends GeckoActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.quit) {
-            // Make sure the Guest Browsing notification goes away when we quit.
-            GuestSession.hideNotification(this);
-
-            final SharedPreferences prefs = getSharedPreferencesForProfile();
-            final Set<String> clearSet = PrefUtils.getStringSet(
-                    prefs, ClearOnShutdownPref.PREF, new HashSet<String>());
-
-            final GeckoBundle clearObj = new GeckoBundle(clearSet.size());
-            for (final String clear : clearSet) {
-                clearObj.putBoolean(clear, true);
-            }
-
-            final GeckoBundle res = new GeckoBundle(2);
-            res.putBundle("sanitize", clearObj);
-
-            // If the user wants to clear open tabs, or else has opted out of session
-            // restore and does want to clear history, we also want to prevent the current
-            // session info from being saved.
-            if (clearObj.containsKey("private.data.openTabs")) {
-                res.putBoolean("dontSaveSession", true);
-            } else if (clearObj.containsKey("private.data.history")) {
-
-                final String sessionRestore =
-                        getSessionRestorePreference(getSharedPreferences());
-                res.putBoolean("dontSaveSession", "quit".equals(sessionRestore));
-            }
-
-            EventDispatcher.getInstance().dispatch("Browser:Quit", res);
-
-            // We don't call shutdown here because this creates a race condition which
-            // can cause the clearing of private data to fail. Instead, we shut down the
-            // UI only after we're done sanitizing.
+            quitAndClear();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private GeckoBundle createSanitizeData() {
+        final SharedPreferences prefs = getSharedPreferencesForProfile();
+        final Set<String> clearSet = PrefUtils.getStringSet(
+            prefs, ClearOnShutdownPref.PREF, new HashSet<String>());
+
+        final GeckoBundle clearObj = new GeckoBundle(clearSet.size());
+        for (final String clear : clearSet) {
+            clearObj.putBoolean(clear, true);
+        }
+        return clearObj;
+    }
+
+    private void quitAndClear() {
+        // Make sure the Guest Browsing notification goes away when we quit.
+        GuestSession.hideNotification(this);
+
+        final GeckoBundle clearObj = createSanitizeData();
+        final GeckoBundle res = new GeckoBundle(2);
+        res.putBundle("sanitize", clearObj);
+
+        // If the user wants to clear open tabs, or else has opted out of session
+        // restore and does want to clear history, we also want to prevent the current
+        // session info from being saved.
+        if (clearObj.containsKey("private.data.openTabs")) {
+            res.putBoolean("dontSaveSession", true);
+        } else if (clearObj.containsKey("private.data.history")) {
+
+            final String sessionRestore =
+                    getSessionRestorePreference(getSharedPreferences());
+            res.putBoolean("dontSaveSession", "quit".equals(sessionRestore));
+        }
+
+        EventDispatcher.getInstance().dispatch("Browser:Quit", res);
+
+        // We don't call shutdown here because this creates a race condition which
+        // can cause the clearing of private data to fail. Instead, we shut down the
+        // UI only after we're done sanitizing.
     }
 
     @Override
@@ -1163,6 +1172,13 @@ public abstract class GeckoApp extends GeckoActivity
         mTextSelection.create();
 
         final Bundle finalSavedInstanceState = savedInstanceState;
+
+        // When the browser is forcefully closed, its private data is not
+        // deleted, even if the history.clear_on_exit is set. Here we are calling
+        // the Sanitize:ClearData in the startup to make sure the private
+        // data was cleared.
+        EventDispatcher.getInstance().dispatch("Sanitize:ClearData", createSanitizeData());
+
         ThreadUtils.postToBackgroundThread(new Runnable() {
             @Override
             public void run() {
@@ -1605,6 +1621,8 @@ public abstract class GeckoApp extends GeckoActivity
             // Copy extras.
             settingsIntent.putExtras(intent.getUnsafe());
             startActivity(settingsIntent);
+        } else if (ACTION_PANIC_TRIGGER.equals(action)) {
+            quitAndClear();
         }
 
         mPromptService = new PromptService(this, getAppEventDispatcher());
