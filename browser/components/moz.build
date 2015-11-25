@@ -86,9 +86,12 @@ EXTRA_COMPONENTS += [
 ]
 
 EXTRA_JS_MODULES += [
-    'BrowserContentHandler.jsm',
     'BrowserGlue.jsm',
     'distribution.js',
+]
+
+EXTRA_PP_JS_MODULES += [
+    'BrowserContentHandler.jsm',
 ]
 
 BROWSER_CHROME_MANIFESTS += [

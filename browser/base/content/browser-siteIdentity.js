@@ -50,7 +50,7 @@ var gIdentityHandler = {
    * RegExp used to decide if an about url should be shown as being part of
    * the browser UI.
    */
-  _secureInternalUIWhitelist: /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|permissions|preferences|rights|sessionrestore|support|welcomeback)(?:[?#]|$)/i,
+  _secureInternalUIWhitelist: (AppConstants.TOR_BROWSER_UPDATE ? /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|permissions|preferences|rights|sessionrestore|support|welcomeback|tor|tbupdate)(?:[?#]|$)/i : /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|permissions|preferences|rights|sessionrestore|support|welcomeback|tor)(?:[?#]|$)/i),
 
   get _isBroken() {
     return this._state & Ci.nsIWebProgressListener.STATE_IS_BROKEN;

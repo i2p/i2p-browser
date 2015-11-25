@@ -45,3 +45,8 @@ FINAL_TARGET_FILES.actors += [
     'URIFixupChild.jsm',
     'WebRTCChild.jsm',
 ]
+
+if CONFIG['TOR_BROWSER_UPDATE']:
+    FINAL_TARGET_FILES.actors += [
+        'AboutTBUpdateChild.jsm',
+    ]

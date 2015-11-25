@@ -1,0 +1,74 @@
+/*
+ * Copyright (c) 2019, The Tor Project, Inc.
+ * See LICENSE for licensing information.
+ *
+ * vim: set sw=2 sts=2 ts=8 et syntax=css:
+ */
+
+:root {
+  --abouttor-text-color: white;
+  --abouttor-bg-toron-color: #420C5D;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  color: var(--abouttor-text-color);
+  background-color: var(--abouttor-bg-toron-color);
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+a {
+  color: var(--abouttor-text-color);
+}
+
+.two-column-grid {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  grid-column-gap: 50px;
+  margin: 10px 0px 0px 50px;
+}
+
+.two-column-grid div {
+  margin-top: 40px;
+  align-self: baseline;  /* Align baseline of text across the row. */
+}
+
+.label-column {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/*
+ * Use a reduced top margin to bring the row that contains the
+ * "visit our website" link closer to the row that precedes it. This
+ * looks better because the "visit our website" row does not have a
+ * label in the left column.
+ */
+div.more-info-row {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+#version-content {
+  font-size: 50px;
+  font-weight: 300;
+}
+
+body:not([havereleasedate]) .release-date-cell {
+  display: none;
+}
+
+#releasedate-content {
+  font-size: 17px;
+}
+
+#releasenotes-label {
+  align-self: start;  /* Anchor "Release Notes" label at the top. */
+}
+
+#releasenotes-content {
+  font-family: monospace;
+  font-size: 15px;
+  white-space: pre;
+}
