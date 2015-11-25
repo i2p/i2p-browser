@@ -163,6 +163,11 @@ EXTRA_JS_MODULES += [
     'ZoomUI.jsm',
 ]
 
+if CONFIG['TOR_BROWSER_UPDATE']:
+    EXTRA_PP_JS_MODULES += [
+        'AboutTBUpdate.jsm',
+    ]
+
 if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'windows':
     EXTRA_JS_MODULES += [
         'Windows8WindowFrameColor.jsm',

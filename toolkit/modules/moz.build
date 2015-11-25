@@ -321,6 +321,9 @@ for var in ('MOZ_TOOLKIT_SEARCH',
     if CONFIG[var]:
         DEFINES[var] = True
 
+if CONFIG['TOR_BROWSER_UPDATE']:
+    DEFINES['TOR_BROWSER_UPDATE'] = 1
+
 JAR_MANIFESTS += ['jar.mn']
 
 DEFINES['TOPOBJDIR'] = TOPOBJDIR

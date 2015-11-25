@@ -304,6 +304,9 @@ var gInitialPages = [
   "about:welcomeback",
   "about:sessionrestore"
 ];
+if (AppConstants.TOR_BROWSER_UPDATE) {
+  gInitialPages.push("about:tbupdate");
+}
 
 function isInitialPage(url) {
   return gInitialPages.includes(url) || url == BROWSER_NEW_TAB_URL;
@@ -2770,7 +2773,8 @@ function URLBarSetURI(aURI) {
     // Replace initial page URIs with an empty string
     // only if there's no opener (bug 370555).
     if (isInitialPage(uri.spec) &&
-        checkEmptyPageOrigin(gBrowser.selectedBrowser, uri)) {
+        checkEmptyPageOrigin(gBrowser.selectedBrowser, uri))
+    {
       value = "";
     } else {
       // We should deal with losslessDecodeURI throwing for exotic URIs
@@ -7470,7 +7474,7 @@ var gIdentityHandler = {
    * RegExp used to decide if an about url should be shown as being part of
    * the browser UI.
    */
-  _secureInternalUIWhitelist: /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|newaddon|permissions|preferences|rights|searchreset|sessionrestore|support|welcomeback)(?:[?#]|$)/i,
+  _secureInternalUIWhitelist: (AppConstants.TOR_BROWSER_UPDATE ? /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|newaddon|permissions|preferences|rights|searchreset|sessionrestore|support|welcomeback|tor|tbupdate)(?:[?#]|$)/i : /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|newaddon|permissions|preferences|rights|searchreset|sessionrestore|support|welcomeback|tor)(?:[?#]|$)/i),
 
   get _isBroken() {
     return this._state & Ci.nsIWebProgressListener.STATE_IS_BROKEN;

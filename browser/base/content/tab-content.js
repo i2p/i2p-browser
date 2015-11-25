@@ -7,6 +7,8 @@
 
 /* eslint-env mozilla/frame-script */
 
+var {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
+
 ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 ChromeUtils.import("resource://gre/modules/Services.jsm");
 
@@ -353,6 +355,69 @@ var AboutReaderListener = {
 };
 AboutReaderListener.init();
 
+#ifdef TOR_BROWSER_UPDATE
+let AboutTBUpdateListener = {
+  init: function(chromeGlobal) {
+    chromeGlobal.addEventListener('AboutTBUpdateLoad', this, false, true);
+  },
+
+  get isAboutTBUpdate() {
+    return content.document.documentURI.toLowerCase() == "about:tbupdate";
+  },
+
+  handleEvent: function(aEvent) {
+    if (!this.isAboutTBUpdate)
+      return;
+
+    switch (aEvent.type) {
+      case "AboutTBUpdateLoad":
+        this.onPageLoad();
+        break;
+      case "pagehide":
+        this.onPageHide(aEvent);
+        break;
+    }
+  },
+
+  receiveMessage: function(aMessage) {
+    if (this.isAboutTBUpdate && (aMessage.name == "AboutTBUpdate:Update"))
+      this.onUpdate(aMessage.data);
+  },
+
+  // aData may contain the following string properties:
+  //   version
+  //   releaseDate
+  //   moreInfoURL
+  //   releaseNotes
+  onUpdate: function(aData) {
+    let doc = content.document;
+    doc.getElementById("version-content").textContent = aData.version;
+    if (aData.releaseDate) {
+      doc.body.setAttribute("havereleasedate", "true");
+      doc.getElementById("releasedate-content").textContent = aData.releaseDate;
+    }
+    if (aData.moreInfoURL)
+      doc.getElementById("infolink").setAttribute("href", aData.moreInfoURL);
+    doc.getElementById("releasenotes-content").textContent = aData.releaseNotes;
+  },
+
+  onPageLoad: function() {
+    addMessageListener("AboutTBUpdate:Update", this);
+    addEventListener("pagehide", this, true);
+    sendAsyncMessage("AboutTBUpdate:RequestUpdate");
+  },
+
+  onPageHide: function(aEvent) {
+    if (aEvent.target.defaultView.frameElement) {
+      return;
+    }
+    removeMessageListener("AboutTBUpdate:Update", this);
+    removeEventListener("pagehide", this, true);
+  },
+
+};
+AboutTBUpdateListener.init(this);
+#endif
 
 var ContentSearchMediator = {
 

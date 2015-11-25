@@ -67,4 +67,7 @@ if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('windows', 'cocoa', 'gtk3'):
 if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('windows', 'gtk3'):
     DEFINES['MENUBAR_CAN_AUTOHIDE'] = 1
 
+if CONFIG['TOR_BROWSER_UPDATE']:
+    DEFINES['TOR_BROWSER_UPDATE'] = 1
+
 JAR_MANIFESTS += ['jar.mn']
