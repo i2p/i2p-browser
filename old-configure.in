@@ -3179,6 +3179,21 @@ if test -n "$MOZ_UPDATER"; then
 fi
 
 dnl ========================================================
+dnl Tor additions
+dnl ========================================================
+MOZ_ARG_ENABLE_BOOL(tor-browser-data-outside-app-dir,
+[  --enable-tor-browser-data-outside-app-dir
+                          Enable Tor Browser data outside of app directory],
+    TOR_BROWSER_DATA_OUTSIDE_APP_DIR=1,
+    TOR_BROWSER_DATA_OUTSIDE_APP_DIR= )
+
+if test -n "$TOR_BROWSER_DATA_OUTSIDE_APP_DIR"; then
+    AC_DEFINE(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+fi
+
+AC_SUBST(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+
+dnl ========================================================
 dnl parental controls (for Windows Vista)
 dnl ========================================================
 MOZ_ARG_DISABLE_BOOL(parental-controls,

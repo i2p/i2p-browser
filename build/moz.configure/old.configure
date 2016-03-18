@@ -281,6 +281,9 @@ def old_configure_options(*options):
     '--with-user-appdir',
     '--x-includes',
     '--x-libraries',
+
+    # Tor additions.
+    '--enable-tor-browser-data-outside-app-dir',
 )
 @imports(_from='__builtin__', _import='compile')
 @imports(_from='__builtin__', _import='open')
