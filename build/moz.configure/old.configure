@@ -263,6 +263,7 @@ def old_configure_options(*options):
     '--x-libraries',
 
     # Tor additions.
+    '--enable-tor-browser-data-outside-app-dir',
     '--enable-tor-launcher',
 )
 def prepare_configure_options(extra_old_configure_args, all_options, *options):

@@ -85,6 +85,7 @@ EXPORTS += [
     'nsUnicharInputStream.h',
     'nsWildCard.h',
     'SpecialSystemDirectory.h',
+    'TorFileUtils.h',
 ]
 
 EXPORTS.mozilla += [
@@ -132,6 +133,10 @@ UNIFIED_SOURCES += [
     'SnappyFrameUtils.cpp',
     'SnappyUncompressInputStream.cpp',
     'SpecialSystemDirectory.cpp',
+]
+
+SOURCES += [
+    'TorFileUtils.cpp',
 ]
 
 if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'cocoa':

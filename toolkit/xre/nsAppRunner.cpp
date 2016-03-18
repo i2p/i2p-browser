@@ -1800,6 +1800,8 @@ static nsresult ProfileMissingDialog(nsINativeAppSupport* aNative) {
   }
 }
 
+// If aUnlocker is NULL, it is also OK for the following arguments to be NULL:
+//   aProfileDir, aProfileLocalDir, aResult.
 static ReturnAbortOnError ProfileErrorDialog(nsIFile* aProfileDir,
                                              nsIFile* aProfileLocalDir,
                                              ProfileStatus aStatus,
@@ -1818,7 +1820,7 @@ static ReturnAbortOnError ProfileErrorDialog(nsIFile* aProfileDir,
   rv = xpcom.Initialize();
   NS_ENSURE_SUCCESS(rv, rv);
 
-  mozilla::Telemetry::WriteFailedProfileLock(aProfileDir);
+  if (aProfileDir) mozilla::Telemetry::WriteFailedProfileLock(aProfileDir);
 
   rv = xpcom.SetWindowCreator(aNative);
   NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
@@ -1908,7 +1910,8 @@ static ReturnAbortOnError ProfileErrorDialog(nsIFile* aProfileDir,
       }
     } else {
 #ifdef MOZ_WIDGET_ANDROID
-      if (java::GeckoAppShell::UnlockProfile()) {
+      if (aProfileDir && aProfileLocalDir && aResult &&
+          java::GeckoAppShell::UnlockProfile()) {
         return NS_LockProfilePath(aProfileDir, aProfileLocalDir, nullptr,
                                   aResult);
       }
@@ -2019,6 +2022,23 @@ static ReturnAbortOnError ShowProfileManager(
 
   return LaunchChild(aNative);
 }
+
+#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+static ProfileStatus CheckTorBrowserDataWriteAccess(nsIFile* aAppDir) {
+  // Check whether we can write to the directory that will contain
+  // TorBrowser-Data.
+  nsCOMPtr<nsIFile> tbDataDir;
+  RefPtr<nsXREDirProvider> dirProvider = nsXREDirProvider::GetSingleton();
+  if (!dirProvider) return PROFILE_STATUS_OTHER_ERROR;
+  nsresult rv =
+      dirProvider->GetTorBrowserUserDataDir(getter_AddRefs(tbDataDir));
+  NS_ENSURE_SUCCESS(rv, PROFILE_STATUS_OTHER_ERROR);
+  nsCOMPtr<nsIFile> tbDataDirParent;
+  rv = tbDataDir->GetParent(getter_AddRefs(tbDataDirParent));
+  NS_ENSURE_SUCCESS(rv, PROFILE_STATUS_OTHER_ERROR);
+  return nsToolkitProfileService::CheckProfileWriteAccess(tbDataDirParent);
+}
+#endif
 
 static bool gDoMigration = false;
 static bool gDoProfileReset = false;
@@ -3192,6 +3212,14 @@ int XREMain::XRE_mainInit(bool* aExitFlag) {
   if (PR_GetEnv("XRE_MAIN_BREAK")) NS_BREAK();
 #endif
 
+#if defined(XP_MACOSX) && defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+  bool hideDockIcon = (CheckArg("invisible") == ARG_FOUND);
+  if (hideDockIcon) {
+    ProcessSerialNumber psn = {0, kCurrentProcess};
+    TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+  }
+#endif
+
   IncreaseDescriptorLimits();
 
 #ifdef USE_GLX_TEST
@@ -4057,7 +4085,34 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
     return 0;
   }
 
+#if (defined(MOZ_UPDATER) && !defined(MOZ_WIDGET_ANDROID)) || \
+    defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+  nsCOMPtr<nsIFile> exeFile, exeDir;
+  bool persistent;
+  rv = mDirProvider.GetFile(XRE_EXECUTABLE_FILE, &persistent,
+                            getter_AddRefs(exeFile));
+  NS_ENSURE_SUCCESS(rv, 1);
+  rv = exeFile->GetParent(getter_AddRefs(exeDir));
+  NS_ENSURE_SUCCESS(rv, 1);
+#endif
+
   rv = NS_NewToolkitProfileService(getter_AddRefs(mProfileSvc));
+#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+  if (NS_FAILED(rv)) {
+    // NS_NewToolkitProfileService() returns a generic NS_ERROR_FAILURE error
+    // if creation of the TorBrowser-Data directory fails due to access denied
+    // or because of a read-only disk volume. Do an extra check here to detect
+    // these errors so we can display an informative error message.
+    ProfileStatus status = CheckTorBrowserDataWriteAccess(exeDir);
+    if ((PROFILE_STATUS_ACCESS_DENIED == status) ||
+        (PROFILE_STATUS_READ_ONLY == status)) {
+      ProfileErrorDialog(nullptr, nullptr, status, nullptr, mNativeApp,
+                         nullptr);
+      return 1;
+    }
+  }
+ #endif
+
   if (rv == NS_ERROR_FILE_ACCESS_DENIED) {
     PR_fprintf(PR_STDERR,
                "Error: Access was denied while trying to open files in "
@@ -4124,7 +4179,6 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
 #if defined(MOZ_UPDATER) && !defined(MOZ_WIDGET_ANDROID)
   // Check for and process any available updates
   nsCOMPtr<nsIFile> updRoot;
-  bool persistent;
   rv = mDirProvider.GetFile(XRE_UPDATE_ROOT_DIR, &persistent,
                             getter_AddRefs(updRoot));
   // XRE_UPDATE_ROOT_DIR may fail. Fallback to appDir if failed
@@ -4160,12 +4214,6 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
   if (CheckArg("test-process-updates")) {
     SaveToEnv("MOZ_TEST_PROCESS_UPDATES=1");
   }
-  nsCOMPtr<nsIFile> exeFile, exeDir;
-  rv = mDirProvider.GetFile(XRE_EXECUTABLE_FILE, &persistent,
-                            getter_AddRefs(exeFile));
-  NS_ENSURE_SUCCESS(rv, 1);
-  rv = exeFile->GetParent(getter_AddRefs(exeDir));
-  NS_ENSURE_SUCCESS(rv, 1);
   ProcessUpdates(mDirProvider.GetGREDir(), exeDir, updRoot, gRestartArgc,
                  gRestartArgv, mAppData->version);
   if (EnvHasValue("MOZ_TEST_PROCESS_UPDATES")) {
