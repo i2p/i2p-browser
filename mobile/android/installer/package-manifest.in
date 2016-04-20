@@ -268,10 +268,6 @@
 @BINPATH@/components/WellKnownOpportunisticUtils.manifest
 @BINPATH@/components/mozProtocolHandler.js
 @BINPATH@/components/mozProtocolHandler.manifest
-#ifndef MOZ_GECKOVIEW_JAR
-@BINPATH@/components/nsDNSServiceDiscovery.manifest
-@BINPATH@/components/nsDNSServiceDiscovery.js
-#endif
 @BINPATH@/components/toolkitsearch.manifest
 @BINPATH@/components/nsSearchService.js
 @BINPATH@/components/nsSidebar.js
@@ -390,8 +386,6 @@
 @BINPATH@/components/PresentationNetworkHelper.manifest
 @BINPATH@/components/PresentationDataChannelSessionTransport.js
 @BINPATH@/components/PresentationDataChannelSessionTransport.manifest
-@BINPATH@/components/AndroidCastDeviceProvider.manifest
-@BINPATH@/components/AndroidCastDeviceProvider.js
 #endif
 
 @BINPATH@/components/mozIntl.manifest
