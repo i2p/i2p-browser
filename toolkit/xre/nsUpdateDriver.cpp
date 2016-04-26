@@ -106,8 +106,8 @@ static void UpdateDriverSetupMacCommandLine(int &argc, char **&argv,
 #endif
 
 static nsresult GetCurrentWorkingDir(char *buf, size_t size) {
-// Cannot use NS_GetSpecialDirectory because XPCOM is not yet initialized.
-// This code is duplicated from xpcom/io/SpecialSystemDirectory.cpp:
+  // Cannot use NS_GetSpecialDirectory because XPCOM is not yet initialized.
+  // This code is duplicated from xpcom/io/SpecialSystemDirectory.cpp:
 
 #if defined(XP_WIN)
   wchar_t wpath[MAX_PATH];
@@ -355,7 +355,7 @@ static void AppendToLibPath(const char *pathToAppend) {
     char *s =
         Smprintf("%s=%s", LD_LIBRARY_PATH_ENVVAR_NAME, pathToAppend).release();
     PR_SetEnv(s);
-  } else if (!strstr(pathValue, pathToAppend)) {
+  } else {
     // Leak the string because that is required by PR_SetEnv.
     char *s = Smprintf("%s=%s" PATH_SEPARATOR "%s", LD_LIBRARY_PATH_ENVVAR_NAME,
                        pathToAppend, pathValue)
@@ -515,7 +515,7 @@ static void ApplyUpdate(nsIFile *greDir, nsIFile *updateDir, nsIFile *appDir,
     // The install directory is the same as the apply to directory.
     applyToDirPath.Assign(installDirPath);
   } else {
-  // Get the directory where the update is staged or will be staged.
+    // Get the directory where the update is staged or will be staged.
 #if defined(XP_MACOSX)
     if (!GetFile(updateDir, NS_LITERAL_CSTRING("Updated.app"), updatedDir)) {
 #else
