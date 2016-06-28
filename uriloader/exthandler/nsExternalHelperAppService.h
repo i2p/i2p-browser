@@ -210,6 +210,7 @@ private:
  */
 class nsExternalAppHandler final : public nsIStreamListener,
                                    public nsIHelperAppLauncher,
+                                   public nsIHelperAppWarningLauncher,
                                    public nsITimerCallback,
                                    public nsIBackgroundFileSaverObserver
 {
@@ -218,6 +219,7 @@ public:
   NS_DECL_NSISTREAMLISTENER
   NS_DECL_NSIREQUESTOBSERVER
   NS_DECL_NSIHELPERAPPLAUNCHER
+  NS_DECL_NSIHELPERAPPWARNINGLAUNCHER
   NS_DECL_NSICANCELABLE
   NS_DECL_NSITIMERCALLBACK
   NS_DECL_NSIBACKGROUNDFILESAVEROBSERVER
@@ -478,6 +480,7 @@ protected:
 
   nsCOMPtr<nsIChannel> mOriginalChannel; /**< in the case of a redirect, this will be the pre-redirect channel. */
   nsCOMPtr<nsIHelperAppLauncherDialog> mDialog;
+  nsCOMPtr<nsIHelperAppWarningDialog> mWarningDialog;
 
   /**
    * Keep request alive in case when helper non-modal dialog shown.
