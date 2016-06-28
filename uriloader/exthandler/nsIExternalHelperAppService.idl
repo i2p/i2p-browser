@@ -152,3 +152,50 @@ interface nsIHelperAppLauncher : nsICancelable
    */
   readonly attribute int64_t contentLength;
 };
+
+/**
+  * nsIHelperAppWarningLauncher is implemented by two classes:
+  *   nsExternalLoadURIHandler
+  *   nsExternalAppHandler
+  */
+[scriptable, uuid(cffd508b-4aaf-43ad-99c6-671d35cbc558)]
+interface nsIHelperAppWarningLauncher : nsISupports
+{
+  /**
+   * Callback invoked by the external app warning dialog to continue the
+   * request.
+   * NOTE: This will release the reference to the nsIHelperAppWarningDialog.
+   */
+  void continueRequest();
+
+  /**
+   * Callback invoked by the external app warning dialog to cancel the request.
+   * NOTE: This will release the reference to the nsIHelperAppWarningDialog.
+   *
+   * @param aReason
+   *        Pass a failure code to indicate the reason why this operation is
+   *        being canceled. It is an error to pass a success code.
+   */
+  void cancelRequest(in nsresult aReason);
+};
+
+/**
+ * nsIHelperAppWarningDialog is implemented by Torbutton's external app
+ * blocker (src/components/external-app-blocker.js).
+ */
+[scriptable, uuid(f4899a3f-0df3-42cc-9db8-bdf599e5a208)]
+interface nsIHelperAppWarningDialog : nsISupports
+{
+  /**
+   * Possibly show a launch warning dialog (it will not be shown if the user
+   * has chosen to not see the warning again).
+   *
+   * @param aLauncher
+   *        A nsIHelperAppWarningLauncher to be invoked after the user confirms
+   *        or cancels the download.
+   * @param aWindowContext
+   *        The window associated with the download.
+   */
+  void maybeShow(in nsIHelperAppWarningLauncher aLauncher,
+                 in nsISupports aWindowContext);
+};
