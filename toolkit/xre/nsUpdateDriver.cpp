@@ -173,6 +173,13 @@ static nsresult GetInstallDirPath(nsIFile* appDir, nsACString& installDirPath) {
   return NS_OK;
 }
 
+#ifdef DEBUG
+static void dump_argv(const char *aPrefix, char **argv, int argc) {
+  printf("%s - %d args\n", aPrefix, argc);
+  for (int i = 0; i < argc; ++i) printf("  %d: %s\n", i, argv[i]);
+}
+#endif
+
 static bool GetFile(nsIFile* dir, const nsACString& name,
                     nsCOMPtr<nsIFile>& result) {
   nsresult rv;
@@ -227,6 +234,34 @@ typedef enum {
   eAppliedUpdate,
   eAppliedService,
 } UpdateStatus;
+
+#ifdef DEBUG
+static const char *UpdateStatusToString(UpdateStatus aStatus) {
+  const char *rv = "unknown";
+  switch (aStatus) {
+    case eNoUpdateAction:
+      rv = "NoUpdateAction";
+      break;
+    case ePendingUpdate:
+      rv = "PendingUpdate";
+      break;
+    case ePendingService:
+      rv = "PendingService";
+      break;
+    case ePendingElevate:
+      rv = "PendingElevate";
+      break;
+    case eAppliedUpdate:
+      rv = "AppliedUpdate";
+      break;
+    case eAppliedService:
+      rv = "AppliedService";
+      break;
+  }
+
+  return rv;
+}
+#endif
 
 /**
  * Returns a value indicating what needs to be done in order to handle an
@@ -292,10 +327,40 @@ static bool IsOlderVersion(nsIFile* versionFile, const char* appVersion) {
   const char kNull[] = "null";
   if (strncmp(buf, kNull, sizeof(kNull) - 1) == 0) return false;
 
+#ifdef DEBUG
+  printf("IsOlderVersion checking appVersion %s against updateVersion %s\n",
+         appVersion, buf);
+#endif
+
   if (mozilla::Version(appVersion) > buf) return true;
 
   return false;
 }
+
+#ifndef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#if defined(TOR_BROWSER_UPDATE) && defined(XP_MACOSX)
+static nsresult GetUpdateDirFromAppDir(nsIFile *aAppDir, nsIFile **aResult) {
+  // On Mac OSX, we stage the update to an Updated.app directory that is
+  // directly below the main Tor Browser.app directory (two levels up from
+  // the appDir).
+  NS_ENSURE_ARG_POINTER(aAppDir);
+  NS_ENSURE_ARG_POINTER(aResult);
+  nsCOMPtr<nsIFile> parentDir1, parentDir2;
+  nsresult rv = aAppDir->GetParent(getter_AddRefs(parentDir1));
+  NS_ENSURE_SUCCESS(rv, rv);
+  rv = parentDir1->GetParent(getter_AddRefs(parentDir2));
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  nsCOMPtr<nsIFile> updatedDir;
+  if (!GetFile(parentDir2, NS_LITERAL_CSTRING("Updated.app"), updatedDir)) {
+    return NS_ERROR_FAILURE;
+  }
+
+  updatedDir.forget(aResult);
+  return NS_OK;
+}
+#endif
+#endif
 
 #if defined(XP_MACOSX)
 static bool CopyFileIntoUpdateDir(nsIFile* parentDir, const nsACString& leaf,
@@ -537,7 +602,12 @@ static void ApplyUpdate(nsIFile* greDir, nsIFile* updateDir, nsIFile* appDir,
   } else {
     // Get the directory where the update is staged or will be staged.
 #if defined(XP_MACOSX)
+#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+    rv = GetUpdateDirFromAppDir(appDir, getter_AddRefs(updatedDir));
+    if (NS_FAILED(rv)) {
+#else
     if (!GetFile(updateDir, NS_LITERAL_CSTRING("Updated.app"), updatedDir)) {
+#endif
 #else
     if (!GetFile(appDir, NS_LITERAL_CSTRING("updated"), updatedDir)) {
 #endif
@@ -632,6 +702,9 @@ static void ApplyUpdate(nsIFile* greDir, nsIFile* updateDir, nsIFile* appDir,
   }
 
   LOG(("spawning updater process [%s]\n", updaterPath.get()));
+#ifdef DEBUG
+  dump_argv("ApplyUpdate updater", argv, argc);
+#endif
 
 #if defined(XP_UNIX) && !defined(XP_MACOSX)
   // We use execv to spawn the updater process on all UNIX systems except Mac
@@ -669,6 +742,10 @@ static void ApplyUpdate(nsIFile* greDir, nsIFile* updateDir, nsIFile* appDir,
   }
 #elif defined(XP_MACOSX)
 UpdateDriverSetupMacCommandLine(argc, argv, restart);
+#ifdef DEBUG
+dump_argv("ApplyUpdate after SetupMacCommandLine", argv, argc);
+#endif
+#ifndef TOR_BROWSER_UPDATE
 // We need to detect whether elevation is required for this update. This can
 // occur when an admin user installs the application, but another admin
 // user attempts to update (see bug 394984).
@@ -681,6 +758,7 @@ if (restart && !IsRecursivelyWritable(installDirPath.get())) {
   }
   exit(0);
 }
+#endif
 
 if (isStaged) {
   // Launch the updater to replace the installation with the staged updated.
@@ -751,9 +829,27 @@ static bool ProcessHasTerminated(ProcessType pt) {
 nsresult ProcessUpdates(nsIFile* greDir, nsIFile* appDir, nsIFile* updRootDir,
                         int argc, char** argv, const char* appVersion,
                         bool restart, ProcessType* pid) {
+#if defined(XP_WIN) && defined(TOR_BROWSER_UPDATE)
+  // Try to remove the "tobedeleted" directory which, if present, contains
+  // files that could not be removed during a previous update (e.g., DLLs
+  // that were in use and therefore locked by Windows).
+  nsCOMPtr<nsIFile> deleteDir;
+  nsresult winrv = appDir->Clone(getter_AddRefs(deleteDir));
+  if (NS_SUCCEEDED(winrv)) {
+    winrv = deleteDir->AppendNative(NS_LITERAL_CSTRING("tobedeleted"));
+    if (NS_SUCCEEDED(winrv)) {
+      winrv = deleteDir->Remove(true);
+    }
+  }
+#endif
+
   nsresult rv;
 
   nsCOMPtr<nsIFile> updatesDir;
+#ifdef DEBUG
+  printf("ProcessUpdates updateRootDir: %s appVersion: %s\n",
+         updRootDir->HumanReadablePath().get(), appVersion);
+#endif
   rv = updRootDir->Clone(getter_AddRefs(updatesDir));
   if (NS_FAILED(rv)) {
     return rv;
@@ -781,6 +877,12 @@ nsresult ProcessUpdates(nsIFile* greDir, nsIFile* appDir, nsIFile* updRootDir,
 
   nsCOMPtr<nsIFile> statusFile;
   UpdateStatus status = GetUpdateStatus(updatesDir, statusFile);
+#ifdef DEBUG
+  printf("ProcessUpdates status: %s (%d)\n", UpdateStatusToString(status),
+         status);
+  printf("ProcessUpdates updatesDir: %s\n",
+         updatesDir->HumanReadablePath().get());
+#endif
   switch (status) {
     case ePendingElevate: {
       if (NS_IsMainThread()) {
@@ -854,13 +956,16 @@ nsUpdateProcessor::ProcessUpdate() {
     NS_ENSURE_SUCCESS(rv, rv);
   }
 
+  nsAutoCString appVersion;
+#ifdef TOR_BROWSER_UPDATE
+  appVersion = TOR_BROWSER_VERSION_QUOTED;
+#else
   nsCOMPtr<nsIXULAppInfo> appInfo =
       do_GetService("@mozilla.org/xre/app-info;1", &rv);
   NS_ENSURE_SUCCESS(rv, rv);
-
-  nsAutoCString appVersion;
   rv = appInfo->GetVersion(appVersion);
   NS_ENSURE_SUCCESS(rv, rv);
+#endif
 
   // Copy the parameters to the StagedUpdateInfo structure shared with the
   // watcher thread.

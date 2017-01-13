@@ -7,7 +7,6 @@
 // Disable initial homepage notifications
 pref("browser.search.update", false);
 pref("browser.rights.3.shown", true);
-pref("browser.startup.homepage_override.mstone", "ignore");
 pref("startup.homepage_welcome_url", "");
 pref("startup.homepage_welcome_url.additional", "");
 
@@ -22,8 +21,11 @@ pref("startup.homepage_override_url", "https://blog.torproject.org/category/tags
 pref("app.update.promptWaitTime", 3600);
 pref("app.update.badge", true);
 
-#ifdef XP_WIN
-// For now, disable staged updates on Windows (see #18292).
+#ifndef XP_MACOSX
+// Disable staged updates on platforms other than macOS.
+// Staged updates do not work on Windows due to #18292.
+// Also, on Windows and Linux any changes that are made to the browser profile
+// or Tor data after an update is staged will be lost.
 pref("app.update.staging.enabled", false);
 #endif
 
@@ -83,6 +85,7 @@ pref("datareporting.policy.dataSubmissionEnabled", false);
 // Make sure Unified Telemetry is really disabled, see: #18738.
 pref("toolkit.telemetry.unified", false);
 pref("toolkit.telemetry.enabled", false);
+pref("toolkit.telemetry.updatePing.enabled", false); // Make sure updater telemetry is disabled; see #25909.
 // No experiments, use Tor Browser. See 21797.
 pref("experiments.enabled", false);
 pref("browser.syncPromoViewsLeftMap", "{\"addons\":0, \"passwords\":0, \"bookmarks\":0}"); // Don't promote sync

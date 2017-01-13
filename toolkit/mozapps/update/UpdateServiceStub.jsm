@@ -45,8 +45,12 @@ function UpdateServiceStub() {
   // contains the status file's path
 
   // We may need to migrate update data
+  // In Tor Browser we skip this because we do not use an update agent and we
+  // do not want to store any data outside of the browser installation directory.
+  // For more info, see https://bugzilla.mozilla.org/show_bug.cgi?id=1458314
   if (
     AppConstants.platform == "win" &&
+    !AppConstants.TOR_BROWSER_UPDATE &&
     !Services.prefs.getBoolPref(prefUpdateDirMigrated, false)
   ) {
     migrateUpdateDirectory();
