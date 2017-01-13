@@ -19,7 +19,7 @@ if ("@mozilla.org/xre/app-info;1" in Cc) {
 
 ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
-const MOZ_COMPATIBILITY_NIGHTLY = !["aurora", "beta", "release", "esr"].includes(AppConstants.MOZ_UPDATE_CHANNEL);
+const MOZ_COMPATIBILITY_NIGHTLY = !["aurora", "alpha", "beta", "release", "esr"].includes(AppConstants.MOZ_UPDATE_CHANNEL);
 
 const PREF_BLOCKLIST_PINGCOUNTVERSION = "extensions.blocklist.pingCountVersion";
 const PREF_DEFAULT_PROVIDERS_ENABLED  = "extensions.defaultProviders.enabled";
@@ -32,6 +32,11 @@ const PREF_EM_CHECK_UPDATE_SECURITY   = "extensions.checkUpdateSecurity";
 const PREF_APP_UPDATE_ENABLED         = "app.update.enabled";
 const PREF_APP_UPDATE_AUTO            = "app.update.auto";
 const UNKNOWN_XPCOM_ABI               = "unknownABI";
+
+#ifdef TOR_BROWSER_VERSION
+#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
+const PREF_EM_LAST_TORBROWSER_VERSION = "extensions.lastTorBrowserVersion";
+#endif
 
 const PREF_MIN_WEBEXT_PLATFORM_VERSION = "extensions.webExtensionsMinPlatformVersion";
 const PREF_WEBAPI_TESTING             = "extensions.webapi.testing";
@@ -802,6 +807,30 @@ var AddonManagerInternal = {
                                   (appChanged === undefined ? 0 : -1));
         this.validateBlocklist();
       }
+
+#ifdef TOR_BROWSER_VERSION
+      // To ensure that extension override prefs are reinstalled into the
+      // user's profile after each update, set appChanged = true if the
+      // Mozilla app version has not changed but the Tor Browser version
+      // has changed.
+      let tbChanged = undefined;
+      try {
+        tbChanged = TOR_BROWSER_VERSION !=
+                   Services.prefs.getCharPref(PREF_EM_LAST_TORBROWSER_VERSION);
+      }
+      catch (e) { }
+      if (tbChanged !== false) {
+        // Because PREF_EM_LAST_TORBROWSER_VERSION was not present in older
+        // versions of Tor Browser, an app change is indicated when tbChanged
+        // is undefined or true.
+        if (appChanged === false) {
+          appChanged = true;
+        }
+
+        Services.prefs.setCharPref(PREF_EM_LAST_TORBROWSER_VERSION,
+                                   TOR_BROWSER_VERSION);
+      }
+#endif
 
       if (!MOZ_COMPATIBILITY_NIGHTLY) {
         PREF_EM_CHECK_COMPATIBILITY = PREF_EM_CHECK_COMPATIBILITY_BASE + "." +

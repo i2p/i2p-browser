@@ -10,6 +10,11 @@
 ChromeUtils.import("resource://gre/modules/Services.jsm");
 ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
+#ifdef TOR_BROWSER_VERSION
+# Add double-quotes back on (stripped by JarMaker.py).
+#expand const TOR_BROWSER_VERSION = "__TOR_BROWSER_VERSION__";
+#endif
+
 function init(aEvent) {
   if (aEvent.target != document)
     return;
@@ -40,15 +45,15 @@ function init(aEvent) {
   versionField.textContent = AppConstants.MOZ_APP_VERSION_DISPLAY;
   let version = Services.appinfo.version;
   if (/a\d+$/.test(version)) {
-    let buildID = Services.appinfo.appBuildID;
-    let year = buildID.slice(0, 4);
-    let month = buildID.slice(4, 6);
-    let day = buildID.slice(6, 8);
-    versionField.textContent += ` (${year}-${month}-${day})`;
-
     document.getElementById("experimental").hidden = false;
     document.getElementById("communityDesc").hidden = true;
   }
+
+#ifdef TOR_BROWSER_VERSION
+  versionField.textContent = TOR_BROWSER_VERSION +
+                             " (based on Mozilla Firefox " +
+                             versionField.textContent + ")";
+#endif
 
   // Append "(32-bit)" or "(64-bit)" build architecture to the version number:
   let bundle = Services.strings.createBundle("chrome://browser/locale/browser.properties");

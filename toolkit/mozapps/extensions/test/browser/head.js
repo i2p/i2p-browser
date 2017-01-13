@@ -42,6 +42,7 @@ var PREF_CHECK_COMPATIBILITY;
 (function() {
   var channel = Services.prefs.getCharPref("app.update.channel", "default");
   if (channel != "aurora" &&
+    channel != "alpha" &&
     channel != "beta" &&
     channel != "release" &&
     channel != "esr") {

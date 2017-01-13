@@ -13,27 +13,6 @@ if test "$OS_ARCH" = "WINNT" -o \
   MOZ_BUNDLED_FONTS=1
 fi
 
-if test "$OS_ARCH" = "WINNT"; then
-  MOZ_MAINTENANCE_SERVICE=1
-  if ! test "$HAVE_64BIT_BUILD"; then
-    if test "$MOZ_UPDATE_CHANNEL" = "nightly" -o \
-            "$MOZ_UPDATE_CHANNEL" = "nightly-try" -o \
-            "$MOZ_UPDATE_CHANNEL" = "aurora" -o \
-            "$MOZ_UPDATE_CHANNEL" = "beta" -o \
-            "$MOZ_UPDATE_CHANNEL" = "release"; then
-      if ! test "$MOZ_DEBUG"; then
-        if ! test "$USE_STUB_INSTALLER"; then
-          # Expect USE_STUB_INSTALLER from taskcluster for downstream task consistency
-          echo "ERROR: STUB installer expected to be enabled but"
-          echo "ERROR: USE_STUB_INSTALLER is not specified in the environment"
-          exit 1
-        fi
-        MOZ_STUB_INSTALLER=1
-      fi
-    fi
-  fi
-fi
-
 # Enable building ./signmar and running libmar signature tests
 MOZ_ENABLE_SIGNMAR=1
 
@@ -56,8 +35,8 @@ if test "$MOZ_UPDATE_CHANNEL" = "aurora"; then
   ACCEPTED_MAR_CHANNEL_IDS=firefox-mozilla-aurora
   MAR_CHANNEL_ID=firefox-mozilla-aurora
 else
-  ACCEPTED_MAR_CHANNEL_IDS=firefox-mozilla-esr
-  MAR_CHANNEL_ID=firefox-mozilla-esr
+  ACCEPTED_MAR_CHANNEL_IDS=torbrowser-torproject-release
+  MAR_CHANNEL_ID=torbrowser-torproject-release
 fi
 MOZ_PROFILE_MIGRATOR=1
 

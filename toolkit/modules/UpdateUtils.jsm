@@ -18,6 +18,9 @@ const PREF_APP_DISTRIBUTION               = "distribution.id";
 const PREF_APP_DISTRIBUTION_VERSION       = "distribution.version";
 const PREF_APP_UPDATE_CUSTOM              = "app.update.custom";
 
+#ifdef TOR_BROWSER_VERSION
+#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
+#endif
 
 var UpdateUtils = {
   _locale: undefined,
@@ -72,7 +75,11 @@ var UpdateUtils = {
         case "PRODUCT":
           return Services.appinfo.name;
         case "VERSION":
+#ifdef TOR_BROWSER_UPDATE
+          return TOR_BROWSER_VERSION;
+#else
           return Services.appinfo.version;
+#endif
         case "BUILD_ID":
           return Services.appinfo.appBuildID;
         case "BUILD_TARGET":

@@ -9,7 +9,9 @@
 ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm", this);
 ChromeUtils.import("resource://gre/modules/FileUtils.jsm", this);
 ChromeUtils.import("resource://gre/modules/Services.jsm", this);
+#ifdef XP_WIN
 ChromeUtils.import("resource://gre/modules/ctypes.jsm", this);
+#endif
 ChromeUtils.import("resource://gre/modules/UpdateTelemetry.jsm", this);
 ChromeUtils.import("resource://gre/modules/AppConstants.jsm", this);
 Cu.importGlobalProperties(["XMLHttpRequest"]);
@@ -56,6 +58,10 @@ const URI_UPDATES_PROPERTIES    = "chrome://mozapps/locale/update/updates.proper
 
 const KEY_UPDROOT         = "UpdRootD";
 const KEY_EXECUTABLE      = "XREExeF";
+
+#ifdef TOR_BROWSER_VERSION
+#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
+#endif
 
 const DIR_UPDATES         = "updates";
 
@@ -195,8 +201,10 @@ var gUpdateMutexHandle = null;
 
 ChromeUtils.defineModuleGetter(this, "UpdateUtils",
                                "resource://gre/modules/UpdateUtils.jsm");
+#if !defined(TOR_BROWSER_UPDATE)
 ChromeUtils.defineModuleGetter(this, "WindowsRegistry",
                                "resource://gre/modules/WindowsRegistry.jsm");
+#endif
 ChromeUtils.defineModuleGetter(this, "AsyncShutdown",
                                "resource://gre/modules/AsyncShutdown.jsm");
 ChromeUtils.defineModuleGetter(this, "OS",
@@ -364,6 +372,11 @@ function areDirectoryEntriesWriteable(aDir) {
  * @return true if elevation is required, false otherwise
  */
 function getElevationRequired() {
+#if defined(TOR_BROWSER_UPDATE)
+  // To avoid potential security holes associated with running the updater
+  // process with elevated privileges, Tor Browser does not support elevation.
+  return false;
+#else
   if (AppConstants.platform != "macosx") {
     return false;
   }
@@ -387,6 +400,7 @@ function getElevationRequired() {
   LOG("getElevationRequired - able to write to application bundle, elevation " +
       "not required");
   return false;
+#endif
 }
 
 /**
@@ -397,6 +411,7 @@ function getElevationRequired() {
  * @return true if an update can be applied, false otherwise
  */
 function getCanApplyUpdates() {
+#if !defined(TOR_BROWSER_UPDATE)
   if (AppConstants.platform == "macosx") {
     LOG("getCanApplyUpdates - bypass the write since elevation can be used " +
         "on Mac OS X");
@@ -408,6 +423,7 @@ function getCanApplyUpdates() {
         "Maintenance Service can be used");
     return true;
   }
+#endif
 
   try {
     // Test write access to the updates directory. On Linux the updates
@@ -950,6 +966,9 @@ function handleUpdateFailure(update, errorCode) {
     cancelations++;
     Services.prefs.setIntPref(PREF_APP_UPDATE_CANCELATIONS, cancelations);
     if (AppConstants.platform == "macosx") {
+#if defined(TOR_BROWSER_UPDATE)
+      cleanupActiveUpdate();
+#else
       let osxCancelations =
         Services.prefs.getIntPref(PREF_APP_UPDATE_CANCELATIONS_OSX, 0);
       osxCancelations++;
@@ -966,6 +985,7 @@ function handleUpdateFailure(update, errorCode) {
         writeStatusFile(getUpdatesDir(),
                         update.state = STATE_PENDING_ELEVATE);
       }
+#endif
       update.statusText = gUpdateBundle.GetStringFromName("elevationFailure");
       update.QueryInterface(Ci.nsIWritablePropertyBag);
       update.setProperty("patchingFailed", "elevationFailure");
@@ -1284,7 +1304,26 @@ function Update(update) {
     this._patches.push(patch);
   }
 
-  if (this._patches.length == 0 && !update.hasAttribute("unsupported")) {
+  if (update.hasAttribute("unsupported")) {
+    this.unsupported = ("true" == update.getAttribute("unsupported"));
+  } else if (update.hasAttribute("minSupportedOSVersion")) {
+    let minOSVersion = update.getAttribute("minSupportedOSVersion");
+    try {
+      let osVersion = Services.sysinfo.getProperty("version");
+      this.unsupported = (Services.vc.compare(osVersion, minOSVersion) < 0);
+    } catch (e) {}
+  }
+  if (!this.unsupported && update.hasAttribute("minSupportedInstructionSet")) {
+    let minInstructionSet = update.getAttribute("minSupportedInstructionSet");
+    if (['MMX', 'SSE', 'SSE2', 'SSE3',
+        'SSE4A', 'SSE4_1', 'SSE4_2'].indexOf(minInstructionSet) >= 0) {
+      try {
+        this.unsupported = !Services.sysinfo.getProperty("has" + minInstructionSet);
+      } catch (e) {}
+    }
+  }
+
+  if (this._patches.length == 0 && !this.unsupported) {
     throw Cr.NS_ERROR_ILLEGAL_VALUE;
   }
 
@@ -1319,9 +1358,7 @@ function Update(update) {
       if (!isNaN(attr.value)) {
         this.backgroundInterval = parseInt(attr.value);
       }
-    } else if (attr.name == "unsupported") {
-      this.unsupported = attr.value == "true";
-    } else {
+    } else if (attr.name != "unsupported") {
       this[attr.name] = attr.value;
 
       switch (attr.name) {
@@ -1681,6 +1718,10 @@ UpdateService.prototype = {
    * notify the user of install success.
    */
   _postUpdateProcessing: function AUS__postUpdateProcessing() {
+#if defined(TOR_BROWSER_UPDATE) && !defined(XP_MACOSX)
+    this._removeOrphanedTorBrowserFiles();
+#endif
+
     if (!this.canCheckForUpdates) {
       LOG("UpdateService:_postUpdateProcessing - unable to check for " +
           "updates... returning early");
@@ -1872,6 +1913,42 @@ UpdateService.prototype = {
       prompter.showUpdateError(update);
     }
   },
+
+#if defined(TOR_BROWSER_UPDATE) && !defined(XP_MACOSX)
+  /**
+   * When updating from an earlier version to Tor Browser 6.0 or later, old
+   * update info files are left behind on Linux and Windows. Remove them.
+   */
+  _removeOrphanedTorBrowserFiles: function AUS__removeOrphanedTorBrowserFiles() {
+    try {
+      let oldUpdateInfoDir = getAppBaseDir();  // aka the Browser directory.
+
+#ifdef XP_WIN
+      // On Windows, the updater files were stored under
+      // Browser/TorBrowser/Data/Browser/Caches/firefox/
+      oldUpdateInfoDir.appendRelativePath(
+                                "TorBrowser\\Data\\Browser\\Caches\\firefox");
+#endif
+
+      // Remove the updates directory.
+      let updatesDir = oldUpdateInfoDir.clone();
+      updatesDir.append("updates");
+      if (updatesDir.exists() && updatesDir.isDirectory()) {
+        updatesDir.remove(true);
+      }
+
+      // Remove files: active-update.xml and updates.xml
+      let filesToRemove = [ "active-update.xml", "updates.xml" ];
+      filesToRemove.forEach(function(aFileName) {
+        let f = oldUpdateInfoDir.clone();
+        f.append(aFileName);
+        if (f.exists()) {
+          f.remove(false);
+        }
+      });
+    } catch (e) {}
+  },
+#endif
 
   /**
    * Register an observer when the network comes online, so we can short-circuit
@@ -2152,9 +2229,14 @@ UpdateService.prototype = {
     updates.forEach(function(aUpdate) {
       // Ignore updates for older versions of the application and updates for
       // the same version of the application with the same build ID.
-      if (vc.compare(aUpdate.appVersion, Services.appinfo.version) < 0 ||
-          vc.compare(aUpdate.appVersion, Services.appinfo.version) == 0 &&
-          aUpdate.buildID == Services.appinfo.appBuildID) {
+#ifdef TOR_BROWSER_UPDATE
+      var compatVersion = TOR_BROWSER_VERSION;
+#else
+      var compatVersion = Services.appinfo.version;
+#endif
+      var rc = vc.compare(aUpdate.appVersion, compatVersion);
+      if (rc < 0 || ((rc == 0) &&
+                     (aUpdate.buildID == Services.appinfo.appBuildID))) {
         LOG("UpdateService:selectUpdate - skipping update because the " +
             "update's application version is less than the current " +
             "application version");
@@ -2425,14 +2507,24 @@ UpdateService.prototype = {
     // current application's version or the update's version is the same as the
     // application's version and the build ID is the same as the application's
     // build ID.
+#ifdef TOR_BROWSER_UPDATE
+    var compatVersion = TOR_BROWSER_VERSION;
+#else
+    var compatVersion = Services.appinfo.version;
+#endif
     if (update.appVersion &&
-        (Services.vc.compare(update.appVersion, Services.appinfo.version) < 0 ||
+        (Services.vc.compare(update.appVersion, compatVersion) < 0 ||
          update.buildID && update.buildID == Services.appinfo.appBuildID &&
-         update.appVersion == Services.appinfo.version)) {
+         update.appVersion == compatVersion)) {
       LOG("UpdateService:downloadUpdate - canceling download of update since " +
           "it is for an earlier or same application version and build ID.\n" +
-          "current application version: " + Services.appinfo.version + "\n" +
+#ifdef TOR_BROWSER_UPDATE
+          "current Tor Browser version: " + compatVersion + "\n" +
+          "update Tor Browser version : " + update.appVersion + "\n" +
+#else
+          "current application version: " + compatVersion + "\n" +
           "update application version : " + update.appVersion + "\n" +
+#endif
           "current build ID: " + Services.appinfo.appBuildID + "\n" +
           "update build ID : " + update.buildID);
       cleanupActiveUpdate();
@@ -2450,7 +2542,7 @@ UpdateService.prototype = {
       this._downloader.cancel();
     }
     // Set the previous application version prior to downloading the update.
-    update.previousAppVersion = Services.appinfo.version;
+    update.previousAppVersion = compatVersion;
     this._downloader = new Downloader(background, this);
     return this._downloader.downloadUpdate(update);
   },
@@ -2889,6 +2981,7 @@ Checker.prototype = {
    */
   _callback: null,
 
+#if !defined(TOR_BROWSER_UPDATE)
   _getCanMigrate: function UC__getCanMigrate() {
     if (AppConstants.platform != "win") {
       return false;
@@ -2941,6 +3034,7 @@ Checker.prototype = {
     LOG("Checker:_getCanMigrate - no registry entries for this installation");
     return false;
   },
+#endif // !defined(TOR_BROWSER_UPDATE)
 
   /**
    * The URL of the update service XML file to connect to that contains details
@@ -2963,9 +3057,11 @@ Checker.prototype = {
       url += (url.includes("?") ? "&" : "?") + "force=1";
     }
 
+#if !defined(TOR_BROWSER_UPDATE)
     if (this._getCanMigrate()) {
       url += (url.includes("?") ? "&" : "?") + "mig64=1";
     }
+#endif
 
     LOG("Checker:getUpdateURL - update URL: " + url);
     return url;
@@ -3915,7 +4011,15 @@ UpdatePrompt.prototype = {
         "an update was downloaded. topic: update-downloaded, status: " + update.state);
     Services.obs.notifyObservers(update, "update-downloaded", update.state);
 
-    if (Services.prefs.getBoolPref(PREF_APP_UPDATE_DOORHANGER, false)) {
+    if (background && Services.prefs.getBoolPref(PREF_APP_UPDATE_DOORHANGER, false)) {
+      // To fix https://trac.torproject.org/projects/tor/ticket/27828
+      // ("Check for Tor Browser update" doesn't seem to do anything), in
+      // Tor Browser we only return here when the background parameter is
+      // true. This causes the update wizard XUL window to (correctly) be
+      // opened in response to "Check for Tor Browser Update."
+      // This change does not alter the behavior of any existing
+      // update-related UI because all callers of showUpdateDownloaded()
+      // other than Torbutton pass true for the background parameter.
       return;
     }
 

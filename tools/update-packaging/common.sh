@@ -8,7 +8,13 @@
 # Author: Darin Fisher
 #
 
+# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# we should remove all lines in this file that contain:
+#      TorBrowser/Data
+
 # -----------------------------------------------------------------------------
+QUIET=0
+
 # By default just assume that these tools exist on our path
 MAR=${MAR:-mar}
 MBSDIFF=${MBSDIFF:-mbsdiff}
@@ -43,6 +49,12 @@ notice() {
   echo "$*" 1>&2
 }
 
+verbose_notice() {
+  if [ $QUIET -eq 0 ]; then
+    notice "$*"
+  fi
+}
+
 get_file_size() {
   stat -c"%s" "$1"
 }
@@ -75,22 +87,10 @@ make_add_instruction() {
     forced=
   fi
 
-  if [[ "$f" =~ distribution/extensions/.*/ ]]
-  then
-    # Use the subdirectory of the extensions folder as the file to test
-    # before performing this add instruction.
-    testdir=$(echo "$f" | sed 's/\(.*distribution\/extensions\/[^\/]*\)\/.*/\1/')
-    notice "     add-if \"$testdir\" \"$f\""
-    printf 'add-if "%s" "%s"\n' "${testdir}" "${f}" >> "${filev2}"
-    if [ -n "${filev3}" ]; then
-      printf 'add-if "%s" "%s"\n' "${testdir}" "${f}" >> "${filev3}"
-    fi
-  else
-    notice "        add \"$f\"$forced"
-    printf 'add "%s"\n' "${f}" >> "${filev2}"
-    if [ ! "$filev3" = "" ]; then
-      printf 'add "%s"\n' "${f}" >> "${filev3}"
-    fi
+  verbose_notice "        add \"$f\"$forced"
+  printf 'add "%s"\n' "${f}" >> "${filev2}"
+  if [ ! "$filev3" = "" ]; then
+    printf 'add "%s"\n' "${f}" >> "${filev3}"
   fi
 }
 
@@ -119,28 +119,30 @@ make_add_if_not_instruction() {
   f="$1"
   filev3="$2"
 
-  notice " add-if-not \"$f\" \"$f\""
+  verbose_notice " add-if-not \"$f\" \"$f\""
   printf 'add-if-not "%s" "%s"\n' "${f}" "${f}" >> "${filev3}"
 }
+
+make_addsymlink_instruction() {
+  link="$1"
+  target="$2"
+  filev2="$3"
+  filev3="$4"
+
+  verbose_notice "        addsymlink: $link -> $target"
+  printf 'addsymlink "%s" "%s"\n' "${link}" "${target}" >> "${filev2}"
+  printf 'addsymlink "%s" "%s"\n' "${link}" "${target}" >> "${filev3}"
+}
+
 
 make_patch_instruction() {
   f="$1"
   filev2="$2"
   filev3="$3"
 
-  if [[ "$f" =~ distribution/extensions/.*/ ]]
-  then
-    # Use the subdirectory of the extensions folder as the file to test
-    # before performing this add instruction.
-    testdir=$(echo "$f" | sed 's/\(.*distribution\/extensions\/[^\/]*\)\/.*/\1/')
-    notice "   patch-if \"$testdir\" \"$f.patch\" \"$f\""
-    printf 'patch-if "%s" "%s.patch" "%s"\n' "${testdir}" "${f}" "${f}" >> "${filev2}"
-    printf 'patch-if "%s" "%s.patch" "%s"\n' "${testdir}" "${f}" "${f}" >> "${filev3}"
-  else
-    notice "      patch \"$f.patch\" \"$f\""
-    printf 'patch "%s.patch" "%s"\n' "${f}" "${f}" >> "${filev2}"
-    printf 'patch "%s.patch" "%s"\n' "${f}" "${f}" >> "${filev3}"
-  fi
+  verbose_notice "      patch \"$f.patch\" \"$f\""
+  printf 'patch "%s.patch" "%s"\n' "${f}" "${f}" >> "${filev2}"
+  printf 'patch "%s.patch" "%s"\n' "${f}" "${f}" >> "${filev3}"
 }
 
 append_remove_instructions() {
@@ -174,18 +176,18 @@ append_remove_instructions() {
 
     if [[ "$f" =~ .*/$ ]]
     then
-      notice "      rmdir \"$f\""
+      verbose_notice "      rmdir \"$f\""
       printf 'rmdir "%s"\n' "${f}" >> "${filev2}"
       printf 'rmdir "%s"\n' "${f}" >> "${filev3}"
     elif [[ "$f" =~ .*/\*$ ]]
     then
       # Remove the *
       f=${f%\*}
-      notice "    rmrfdir \"$f\""
+      verbose_notice "    rmrfdir \"$f\""
       printf 'rmrfdir "%s"\n' "${f}" >> "${filev2}"
       printf 'rmrfdir "%s"\n' "${f}" >> "${filev3}"
     else
-      notice "     remove \"$f\""
+      verbose_notice "     remove \"$f\""
       printf 'remove "%s"\n' "${f}" >> "${filev2}"
       printf 'remove "%s"\n' "${f}" >> "${filev3}"
     fi
@@ -194,6 +196,10 @@ append_remove_instructions() {
 
 # List all files in the current directory, stripping leading "./"
 # Pass a variable name and it will be filled as an array.
+# To support Tor Browser updates, skip the following files:
+#    TorBrowser/Data/Browser/profiles.ini
+#    TorBrowser/Data/Browser/profile.default/bookmarks.html
+#    TorBrowser/Data/Tor/torrc
 list_files() {
   count=0
   tmpfile="$(mktemp)"
@@ -206,6 +212,11 @@ list_files() {
     | sed 's/\.\/\(.*\)/\1/' \
     | sort -r > "${tmpfile}"
   while read -r file; do
+    if [ "$file" = "TorBrowser/Data/Browser/profiles.ini" -o                   \
+         "$file" = "TorBrowser/Data/Browser/profile.default/bookmarks.html" -o \
+         "$file" = "TorBrowser/Data/Tor/torrc" ]; then
+      continue;
+    fi
     eval "${1}[$count]=\"$file\""
     (( count++ ))
   done <"${tmpfile}"
@@ -224,6 +235,23 @@ list_dirs() {
     | sort -r > "${tmpfile}"
   while read -r dir; do
     eval "${1}[$count]=\"$dir\""
+    (( count++ ))
+  done <"${tmpfile}"
+  rm -f "${tmpfile}"
+}
+
+# List all symbolic links in the current directory, stripping leading "./"
+list_symlinks() {
+  count=0
+  tmpfile="$(mktemp)"
+
+  find . -type l \
+    | sed 's/\.\/\(.*\)/\1/' \
+    | sort -r > "${tmpfile}"
+  while read symlink; do
+    target=$(readlink "$symlink")
+    eval "${1}[$count]=\"$symlink\""
+    eval "${2}[$count]=\"$target\""
     (( count++ ))
   done <"${tmpfile}"
   rm -f "${tmpfile}"

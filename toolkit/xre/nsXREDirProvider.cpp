@@ -1096,6 +1096,41 @@ static bool GetCachedHash(HKEY rootKey, const nsAString& regPath,
 
 nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult) {
   nsCOMPtr<nsIFile> updRoot;
+#if defined(TOR_BROWSER_UPDATE)
+  // For Tor Browser, we store update history, etc. within the UpdateInfo
+  // directory under the user data directory.
+  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(updRoot));
+  NS_ENSURE_SUCCESS(rv, rv);
+  rv = updRoot->AppendNative(NS_LITERAL_CSTRING("UpdateInfo"));
+  NS_ENSURE_SUCCESS(rv, rv);
+#if defined(XP_MACOSX) && defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+  // Since the TorBrowser-Data directory may be shared among different
+  // installations of the application, embed the app path in the update dir
+  // so that the update history is partitioned. This is much less likely to
+  // be an issue on Linux or Windows because the Tor Browser packages for
+  // those platforms include a "container" folder that provides partitioning
+  // by default, and we do not support use of a shared, OS-recommended area
+  // for user data on those platforms.
+  nsCOMPtr<nsIFile> appFile;
+  bool per = false;
+  rv = GetFile(XRE_EXECUTABLE_FILE, &per, getter_AddRefs(appFile));
+  NS_ENSURE_SUCCESS(rv, rv);
+  nsCOMPtr<nsIFile> appRootDirFile;
+  nsAutoString appDirPath;
+  if (NS_FAILED(appFile->GetParent(getter_AddRefs(appRootDirFile))) ||
+      NS_FAILED(appRootDirFile->GetPath(appDirPath))) {
+    return NS_ERROR_FAILURE;
+  }
+
+  int32_t dotIndex = appDirPath.RFind(".app");
+  if (dotIndex == kNotFound) {
+    dotIndex = appDirPath.Length();
+  }
+  appDirPath = Substring(appDirPath, 1, dotIndex - 1);
+  rv = updRoot->AppendRelativePath(appDirPath);
+  NS_ENSURE_SUCCESS(rv, rv);
+#endif
+#else  // ! TOR_BROWSER_UPDATE
   nsCOMPtr<nsIFile> appFile;
   bool per = false;
   nsresult rv = GetFile(XRE_EXECUTABLE_FILE, &per, getter_AddRefs(appFile));
@@ -1239,6 +1274,7 @@ nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult) {
   NS_ENSURE_SUCCESS(rv, rv);
 
 #endif  // XP_WIN
+#endif  // ! TOR_BROWSER_UPDATE
   updRoot.forget(aResult);
   return NS_OK;
 }
