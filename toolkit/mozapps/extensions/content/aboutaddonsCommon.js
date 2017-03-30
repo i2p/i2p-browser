@@ -186,9 +186,15 @@ var gBrowser = {
   },
 };
 
+// This function is the central check point to decide whether to show a warning
+// about unsigned extensions or not. We want those warnings but only for
+// extensions we don't distribute.
 function isCorrectlySigned(addon) {
   // Add-ons without an "isCorrectlySigned" property are correctly signed as
   // they aren't the correct type for signing.
+  if (addon.id == "https-everywhere-eff@eff.org") {
+    return true;
+  }
   return addon.isCorrectlySigned !== false;
 }
 
