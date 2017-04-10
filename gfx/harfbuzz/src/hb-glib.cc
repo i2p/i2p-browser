@@ -43,7 +43,6 @@
  **/
 
 
-#if !GLIB_CHECK_VERSION(2,29,14)
 static const hb_script_t
 glib_script_to_script[] =
 {
@@ -165,14 +164,10 @@ glib_script_to_script[] =
   HB_SCRIPT_SORA_SOMPENG,
   HB_SCRIPT_TAKRI
 };
-#endif
 
 hb_script_t
 hb_glib_script_to_script (GUnicodeScript script)
 {
-#if GLIB_CHECK_VERSION(2,29,14)
-  return (hb_script_t) g_unicode_script_to_iso15924 (script);
-#else
   if (likely ((unsigned int) script < ARRAY_LENGTH (glib_script_to_script)))
     return glib_script_to_script[script];
 
@@ -180,15 +175,11 @@ hb_glib_script_to_script (GUnicodeScript script)
     return HB_SCRIPT_INVALID;
 
   return HB_SCRIPT_UNKNOWN;
-#endif
 }
 
 GUnicodeScript
 hb_glib_script_from_script (hb_script_t script)
 {
-#if GLIB_CHECK_VERSION(2,29,14)
-  return g_unicode_script_from_iso15924 (script);
-#else
   unsigned int count = ARRAY_LENGTH (glib_script_to_script);
   for (unsigned int i = 0; i < count; i++)
     if (glib_script_to_script[i] == script)
@@ -198,7 +189,6 @@ hb_glib_script_from_script (hb_script_t script)
     return G_UNICODE_SCRIPT_INVALID_CODE;
 
   return G_UNICODE_SCRIPT_UNKNOWN;
-#endif
 }
 
 
@@ -245,10 +235,6 @@ hb_glib_unicode_compose (hb_unicode_funcs_t *ufuncs HB_UNUSED,
 			 hb_codepoint_t     *ab,
 			 void               *user_data HB_UNUSED)
 {
-#if GLIB_CHECK_VERSION(2,29,12)
-  return g_unichar_compose (a, b, ab);
-#endif
-
   /* We don't ifdef-out the fallback code such that compiler always
    * sees it and makes sure it's compilable. */
 
@@ -282,10 +268,6 @@ hb_glib_unicode_decompose (hb_unicode_funcs_t *ufuncs HB_UNUSED,
 			   hb_codepoint_t     *b,
 			   void               *user_data HB_UNUSED)
 {
-#if GLIB_CHECK_VERSION(2,29,12)
-  return g_unichar_decompose (ab, a, b);
-#endif
-
   /* We don't ifdef-out the fallback code such that compiler always
    * sees it and makes sure it's compilable. */
 
@@ -379,28 +361,3 @@ hb_glib_get_unicode_funcs ()
 
 
 
-#if GLIB_CHECK_VERSION(2,31,10)
-
-static void
-_hb_g_bytes_unref (void *data)
-{
-  g_bytes_unref ((GBytes *) data);
-}
-
-/**
- * hb_glib_blob_create:
- *
- * Since: 0.9.38
- **/
-hb_blob_t *
-hb_glib_blob_create (GBytes *gbytes)
-{
-  gsize size = 0;
-  gconstpointer data = g_bytes_get_data (gbytes, &size);
-  return hb_blob_create ((const char *) data,
-			 size,
-			 HB_MEMORY_MODE_READONLY,
-			 g_bytes_ref (gbytes),
-			 _hb_g_bytes_unref);
-}
-#endif
