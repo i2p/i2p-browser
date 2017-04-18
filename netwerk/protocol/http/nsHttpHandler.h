@@ -393,7 +393,7 @@ private:
     void     PrefsChanged(nsIPrefBranch *prefs, const char *pref);
 
     nsresult SetAccept(const char *);
-    nsresult SetAcceptLanguages(const char *);
+    nsresult SetAcceptLanguages();
     nsresult SetAcceptEncodings(const char *, bool mIsSecure);
 
     nsresult InitConnectionMgr();
@@ -497,6 +497,7 @@ private:
     nsCString      mUserAgent;
     nsXPIDLCString mUserAgentOverride;
     bool           mUserAgentIsDirty; // true if mUserAgent should be rebuilt
+    bool           mAcceptLanguagesIsDirty;
 
 
     bool           mPromptTempRedirect;
