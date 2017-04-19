@@ -93,8 +93,7 @@ already_AddRefed<nsIPrincipal> PermissionStatus::GetPrincipal() const {
   }
 
   nsCOMPtr<nsIPrincipal> principal =
-      mozilla::BasePrincipal::Cast(doc->NodePrincipal())
-          ->CloneStrippingUserContextIdAndFirstPartyDomain();
+      mozilla::BasePrincipal::Cast(doc->NodePrincipal());
   NS_ENSURE_TRUE(principal, nullptr);
 
   return principal.forget();

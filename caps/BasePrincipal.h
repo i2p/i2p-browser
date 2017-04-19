@@ -127,9 +127,6 @@ class BasePrincipal : public nsJSPrincipals {
 
   PrincipalKind Kind() const { return mKind; }
 
-  already_AddRefed<BasePrincipal>
-  CloneStrippingUserContextIdAndFirstPartyDomain();
-
   // Helper to check whether this principal is associated with an addon that
   // allows unprivileged code to load aURI.  aExplicit == true will prevent
   // use of all_urls permission, requiring the domain in its permissions.

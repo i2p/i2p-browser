@@ -69,7 +69,8 @@ var UITourListener = {
     if (!this.isSafeScheme(uri))
       return false;
 
-    let permission = Services.perms.testPermission(uri, UITOUR_PERMISSION);
+    let permission = Services.perms.testPermissionFromPrincipal(
+                          content.document.nodePrincipal, UITOUR_PERMISSION);
     if (permission == Services.perms.ALLOW_ACTION)
       return true;
 

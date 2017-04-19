@@ -29,9 +29,7 @@ already_AddRefed<nsPermission> nsPermission::Create(nsIPrincipal* aPrincipal,
                                                     uint32_t aExpireType,
                                                     int64_t aExpireTime) {
   NS_ENSURE_TRUE(aPrincipal, nullptr);
-  nsCOMPtr<nsIPrincipal> principal =
-      mozilla::BasePrincipal::Cast(aPrincipal)
-          ->CloneStrippingUserContextIdAndFirstPartyDomain();
+  nsCOMPtr<nsIPrincipal> principal = mozilla::BasePrincipal::Cast(aPrincipal);
 
   NS_ENSURE_TRUE(principal, nullptr);
 
@@ -79,9 +77,7 @@ nsPermission::Matches(nsIPrincipal* aPrincipal, bool aExactHost,
 
   *aMatches = false;
 
-  nsCOMPtr<nsIPrincipal> principal =
-      mozilla::BasePrincipal::Cast(aPrincipal)
-          ->CloneStrippingUserContextIdAndFirstPartyDomain();
+  nsCOMPtr<nsIPrincipal> principal = mozilla::BasePrincipal::Cast(aPrincipal);
 
   if (!principal) {
     *aMatches = false;
