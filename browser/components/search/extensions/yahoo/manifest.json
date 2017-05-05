@@ -1,0 +1,28 @@
+{
+  "name": "Yahoo",
+  "description": "Yahoo Search",
+  "manifest_version": 2,
+  "version": "1.0",
+  "applications": {
+    "gecko": {
+      "id": "yahoo@search.mozilla.org"
+    }
+  },
+  "hidden": true,
+  "icons": {
+    "16": "favicon.ico"
+  },
+  "web_accessible_resources": [
+    "favicon.ico"
+  ],
+  "chrome_settings_overrides": {
+    "search_provider": {
+      "name": "Yahoo",
+      "search_url": "https://search.yahoo.com/yhs/search",
+      "search_form": "https://search.yahoo.com/yhs/search?p={searchTerms}&ei=UTF-8&hspart=mozilla",
+      "search_url_get_params": "p={searchTerms}&ei=UTF-8&hspart=mozilla",
+      "suggest_url": "https://search.yahoo.com/sugg/ff",
+      "suggest_url_get_params": "output=fxjson&appid=ffd&command={searchTerms}"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "name": "__MSG_extensionName__",
-  "description": "__MSG_extensionDescription__",
+  "name": "Twitter",
+  "description": "Realtime Twitter Search",
   "manifest_version": 2,
   "version": "1.0",
   "applications": {
@@ -9,7 +9,6 @@
     }
   },
   "hidden": true,
-  "default_locale": "en",
   "icons": {
     "16": "favicon.ico"
   },
@@ -18,10 +17,10 @@
   ],
   "chrome_settings_overrides": {
     "search_provider": {
-      "name": "__MSG_extensionName__",
-      "search_url": "__MSG_searchUrl__",
-      "search_form": "__MSG_searchForm__",
-      "search_url_get_params": "__MSG_searchUrlGetParams__"
+      "name": "Twitter",
+      "search_url": "https://twitter.com/search",
+      "search_form": "https://twitter.com/search?q={searchTerms}&partner=Firefox&source=desktop-search",
+      "search_url_get_params": "q={searchTerms}&partner=Firefox&source=desktop-search"
     }
   }
 }

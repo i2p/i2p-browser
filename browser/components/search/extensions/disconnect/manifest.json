@@ -1,0 +1,25 @@
+{
+  "name": "Disconnect",
+  "description": "Private searches using disconnect.me",
+  "manifest_version": 2,
+  "version": "1.0",
+  "applications": {
+    "gecko": {
+      "id": "disconnect@search.mozilla.org"
+    }
+  },
+  "hidden": true,
+  "icons": {
+    "16": "favicon.ico"
+  },
+  "web_accessible_resources": [
+    "favicon.ico"
+  ],
+  "chrome_settings_overrides": {
+    "search_provider": {
+      "name": "Disconnect",
+      "search_url": "https://search.disconnect.me/searchTerms/search?ses=Google&location_option=US&source=tor",
+      "search_url_post_params": "query={searchTerms}"
+    }
+  }
+}

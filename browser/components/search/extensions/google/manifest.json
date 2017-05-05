@@ -1,6 +1,6 @@
 {
-  "name": "__MSG_extensionName__",
-  "description": "__MSG_extensionDescription__",
+  "name": "Google",
+  "description": "Google Search",
   "manifest_version": 2,
   "version": "1.0",
   "applications": {
@@ -9,7 +9,6 @@
     }
   },
   "hidden": true,
-  "default_locale": "en",
   "icons": {
     "16": "favicon.ico"
   },
@@ -18,18 +17,18 @@
   ],
   "chrome_settings_overrides": {
     "search_provider": {
-      "name": "__MSG_extensionName__",
-      "search_url": "__MSG_searchUrl__",
-      "search_form": "__MSG_searchForm__",
-      "suggest_url": "__MSG_suggestUrl__",
+      "name": "Google",
+      "search_url": "https://www.google.com/search",
+      "search_form": "https://www.google.com/search?client=firefox-b-d&q={searchTerms}",
+      "suggest_url": "https://www.google.com/complete/search?client=firefox&q={searchTerms}",
       "params": [
         {
           "name": "channel",
           "condition": "pref",
-          "pref": "__MSG_channel_pref__"
+          "pref": "google_channel_row"
         }
       ],
-      "search_url_get_params": "__MSG_searchUrlGetParams__"
+      "search_url_get_params": "client=firefox-b-d&q={searchTerms}"
     }
   }
 }

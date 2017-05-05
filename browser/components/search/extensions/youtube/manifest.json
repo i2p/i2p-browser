@@ -1,0 +1,26 @@
+{
+  "name": "YouTube",
+  "description": "YouTube - Videos",
+  "manifest_version": 2,
+  "version": "1.0",
+  "applications": {
+    "gecko": {
+      "id": "youtube@search.mozilla.org"
+    }
+  },
+  "hidden": true,
+  "icons": {
+    "16": "favicon.ico"
+  },
+  "web_accessible_resources": [
+    "favicon.ico"
+  ],
+  "chrome_settings_overrides": {
+    "search_provider": {
+      "name": "YouTube",
+      "search_url": "https://www.youtube.com/results?search_query={searchTerms}&search=Search",
+      "search_form": "https://www.youtube.com/index",
+      "suggest_url": "https://suggestqueries.google.com/complete/search?output=firefox&ds=yt&q={searchTerms}"
+    }
+  }
+}
