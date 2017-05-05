@@ -1,62 +1,16 @@
 {
   "default": {
     "visibleDefaultEngines": [
-      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
+      "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
     ]
   },
   "regionOverrides": {
-    "US": {
-      "google-b-d": "google-b-1-d"
-    },
-    "CA": {
-      "ebay": "ebay-ca",
-      "ebay-fr": "ebay-ca"
-    },
-    "AT": {
-      "ebay-de": "ebay-at"
-    },
-    "AU": {
-      "ebay": "ebay-au",
-      "ebay-uk": "ebay-au"
-    },
-    "BE": {
-      "ebay": "ebay-be",
-      "ebay-nl": "ebay-be",
-      "ebay-fr": "ebay-be"
-    },
-    "CH": {
-      "ebay": "ebay-ch",
-      "ebay-de": "ebay-ch",
-      "ebay-fr": "ebay-ch"
-    },
-    "IE": {
-      "ebay": "ebay-ie",
-      "ebay-uk": "ebay-ie"
-    },
-    "NL": {
-      "ebay": "ebay-nl"
-    },
-    "GB": {
-      "ebay": "ebay-uk"
-    },
-    "esronly-1": {
-      "google-b-d": "google-b-e"
-    },
-    "esronly-2": {
-      "google-b-d": "google-b-1-e"
-    },
-    "esronly-3": {
-      "google-b-d": "google"
-    },
-    "esronly-4": {
-      "google-b-d": "google-2018"
-    }
   },
   "locales": {
     "en-US": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       },
       "experimental-hidden": {
@@ -89,7 +43,7 @@
     "ar": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "bing", "amazondotcom", "ddg", "wikipedia-ar"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -194,7 +148,7 @@
     "de": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "amazondotcom-de", "bing", "ddg", "ebay-de", "ecosia", "leo_ende_de", "wikipedia-de"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -255,7 +209,7 @@
     "es-ES": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "bing", "drae", "ddg", "ebay-es", "twitter", "wikipedia-es"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -288,7 +242,7 @@
     "fa": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "amazondotcom", "bing", "ddg", "wikipedia-fa"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -309,7 +263,7 @@
     "fr": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "bing", "amazon-france", "ddg", "ebay-fr", "cnrtl-tlfi-fr", "qwant", "wikipedia-fr"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -426,21 +380,21 @@
     "it": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "bing", "amazon-it", "ddg", "ebay-it", "hoepli", "wikipedia-it"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
     "ja-JP-mac": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "yahoo-jp", "bing", "amazon-jp", "rakuten", "yahoo-jp-auctions", "oshiete-goo", "twitter-ja", "wikipedia-ja", "ddg"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
     "ja": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "yahoo-jp", "bing", "amazon-jp", "rakuten", "yahoo-jp-auctions", "oshiete-goo", "twitter-ja", "wikipedia-ja", "ddg"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -482,7 +436,7 @@
     "ko": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "ddg", "naver-kr", "danawa-kr", "daum-kr", "wikipedia-kr"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -620,14 +574,14 @@
     "pl": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "allegro-pl", "ddg", "pwn-pl", "wikipedia-pl", "wolnelektury-pl"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
     "pt-BR": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "bing", "buscape", "ddg", "mercadolivre", "twitter", "wikipedia-pt"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       },
       "experimental-hidden": {
@@ -660,7 +614,7 @@
     "ru": {
       "default": {
         "visibleDefaultEngines": [
-          "yandex-ru", "google-b-d", "ddg", "ozonru", "priceru", "wikipedia-ru", "mailru"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -744,7 +698,7 @@
     "tr": {
       "default": {
         "visibleDefaultEngines": [
-          "yandex-tr", "google-b-d", "ddg", "twitter", "wikipedia-tr"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -772,7 +726,7 @@
     "vi": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-d", "coccoc", "ddg", "wikipedia-vi"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },
@@ -793,7 +747,7 @@
     "zh-CN": {
       "default": {
         "visibleDefaultEngines": [
-          "baidu", "google-b-d", "bing", "ddg", "wikipedia-zh-CN", "amazondotcn"
+          "ddg", "ddg-onion", "google", "yahoo", "twitter", "wikipedia", "disconnect", "youtube", "startpage"
         ]
       }
     },

@@ -275,13 +275,15 @@ pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-
 
 // Putting the search engine prefs into this file to fix #11236.
 // Default search engine
-pref("browser.search.defaultenginename", "Search");
+pref("browser.search.defaultenginename", "data:text/plain,browser.search.defaultenginename=DuckDuckGo");
+// Make sure we use the same search engine regardless of locale
+pref("browser.search.geoSpecificDefaults", false);
 
 // Search engine order (order displayed in the search bar dropdown)
 // Somewhat surprisingly we get some random behavior if we specify more than
 // two search engines as below. See
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1126722 for details.
-pref("browser.search.order.extra.1", "Search");
+pref("browser.search.order.extra.1", "DuckDuckGo");
 pref("browser.search.order.extra.2", "YouTube");
 
 // Audio_data is deprecated in future releases, but still present
