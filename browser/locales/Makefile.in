@@ -74,18 +74,7 @@ libs-%:
 	@$(MAKE) -C ../../toolkit/locales libs-$* XPI_ROOT_APPID='$(XPI_ROOT_APPID)'
 	@$(MAKE) -C ../../services/sync/locales AB_CD=$* XPI_NAME=locale-$*
 	@$(MAKE) -C ../../extensions/spellcheck/locales AB_CD=$* XPI_NAME=locale-$*
-ifneq (,$(wildcard ../extensions/formautofill/locales))
-	@$(MAKE) -C ../extensions/formautofill/locales AB_CD=$* XPI_NAME=locale-$*
-endif
-	@$(MAKE) -C ../extensions/jaws-esr/locales AB_CD=$* XPI_NAME=locale-$*
 	@$(MAKE) -C ../extensions/onboarding/locales AB_CD=$* XPI_NAME=locale-$*
-	@$(MAKE) -C ../extensions/pocket/locale AB_CD=$* XPI_NAME=locale-$*
-ifndef RELEASE_OR_BETA
-	@$(MAKE) -C ../extensions/presentation/locale AB_CD=$* XPI_NAME=locale-$*
-endif
-ifneq '$(or $(MOZ_DEV_EDITION),$(NIGHTLY_BUILD))' ''
-	@$(MAKE) -C ../extensions/webcompat-reporter/locales AB_CD=$* XPI_NAME=locale-$*
-endif
 	@$(MAKE) -C ../../devtools/client/locales AB_CD=$* XPI_NAME=locale-$* XPI_ROOT_APPID='$(XPI_ROOT_APPID)'
 	@$(MAKE) -C ../../devtools/shim/locales AB_CD=$* XPI_NAME=locale-$* XPI_ROOT_APPID='$(XPI_ROOT_APPID)'
 	@$(MAKE) -B searchplugins AB_CD=$* XPI_NAME=locale-$*
@@ -100,21 +89,10 @@ chrome-%:
 	@$(MAKE) -C ../../toolkit/locales chrome-$*
 	@$(MAKE) -C ../../services/sync/locales chrome AB_CD=$*
 	@$(MAKE) -C ../../extensions/spellcheck/locales chrome AB_CD=$*
-ifneq (,$(wildcard ../extensions/formautofill/locales))
-	@$(MAKE) -C ../extensions/formautofill/locales chrome AB_CD=$*
-endif
-	@$(MAKE) -C ../extensions/jaws-esr/locales chrome AB_CD=$*
-	@$(MAKE) -C ../extensions/pocket/locale chrome AB_CD=$*
-ifndef RELEASE_OR_BETA
-	@$(MAKE) -C ../extensions/presentation/locale chrome AB_CD=$*
-endif
 	@$(MAKE) -C ../../devtools/client/locales chrome AB_CD=$*
 	@$(MAKE) -C ../../devtools/shim/locales chrome AB_CD=$*
 	@$(MAKE) chrome AB_CD=$*
 	@$(MAKE) -C $(DEPTH)/$(MOZ_BRANDING_DIRECTORY)/locales chrome AB_CD=$*
-ifdef NIGHTLY_BUILD
-	@$(MAKE) -C ../extensions/webcompat-reporter/locales chrome AB_CD=$*
-endif
 
 package-win32-installer: $(SUBMAKEFILES)
 	$(MAKE) -C ../installer/windows CONFIG_DIR=l10ngen ZIP_IN='$(ZIP_OUT)' installer
