@@ -112,7 +112,7 @@ CreateInterceptor(STAUniquePtr<InterfaceT> aTargetInterface,
     return E_INVALIDARG;
   }
 
-  REFIID iidTarget = __uuidof(InterfaceT);
+  REFIID iidTarget = __uuidof(aTargetInterface);
 
   STAUniquePtr<IUnknown> targetUnknown(aTargetInterface.release());
   return Interceptor::Create(Move(targetUnknown), aEventSink, iidTarget,
