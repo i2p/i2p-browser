@@ -82,12 +82,6 @@ NullHttpChannel::SetTopLevelContentWindowId(uint64_t aWindowId)
 }
 
 NS_IMETHODIMP
-NullHttpChannel::IsPendingUnforced(bool *_retval)
-{
-  return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-NS_IMETHODIMP
 NullHttpChannel::GetTransferSize(uint64_t *aTransferSize)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
