@@ -39,6 +39,7 @@ Notes to self:
 #include "nsIFile.h"
 #include "nsILoadContext.h"
 #include "mozilla/UniquePtr.h"
+#include "mozilla/Preferences.h"
 
 NS_IMPL_ISUPPORTS(nsTransferable, nsITransferable)
 
@@ -248,6 +249,11 @@ nsTransferable::Init(nsILoadContext* aContext)
 
   if (aContext) {
     mPrivateData = aContext->UsePrivateBrowsing();
+  } else {
+    // without aContext here to provide PrivateBrowsing information,
+    // we defer to the active configured setting
+    mPrivateData =
+      mozilla::Preferences::GetBool("browser.privatebrowsing.autostart");
   }
 #ifdef DEBUG
   mInitialized = true;
