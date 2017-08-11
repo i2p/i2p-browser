@@ -148,9 +148,9 @@ struct Opcode {
   // Description of the type of the dest, src and aux operands,
   // put together from an enOperandType flag and an enAddressingMethod
   // flag.
-  int flag_dest_;
-  int flag_source_;
-  int flag_aux_;
+  unsigned int flag_dest_;
+  unsigned int flag_source_;
+  unsigned int flag_aux_;
 
   // We indicate the mnemonic for debugging purposes
   const char* mnemonic_;

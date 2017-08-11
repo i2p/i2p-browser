@@ -23,7 +23,7 @@
 #include "sandbox/win/src/service_resolver.h"
 #include "sandbox/win/src/target_interceptions.h"
 #include "sandbox/win/src/target_process.h"
-#include "sandbox/win/src/wow64.h"
+#include "sandbox/win/src/Wow64.h"
 
 namespace sandbox {
 
@@ -265,7 +265,7 @@ bool InterceptionManager::SetupDllInfo(const InterceptionData& data,
   dll_info->record_bytes = required;
   dll_info->offset_to_functions = required;
   dll_info->num_functions = 0;
-  data.dll._Copy_s(dll_info->dll_name, data.dll.size(), data.dll.size());
+  data.dll.copy(dll_info->dll_name, data.dll.size());
   dll_info->dll_name[data.dll.size()] = L'\0';
 
   return true;
@@ -307,12 +307,12 @@ bool InterceptionManager::SetupInterceptionInfo(const InterceptionData& data,
   function->interceptor_address = data.interceptor_address;
   char* names = function->function;
 
-  data.function._Copy_s(names, name_bytes, name_bytes);
+  data.function.copy(names, name_bytes);
   names += name_bytes;
   *names++ = '\0';
 
   // interceptor follows the function_name
-  data.interceptor._Copy_s(names, interceptor_bytes, interceptor_bytes);
+  data.interceptor.copy(names, interceptor_bytes);
   names += interceptor_bytes;
   *names++ = '\0';
 

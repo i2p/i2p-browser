@@ -16,6 +16,9 @@
 #include "sandbox/win/src/internal_types.h"
 #include "sandbox/win/src/sandbox_types.h"
 
+#define __try if(true)
+#define __except(x) else
+
 // Increases |value| until there is no need for padding given an int64_t
 // alignment. Returns the increased value.
 inline uint32_t Align(uint32_t value) {

@@ -356,7 +356,7 @@ TimeDelta RolloverProtectedNow() {
   // we keep last_seen_now stay correctly in sync.
   DWORD now = g_tick_function();
   if (now < g_last_seen_now)
-    g_rollover_ms += 0x100000000I64;  // ~49.7 days.
+    g_rollover_ms += 0x100000000LL;  // ~49.7 days.
   g_last_seen_now = now;
   return TimeDelta::FromMilliseconds(now + g_rollover_ms);
 }

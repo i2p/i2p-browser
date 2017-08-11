@@ -4,7 +4,7 @@
 
 #include "sandbox/win/src/app_container.h"
 
-#include <Sddl.h>
+#include <sddl.h>
 #include <stddef.h>
 #include <vector>
 
@@ -27,10 +27,10 @@ PSID ConvertSid(const base::string16& sid) {
 template <typename T>
 T BindFunction(const char* name) {
   HMODULE module = GetModuleHandle(sandbox::kKerneldllName);
-  void* function = GetProcAddress(module, name);
+  void* function = (void*)GetProcAddress(module, name);
   if (!function) {
     module = GetModuleHandle(sandbox::kKernelBasedllName);
-    function = GetProcAddress(module, name);
+    function = (void*)GetProcAddress(module, name);
   }
   return reinterpret_cast<T>(function);
 }

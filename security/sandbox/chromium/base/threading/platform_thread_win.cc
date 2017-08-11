@@ -38,11 +38,13 @@ void SetNameInternal(PlatformThreadId thread_id, const char* name) {
   info.dwThreadID = thread_id;
   info.dwFlags = 0;
 
+#if 0
   __try {
     RaiseException(kVCThreadNameException, 0, sizeof(info)/sizeof(DWORD),
                    reinterpret_cast<DWORD_PTR*>(&info));
   } __except(EXCEPTION_CONTINUE_EXECUTION) {
   }
+#endif
 }
 
 struct ThreadParams {

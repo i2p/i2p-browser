@@ -12,6 +12,7 @@
 #include <stddef.h>
 
 #include "sandbox/win/src/sandbox_types.h"
+#include "sandbox/win/src/interceptors.h"
 
 namespace sandbox {
 

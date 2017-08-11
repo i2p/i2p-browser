@@ -221,7 +221,7 @@ DWORD TargetProcess::Create(const wchar_t* exe_path,
         static_cast<PROCESS_INFORMATION_CLASS>(NtProcessInformationAccessToken),
         &process_access_token, sizeof(process_access_token));
     if (!NT_SUCCESS(status)) {
-      win_result = ERROR_INVALID_TOKEN;
+      win_result = ::GetLastError(); //ERROR_INVALID_TOKEN;
       ::TerminateProcess(process_info.process_handle(), 0);  // exit code
       return win_result;
     }
@@ -244,7 +244,7 @@ ResultCode TargetProcess::TransferVariable(const char* name, void* address,
   if (NULL == module)
     return SBOX_ERROR_GENERIC;
 
-  child_var = ::GetProcAddress(module, name);
+  child_var = (void*)::GetProcAddress(module, name);
   ::FreeLibrary(module);
 
   if (NULL == child_var)

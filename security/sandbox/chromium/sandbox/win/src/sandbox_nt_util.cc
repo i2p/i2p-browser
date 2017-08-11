@@ -13,6 +13,9 @@
 #include "sandbox/win/src/sandbox_factory.h"
 #include "sandbox/win/src/target_services.h"
 
+#define __try if(true)
+#define __except(x) else
+
 namespace sandbox {
 
 // This is the list of all imported symbols from ntdll.dll.
@@ -643,6 +646,11 @@ void* operator new(size_t size, sandbox::AllocationType type,
   // for NULL here and crashing or throwing.
 
   return result;
+}
+
+void* operator new [](size_t size, sandbox::AllocationType type,
+                      void* near_to) {
+    return operator new(size, type, near_to);
 }
 
 void operator delete(void* memory, sandbox::AllocationType type) {

@@ -62,7 +62,7 @@ GetStackAfterCurrentFrame(uint8_t** aOutTop, uint8_t** aOutBottom)
 {
   // "Top" of the free space on the stack is directly after the memory
   // holding our return address.
-  uint8_t* top = (uint8_t*)_AddressOfReturnAddress();
+  uint8_t* top = (uint8_t*)__builtin_return_address(0);//_AddressOfReturnAddress();
 
   // Look down the stack until we find the guard page...
   MEMORY_BASIC_INFORMATION memInfo = {0};
