@@ -1575,7 +1575,7 @@ int setup_wasapi_stream(cubeb_stream * stm)
   XASSERT((!stm->output_client || !stm->input_client) && "WASAPI stream already setup, close it first.");
 
   if (has_input(stm)) {
-    LOG("Setup capture: device=%x", (int)stm->input_device);
+    LOG("Setup capture: device=%p", stm->input_device);
     rv = setup_wasapi_stream_one_side(stm,
                                       &stm->input_stream_params,
                                       stm->input_device,
@@ -1593,7 +1593,7 @@ int setup_wasapi_stream(cubeb_stream * stm)
   }
 
   if (has_output(stm)) {
-    LOG("Setup render: device=%x", (int)stm->output_device);
+    LOG("Setup render: device=%p", stm->output_device);
     rv = setup_wasapi_stream_one_side(stm,
                                       &stm->output_stream_params,
                                       stm->output_device,
