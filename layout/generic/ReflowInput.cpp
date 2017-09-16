@@ -30,6 +30,7 @@
 #include "CounterStyleManager.h"
 #include <algorithm>
 #include "mozilla/dom/HTMLInputElement.h"
+#include "nsContentUtils.h"
 
 #ifdef DEBUG
 #undef NOISY_VERTICAL_ALIGN
@@ -2768,6 +2769,11 @@ GetNormalLineHeight(nsFontMetrics* aFontMetrics)
   nscoord externalLeading = aFontMetrics->ExternalLeading();
   nscoord internalLeading = aFontMetrics->InternalLeading();
   nscoord emHeight = aFontMetrics->EmHeight();
+
+  if (nsContentUtils::ShouldResistFingerprinting()) {
+    return NSToCoordRound(emHeight * NORMAL_LINE_HEIGHT_FACTOR);
+  }
+
   switch (GetNormalLineHeightCalcControl()) {
   case eIncludeExternalLeading:
     normalLineHeight = emHeight+ internalLeading + externalLeading;
