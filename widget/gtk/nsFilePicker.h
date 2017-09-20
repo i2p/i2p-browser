@@ -25,7 +25,6 @@ public:
 
   // nsIFilePicker (less what's in nsBaseFilePicker)
   NS_IMETHOD Open(nsIFilePickerShownCallback *aCallback) override;
-  NS_IMETHOD AppendFilters(int32_t aFilterMask) override;
   NS_IMETHOD AppendFilter(const nsAString& aTitle,
                           const nsAString& aFilter) override;
   NS_IMETHOD SetDefaultString(const nsAString& aString) override;
@@ -62,7 +61,6 @@ protected:
   int16_t   mSelectedType;
   int16_t   mResult;
   bool      mRunning;
-  bool      mAllowURLs;
   nsCString mFileURL;
   nsString  mTitle;
   nsString  mDefault;

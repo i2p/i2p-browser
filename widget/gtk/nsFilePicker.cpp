@@ -170,7 +170,6 @@ NS_IMPL_ISUPPORTS(nsFilePicker, nsIFilePicker)
 nsFilePicker::nsFilePicker()
   : mSelectedType(0)
   , mRunning(false)
-  , mAllowURLs(false)
 #if (MOZ_WIDGET_GTK == 3)
   , mFileChooserDelegate(nullptr)
 #endif
@@ -237,13 +236,6 @@ nsFilePicker::InitNative(nsIWidget *aParent,
 {
   mParentWidget = aParent;
   mTitle.Assign(aTitle);
-}
-
-NS_IMETHODIMP
-nsFilePicker::AppendFilters(int32_t aFilterMask)
-{
-  mAllowURLs = !!(aFilterMask & filterAllowURLs);
-  return nsBaseFilePicker::AppendFilters(aFilterMask);
 }
 
 NS_IMETHODIMP
@@ -402,9 +394,9 @@ nsFilePicker::Open(nsIFilePickerShownCallback *aCallback)
                                           GTK_RESPONSE_ACCEPT,
                                           GTK_RESPONSE_CANCEL,
                                           -1);
-  if (mAllowURLs) {
-    gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(file_chooser), FALSE);
-  }
+
+  // Don't allow remote URLs.
+  gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(file_chooser), TRUE);
 
   if (action == GTK_FILE_CHOOSER_ACTION_OPEN || action == GTK_FILE_CHOOSER_ACTION_SAVE) {
     GtkWidget *img_preview = gtk_image_new();
