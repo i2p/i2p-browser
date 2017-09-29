@@ -36,6 +36,7 @@ NS_IMPL_ISUPPORTS(nsUserInfo,nsIUserInfo)
 NS_IMETHODIMP
 nsUserInfo::GetFullname(char16_t **aFullname)
 {
+#ifndef TOR_BROWSER_VERSION
     struct passwd *pw = nullptr;
 
     pw = getpwuid (geteuid());
@@ -76,11 +77,16 @@ nsUserInfo::GetFullname(char16_t **aFullname)
         return NS_OK;
 
     return NS_ERROR_FAILURE;
+#else
+    *aFullname = ToNewUnicode(NS_LITERAL_STRING(""));
+    return *aFullname ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 
 NS_IMETHODIMP 
 nsUserInfo::GetUsername(char * *aUsername)
 {
+#ifndef TOR_BROWSER_VERSION
     struct passwd *pw = nullptr;
 
     // is this portable?  those are POSIX compliant calls, but I need to check
@@ -95,11 +101,16 @@ nsUserInfo::GetUsername(char * *aUsername)
     *aUsername = strdup(pw->pw_name);
 
     return NS_OK;
+#else
+    *aUsername = ToNewUTF8String(NS_LITERAL_STRING(""));
+    return *aUsername ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 
 NS_IMETHODIMP 
 nsUserInfo::GetDomain(char * *aDomain)
 {
+#ifndef TOR_BROWSER_VERSION
     nsresult rv = NS_ERROR_FAILURE;
 
     struct utsname buf;
@@ -132,11 +143,16 @@ nsUserInfo::GetDomain(char * *aDomain)
     }
     
     return rv;
+#else
+    *aDomain = ToNewUTF8String(NS_LITERAL_STRING(""));
+    return *aDomain ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 
 NS_IMETHODIMP 
 nsUserInfo::GetEmailAddress(char * *aEmailAddress)
 {
+#ifndef TOR_BROWSER_VERSION
     // use username + "@" + domain for the email address
 
     nsresult rv;
@@ -163,5 +179,9 @@ nsUserInfo::GetEmailAddress(char * *aEmailAddress)
     *aEmailAddress = ToNewCString(emailAddress);
     
     return NS_OK;
+#else
+    *aEmailAddress = ToNewUTF8String(NS_LITERAL_STRING(""));
+    return *aEmailAddress ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 

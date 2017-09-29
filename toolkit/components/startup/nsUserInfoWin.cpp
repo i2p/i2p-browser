@@ -30,6 +30,7 @@ nsUserInfo::GetUsername(char **aUsername)
 {
   NS_ENSURE_ARG_POINTER(aUsername);
   *aUsername = nullptr;
+#ifndef TOR_BROWSER_VERSION
 
   // ULEN is the max username length as defined in lmcons.h
   wchar_t username[UNLEN +1];
@@ -39,6 +40,10 @@ nsUserInfo::GetUsername(char **aUsername)
 
   *aUsername = ToNewUTF8String(nsDependentString(username));
   return (*aUsername) ? NS_OK : NS_ERROR_FAILURE;
+#else
+  *aUsername = ToNewUTF8String(NS_LITERAL_STRING(""));
+  return *aUsername ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 
 NS_IMETHODIMP
@@ -46,6 +51,7 @@ nsUserInfo::GetFullname(char16_t **aFullname)
 {
   NS_ENSURE_ARG_POINTER(aFullname);
   *aFullname = nullptr;
+#ifndef TOR_BROWSER_VERSION
 
   wchar_t fullName[512];
   DWORD size = mozilla::ArrayLength(fullName);
@@ -91,6 +97,10 @@ nsUserInfo::GetFullname(char16_t **aFullname)
   }
 
   return (*aFullname) ? NS_OK : NS_ERROR_FAILURE;
+#else
+  *aFullname = ToNewUnicode(NS_LITERAL_STRING(""));
+  return *aFullname ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 
 NS_IMETHODIMP
@@ -98,7 +108,7 @@ nsUserInfo::GetDomain(char **aDomain)
 {
   NS_ENSURE_ARG_POINTER(aDomain);
   *aDomain = nullptr;
-
+#ifndef TOR_BROWSER_VERSION
   const DWORD level = 100;
   LPBYTE info;
   NET_API_STATUS status = NetWkstaGetInfo(nullptr, level, &info);
@@ -110,6 +120,10 @@ nsUserInfo::GetDomain(char **aDomain)
   }
 
   return (*aDomain) ? NS_OK : NS_ERROR_FAILURE;
+#else
+  *aDomain = ToNewUTF8String(NS_LITERAL_STRING(""));
+  return *aDomain ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 
 NS_IMETHODIMP
@@ -117,7 +131,7 @@ nsUserInfo::GetEmailAddress(char **aEmailAddress)
 {
   NS_ENSURE_ARG_POINTER(aEmailAddress);
   *aEmailAddress = nullptr;
-
+#ifndef TOR_BROWSER_VERSION
   // RFC3696 says max length of an email address is 254
   wchar_t emailAddress[255];
   DWORD size = mozilla::ArrayLength(emailAddress);
@@ -130,4 +144,8 @@ nsUserInfo::GetEmailAddress(char **aEmailAddress)
 
   *aEmailAddress = ToNewUTF8String(nsDependentString(emailAddress));
   return (*aEmailAddress) ? NS_OK : NS_ERROR_FAILURE;
+#else
+  *aEmailAddress = ToNewUTF8String(NS_LITERAL_STRING(""));
+  return *aEmailAddress ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
