@@ -19,11 +19,14 @@ NS_IMETHODIMP
 nsUserInfo::GetFullname(char16_t **aFullname)
 {
   NS_OBJC_BEGIN_TRY_ABORT_BLOCK_NSRESULT
-  
+#ifndef TOR_BROWSER_VERSION
   NS_ConvertUTF8toUTF16 fullName([NSFullUserName() UTF8String]);
   *aFullname = ToNewUnicode(fullName);
   return NS_OK;
-  
+#else
+  *aFullname = ToNewUnicode(NS_LITERAL_STRING(""));
+  return *aFullname ? NS_OK : NS_ERROR_FAILURE;
+#endif
   NS_OBJC_END_TRY_ABORT_BLOCK_NSRESULT
 }
 
@@ -31,11 +34,14 @@ NS_IMETHODIMP
 nsUserInfo::GetUsername(char **aUsername)
 {
   NS_OBJC_BEGIN_TRY_ABORT_BLOCK_NSRESULT
-  
+#ifndef TOR_BROWSER_VERSION
   nsAutoCString username([NSUserName() UTF8String]);
   *aUsername = ToNewCString(username);
   return NS_OK;
-  
+#else
+  *aUsername = ToNewUTF8String(NS_LITERAL_STRING(""));
+  return *aUsername ? NS_OK : NS_ERROR_FAILURE;
+#endif
   NS_OBJC_END_TRY_ABORT_BLOCK_NSRESULT
 }
 
@@ -63,15 +69,21 @@ nsUserInfo::GetPrimaryEmailAddress(nsCString &aEmailAddress)
 NS_IMETHODIMP 
 nsUserInfo::GetEmailAddress(char **aEmailAddress)
 {
+#ifndef TOR_BROWSER_VERSION
   nsAutoCString email;
   if (NS_SUCCEEDED(GetPrimaryEmailAddress(email))) 
     *aEmailAddress = ToNewCString(email);
   return NS_OK;
+#else
+  *aEmailAddress = ToNewUTF8String(NS_LITERAL_STRING(""));
+  return *aEmailAddress ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
 
 NS_IMETHODIMP 
 nsUserInfo::GetDomain(char **aDomain)
 {
+#ifndef TOR_BROWSER_VERSION
   nsAutoCString email;
   if (NS_SUCCEEDED(GetPrimaryEmailAddress(email))) {
     int32_t index = email.FindChar('@');
@@ -81,4 +93,8 @@ nsUserInfo::GetDomain(char **aDomain)
     }
   }
   return NS_OK;
+#else
+  *aDomain = ToNewUTF8String(NS_LITERAL_STRING(""));
+  return *aDomain ? NS_OK : NS_ERROR_FAILURE;
+#endif
 }
