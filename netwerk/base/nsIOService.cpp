@@ -789,12 +789,20 @@ nsIOService::NewChannelFromURIWithProxyFlagsInternal(nsIURI* aURI,
         // if calling newChannel2() fails we try to fall back to
         // creating a new channel by calling NewChannel().
         if (NS_FAILED(rv)) {
+#ifdef XP_UNIX
+        if (rv == NS_ERROR_FILE_TARGET_DOES_NOT_EXIST) {
+            return rv;
+        } else {
+#endif
             rv = handler->NewChannel(aURI, getter_AddRefs(channel));
             NS_ENSURE_SUCCESS(rv, rv);
             // The protocol handler does not implement NewChannel2, so
             // maybe we need to wrap the channel (see comment in MaybeWrap
             // function).
             channel = nsSecCheckWrapChannel::MaybeWrap(channel, aLoadInfo);
+#ifdef XP_UNIX
+        }
+#endif
         }
     }
 
