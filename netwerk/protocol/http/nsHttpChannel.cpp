@@ -5419,6 +5419,13 @@ nsHttpChannel::AsyncProcessRedirection(uint32_t redirectType)
         return NS_ERROR_CORRUPTED_CONTENT;
     }
 
+    bool isRedirectToFile = false;
+    rv = mRedirectURI->SchemeIs("file", &isRedirectToFile);
+    if (!NS_FAILED(rv) && isRedirectToFile) {
+        LOG(("Attempted to redirect from a remote page to a file:// URI."));
+        return NS_ERROR_FAILURE;
+    }
+
     if (mApplicationCache) {
         // if we are redirected to a different origin check if there is a fallback
         // cache entry to fall back to. we don't care about file strict
