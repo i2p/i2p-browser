@@ -48,6 +48,7 @@ NS_ShutdownNativeCharsetUtils()
 #include <stdlib.h>   // mbtowc, wctomb
 #include <locale.h>   // setlocale
 #include "mozilla/Mutex.h"
+#include "mozilla/Preferences.h"
 #include "nscore.h"
 #include "nsAString.h"
 #include "nsReadableUtils.h"
@@ -316,7 +317,12 @@ nsNativeCharsetConverter::LazyInit()
   // NS_StartupNativeCharsetUtils, assume we are called early enough that
   // we are the first to care about the locale's charset.
   if (!gLock) {
-    setlocale(LC_CTYPE, "");
+
+    if (mozilla::Preferences::GetBool("javascript.use_us_english_locale", false)) {
+      setlocale(LC_CTYPE, "C.UTF-8") || setlocale(LC_CTYPE, "C");
+    } else {
+      setlocale(LC_CTYPE, "");
+    }
   }
   const char* blank_list[] = { "", nullptr };
   const char** native_charset_list = blank_list;
@@ -884,7 +890,11 @@ NS_StartupNativeCharsetUtils()
   // XXX we assume that we are called early enough that we should
   // always be the first to care about the locale's charset.
   //
-  setlocale(LC_CTYPE, "");
+  if (mozilla::Preferences::GetBool("javascript.use_us_english_locale", false)) {
+    setlocale(LC_CTYPE, "C.UTF-8") || setlocale(LC_CTYPE, "C");
+  } else {
+    setlocale(LC_CTYPE, "");
+  }
 
   nsNativeCharsetConverter::GlobalInit();
 }

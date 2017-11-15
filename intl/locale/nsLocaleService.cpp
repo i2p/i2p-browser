@@ -12,6 +12,7 @@
 #include "nsTArray.h"
 #include "nsString.h"
 #include "mozilla/UniquePtr.h"
+#include "mozilla/Preferences.h"
 
 #include <ctype.h>
 
@@ -93,12 +94,20 @@ protected:
 //
 nsLocaleService::nsLocaleService(void) 
 {
+    // conditionally use us english locale when initialization locale objects
+    const auto use_us_english_locale =
+        mozilla::Preferences::GetBool("javascript.use_us_english_locale", false);
+
 #ifdef XP_WIN
     nsAutoString        xpLocale;
+    // 1033 is default english us locale LCID
+    // https://msdn.microsoft.com/en-us/library/ms912047(v=winembedded.10).aspx
+    const LCID          en_US_lcid = 1033;
+
     //
     // get the system LCID
     //
-    LCID win_lcid = GetSystemDefaultLCID();
+    LCID win_lcid = use_us_english_locale ? en_US_lcid : GetSystemDefaultLCID();
     NS_ENSURE_TRUE_VOID(win_lcid);
     nsWin32Locale::GetXPLocale(win_lcid, xpLocale);
     nsresult rv = NewLocale(xpLocale, getter_AddRefs(mSystemLocale));
@@ -107,7 +116,7 @@ nsLocaleService::nsLocaleService(void)
     //
     // get the application LCID
     //
-    win_lcid = GetUserDefaultLCID();
+    win_lcid = use_us_english_locale ? en_US_lcid : GetUserDefaultLCID();
     NS_ENSURE_TRUE_VOID(win_lcid);
     nsWin32Locale::GetXPLocale(win_lcid, xpLocale);
     rv = NewLocale(xpLocale, getter_AddRefs(mApplicationLocale));
@@ -118,7 +127,7 @@ nsLocaleService::nsLocaleService(void)
     NS_ENSURE_TRUE_VOID(resultLocale);
 
     // Get system configuration
-    const char* lang = getenv("LANG");
+    const char* lang = use_us_english_locale ? "en-US" : getenv("LANG");
 
     nsAutoString xpLocale, platformLocale;
     nsAutoString category, category_platform;
@@ -127,7 +136,19 @@ nsLocaleService::nsLocaleService(void)
     for( i = 0; i < LocaleListLength; i++ ) {
         nsresult result;
         // setlocale( , "") evaluates LC_* and LANG
-        char* lc_temp = setlocale(posix_locale_category[i], "");
+        const auto current_posix_locale_category = posix_locale_category[i];
+        const char* lc_temp = nullptr;
+
+        if (use_us_english_locale) {
+            lc_temp = setlocale(current_posix_locale_category, "C.UTF-8");
+            if (lc_temp == nullptr) {
+                lc_temp = setlocale(current_posix_locale_category, "C");
+            }
+        }
+        else {
+            lc_temp = setlocale(current_posix_locale_category, "");
+        }
+
         CopyASCIItoUTF16(LocaleList[i], category);
         category_platform = category;
         category_platform.AppendLiteral("##PLATFORM");
@@ -163,29 +184,36 @@ nsLocaleService::nsLocaleService(void)
 #endif // XP_UNIX
 
 #ifdef XP_MACOSX
-    // Get string representation of user's current locale
-    CFLocaleRef userLocaleRef = ::CFLocaleCopyCurrent();
-    CFStringRef userLocaleStr = ::CFLocaleGetIdentifier(userLocaleRef);
-    ::CFRetain(userLocaleStr);
+    nsAutoString xpLocale;
 
-    AutoTArray<UniChar, 32> buffer;
-    int size = ::CFStringGetLength(userLocaleStr);
-    buffer.SetLength(size + 1);
-    CFRange range = ::CFRangeMake(0, size);
-    ::CFStringGetCharacters(userLocaleStr, range, buffer.Elements());
-    buffer[size] = 0;
+    if (use_us_english_locale) {
+        xpLocale = NS_LITERAL_STRING("en-US").get();
+    }
+    else {
+        // Get string representation of user's current locale
+        CFLocaleRef userLocaleRef = ::CFLocaleCopyCurrent();
+        CFStringRef userLocaleStr = ::CFLocaleGetIdentifier(userLocaleRef);
+        ::CFRetain(userLocaleStr);
 
-    // Convert the locale string to the format that Mozilla expects
-    nsAutoString xpLocale(reinterpret_cast<char16_t*>(buffer.Elements()));
-    xpLocale.ReplaceChar('_', '-');
+        AutoTArray<UniChar, 32> buffer;
+        int size = ::CFStringGetLength(userLocaleStr);
+        buffer.SetLength(size + 1);
+        CFRange range = ::CFRangeMake(0, size);
+        ::CFStringGetCharacters(userLocaleStr, range, buffer.Elements());
+        buffer[size] = 0;
+
+        // Convert the locale string to the format that Mozilla expects
+        xpLocale = reinterpret_cast<char16_t*>(buffer.Elements());
+        xpLocale.ReplaceChar('_', '-');
+
+        ::CFRelease(userLocaleStr);
+        ::CFRelease(userLocaleRef);
+    }
 
     nsresult rv = NewLocale(xpLocale, getter_AddRefs(mSystemLocale));
     if (NS_SUCCEEDED(rv)) {
         mApplicationLocale = mSystemLocale;
     }
-
-    ::CFRelease(userLocaleStr);
-    ::CFRelease(userLocaleRef);
 
     NS_ASSERTION(mApplicationLocale, "Failed to create locale objects");
 #endif // XP_MACOSX
