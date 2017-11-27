@@ -1047,7 +1047,7 @@ private:
   uint8_t *mData;
   RecordedFontDetails mFontDetails;
 
-  bool mGetFontFileDataSucceeded = false;
+  bool mGetFontFileDataSucceeded;
 
   MOZ_IMPLICIT RecordedFontData(std::istream &aStream);
 };
@@ -1055,7 +1055,7 @@ private:
 class RecordedFontDescriptor : public RecordedEvent {
 public:
 
-  static void FontDescCb(const uint8_t *aData, uint32_t aSize,
+  static void FontDescCb(const uint8_t* aData, uint32_t aSize,
                          Float aFontSize, void* aBaton)
   {
     auto recordedFontDesc = static_cast<RecordedFontDescriptor*>(aBaton);
@@ -1108,9 +1108,11 @@ public:
 
   RecordedScaledFontCreation(ScaledFont* aScaledFont,
                              RecordedFontDetails aFontDetails)
-    : RecordedEvent(SCALEDFONTCREATION), mRefPtr(aScaledFont)
+    : RecordedEvent(SCALEDFONTCREATION)
+    , mRefPtr(aScaledFont)
     , mFontDataKey(aFontDetails.fontDataKey)
-    , mGlyphSize(aFontDetails.glyphSize) , mIndex(aFontDetails.index)
+    , mGlyphSize(aFontDetails.glyphSize)
+    , mIndex(aFontDetails.index)
   {
     aScaledFont->GetFontInstanceData(FontInstanceDataProc, this);
   }

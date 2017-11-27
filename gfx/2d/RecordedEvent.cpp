@@ -1595,18 +1595,13 @@ RecordedFontDescriptor::~RecordedFontDescriptor()
 bool
 RecordedFontDescriptor::PlayEvent(Translator *aTranslator) const
 {
-  MOZ_ASSERT(mType == FontType::GDI);
-
-  NativeFont nativeFont;
-  nativeFont.mType = (NativeFontType)mType;
-  nativeFont.mFont = (void*)&mData[0];
-
   RefPtr<ScaledFont> font =
-    Factory::CreateScaledFontForNativeFont(nativeFont, mFontSize);
-
-#ifdef USE_CAIRO_SCALED_FONT
-  static_cast<ScaledFontBase*>(font.get())->PopulateCairoScaledFont();
-#endif
+    Factory::CreateScaledFontFromFontDescriptor(mType, mData.data(), mData.size(), mFontSize);
+  if (!font) {
+    gfxDevCrash(LogReason::InvalidFont) <<
+      "Failed creating ScaledFont of type " << int(mType) << " from font descriptor";
+    return false;
+  }
 
   aTranslator->AddScaledFont(mRefPtr, font);
   return true;
@@ -1620,7 +1615,7 @@ RecordedFontDescriptor::RecordToStream(std::ostream &aStream) const
   WriteElement(aStream, mFontSize);
   WriteElement(aStream, mRefPtr);
   WriteElement(aStream, (size_t)mData.size());
-  aStream.write((char*)&mData[0], mData.size());
+  aStream.write((char*)mData.data(), mData.size());
 }
 
 void
@@ -1646,7 +1641,7 @@ RecordedFontDescriptor::RecordedFontDescriptor(istream &aStream)
   size_t size;
   ReadElement(aStream, size);
   mData.resize(size);
-  aStream.read((char*)&mData[0], size);
+  aStream.read((char*)mData.data(), size);
 }
 
 bool

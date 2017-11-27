@@ -1388,6 +1388,13 @@ public:
     CreateNativeFontResource(uint8_t *aData, uint32_t aSize, FontType aType);
 
   /**
+   * This creates a scaled font of the given type based on font descriptor
+   * data retrieved from ScaledFont::GetFontDescriptor.
+   */
+  static already_AddRefed<ScaledFont>
+    CreateScaledFontFromFontDescriptor(FontType aType, const uint8_t* aData, uint32_t aDataLength, Float aSize);
+
+  /**
    * This creates a scaled font with an associated cairo_scaled_font_t, and
    * must be used when using the Cairo backend. The NativeFont and
    * cairo_scaled_font_t* parameters must correspond to the same font.
