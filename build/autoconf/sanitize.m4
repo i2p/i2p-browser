@@ -32,8 +32,10 @@ if test -n "$MOZ_ASAN"; then
             CXXFLAGS="-fsanitize-blacklist=$_topsrcdir/build/sanitizers/asan_blacklist_win.txt $CXXFLAGS"
         fi
     fi
-    CFLAGS="-fsanitize=address $CFLAGS"
-    CXXFLAGS="-fsanitize=address $CXXFLAGS"
+    # ASan and FORTIFY_SOURCE are not compatible yet. Let's make sure we are
+    # compiling without FORTIFY_SOURCE if ASan is enabled, see #21925.
+    CFLAGS="-fsanitize=address $CFLAGS -U_FORTIFY_SOURCE"
+    CXXFLAGS="-fsanitize=address $CXXFLAGS -U_FORTIFY_SOURCE"
     if test -z "$CLANG_CL"; then
         LDFLAGS="-fsanitize=address $LDFLAGS"
     fi
