@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<html>
+<head>
+  <title>Test for Tor Bug #23104: CSS line-height reveals the platform Tor browser is running</title>
+  <script type="application/javascript" src="/tests/SimpleTest/SimpleTest.js"></script>
+  <script type="application/javascript" src="/tests/SimpleTest/SpawnTask.js"></script>
+  <style type="text/css">
+    span {
+      background-color: #000;
+      color: #fff;
+      font-size: 16.5px;
+    }
+  </style>
+</head>
+<body>
+<span id="test1">Test1</span>
+<span id="test2">كلمة</span>
+<span id="test3">ação</span>
+<script type="application/javascript;version=1.7">
+
+let setPref = function* (key, value) {
+  return new Promise(function(resolve, reject) {
+    SpecialPowers.pushPrefEnv({"set": [[key, value]]}, resolve);
+  });
+}
+
+function getStyle(el, styleprop) {
+  el = document.getElementById(el);
+  return document.defaultView.getComputedStyle(el, null).getPropertyValue(styleprop);
+}
+
+function validateElement(elementName, isFingerprintResistent) {
+  var fontSize = getStyle(elementName, 'font-size');
+  var lineHeight = getStyle(elementName, 'line-height');
+  var validationCb = isFingerprintResistent ? is : isnot;
+  validationCb(parseFloat(lineHeight), parseFloat(fontSize) * 1.2, 'Line Height validation');
+}
+
+add_task(function* () {
+  for (let resistFingerprintingValue of [true, false]) {
+  yield setPref("privacy.resistFingerprinting", resistFingerprintingValue);
+    for (let elementId of ['test1', 'test2', 'test3']) {
+      validateElement(elementId, resistFingerprintingValue);
+    }
+  }
+});
+
+</script>
+</body>
+</html>
