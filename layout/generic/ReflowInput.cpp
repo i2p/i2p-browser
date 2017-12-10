@@ -31,6 +31,7 @@
 #include "CounterStyleManager.h"
 #include <algorithm>
 #include "mozilla/dom/HTMLInputElement.h"
+#include "nsContentUtils.h"
 
 #ifdef DEBUG
 #undef NOISY_VERTICAL_ALIGN
@@ -2689,7 +2690,8 @@ void ReflowInput::CalculateBlockSideMargins(LayoutFrameType aFrameType) {
 
 // For risk management, we use preference to control the behavior, and
 // eNoExternalLeading is the old behavior.
-static nscoord GetNormalLineHeight(nsFontMetrics* aFontMetrics) {
+static nscoord GetNormalLineHeight(nsIContent* aContent,
+                                   nsFontMetrics* aFontMetrics) {
   NS_PRECONDITION(nullptr != aFontMetrics, "no font metrics");
 
   nscoord normalLineHeight;
@@ -2697,6 +2699,12 @@ static nscoord GetNormalLineHeight(nsFontMetrics* aFontMetrics) {
   nscoord externalLeading = aFontMetrics->ExternalLeading();
   nscoord internalLeading = aFontMetrics->InternalLeading();
   nscoord emHeight = aFontMetrics->EmHeight();
+
+  if (nsContentUtils::ShouldResistFingerprinting() &&
+      !aContent->IsInChromeDocument()) {
+    return NSToCoordRound(emHeight * NORMAL_LINE_HEIGHT_FACTOR);
+  }
+
   switch (GetNormalLineHeightCalcControl()) {
     case eIncludeExternalLeading:
       normalLineHeight = emHeight + internalLeading + externalLeading;
@@ -2714,7 +2722,8 @@ static nscoord GetNormalLineHeight(nsFontMetrics* aFontMetrics) {
   return normalLineHeight;
 }
 
-static inline nscoord ComputeLineHeight(nsStyleContext* aStyleContext,
+static inline nscoord ComputeLineHeight(nsIContent* aContent,
+                                        nsStyleContext* aStyleContext,
                                         nscoord aBlockBSize,
                                         float aFontSizeInflation) {
   const nsStyleCoord& lhCoord = aStyleContext->StyleText()->mLineHeight;
@@ -2748,7 +2757,7 @@ static inline nscoord ComputeLineHeight(nsStyleContext* aStyleContext,
 
   RefPtr<nsFontMetrics> fm = nsLayoutUtils::GetFontMetricsForStyleContext(
       aStyleContext, aFontSizeInflation);
-  return GetNormalLineHeight(fm);
+  return GetNormalLineHeight(aContent, fm);
 }
 
 nscoord ReflowInput::CalcLineHeight() const {
@@ -2768,8 +2777,8 @@ nscoord ReflowInput::CalcLineHeight() const {
                                                  float aFontSizeInflation) {
   NS_PRECONDITION(aStyleContext, "Must have a style context");
 
-  nscoord lineHeight =
-      ComputeLineHeight(aStyleContext, aBlockBSize, aFontSizeInflation);
+  nscoord lineHeight = ComputeLineHeight(aContent, aStyleContext, aBlockBSize,
+                                         aFontSizeInflation);
 
   NS_ASSERTION(lineHeight >= 0, "ComputeLineHeight screwed up");
 
