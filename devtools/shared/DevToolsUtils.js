@@ -697,11 +697,16 @@ function newChannelForURL(url, { policy, window, principal }) {
   try {
     return NetUtil.newChannel(channelOptions);
   } catch (e) {
-    // In xpcshell tests on Windows, nsExternalProtocolHandler::NewChannel()
-    // can throw NS_ERROR_UNKNOWN_PROTOCOL if the external protocol isn't
-    // supported by Windows, so we also need to handle the exception here if
-    // parsing the URL above doesn't throw.
-    return newChannelForURL("file://" + url, { policy, window, principal });
+    if (e.name === "NS_ERROR_UNKNOWN_PROTOCOL" &&
+        !(url.startsWith("file://"))) {
+      // In xpcshell tests on Windows, nsExternalProtocolHandler::NewChannel()
+      // can throw NS_ERROR_UNKNOWN_PROTOCOL if the external protocol isn't
+      // supported by Windows, so we also need to handle the exception here if
+      // parsing the URL above doesn't throw.
+      return newChannelForURL("file://" + url, { policy, window, principal });
+    }
+
+    throw e;
   }
 }
 
