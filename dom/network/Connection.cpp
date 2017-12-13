@@ -78,7 +78,8 @@ Connection::Notify(const hal::NetworkInformation& aNetworkInfo)
 
   UpdateFromNetworkInfo(aNetworkInfo);
 
-  if (previousType == mType) {
+  if (previousType == mType ||
+      nsContentUtils::ShouldResistFingerprinting()) {
     return;
   }
 
