@@ -134,6 +134,8 @@ pref("browser.link.open_newwindow.restriction", 0); // Bug 9881: Open popups in 
 pref("dom.gamepad.enabled", false); // bugs.torproject.org/13023
 // Disable video statistics fingerprinting vector (bug 15757)
 pref("media.video_stats.enabled", false);
+// Set video VP9 to 0 for everyone (bug 22548)
+pref("media.benchmark.vp9.threshold", 0);
 // Disable device sensors as possible fingerprinting vector (bug 15758)
 pref("device.sensors.enabled", false);
 pref("dom.enable_resource_timing", false); // Bug 13024: To hell with this API
