@@ -2117,7 +2117,7 @@ VARCACHE_PREF(
 VARCACHE_PREF(
   "media.benchmark.vp9.threshold",
    MediaBenchmarkVp9Threshold,
-  RelaxedAtomicUint32, 150
+  RelaxedAtomicUint32, 0
 )
 
 VARCACHE_PREF(
