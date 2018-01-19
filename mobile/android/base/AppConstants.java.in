@@ -338,4 +338,19 @@ public class AppConstants {
 //#else
         null;
 //#endif
+
+    public static final String TOR_BROWSER_VERSION =
+//#ifdef TOR_BROWSER_VERSION
+        "@TOR_BROWSER_VERSION@";
+//#else
+        null;
+//#endif
+
+    public static final boolean isTorBrowser() {
+//#ifdef TOR_BROWSER_VERSION
+        return true;
+//#else
+        return false;
+//#endif
+    }
 }

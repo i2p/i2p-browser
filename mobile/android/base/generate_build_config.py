@@ -64,7 +64,8 @@ def _defines():
                 'MOZ_ANDROID_MAX_SDK_VERSION',
                 'MOZ_ANDROID_MIN_SDK_VERSION',
                 'MOZ_PKG_SPECIAL',
-                'MOZ_UPDATER'):
+                'MOZ_UPDATER',
+                'TOR_BROWSER_VERSION'):
         if CONFIG[var]:
             DEFINES[var] = CONFIG[var]
 
