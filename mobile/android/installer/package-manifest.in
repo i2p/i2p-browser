@@ -431,6 +431,7 @@
 #ifdef MOZ_GECKOVIEW_JAR
 @BINPATH@/@PREF_DIR@/geckoview-prefs.js
 #else
+@BINPATH@/@PREF_DIR@/000-tor-browser-android.js
 @BINPATH@/@PREF_DIR@/mobile.js
 #endif
 @BINPATH@/@PREF_DIR@/channel-prefs.js

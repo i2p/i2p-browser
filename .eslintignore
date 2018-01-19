@@ -326,6 +326,9 @@ media/webrtc/trunk/**
 # mobile/android/ exclusions
 mobile/android/tests/browser/chrome/tp5/**
 
+# uses `#include`
+mobile/android/app/000-tor-browser-android.js
+
 # Uses `#filter substitution`
 mobile/android/app/mobile.js
 mobile/android/app/geckoview-prefs.js
