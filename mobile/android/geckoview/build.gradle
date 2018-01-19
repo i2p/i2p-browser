@@ -89,6 +89,7 @@ android {
         buildConfigField 'String', "MOZ_APP_DISPLAYNAME", "\"${mozconfig.substs.MOZ_APP_DISPLAYNAME}\"";
         buildConfigField 'String', "MOZ_APP_UA_NAME", "\"${mozconfig.substs.MOZ_APP_UA_NAME}\"";
         buildConfigField 'String', "MOZ_UPDATE_CHANNEL", "\"${mozconfig.substs.MOZ_UPDATE_CHANNEL}\"";
+        buildConfigField 'String', "TOR_BROWSER_VERSION", "\"${mozconfig.substs.TOR_BROWSER_VERSION}\"";
 
         // MOZILLA_VERSION is oddly quoted from autoconf, but we don't have to handle it specially in Gradle.
         buildConfigField 'String', "MOZILLA_VERSION", "\"${mozconfig.substs.MOZILLA_VERSION}\"";
