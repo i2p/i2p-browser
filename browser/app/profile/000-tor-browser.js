@@ -179,6 +179,9 @@ pref("media.webspeech.synth.enabled", false); // Bug 10283: Disable SpeechSynthe
 pref("dom.webaudio.enabled", false); // Bug 13017: Disable Web Audio API
 pref("dom.maxHardwareConcurrency", 1); // Bug 21675: Spoof single-core cpu
 pref("dom.w3c_touch_events.enabled", 0); // Bug 10286: Always disable Touch API
+// Disable randomised Firefox HTTP cache decay user test groups (Bug: 13575)
+pref("browser.cache.frecency_experiment", -1);
+
 
 // Third party stuff
 pref("privacy.firstparty.isolate", true); // Always enforce first party isolation
