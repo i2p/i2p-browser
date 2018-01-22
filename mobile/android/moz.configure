@@ -112,9 +112,12 @@ option(env='MOZ_ANDROID_MOZILLA_ONLINE',
 set_config('MOZ_ANDROID_MOZILLA_ONLINE',
            depends_if('MOZ_ANDROID_MOZILLA_ONLINE')(lambda _: True))
 
-imply_option('MOZ_SERVICES_HEALTHREPORT', True)
-imply_option('MOZ_ANDROID_HISTORY', True)
 imply_option('--enable-small-chunk-size', True)
+# Comment these so we can imply |False| in torbrowser.configure
+# The Build system doesn't allow multiple imply_option()
+# calls with the same key.
+#imply_option('MOZ_SERVICES_HEALTHREPORT', True)
+#imply_option('MOZ_ANDROID_HISTORY', True)
 
 set_config('ANDROID_SUPPORT_LIBRARY_VERSION', '23.4.0')
 add_old_configure_assignment('ANDROID_SUPPORT_LIBRARY_VERSION', '23.4.0')
@@ -127,6 +130,8 @@ def check_target(target):
         die('See https://developer.mozilla.org/docs/Mozilla/Developer_guide/'
             'Build_Instructions/Simple_Firefox_for_Android_build '
             'for more information about the necessary options.')
+
+include('torbrowser.configure')
 
 include('../../toolkit/moz.configure')
 include('../../build/moz.configure/java.configure')
