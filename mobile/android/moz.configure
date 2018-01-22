@@ -122,9 +122,12 @@ def fennec_nightly(nightly):
     return bool(nightly)
 
 
-imply_option('MOZ_SERVICES_HEALTHREPORT', True)
-imply_option('MOZ_ANDROID_HISTORY', True)
 imply_option('--enable-small-chunk-size', True)
+# Comment these so we can imply |False| in torbrowser.configure
+# The Build system doesn't allow multiple imply_option()
+# calls with the same key.
+#imply_option('MOZ_SERVICES_HEALTHREPORT', True)
+#imply_option('MOZ_ANDROID_HISTORY', True)
 
 @depends(target)
 def check_target(target):
@@ -134,6 +137,8 @@ def check_target(target):
         die('See https://developer.mozilla.org/docs/Mozilla/Developer_guide/'
             'Build_Instructions/Simple_Firefox_for_Android_build '
             'for more information about the necessary options.')
+
+include('torbrowser.configure')
 
 include('../../toolkit/moz.configure')
 include('../../build/moz.configure/android-sdk.configure')

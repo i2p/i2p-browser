@@ -1,0 +1,43 @@
+# -*- Mode: python; indent-tabs-mode: nil; tab-width: 40 -*-
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Set Tor Browser default config
+
+# Disable Android Beam (NFC integration)
+imply_option('MOZ_ANDROID_BEAM', False)
+
+
+imply_option('MOZ_ANDROID_DOWNLOAD_CONTENT_SERVICE', False)
+imply_option('MOZ_ANDROID_DOWNLOADS_INTEGRATION', False)
+imply_option('MOZ_ANDROID_EXCLUDE_FONTS', False)
+
+# Disable push notifications/messaging on nightly
+imply_option('MOZ_ANDROID_GCM', False)
+
+# Disable all history/bookmark/icon caching
+# (both in local sqlite DB and with Android integration)
+imply_option('MOZ_ANDROID_HISTORY', False)
+imply_option('MOZ_PLACES', False)
+
+# Disable the stumbler, Firefox shouldn't touch the network
+imply_option('MOZ_ANDROID_MLS_STUMBLER', False)
+
+# Disable uploading crash reports and dump files to an external server
+# This is still configured in old-configure. Uncomment when this moves
+# to the python config
+#imply_option('MOZ_CRASHREPORTER', False)
+
+# Disable uploading information about the browser configuration and
+# performance to an external server
+imply_option('MOZ_SERVICES_HEALTHREPORT', False)
+
+# Disable creating telemetry and data reports that are uploaded to an
+# external server
+# These aren't actually configure options. These are disabled in
+# confvars.sh, but they look like configure options so we'll document
+# them here, as well.
+#imply_option('MOZ_TELEMETRY_REPORTING', False)
+#imply_option('MOZ_DATA_REPORTING', False)
