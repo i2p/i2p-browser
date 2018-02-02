@@ -43,6 +43,14 @@ nsSOCKSSocketProvider::CreateV5(nsISupports *aOuter, REFNSIID aIID, void **aResu
     return rv;
 }
 
+#if defined(XP_UNIX)
+bool
+static IsUNIXDomainSocketPath(const nsACString& aPath)
+{
+    return StringBeginsWith(aPath, NS_LITERAL_CSTRING("file://"));
+}
+#endif
+
 NS_IMETHODIMP
 nsSOCKSSocketProvider::NewSocket(int32_t family,
                                  const char *host, 
@@ -61,6 +69,13 @@ nsSOCKSSocketProvider::NewSocket(int32_t family,
     if (IsNamedPipePath(proxyHost)) {
         sock = CreateNamedPipeLayer();
     } else
+#endif
+#if defined(XP_UNIX)
+    nsAutoCString proxyHost;
+    proxy->GetHost(proxyHost);
+    if(IsUNIXDomainSocketPath(proxyHost)) {
+        family = AF_LOCAL;
+    }
 #endif
     {
         sock = PR_OpenTCPSocket(family);
