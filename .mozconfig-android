@@ -1,0 +1,38 @@
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-arm-linux-androideabi
+mk_add_options MOZ_APP_DISPLAYNAME="Tor Browser"
+mk_add_options MOZILLA_OFFICIAL=1
+
+ac_add_options --enable-optimize
+ac_add_options --enable-official-branding
+
+# Android
+ac_add_options --enable-application=mobile/android
+ac_add_options --target=arm-linux-androideabi
+ac_add_options --with-android-ndk="$NDK_BASE" #Enter the android ndk location(ndk r15c)
+ac_add_options --with-android-sdk="$SDK_BASE" #Enter the android sdk location
+ac_add_options --with-branding=mobile/android/branding/torbrowser
+
+if [ -n "${TB_BUILD_WITH_DISTRIBUTION}" ]; then
+    ac_add_options --with-android-distribution-directory=@TOPSRCDIR@/mobile/android/torbrowser
+fi
+
+#enable ccache to set amount of cache assigned for build.
+ac_add_options --with-ccache
+
+ac_add_options --disable-tor-browser-update
+ac_add_options --disable-signmar
+ac_add_options --disable-verify-mar
+
+ac_add_options --enable-strip
+ac_add_options --disable-tests
+ac_add_options --disable-debug
+ac_add_options --disable-rust-debug
+ac_add_options --disable-maintenance-service
+ac_add_options --disable-crashreporter
+ac_add_options --disable-webrtc
+
+ac_add_options --without-google-play-services
+
+# Let's make sure no preference is enabling either Adobe's or Google's CDM.
+ac_add_options --disable-eme
+#ac_add_options --disable-ctypes

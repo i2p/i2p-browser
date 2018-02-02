@@ -467,8 +467,11 @@ You can set this by specifying --test-url URL
             self._download_test_packages(suite_categories, extract_dirs)
 
         self._download_installer()
-        if self.config.get('download_symbols'):
-            self._download_and_extract_symbols()
+        # When using --disable-crashreporter the symbols file
+        # "target.crashreporter-symbols.zip" won't be created,
+        # so we shouldn't try downloading it (and fail).
+        #if self.config.get('download_symbols'):
+        #    self._download_and_extract_symbols()
 
     # create_virtualenv is in VirtualenvMixin.
 

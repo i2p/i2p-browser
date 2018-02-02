@@ -4,7 +4,7 @@
 
 <!ENTITY firstrun_panel_title_welcome "Welcome">
 <!ENTITY firstrun_urlbar_message2 "Thanks for choosing &brandShortName;">
-<!ENTITY firstrun_urlbar_subtext2 "A modern mobile browser from Mozilla, the non-profit committed to a free and open web.">
+<!ENTITY firstrun_urlbar_subtext2 "A modern mobile browser from The Tor Project, the non-profit committed to a free and open web.">
 <!ENTITY firstrun_panel_title_privacy "Privacy">
 <!ENTITY firstrun_privacy_message "Browse like no one\'s watching">
 <!ENTITY firstrun_privacy_subtext "Private Browsing with Tracking Protection blocks trackers while you browse and won’t remember your history when you finish browsing.">
