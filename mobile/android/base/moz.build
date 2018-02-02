@@ -181,6 +181,7 @@ for f in ['res/values/strings.xml',
         # The `locales/en-US/` will be rewritten to the locale-specific path.
         'locales/en-US/android_strings.dtd',
         'locales/en-US/sync_strings.dtd',
+        'locales/en-US/torbrowser_strings.dtd',
     ]
 
 generated_inputs = [

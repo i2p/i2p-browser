@@ -339,6 +339,9 @@ pref("dom.presentation.receiver.enabled", false);
 pref("dom.audiochannel.audioCompeting", false);
 pref("dom.audiochannel.mediaControl", false);
 
+// Bug 31144 - Avoid proxy-bypass using the Android native download manager.
+pref("browser.download.forward_oma_android_download_manager", false);
+
 #expand pref("torbrowser.version", __TOR_BROWSER_VERSION_QUOTED__);
 
 // Old torbutton prefs

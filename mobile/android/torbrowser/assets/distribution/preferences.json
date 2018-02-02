@@ -1,0 +1,10 @@
+{
+  "ApplicationPreferences": {
+    "newtab.load_homepage": true
+  },
+  "AndroidPreferences": {
+    "homepage": "about:tor",
+    "startpane_enabled_after_57": true,
+    "startpane_enabled": true
+  }
+}
