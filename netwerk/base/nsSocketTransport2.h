@@ -201,9 +201,7 @@ private:
         STATE_IDLE,
         STATE_RESOLVING,
         STATE_CONNECTING,
-        STATE_TRANSFERRING,
-        STATE_SENDINGGET,
-        STATE_SENTGET
+        STATE_TRANSFERRING
     };
 
     // Safer way to get and automatically release PRFileDesc objects.
