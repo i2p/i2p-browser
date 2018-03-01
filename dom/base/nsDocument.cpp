@@ -1315,7 +1315,8 @@ nsIDocument::nsIDocument()
     mFrameRequestCallbacksScheduled(false),
     mBidiOptions(IBMBIDI_DEFAULT_BIDI_OPTIONS),
     mPartID(0),
-    mUserHasInteracted(false)
+    mUserHasInteracted(false),
+    mAllowUnsafeHTML(false)
 {
   SetIsInDocument();
 
@@ -2659,7 +2660,7 @@ nsDocument::InitCSP(nsIChannel* aChannel)
     (cspSandboxFlags & SANDBOXED_ORIGIN) && !(mSandboxFlags & SANDBOXED_ORIGIN);
 
   mSandboxFlags |= cspSandboxFlags;
-  
+
   if (needNewNullPrincipal) {
     principal = nsNullPrincipal::CreateWithInheritedAttributes(principal);
     principal->SetCsp(csp);
@@ -5731,6 +5732,13 @@ nsDocument::CustomElementConstructor(JSContext* aCx, unsigned aArgc, JS::Value* 
   NS_ENSURE_SUCCESS(rv, true);
 
   return true;
+}
+
+bool
+nsIDocument::AllowUnsafeHTML() const
+{
+  return (!nsContentUtils::IsSystemPrincipal(NodePrincipal()) ||
+          mAllowUnsafeHTML);
 }
 
 bool

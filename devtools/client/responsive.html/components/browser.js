@@ -16,6 +16,13 @@ const Types = require("../types");
 const e10s = require("../utils/e10s");
 const message = require("../utils/message");
 
+// Allow creation of HTML fragments without automatic sanitization, even
+// though we're in a chrome-privileged document.
+// This is, unfortunately, necessary in order to React to function
+// correctly.
+
+document.allowUnsafeHTML = true;
+
 module.exports = createClass({
 
   /**

@@ -599,7 +599,7 @@ Pref.prototype = {
       this.li.setAttribute("contextmenu", "prefs-context-menu");
 
       // Create list item outline, bind to object actions
-      this.li.innerHTML =
+      this.li.unsafeSetInnerHTML(
         "<div class='pref-name' " +
             "onclick='AboutConfig.selectOrToggleBoolPref(event);'>" +
             this.name +
@@ -623,7 +623,7 @@ Pref.prototype = {
           "<div class='pref-button down' " +
             "onclick='AboutConfig.incrOrDecrIntPref(event, -1);'>" +
           "</div>" +
-        "</div>";
+        "</div>");
 
       // Delay providing the list item values, until the LI is returned and added to the document
       setTimeout(this._valueSetup.bind(this), INNERHTML_VALUE_DELAY);

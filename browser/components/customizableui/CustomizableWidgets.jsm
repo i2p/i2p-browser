@@ -327,7 +327,7 @@ const CustomizableWidgets = [
       let promoParentElt = doc.getElementById("PanelUI-remotetabs-mobile-promo");
       // Put it all together...
       let contents = bundle.getFormattedString("appMenuRemoteTabs.mobilePromo.text2", formatArgs);
-      promoParentElt.innerHTML = contents;
+      promoParentElt.unsafeSetInnerHTML(contents);
       // We manually manage the "click" event to open the promo links because
       // allowing the "text-link" widget handle it has 2 problems: (1) it only
       // supports button 0 and (2) it's tricky to intercept when it does the
