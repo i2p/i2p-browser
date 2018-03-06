@@ -41,6 +41,7 @@
 #include <sys/stat.h>
 
 #ifdef XP_WIN
+#include "mozilla/WindowsVersion.h"
 #include "nsIWinTaskbar.h"
 #define NS_TASKBAR_CONTRACTID "@mozilla.org/windows-taskbar;1"
 
@@ -304,6 +305,55 @@ GeckoChildProcessHost::GetUniqueID()
   return sNextUniqueID++;
 }
 
+// pospeselr: This is a temporary workaround for TBB 25112
+// Once we're off of ESR 52 TweakSandboxLevel() should be removed
+#ifdef XP_WIN
+
+// reduces sandbox level to 0 when running WOW64 on Vista and lower
+// for 64-bit windows builds all this logic is unnecessary so we just
+// pass-through
+static int32_t
+TweakSandboxLevel(int32_t sandboxLevel)
+{
+#ifdef _WIN64
+  // we can't be running WOW64 if this is built as a 64-bit binary
+  return sandboxLevel;
+#else
+  // 0 is as low as you can go, early out
+  if (sandboxLevel == 0) {
+    return 0;
+  }
+
+  // Win7 and later can be sandboxed without issue
+  if (mozilla::IsWin7OrLater()) {
+    return sandboxLevel;
+  }
+
+  // determine if we're 32-bit firefox on 64-bit windows (ie WOW64)
+  typedef BOOL (WINAPI* IsWow64ProcessFunc)(HANDLE, PBOOL);
+  IsWow64ProcessFunc IsWow64Process = reinterpret_cast<IsWow64ProcessFunc>(
+      GetProcAddress(GetModuleHandle(L"kernel32.dll"), "IsWow64Process"));
+
+  // according to the MSDN, older versions of windows may not have this function
+  // assume that this function missing indicates we cannot sandbox
+  if (IsWow64Process == nullptr) {
+    return 0;
+  }
+
+  // this function is non-zero on success, assume a failure means we
+  // cannot sandbox
+  BOOL isWow64 = FALSE;
+  if (!IsWow64Process(GetCurrentProcess(), &isWow64)) {
+    return 0;
+  }
+
+  // finally, this BOOL indicate whether we're WOW64
+  return isWow64 ? 0 : sandboxLevel;
+#endif  // _WIN64
+}
+
+#endif // XP_WIN
+
 void
 GeckoChildProcessHost::PrepareLaunch()
 {
@@ -322,6 +372,7 @@ GeckoChildProcessHost::PrepareLaunch()
   // We need to get the pref here as the process is launched off main thread.
   if (mProcessType == GeckoProcessType_Content) {
     mSandboxLevel = Preferences::GetInt("security.sandbox.content.level");
+    mSandboxLevel = TweakSandboxLevel(mSandboxLevel);
     mEnableSandboxLogging =
       Preferences::GetBool("security.sandbox.windows.log");
   }
