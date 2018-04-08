@@ -175,7 +175,7 @@ public class BrowserProviderHistoryTest extends BrowserProviderHistoryVisitsTest
                 17, 0, 0, 0, 0);
 
         // Test setting visit count on new history item creation via .update
-        final String url3 = "https://www.torproject.org";
+        final String url3 = "https://www.geti2p.net";
         final ContentValues cv = new ContentValues();
         cv.put(BrowserContract.History.URL, url3);
         cv.put(BrowserContract.History.VISITS, 13);

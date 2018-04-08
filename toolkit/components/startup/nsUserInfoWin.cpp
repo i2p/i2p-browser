@@ -30,7 +30,7 @@ nsUserInfo::GetUsername(char **aUsername)
 {
   NS_ENSURE_ARG_POINTER(aUsername);
   *aUsername = nullptr;
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
 
   // ULEN is the max username length as defined in lmcons.h
   wchar_t username[UNLEN +1];
@@ -51,7 +51,7 @@ nsUserInfo::GetFullname(char16_t **aFullname)
 {
   NS_ENSURE_ARG_POINTER(aFullname);
   *aFullname = nullptr;
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
 
   wchar_t fullName[512];
   DWORD size = mozilla::ArrayLength(fullName);
@@ -108,7 +108,7 @@ nsUserInfo::GetDomain(char **aDomain)
 {
   NS_ENSURE_ARG_POINTER(aDomain);
   *aDomain = nullptr;
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
   const DWORD level = 100;
   LPBYTE info;
   NET_API_STATUS status = NetWkstaGetInfo(nullptr, level, &info);
@@ -131,7 +131,7 @@ nsUserInfo::GetEmailAddress(char **aEmailAddress)
 {
   NS_ENSURE_ARG_POINTER(aEmailAddress);
   *aEmailAddress = nullptr;
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
   // RFC3696 says max length of an email address is 254
   wchar_t emailAddress[255];
   DWORD size = mozilla::ArrayLength(emailAddress);

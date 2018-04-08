@@ -20,8 +20,8 @@ const PREF_APP_B2G_VERSION                = "b2g.version";
 const PREF_APP_UPDATE_CUSTOM              = "app.update.custom";
 const PREF_APP_UPDATE_IMEI_HASH           = "app.update.imei_hash";
 
-#ifdef TOR_BROWSER_VERSION
-#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
+#ifdef I2P_BROWSER_VERSION
+#expand const I2P_BROWSER_VERSION = __I2P_BROWSER_VERSION__;
 #endif
 
 this.UpdateUtils = {
@@ -73,8 +73,8 @@ this.UpdateUtils = {
    */
   formatUpdateURL(url) {
     url = url.replace(/%PRODUCT%/g, Services.appinfo.name);
-#ifdef TOR_BROWSER_UPDATE
-    url = url.replace(/%VERSION%/g, TOR_BROWSER_VERSION);
+#ifdef I2P_BROWSER_UPDATE
+    url = url.replace(/%VERSION%/g, I2P_BROWSER_VERSION);
 #else
     url = url.replace(/%VERSION%/g, Services.appinfo.version);
 #endif

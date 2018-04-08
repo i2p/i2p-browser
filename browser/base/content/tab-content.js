@@ -5,9 +5,9 @@
 
 /* This content script contains code that requires a tab browser. */
 
-#ifdef TOR_BROWSER_VERSION
+#ifdef I2P_BROWSER_VERSION
 # Add double-quotes back on (stripped by JarMaker.py).
-#expand const TOR_BROWSER_VERSION = "__TOR_BROWSER_VERSION__";
+#expand const I2P_BROWSER_VERSION = "__I2P_BROWSER_VERSION__";
 #endif
 
 var {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
@@ -15,7 +15,7 @@ var {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/ExtensionContent.jsm");
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
 Cu.import("resource://gre/modules/NetUtil.jsm");
 #endif
 
@@ -401,19 +401,19 @@ var AboutReaderListener = {
 };
 AboutReaderListener.init();
 
-#ifdef TOR_BROWSER_UPDATE
-let AboutTBUpdateListener = {
+#ifdef I2P_BROWSER_UPDATE
+let AboutI2PUpdateListener = {
   init: function(chromeGlobal) {
-    chromeGlobal.addEventListener('AboutTBUpdateLoad', this, false, true);
+    chromeGlobal.addEventListener('AboutI2PUpdateLoad', this, false, true);
   },
 
-  get isAboutTBUpdate() {
+  get isAboutI2Update() {
     return content.document.documentURI.split('?')[0].toLowerCase()
-           == "about:tbupdate";
+           == "about:i2pupdate";
   },
 
   handleEvent: function(aEvent) {
-    if (this.isAboutTBUpdate && (aEvent.type == "AboutTBUpdateLoad"))
+    if (this.isAboutI2Update && (aEvent.type == "AboutI2PUpdateLoad"))
       this.onPageLoad();
   },
 
@@ -427,8 +427,7 @@ let AboutTBUpdateListener = {
                         .getService(Ci.nsIStringBundleService)
                         .createBundle(kBrandBundle);
     let productName = brandBundle.GetStringFromName("brandFullName");
-    doc.getElementById("torbrowser-version").textContent = productName + "\n"
-                                                           + TOR_BROWSER_VERSION;
+    doc.getElementById("i2pbrowser-version").textContent = productName + "\n" + I2P_BROWSER_VERSION;
   },
 
   // Extract the post update URL from this page's query string.
@@ -442,27 +441,27 @@ let AboutTBUpdateListener = {
   },
 
   // Read and return the text from the beginning of the changelog file that is
-  // located at TorBrowser/Docs/ChangeLog.txt.
-  // On Mac OS, when building with --enable-tor-browser-data-outside-app-dir
+  // located at I2PBrowser/Docs/ChangeLog.txt.
+  // On Mac OS, when building with --enable-i2p-browser-data-outside-app-dir
   // to support Gatekeeper signing, the file is located in
-  // TorBrowser.app/Contents/Resources/TorBrowser/Docs/.
+  // I2PBrowser.app/Contents/Resources/I2PBrowser/Docs/.
   //
   // When electrolysis is enabled we will need to adopt an architecture that is
   // more similar to the one that is used for about:home (see AboutHomeListener
   // in this file and browser/modules/AboutHome.jsm).
   getChangeLogText: function() {
     try {
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
       // "XREExeF".parent is the directory that contains firefox, i.e.,
-      // Browser/ or, on Mac OS, TorBrowser.app/Contents/MacOS/.
+      // Browser/ or, on Mac OS, I2PBrowser.app/Contents/MacOS/.
       let f = Services.dirsvc.get("XREExeF", Ci.nsIFile).parent;
 #ifdef XP_MACOSX
       f = f.parent;
       f.append("Resources");
 #endif
-      f.append("TorBrowser");
+      f.append("I2PBrowser");
 #else
-      // "DefProfRt" is .../TorBrowser/Data/Browser
+      // "DefProfRt" is .../I2PBrowser/Data/Browser
       let f = Cc["@mozilla.org/file/directory_service;1"]
                 .getService(Ci.nsIProperties).get("DefProfRt", Ci.nsIFile);
       f = f.parent.parent;  // Remove "Data/Browser"
@@ -483,7 +482,7 @@ let AboutTBUpdateListener = {
     return "";
   },
 };
-AboutTBUpdateListener.init(this);
+AboutI2UpdateListener.init(this);
 #endif
 
 var ContentSearchMediator = {

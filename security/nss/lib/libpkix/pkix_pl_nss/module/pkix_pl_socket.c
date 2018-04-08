@@ -1337,7 +1337,7 @@ pkix_pl_Socket_Create(
         // XXX: Do we need a unittest ifdef here? We don't want to break the tests, but
         // we want to ensure nothing can ever hit this code in production.
 #if 1
-        printf("Tor Browser BUG: Attempted pkix direct socket connect\n");
+        printf("I2P Browser BUG: Attempted pkix direct socket connect\n");
         PKIX_ERROR(PKIX_PRNEWTCPSOCKETFAILED);
 #endif
 
@@ -1443,7 +1443,7 @@ pkix_pl_Socket_CreateByName(
         // XXX: Do we need a unittest ifdef here? We don't want to break the tests, but
         // we want to ensure nothing can ever hit this code in production.
 #if 1
-        printf("Tor Browser BUG: Attempted pkix direct connect to %s\n", serverName);
+        printf("I2P Browser BUG: Attempted pkix direct connect to %s\n", serverName);
         PKIX_ERROR(PKIX_PRNEWTCPSOCKETFAILED);
 #endif
 
@@ -1599,7 +1599,7 @@ pkix_pl_Socket_CreateByHostAndPort(
         // XXX: Do we need a unittest ifdef here? We don't want to break the tests, but
         // we want to ensure nothing can ever hit this code in production.
 #if 1
-        printf("Tor Browser BUG: Attempted pkix direct connect to %s, port %u\n", hostname,
+        printf("I2P Browser BUG: Attempted pkix direct connect to %s, port %u\n", hostname,
                 portnum);
         PKIX_ERROR(PKIX_PRNEWTCPSOCKETFAILED);
 #endif

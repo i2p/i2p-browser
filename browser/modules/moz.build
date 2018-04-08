@@ -47,7 +47,7 @@ EXTRA_JS_MODULES += [
     'webrtcUI.jsm',
 ]
 
-if not CONFIG['TOR_BROWSER_VERSION']:
+if not CONFIG['I2P_BROWSER_VERSION']:
     EXTRA_JS_MODULES += [
         'CastingApps.jsm',
     ]

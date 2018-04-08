@@ -8,9 +8,9 @@
 # Author: Darin Fisher
 #
 
-# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
 # we should remove all lines in this file that contain:
-#      TorBrowser/Data
+#      I2PBrowser/Data
 
 # -----------------------------------------------------------------------------
 QUIET=0
@@ -172,9 +172,9 @@ append_remove_instructions() {
 # List all files in the current directory, stripping leading "./"
 # Pass a variable name and it will be filled as an array.
 # To support Tor Browser updates, skip the following files:
-#    TorBrowser/Data/Browser/profiles.ini
-#    TorBrowser/Data/Browser/profile.default/bookmarks.html
-#    TorBrowser/Data/Tor/torrc
+#    I2PBrowser/Data/Browser/profiles.ini
+#    I2PBrowser/Data/Browser/profile.default/bookmarks.html
+#    I2PBrowser/Data/Tor/torrc
 list_files() {
   count=0
 
@@ -187,9 +187,10 @@ list_files() {
     | sed 's/\.\/\(.*\)/\1/' \
     | sort -r > "temp-filelist"
   while read file; do
-    if [ "$file" = "TorBrowser/Data/Browser/profiles.ini" -o                   \
-         "$file" = "TorBrowser/Data/Browser/profile.default/bookmarks.html" -o \
-         "$file" = "TorBrowser/Data/Tor/torrc" ]; then
+    if [ "$file" = "I2PBrowser/Data/Browser/profiles.ini" -o                   \
+         "$file" = "I2PBrowser/Data/Browser/profile.default/bookmarks.html" -o \
+         "$file" = "I2PBrowser/Data/I2P/*.config" -o \
+         "$file" = "I2PBrowser/Data/I2P/*.dat" ]; then
       continue;
     fi
     eval "${1}[$count]=\"$file\""

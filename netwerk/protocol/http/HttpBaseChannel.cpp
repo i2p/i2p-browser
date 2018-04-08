@@ -1511,6 +1511,15 @@ HttpBaseChannel::SetReferrerWithPolicy(nsIURI *referrer,
     return NS_OK;
   }
 
+  // TODO: MEEH: Make this an option for i2p only
+  if(userHideOnionReferrerSource &&
+     !currentHost.Equals(referrerHost) &&
+     StringEndsWith(referrerHost, NS_LITERAL_CSTRING(".i2p"))) {
+    return NS_OK;
+  }
+  
+
+
   // check policy for sending ref only when hosts match
   if (userReferrerXOriginPolicy == 2 && !currentHost.Equals(referrerHost))
     return NS_OK;

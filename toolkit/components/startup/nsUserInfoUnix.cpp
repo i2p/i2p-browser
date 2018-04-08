@@ -36,7 +36,7 @@ NS_IMPL_ISUPPORTS(nsUserInfo,nsIUserInfo)
 NS_IMETHODIMP
 nsUserInfo::GetFullname(char16_t **aFullname)
 {
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
     struct passwd *pw = nullptr;
 
     pw = getpwuid (geteuid());
@@ -86,7 +86,7 @@ nsUserInfo::GetFullname(char16_t **aFullname)
 NS_IMETHODIMP 
 nsUserInfo::GetUsername(char * *aUsername)
 {
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
     struct passwd *pw = nullptr;
 
     // is this portable?  those are POSIX compliant calls, but I need to check
@@ -110,7 +110,7 @@ nsUserInfo::GetUsername(char * *aUsername)
 NS_IMETHODIMP 
 nsUserInfo::GetDomain(char * *aDomain)
 {
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
     nsresult rv = NS_ERROR_FAILURE;
 
     struct utsname buf;
@@ -152,7 +152,7 @@ nsUserInfo::GetDomain(char * *aDomain)
 NS_IMETHODIMP 
 nsUserInfo::GetEmailAddress(char * *aEmailAddress)
 {
-#ifndef TOR_BROWSER_VERSION
+#ifndef I2P_BROWSER_VERSION
     // use username + "@" + domain for the email address
 
     nsresult rv;

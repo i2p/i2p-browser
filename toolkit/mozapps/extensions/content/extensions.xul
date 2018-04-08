@@ -393,7 +393,6 @@
                           command="cmd_enableUpdateSecurity"/>
                   <spacer flex="5000"/> <!-- Necessary to allow the message to wrap -->
                 </hbox>
-                <vbox id="plugin-disable-button" />  <!-- Overlaid by Torbutton -->
               </hbox>
               <hbox class="view-header global-info-container experiment-info-container">
                 <hbox class="global-info" flex="1" align="center">
@@ -423,9 +422,6 @@
                 </vbox>
                 <spacer class="alert-spacer-after"/>
               </vbox>
-            <vbox id="plugin-enable-button" />  <!-- Overlaid by Torbutton -->
-              <richlistbox id="addon-list" class="list" flex="1"/>
-            </vbox>
             <!-- updates view -->
             <vbox id="updates-view" flex="1" class="view-pane" tabindex="0">
               <hbox class="view-header global-warning-container" align="center">

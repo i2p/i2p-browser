@@ -83,7 +83,7 @@ bool IsRecursivelyWritable(const char* aPath);
 void LaunchChild(int argc, const char** argv);
 void LaunchMacPostProcess(const char* aAppBundle);
 bool ObtainUpdaterArguments(int* argc, char*** argv);
-#ifndef TOR_BROWSER_UPDATE
+#ifndef I2P_BROWSER_UPDATE
 bool ServeElevatedUpdate(int argc, const char** argv);
 #endif
 void SetGroupOwnershipAndPermissions(const char* aAppBundle);
@@ -945,7 +945,7 @@ static int rename_file(const NS_tchar *spath, const NS_tchar *dpath,
   return OK;
 }
 
-#if defined(XP_WIN) && !defined(TOR_BROWSER_UPDATE)
+#if defined(XP_WIN) && !defined(I2P_BROWSER_UPDATE)
 // Remove the directory pointed to by path and all of its files and
 // sub-directories. If a file is in use move it to the tobedeleted directory
 // and attempt to schedule removal of the file on reboot
@@ -1094,7 +1094,7 @@ static int backup_discard(const NS_tchar *path, const NS_tchar *relPath)
       return WRITE_ERROR_DELETE_BACKUP;
     }
 
-#if !defined(TOR_BROWSER_UPDATE)
+#if !defined(I2P_BROWSER_UPDATE)
     // The MoveFileEx call to remove the file on OS reboot will fail if the
     // process doesn't have write access to the HKEY_LOCAL_MACHINE registry key
     // but this is ok since the installer / uninstaller will delete the
@@ -2453,7 +2453,7 @@ static int
 CopyInstallDirToDestDir()
 {
   // These files should not be copied over to the updated app
-#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(I2P_BROWSER_UPDATE) && !defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
   #ifdef XP_WIN
   #define SKIPLIST_COUNT 6
   #else
@@ -2469,10 +2469,10 @@ CopyInstallDirToDestDir()
   #endif
 #endif
   copy_recursive_skiplist<SKIPLIST_COUNT> skiplist;
-#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(I2P_BROWSER_UPDATE) && !defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
 #ifdef XP_MACOSX
   skiplist.append(0, gInstallDirPath, NS_T("Updated.app"));
-  skiplist.append(1, gInstallDirPath, NS_T("TorBrowser/UpdateInfo/updates/0"));
+  skiplist.append(1, gInstallDirPath, NS_T("I2PBrowser/UpdateInfo/updates/0"));
 #endif
 #endif
 
@@ -2484,21 +2484,21 @@ CopyInstallDirToDestDir()
 #endif
 #endif
 
-#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(I2P_BROWSER_UPDATE) && !defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
 #ifdef XP_WIN
   skiplist.append(SKIPLIST_COUNT - 3, gInstallDirPath,
-                  NS_T("TorBrowser/Data/Browser/profile.default/parent.lock"));
+                  NS_T("I2PBrowser/Data/Browser/profile.default/parent.lock"));
   skiplist.append(SKIPLIST_COUNT - 2, gInstallDirPath,
-         NS_T("TorBrowser/Data/Browser/profile.meek-http-helper/parent.lock"));
+         NS_T("I2PBrowser/Data/Browser/profile.meek-http-helper/parent.lock"));
 #else
   skiplist.append(SKIPLIST_COUNT - 3, gInstallDirPath,
-                  NS_T("TorBrowser/Data/Browser/profile.default/.parentlock"));
+                  NS_T("I2PBrowser/Data/Browser/profile.default/.parentlock"));
   skiplist.append(SKIPLIST_COUNT - 2, gInstallDirPath,
-         NS_T("TorBrowser/Data/Browser/profile.meek-http-helper/.parentlock"));
+         NS_T("I2PBrowser/Data/Browser/profile.meek-http-helper/.parentlock"));
 #endif
 
 skiplist.append(SKIPLIST_COUNT - 1, gInstallDirPath,
-                NS_T("TorBrowser/Data/Tor/lock"));
+                NS_T("I2PBrowser/Data/I2P/lock"));
 #endif
 
   return ensure_copy_recursive(gInstallDirPath, gWorkingDirPath, skiplist);
@@ -2637,7 +2637,7 @@ ProcessReplaceRequest()
     if (NS_taccess(deleteDir, F_OK)) {
       NS_tmkdir(deleteDir, 0755);
     }
-#if !defined(TOR_BROWSER_UPDATE)
+#if !defined(I2P_BROWSER_UPDATE)
     remove_recursive_on_reboot(tmpDir, deleteDir);
 #endif
 #endif
@@ -2647,7 +2647,7 @@ ProcessReplaceRequest()
   // On OS X, we we need to remove the staging directory after its Contents
   // directory has been moved.
   NS_tchar updatedAppDir[MAXPATHLEN];
-#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(I2P_BROWSER_UPDATE) && !defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
   NS_tsnprintf(updatedAppDir, sizeof(updatedAppDir)/sizeof(updatedAppDir[0]),
                NS_T("%s/Updated.app"), gInstallDirPath);
   // For Tor Browser on OS X, we also need to copy everything else that is inside Updated.app.
@@ -2843,8 +2843,8 @@ UpdateThreadFunc(void *param)
           MARStrings.MARChannelID[0] = '\0';
         }
 
-#ifdef TOR_BROWSER_UPDATE
-        const char *appVersion = TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+        const char *appVersion = I2P_BROWSER_VERSION;
 #else
         const char *appVersion = MOZ_APP_VERSION;
 #endif
@@ -2933,7 +2933,7 @@ UpdateThreadFunc(void *param)
 static void
 ServeElevatedUpdateThreadFunc(void* param)
 {
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
   WriteStatusFile(ELEVATION_CANCELED);
 #else
   UpdateServerThreadArgs* threadArgs = (UpdateServerThreadArgs*)param;
@@ -2965,7 +2965,7 @@ int LaunchCallbackAndPostProcessApps(int argc, NS_tchar** argv,
                                      )
 {
   if (argc > callbackIndex) {
-#if defined(XP_WIN) && !defined(TOR_BROWSER_UPDATE)
+#if defined(XP_WIN) && !defined(I2P_BROWSER_UPDATE)
     if (gSucceeded) {
       if (!LaunchWinPostProcess(gInstallDirPath, gPatchDirPath)) {
         fprintf(stderr, "The post update process was not launched");
@@ -3010,7 +3010,7 @@ int NS_main(int argc, NS_tchar **argv)
 
 #ifdef XP_MACOSX
   bool isElevated =
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
     false;
 #else
     strstr(argv[0], "/Library/PrivilegedHelperTools/org.mozilla.updater") != 0;
@@ -3630,17 +3630,17 @@ int NS_main(int argc, NS_tchar **argv)
       // using the service is because we are testing.
       if (!useService && !noServiceFallback &&
           updateLockFileHandle == INVALID_HANDLE_VALUE) {
-#ifdef TOR_BROWSER_UPDATE
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
-        // Because the TorBrowser-Data directory that contains the user's
-        // profile is a sibling of the Tor Browser installation directory,
+#ifdef I2P_BROWSER_UPDATE
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
+        // Because the I2PBrowser-Data directory that contains the user's
+        // profile is a sibling of the I2P Browser installation directory,
         // the user probably has permission to apply updates. Therefore, to
         // avoid potential security issues such as CVE-2015-0833, do not
         // attempt to elevate privileges. Instead, write a "failed" message
         // to the update status file (this function will return immediately
         // after the CloseHandle(elevatedFileHandle) call below).
 #else
-        // Because the user profile is contained within the Tor Browser
+        // Because the user profile is contained within the I2P Browser
         // installation directory, the user almost certainly has permission to
         // apply updates. Therefore, to avoid potential security issues such
         // as CVE-2015-0833, do not attempt to elevate privileges. Instead,
@@ -4009,7 +4009,7 @@ int NS_main(int argc, NS_tchar **argv)
   if (!sStagedUpdate && !sReplaceRequest && _wrmdir(gDeleteDirPath)) {
     LOG(("NS_main: unable to remove directory: " LOG_S ", err: %d",
          DELETE_DIR, errno));
-#if !defined(TOR_BROWSER_UPDATE)
+#if !defined(I2P_BROWSER_UPDATE)
     // The directory probably couldn't be removed due to it containing files
     // that are in use and will be removed on OS reboot. The call to remove the
     // directory on OS reboot is done after the calls to remove the files so the

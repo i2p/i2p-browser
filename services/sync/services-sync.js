@@ -47,7 +47,7 @@ pref("services.sync.addons.ignoreUserEnabledChanges", false);
 pref("services.sync.addons.trustedSourceHostnames", "addons.mozilla.org");
 
 pref("services.sync.log.appender.console", "Fatal");
-pref("services.sync.log.appender.dump", "Error");
+pref("services.sync.log.appender.dump", "Debug");
 pref("services.sync.log.appender.file.level", "Trace");
 pref("services.sync.log.appender.file.logOnError", true);
 pref("services.sync.log.appender.file.logOnSuccess", false);

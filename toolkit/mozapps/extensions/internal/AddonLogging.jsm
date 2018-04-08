@@ -21,7 +21,8 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 
 this.EXPORTED_SYMBOLS = [ "LogManager" ];
 
-var gDebugLogEnabled = false;
+// TODO: MEEH: Debug log enabled here
+var gDebugLogEnabled = true;
 
 function formatLogMessage(aType, aName, aStr, aException) {
   let message = aType.toUpperCase() + " " + aName + ": " + aStr;

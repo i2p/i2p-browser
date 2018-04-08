@@ -745,13 +745,14 @@ function isUsableAddon(aAddon) {
   if (aAddon.type == "theme" && aAddon.internalName == XPIProvider.defaultSkin)
     return true;
 
-  // Ensure that we allow torbutton, tor-launcher, and https-everywhere
-  if (aAddon.id == "torbutton@torproject.org" ||
-      aAddon.id == "tor-launcher@torproject.org" ||
+  // Ensure that we allow i2pbutton, i2p-launcher, and https-everywhere
+  // TODO: MEEH: Disabled code
+  /*if (aAddon.id == "i2pbutton@i2bb.net" ||
+      aAddon.id == "i2p-launcher@i2bb.net" ||
       aAddon.id == "https-everywhere-eff@eff.org" ||
       aAddon.id == "meek-http-helper@bamsoftware.com") {
     return true;
-  }
+  }*/
 
   if (mustSign(aAddon.type) && !aAddon.isCorrectlySigned) {
     logger.warn(`Add-on ${aAddon.id} is not correctly signed.`);
@@ -2675,6 +2676,7 @@ this.XPIProvider = {
   startup: function(aAppChanged, aOldAppVersion, aOldPlatformVersion) {
     function addDirectoryInstallLocation(aName, aKey, aPaths, aScope, aLocked) {
       try {
+        logger.debug(`addDirectoryInstallLocation = `, aPaths);
         var dir = FileUtils.getDir(aKey, aPaths);
       }
       catch (e) {
@@ -2698,6 +2700,7 @@ this.XPIProvider = {
 
     function addSystemAddonInstallLocation(aName, aKey, aPaths, aScope) {
       try {
+        logger.debug(`addSystemAddonInstallLocation = `, aPaths);
         var dir = FileUtils.getDir(aKey, aPaths);
       }
       catch (e) {
@@ -3458,11 +3461,13 @@ this.XPIProvider = {
           continue;
         }
 
-        // Make sure Torbutton, TorLauncher, EFF's HTTPS-Everywhere and meek
+        // Make sure I2Pbutton, I2PLauncher, EFF's HTTPS-Everywhere and meek
         // are still working after an update.
+        // TODO: MEEH: Disabled code
+        /*
         if (mustSign(addon.type) &&
-            addon.id != "torbutton@torproject.org" &&
-            addon.id != "tor-launcher@torproject.org" &&
+            addon.id != "i2pbutton@i2bb.net" &&
+            addon.id != "i2p-launcher@i2bb.net" &&
             addon.id != "https-everywhere-eff@eff.org" &&
             addon.id != "meek-http-helper@bamsoftware.com" &&
             addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) {
@@ -3471,6 +3476,7 @@ this.XPIProvider = {
           seenFiles.push(jsonfile.leafName);
           continue;
         }
+        */
 
         // Check for a cached metadata for this add-on, it may contain updated
         // compatibility information

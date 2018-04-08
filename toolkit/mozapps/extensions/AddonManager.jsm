@@ -45,9 +45,9 @@ const PREF_MATCH_OS_LOCALE            = "intl.locale.matchOS";
 const PREF_SELECTED_LOCALE            = "general.useragent.locale";
 const UNKNOWN_XPCOM_ABI               = "unknownABI";
 
-#ifdef TOR_BROWSER_VERSION
-#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
-const PREF_EM_LAST_TORBROWSER_VERSION = "extensions.lastTorBrowserVersion";
+#ifdef I2P_BROWSER_VERSION
+#expand const I2P_BROWSER_VERSION = __I2P_BROWSER_VERSION__;
+const PREF_EM_LAST_I2PBROWSER_VERSION = "extensions.lastI2PBrowserVersion";
 #endif
 
 const PREF_MIN_WEBEXT_PLATFORM_VERSION = "extensions.webExtensionsMinPlatformVersion";
@@ -875,27 +875,27 @@ var AddonManagerInternal = {
         this.validateBlocklist();
       }
 
-#ifdef TOR_BROWSER_VERSION
+#ifdef I2P_BROWSER_VERSION
       // To ensure that extension override prefs are reinstalled into the
       // user's profile after each update, set appChanged = true if the
       // Mozilla app version has not changed but the Tor Browser version
       // has changed.
       let tbChanged = undefined;
       try {
-        tbChanged = TOR_BROWSER_VERSION !=
-                   Services.prefs.getCharPref(PREF_EM_LAST_TORBROWSER_VERSION);
+        tbChanged = I2P_BROWSER_VERSION !=
+                   Services.prefs.getCharPref(PREF_EM_LAST_I2PBROWSER_VERSION);
       }
       catch (e) { }
       if (tbChanged !== false) {
-        // Because PREF_EM_LAST_TORBROWSER_VERSION was not present in older
+        // Because PREF_EM_LAST_I2PBROWSER_VERSION was not present in older
         // versions of Tor Browser, an app change is indicated when tbChanged
         // is undefined or true.
         if (appChanged === false) {
           appChanged = true;
         }
 
-        Services.prefs.setCharPref(PREF_EM_LAST_TORBROWSER_VERSION,
-                                   TOR_BROWSER_VERSION);
+        Services.prefs.setCharPref(PREF_EM_LAST_I2PBROWSER_VERSION,
+                                   I2P_BROWSER_VERSION);
       }
 #endif
 

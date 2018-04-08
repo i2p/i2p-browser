@@ -215,7 +215,7 @@ this.__defineSetter__("AddonManager", function (val) {
 
 var gInitialPages = [
   "about:tor",
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
   "about:tbupdate",
 #endif
   "about:blank",
@@ -2420,7 +2420,7 @@ function URLBarSetURI(aURI) {
     // 2. if remote newtab is enabled and it's the default remote newtab page
     let defaultRemoteURL = gAboutNewTabService.remoteEnabled &&
                            uri.spec === gAboutNewTabService.newTabURL;
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
     if ((gInitialPages.includes(uri.spec.split('?')[0]) || defaultRemoteURL) &&
         checkEmptyPageOrigin(gBrowser.selectedBrowser, uri))
 #else
@@ -6347,12 +6347,14 @@ var CanvasPermissionPromptHelper = {
 
     var bundleSvc = Cc["@mozilla.org/intl/stringbundle;1"].
                         getService(Ci.nsIStringBundleService);
+    // TODO: MEEH: Disabled code
+    /*
     var torBtnBundle;
     try {
       torBtnBundle = bundleSvc.createBundle(
-                             "chrome://torbutton/locale/torbutton.properties");
+                             "chrome://i2pbutton/locale/i2pbutton.properties");
     } catch (e) {}
-
+*/
     var message = getLocalizedString("canvas.siteprompt", [ uri.asciiHost ]);
 
     var mainAction = {
@@ -6384,13 +6386,15 @@ var CanvasPermissionPromptHelper = {
     // Torbutton extension, get our strings from the extension if possible.
     function getLocalizedString(aID, aParams) {
       var s;
+      // TODO: MEEH: Disabled code
+      /*
       if (torBtnBundle) try {
         if (aParams)
           s = torBtnBundle.formatStringFromName(aID, aParams, aParams.length);
         else
           s = torBtnBundle.GetStringFromName(aID);
       } catch (e) {}
-
+*/
       if (!s) {
         if (aParams)
           s = gNavigatorBundle.getFormattedString(aID, aParams);
@@ -7453,10 +7457,10 @@ var gIdentityHandler = {
       this._uriHasHost = false;
     }
 
-#ifdef TOR_BROWSER_UPDATE
-    let whitelist = /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|home|license|newaddon|permissions|preferences|privatebrowsing|rights|searchreset|sessionrestore|support|welcomeback|tor|tbupdate)(?:[?#]|$)/i;
+#ifdef I2P_BROWSER_UPDATE
+    let whitelist = /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|home|license|newaddon|permissions|preferences|privatebrowsing|rights|searchreset|sessionrestore|support|welcomeback|i2p|i2pupdate)(?:[?#]|$)/i;
 #else
-    let whitelist = /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|home|license|newaddon|permissions|preferences|privatebrowsing|rights|searchreset|sessionrestore|support|welcomeback|tor)(?:[?#]|$)/i;
+    let whitelist = /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|home|license|newaddon|permissions|preferences|privatebrowsing|rights|searchreset|sessionrestore|support|welcomeback|i2p)(?:[?#]|$)/i;
 #endif
     this._isSecureInternalUI = uri.schemeIs("about") && whitelist.test(uri.path);
 

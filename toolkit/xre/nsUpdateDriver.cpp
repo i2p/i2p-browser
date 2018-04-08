@@ -396,8 +396,8 @@ IsOlderVersion(nsIFile *versionFile, const char *appVersion)
   return false;
 }
 
-#ifndef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
-#if defined(TOR_BROWSER_UPDATE) && defined(XP_MACOSX)
+#ifndef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
+#if defined(I2P_BROWSER_UPDATE) && defined(XP_MACOSX)
 static nsresult
 GetUpdateDirFromAppDir(nsIFile *aAppDir, nsIFile* *aResult)
 {
@@ -648,7 +648,7 @@ SwitchToUpdatedApp(nsIFile *greDir, nsIFile *updateDir,
   nsAutoCString applyToDir;
   nsCOMPtr<nsIFile> updatedDir;
 #ifdef XP_MACOSX
-#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(I2P_BROWSER_UPDATE) && !defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
   rv = GetUpdateDirFromAppDir(appDir, getter_AddRefs(updatedDir));
   if (NS_FAILED(rv)) {
 #else
@@ -743,7 +743,7 @@ SwitchToUpdatedApp(nsIFile *greDir, nsIFile *updateDir,
 
 #if defined(MOZ_VERIFY_MAR_SIGNATURE) && (defined(MAR_NSS) || \
     (!defined(XP_WIN) && !defined(XP_MACOSX) && !defined(MOZ_WIDGET_GONK)))
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
   nsAutoCString appPath;
   nsresult rv2 = appDir->GetNativePath(appPath);
   if (NS_SUCCEEDED(rv2)) {
@@ -928,7 +928,7 @@ ApplyUpdate(nsIFile *greDir, nsIFile *updateDir, nsIFile *statusFile,
     applyToDir.Assign(installDirPath);
   } else {
 #ifdef XP_MACOSX
-#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(I2P_BROWSER_UPDATE) && !defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
     rv = GetUpdateDirFromAppDir(appDir, getter_AddRefs(updatedDir));
     if (NS_FAILED(rv)) {
 #else
@@ -1041,7 +1041,7 @@ ApplyUpdate(nsIFile *greDir, nsIFile *updateDir, nsIFile *statusFile,
   }
 #if defined(MOZ_VERIFY_MAR_SIGNATURE) && (defined(MAR_NSS) || \
     (!defined(XP_WIN) && !defined(XP_MACOSX) && !defined(MOZ_WIDGET_GONK)))
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
   nsAutoCString appPath;
   nsresult rv2 = appDir->GetNativePath(appPath);
   if (NS_SUCCEEDED(rv2)) {
@@ -1114,7 +1114,7 @@ ApplyUpdate(nsIFile *greDir, nsIFile *updateDir, nsIFile *statusFile,
 #ifdef DEBUG
   dump_argv("ApplyUpdate after SetupMacCommandLine", argv, argc);
 #endif
-#ifndef TOR_BROWSER_UPDATE
+#ifndef I2P_BROWSER_UPDATE
   // We need to detect whether elevation is required for this update. This can
   // occur when an admin user installs the application, but another admin
   // user attempts to update (see bug 394984).
@@ -1131,7 +1131,7 @@ ApplyUpdate(nsIFile *greDir, nsIFile *updateDir, nsIFile *statusFile,
       exit(0);
     }
     LaunchChildMac(argc, argv, outpid);
-#ifndef TOR_BROWSER_UPDATE
+#ifndef I2P_BROWSER_UPDATE
   }
 #endif
 #else
@@ -1194,7 +1194,7 @@ ProcessUpdates(nsIFile *greDir, nsIFile *appDir, nsIFile *updRootDir,
                bool restart, bool isOSUpdate, nsIFile *osApplyToDir,
                ProcessType *pid)
 {
-#if defined(XP_WIN) && defined(TOR_BROWSER_UPDATE)
+#if defined(XP_WIN) && defined(I2P_BROWSER_UPDATE)
   // Try to remove the "tobedeleted" directory which, if present, contains
   // files that could not be removed during a previous update (e.g., DLLs
   // that were in use and therefore locked by Windows).
@@ -1333,8 +1333,8 @@ nsUpdateProcessor::ProcessUpdate(nsIUpdate* aUpdate)
     if (NS_FAILED(rv))
       appDir = dirProvider->GetAppDir();
 
-#ifdef TOR_BROWSER_UPDATE
-    appVersion = TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+    appVersion = I2P_BROWSER_VERSION;
 #else
     appVersion = gAppData->version;
 #endif
@@ -1368,7 +1368,7 @@ nsUpdateProcessor::ProcessUpdate(nsIUpdate* aUpdate)
     NS_ASSERTION(NS_SUCCEEDED(rv), "Can't get the UpdRootD dir");
 
     // To support Tor Browser updates from xpcshell, modify the following
-    // code to use TOR_BROWSER_VERSION from the configure process.
+    // code to use I2P_BROWSER_VERSION from the configure process.
     nsCOMPtr<nsIXULAppInfo> appInfo =
       do_GetService("@mozilla.org/xre/app-info;1");
     if (appInfo) {

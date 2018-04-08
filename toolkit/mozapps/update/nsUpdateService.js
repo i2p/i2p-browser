@@ -60,8 +60,8 @@ const KEY_EXECUTABLE      = "XREExeF";
 // Gonk only
 const KEY_UPDATE_ARCHIVE_DIR = "UpdArchD";
 
-#ifdef TOR_BROWSER_VERSION
-#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
+#ifdef I2P_BROWSER_VERSION
+#expand const I2P_BROWSER_VERSION = __I2P_BROWSER_VERSION__;
 #endif
 
 const DIR_UPDATES         = "updates";
@@ -378,7 +378,7 @@ function areDirectoryEntriesWriteable(aDir) {
  * @return true if elevation is required, false otherwise
  */
 function getElevationRequired() {
-#if defined(TOR_BROWSER_UPDATE)
+#if defined(I2P_BROWSER_UPDATE)
   // To avoid potential security holes associated with running the updater
   // process with elevated privileges, Tor Browser does not support elevation.
   return false;
@@ -1209,7 +1209,7 @@ function handleUpdateFailure(update, errorCode) {
     cancelations++;
     Services.prefs.setIntPref(PREF_APP_UPDATE_CANCELATIONS, cancelations);
     if (AppConstants.platform == "macosx") {
-#if defined(TOR_BROWSER_UPDATE)
+#if defined(I2P_BROWSER_UPDATE)
       cleanupActiveUpdate();
 #else
       let osxCancelations = getPref("getIntPref",
@@ -1968,8 +1968,8 @@ UpdateService.prototype = {
    * notify the user of install success.
    */
   _postUpdateProcessing: function AUS__postUpdateProcessing() {
-#if defined(TOR_BROWSER_UPDATE) && !defined(XP_MACOSX)
-    this._removeOrphanedTorBrowserFiles();
+#if defined(I2P_BROWSER_UPDATE) && !defined(XP_MACOSX)
+    this._removeOrphanedI2PBrowserFiles();
 #endif
 
     if (!this.canCheckForUpdates) {
@@ -2160,20 +2160,20 @@ UpdateService.prototype = {
     }
   },
 
-#if defined(TOR_BROWSER_UPDATE) && !defined(XP_MACOSX)
+#if defined(I2P_BROWSER_UPDATE) && !defined(XP_MACOSX)
   /**
    * When updating from an earlier version to Tor Browser 6.0 or later, old
    * update info files are left behind on Linux and Windows. Remove them.
    */
-  _removeOrphanedTorBrowserFiles: function AUS__removeOrphanedTorBrowserFiles() {
+  _removeOrphanedI2PBrowserFiles: function AUS__removeOrphanedI2PBrowserFiles() {
     try {
       let oldUpdateInfoDir = getAppBaseDir();  // aka the Browser directory.
 
 #ifdef XP_WIN
       // On Windows, the updater files were stored under
-      // Browser/TorBrowser/Data/Browser/Caches/firefox/
+      // Browser/I2PBrowser/Data/Browser/Caches/firefox/
       oldUpdateInfoDir.appendRelativePath(
-                                "TorBrowser\\Data\\Browser\\Caches\\firefox");
+                                "I2PBrowser\\Data\\Browser\\Caches\\firefox");
 #endif
 
       // Remove the updates directory.
@@ -2470,8 +2470,8 @@ UpdateService.prototype = {
     updates.forEach(function(aUpdate) {
       // Ignore updates for older versions of the application and updates for
       // the same version of the application with the same build ID.
-#ifdef TOR_BROWSER_UPDATE
-      var compatVersion = TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+      var compatVersion = I2P_BROWSER_VERSION;
 #else
       var compatVersion = Services.appinfo.version;
 #endif
@@ -2766,8 +2766,8 @@ UpdateService.prototype = {
     // current application's version or the update's version is the same as the
     // application's version and the build ID is the same as the application's
     // build ID.
-#ifdef TOR_BROWSER_UPDATE
-    var compatVersion = TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+    var compatVersion = I2P_BROWSER_VERSION;
 #else
     var compatVersion = Services.appinfo.version;
 #endif
@@ -2777,9 +2777,9 @@ UpdateService.prototype = {
          update.appVersion == compatVersion)) {
       LOG("UpdateService:downloadUpdate - canceling download of update since " +
           "it is for an earlier or same application version and build ID.\n" +
-#ifdef TOR_BROWSER_UPDATE
-          "current Tor Browser version: " + compatVersion + "\n" +
-          "update Tor Browser version : " + update.appVersion + "\n" +
+#ifdef I2P_BROWSER_UPDATE
+          "current I2P Browser version: " + compatVersion + "\n" +
+          "update I2P Browser version : " + update.appVersion + "\n" +
 #else
           "current application version: " + compatVersion + "\n" +
           "update application version : " + update.appVersion + "\n" +

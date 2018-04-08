@@ -73,10 +73,10 @@ check_for_forced_update() {
       return 0;
     fi
 
-# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
 # we should remove the following lines:
     # If the file in the skip list ends with /*, do a prefix match.
-    # This allows TorBrowser/Data/Browser/profile.default/extensions/https-everywhere-eff@eff.org/*
+    # This allows I2PBrowser/Data/Browser/profile.default/extensions/https-everywhere-eff@eff.org/*
     # to be used to force all HTTPS Everywhere files to be updated.
     f_suffix=${f##*/}
     if [[ $f_suffix = "*" ]]; then
@@ -86,7 +86,7 @@ check_for_forced_update() {
         return 0;
       fi
     fi
-# END TOR_BROWSER_DATA_OUTSIDE_APP_DIR removal
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
   done
   ## 'false'... because this is bash. Oh yay!
   return 1;
@@ -136,11 +136,11 @@ updatemanifestv2="$workdir/updatev2.manifest"
 updatemanifestv3="$workdir/updatev3.manifest"
 archivefiles="updatev2.manifest updatev3.manifest"
 
-# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
 # we should remove the following lines:
 # If the NoScript or HTTPS Everywhere extensions have changed between
 # releases, add them to the "force updates" list.
-ext_path='TorBrowser/Data/Browser/profile.default/extensions'
+ext_path='I2PBrowser/Data/Browser/profile.default/extensions'
 if [ -d "$newdir/$ext_path" ]; then
   https_everywhere_dir='https-everywhere-eff@eff.org'
   https_everywhere_xpi='https-everywhere-eff@eff.org.xpi'
@@ -207,11 +207,12 @@ if [ -d "$newdir/$ext_path" ]; then
       # that the replace is "clean." Also, make sure we delete the pre 5.1.0
       # HTTPS Everywhere as well in case it exists (the extension ID got
       # changed with the version bump to 5.1.0).
-      directories_to_remove="$directories_to_remove $ext_path/https-everywhere@eff.org $ext_path/$https_everywhere_dir"
+      #directories_to_remove="$directories_to_remove $ext_path/https-everywhere@eff.org $ext_path/$https_everywhere_dir"
+      directories_to_remove=""
     fi
   fi
 fi
-# END TOR_BROWSER_DATA_OUTSIDE_APP_DIR removal
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
 
 mkdir -p "$workdir"
 
@@ -254,7 +255,7 @@ notice "       type partial"
 echo "type \"partial\"" >> "$updatemanifestv2"
 echo "type \"partial\"" >> "$updatemanifestv3"
 
-# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
 # we should remove the following lines:
 # If removal of any old, existing directories is desired, emit the appropriate
 # rmrfdir commands.
@@ -268,7 +269,7 @@ for dir_to_remove in $directories_to_remove; do
   echo "rmrfdir \"$dir_to_remove\"" >> "$updatemanifestv2"
   echo "rmrfdir \"$dir_to_remove\"" >> "$updatemanifestv3"
 done
-# END TOR_BROWSER_DATA_OUTSIDE_APP_DIR removal
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
 
 notice ""
 notice "Adding file patch and add instructions to update manifests"
@@ -424,14 +425,14 @@ notice ""
 notice "Adding file and directory remove instructions from file 'removed-files'"
 append_remove_instructions "$newdir" "$updatemanifestv2" "$updatemanifestv3"
 
-# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
 # we should remove the following lines:
 for f in $extra_files_to_remove; do
   notice "     remove \"$f\""
   echo "remove \"$f\"" >> "$updatemanifestv2"
   echo "remove \"$f\"" >> "$updatemanifestv3"
 done
-# END TOR_BROWSER_DATA_OUTSIDE_APP_DIR removal
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
 
 notice ""
 notice "Adding directory remove instructions for directories that no longer exist"

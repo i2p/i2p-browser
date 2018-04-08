@@ -131,10 +131,10 @@ static const char NEVER_ASK_FOR_SAVE_TO_DISK_PREF[] =
   "browser.helperApps.neverAsk.saveToDisk";
 static const char NEVER_ASK_FOR_OPEN_FILE_PREF[] =
   "browser.helperApps.neverAsk.openFile";
-
+/*
 static const char WARNING_DIALOG_CONTRACT_ID[] =
-  "@torproject.org/torbutton-extAppBlocker;1";
-
+  "@i2bb.net/i2pbutton-extAppBlocker;1";
+*/
 // Helper functions for Content-Disposition headers
 
 /**
@@ -636,6 +636,8 @@ nsExternalLoadURIHandler::nsExternalLoadURIHandler(
 , mHandlerInfo(aHandlerInfo)
 {
   nsresult rv = NS_OK;
+  // TODO: MEEH: Disabled code
+  /*
   mWarningDialog = do_CreateInstance(WARNING_DIALOG_CONTRACT_ID, &rv);
   if (NS_SUCCEEDED(rv) && mWarningDialog) {
     // This will create a reference cycle (the dialog holds a reference to us
@@ -643,7 +645,7 @@ nsExternalLoadURIHandler::nsExternalLoadURIHandler(
     // or CancelRequest.
     rv = mWarningDialog->MaybeShow(this, aWindowContext);
   }
-
+*/
   if (NS_FAILED(rv)) {
     // If for some reason we could not open the download warning prompt,
     // continue with the request.
@@ -1765,7 +1767,8 @@ NS_IMETHODIMP nsExternalAppHandler::OnStartRequest(nsIRequest *request, nsISuppo
   if (httpInternal) {
     httpInternal->SetChannelIsForDownload(true);
   }
-
+// TODO: MEEH: Disabled code
+/*
   mWarningDialog = do_CreateInstance(WARNING_DIALOG_CONTRACT_ID, &rv);
   if (NS_SUCCEEDED(rv) && mWarningDialog) {
     // This will create a reference cycle (the dialog holds a reference to us
@@ -1773,7 +1776,7 @@ NS_IMETHODIMP nsExternalAppHandler::OnStartRequest(nsIRequest *request, nsISuppo
     // or CancelRequest.
     rv = mWarningDialog->MaybeShow(this, GetDialogParent());
   }
-
+*/
   if (NS_FAILED(rv)) {
     // If for some reason we could not open the download warning prompt,
     // continue with the request.

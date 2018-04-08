@@ -71,18 +71,20 @@ fi
 list_files files
 list_symlinks symlinks symlink_targets
 
-# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
 # we should remove the following lines (which remove entire directories
 # which, if present, contain old, unpacked copies of HTTPS Everywhere):
 # Make sure we delete the pre 5.1.0 HTTPS Everywhere as well in case it
 # exists. The extension ID got changed with the version bump to 5.1.0.
-ext_path='TorBrowser/Data/Browser/profile.default/extensions'
+ext_path='I2PBrowser/Data/Browser/profile.default/extensions'
 if [ -d "$ext_dir" ]; then
-  directories_to_remove="$ext_path/https-everywhere@eff.org $ext_path/https-everywhere-eff@eff.org"
+# // TODO: MEEH: Commented away code here as well
+#  directories_to_remove="$ext_path/https-everywhere@eff.org $ext_path/https-everywhere-eff@eff.org"
+  directories_to_remove=""
 else
   directories_to_remove=""
 fi
-# END TOR_BROWSER_DATA_OUTSIDE_APP_DIR removal
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
 
 popd
 
@@ -95,7 +97,7 @@ notice "       type complete"
 echo "type \"complete\"" >> "$updatemanifestv2"
 echo "type \"complete\"" >> "$updatemanifestv3"
 
-# TODO When TOR_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
 # we should remove the following lines:
 # If removal of any old, existing directories is desired, emit the appropriate
 # rmrfdir commands.
@@ -109,7 +111,7 @@ for dir_to_remove in $directories_to_remove; do
   echo "rmrfdir \"$dir_to_remove\"" >> "$updatemanifestv2"
   echo "rmrfdir \"$dir_to_remove\"" >> "$updatemanifestv3"
 done
-# END TOR_BROWSER_DATA_OUTSIDE_APP_DIR removal
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
 
 notice ""
 notice "Adding file add instructions to update manifests"

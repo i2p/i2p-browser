@@ -68,7 +68,7 @@ browser.jar:
         content/browser/aboutTabCrashed.css           (content/aboutTabCrashed.css)
         content/browser/aboutTabCrashed.js            (content/aboutTabCrashed.js)
         content/browser/aboutTabCrashed.xhtml         (content/aboutTabCrashed.xhtml)
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
         content/browser/abouttbupdate/aboutTBUpdate.xhtml    (content/abouttbupdate/aboutTBUpdate.xhtml)
         content/browser/abouttbupdate/aboutTBUpdate.js       (content/abouttbupdate/aboutTBUpdate.js)
         content/browser/abouttbupdate/aboutTBUpdate.css      (content/abouttbupdate/aboutTBUpdate.css)

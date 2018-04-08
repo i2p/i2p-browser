@@ -157,7 +157,7 @@
       <checkbox id="resistFingerprintingCB"
                 preference="privacy.resistFingerprinting"
                 accesskey="F"
-                label="Change details that distinguish you from other Tor Browser users" />
+                label="Change details that distinguish you from other I2P Browser users" />
     </hbox>
   </vbox>
 </groupbox>

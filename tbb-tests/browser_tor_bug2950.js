@@ -37,7 +37,7 @@ let fileInProfile = fileName => FileUtils.File(profileDirPath + "/" + fileName);
 
 // ## Now let's run the test.
 
-let SITE = "http://torproject.org",
+let SITE = "http://i2bb.net",
     KEY = "popup";
 
 let permissionsFile = fileInProfile("permissions.sqlite"),

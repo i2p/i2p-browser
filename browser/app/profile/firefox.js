@@ -57,7 +57,7 @@ pref("extensions.hotfix.cert.checkAttributes", true);
 pref("extensions.hotfix.certs.1.sha1Fingerprint", "91:53:98:0C:C1:86:DF:47:8F:35:22:9E:11:C9:A7:31:04:49:A1:AA");
 pref("extensions.hotfix.certs.2.sha1Fingerprint", "39:E7:2B:7A:5B:CF:37:78:F9:5D:4A:E0:53:2D:2F:3D:68:53:C5:60");
 
-// No AUS check for system add-on updates for Tor Browser users.
+// No AUS check for system add-on updates for I2P Browser users.
 pref("extensions.systemAddon.update.url", "");
 
 // Disable add-ons that are not installed by the user in all scopes by default.
@@ -134,7 +134,7 @@ pref("app.update.badge", false);
 pref("app.update.staging.enabled", true);
 
 // Update service URL:
-pref("app.update.url", "https://aus1.torproject.org/torbrowser/update_3/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%");
+pref("app.update.url", "https://update.i2bb.net/g1/update/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%");
 
 // app.update.url.manual is in branding section
 // app.update.url.details is in branding section

@@ -1867,7 +1867,7 @@ public class BrowserApp extends GeckoApp
                 }
 
                 Telemetry.addToHistogram("FENNEC_ORBOT_INSTALLED",
-                    ContextUtils.isPackageInstalled(getContext(), "org.torproject.android") ? 1 : 0);
+                    ContextUtils.isPackageInstalled(getContext(), "net.i2bb.android") ? 1 : 0);
                 break;
 
             case "Updater:Launch":

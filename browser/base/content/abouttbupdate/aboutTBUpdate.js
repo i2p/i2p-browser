@@ -5,6 +5,6 @@
 
 function init()
 {
-  let event = new CustomEvent("AboutTBUpdateLoad", { bubbles: true });
+  let event = new CustomEvent("AboutI2PUpdateLoad", { bubbles: true });
   document.dispatchEvent(event);
 }

@@ -389,14 +389,15 @@ nsHttpHandler::Init()
         obsService->AddObserver(this, NS_XPCOM_SHUTDOWN_OBSERVER_ID, true);
         obsService->AddObserver(this, "net:clear-active-logins", true);
         obsService->AddObserver(this, "net:prune-dead-connections", true);
+        // TODO: MEEH: Disabled code related to TorButton
         // Sent by the TorButton add-on in the Tor Browser
-        obsService->AddObserver(this, "net:prune-all-connections", true);
+        //obsService->AddObserver(this, "net:prune-all-connections", true);
         obsService->AddObserver(this, "net:failed-to-process-uri-content", true);
-        obsService->AddObserver(this, "last-pb-context-exited", true);
+        //obsService->AddObserver(this, "last-pb-context-exited", true);
         obsService->AddObserver(this, "webapps-clear-data", true);
         obsService->AddObserver(this, "browser:purge-session-history", true);
         obsService->AddObserver(this, NS_NETWORK_LINK_TOPIC, true);
-        obsService->AddObserver(this, "application-background", true);
+        //obsService->AddObserver(this, "application-background", true);
     }
 
     MakeNewRequestTokenBucket();

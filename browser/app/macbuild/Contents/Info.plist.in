@@ -159,7 +159,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>%APP_VERSION%</string>
 	<key>CFBundleSignature</key>
-	<string>TORB</string>
+	<string>I2BB</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

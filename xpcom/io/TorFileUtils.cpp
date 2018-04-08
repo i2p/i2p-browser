@@ -10,19 +10,19 @@ static nsresult GetAppRootDir(nsIFile *aExeFile, nsIFile** aFile);
 
 //-----------------------------------------------------------------------------
 NS_METHOD
-TorBrowser_GetUserDataDir(nsIFile *aExeFile, nsIFile** aFile)
+I2PBrowser_GetUserDataDir(nsIFile *aExeFile, nsIFile** aFile)
 {
   NS_ENSURE_ARG_POINTER(aFile);
   nsCOMPtr<nsIFile> tbDataDir;
 
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
-  nsAutoCString tbDataLeafName(NS_LITERAL_CSTRING("TorBrowser-Data"));
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
+  nsAutoCString tbDataLeafName(NS_LITERAL_CSTRING("I2PBrowser-Data"));
   nsCOMPtr<nsIFile> appRootDir;
   nsresult rv = GetAppRootDir(aExeFile, getter_AddRefs(appRootDir));
   NS_ENSURE_SUCCESS(rv, rv);
 #ifndef XP_MACOSX
   // On all platforms except Mac OS, we always operate in a "portable" mode
-  // where the TorBrowser-Data directory is located next to the application.
+  // where the I2PBrowser-Data directory is located next to the application.
   rv = appRootDir->GetParent(getter_AddRefs(tbDataDir));
   NS_ENSURE_SUCCESS(rv, rv);
   rv = tbDataDir->AppendNative(tbDataLeafName);
@@ -31,7 +31,7 @@ TorBrowser_GetUserDataDir(nsIFile *aExeFile, nsIFile** aFile)
   // For Mac OS, determine whether we should store user data in the OS's
   // standard location (i.e., under ~/Library/Application Support). We use
   // the OS location if (1) the application is installed in a directory whose
-  // path contains "/Applications" or (2) the TorBrowser-Data directory does
+  // path contains "/Applications" or (2) the I2PBrowser-Data directory does
   // not exist and cannot be created (which probably means we lack write
   // permission to the directory that contains the application).
   nsAutoString appRootPath;
@@ -41,7 +41,7 @@ TorBrowser_GetUserDataDir(nsIFile *aExeFile, nsIFile** aFile)
                                          true /* ignore case */) >= 0);
   if (!useOSLocation) {
     // We hope to use the portable (aka side-by-side) approach, but before we
-    // commit to that, let's ensure that we can create the TorBrowser-Data
+    // commit to that, let's ensure that we can create the I2PBrowser-Data
     // directory. If it already exists, we will try to use it; if not and we
     // fail to create it, we will switch to ~/Library/Application Support.
     rv = appRootDir->GetParent(getter_AddRefs(tbDataDir));
@@ -56,7 +56,7 @@ TorBrowser_GetUserDataDir(nsIFile *aExeFile, nsIFile** aFile)
   }
 
   if (useOSLocation) {
-    // We are using ~/Library/Application Support/TorBrowser-Data. We do not
+    // We are using ~/Library/Application Support/I2PBrowser-Data. We do not
     // need to create that directory here because the code in nsXREDirProvider
     // will do so (and the user should always have write permission for
     // ~/Library/Application Support; if they do not we have no more options).
@@ -90,10 +90,10 @@ TorBrowser_GetUserDataDir(nsIFile *aExeFile, nsIFile** aFile)
                                       getter_AddRefs(tbDataDir));
 #else
   // User data is embedded within the application directory (i.e.,
-  // TOR_BROWSER_DATA_OUTSIDE_APP_DIR is not defined).
+  // I2P_BROWSER_DATA_OUTSIDE_APP_DIR is not defined).
   nsresult rv = GetAppRootDir(aExeFile, getter_AddRefs(tbDataDir));
   NS_ENSURE_SUCCESS(rv, rv);
-  rv = tbDataDir->AppendNative(NS_LITERAL_CSTRING("TorBrowser"));
+  rv = tbDataDir->AppendNative(NS_LITERAL_CSTRING("I2PBrowser"));
   NS_ENSURE_SUCCESS(rv, rv);
 #endif
 

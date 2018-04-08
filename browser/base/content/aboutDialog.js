@@ -8,9 +8,9 @@
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource://gre/modules/AppConstants.jsm");
 
-#ifdef TOR_BROWSER_VERSION
+#ifdef I2P_BROWSER_VERSION
 # Add double-quotes back on (stripped by JarMaker.py).
-#expand const TOR_BROWSER_VERSION = "__TOR_BROWSER_VERSION__";
+#expand const I2P_BROWSER_VERSION = "__I2P_BROWSER_VERSION__";
 #endif
 
 function init(aEvent)
@@ -53,8 +53,8 @@ function init(aEvent)
     document.getElementById("communityDesc").hidden = true;
   }
 
-#ifdef TOR_BROWSER_VERSION
-  versionField.textContent = TOR_BROWSER_VERSION +
+#ifdef I2P_BROWSER_VERSION
+  versionField.textContent = I2P_BROWSER_VERSION +
                              " (based on Mozilla Firefox " +
                              versionField.textContent + ")";
 #endif

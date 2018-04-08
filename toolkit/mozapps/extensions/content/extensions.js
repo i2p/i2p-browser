@@ -280,12 +280,14 @@ function loadView(aViewId) {
 function isCorrectlySigned(aAddon) {
   // Add-ons without an "isCorrectlySigned" property are correctly signed as
   // they aren't the correct type for signing.
-  if (aAddon.id == "torbutton@torproject.org" ||
-      aAddon.id == "tor-launcher@torproject.org" ||
+  // TODO: MEEH: Disabled code
+  /*if (aAddon.id == "i2pbutton@i2bb.net" ||
+      aAddon.id == "i2p-launcher@i2bb.net" ||
       aAddon.id == "https-everywhere-eff@eff.org") {
     return true;
   }
-  return aAddon.isCorrectlySigned !== false;
+  return aAddon.isCorrectlySigned !== false;*/
+  return true;
 }
 
 function isDiscoverEnabled() {

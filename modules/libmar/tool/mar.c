@@ -32,8 +32,8 @@ int mar_repackage_and_sign(const char *NSSConfigDir,
                            const char * dest);
 
 static void print_version() {
-#ifdef TOR_BROWSER_UPDATE
-  printf("Version: %s\n", TOR_BROWSER_VERSION);
+#ifdef I2P_BROWSER_UPDATE
+  printf("Version: %s\n", I2P_BROWSER_VERSION);
 #else
   printf("Version: %s\n", MOZ_APP_VERSION);
 #endif
@@ -121,8 +121,8 @@ int main(int argc, char **argv) {
   char *NSSConfigDir = NULL;
   const char *certNames[MAX_SIGNATURES];
   char *MARChannelID = MAR_CHANNEL_ID;
-#ifdef TOR_BROWSER_UPDATE
-  char *productVersion = TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+  char *productVersion = I2P_BROWSER_VERSION;
 #else
   char *productVersion = MOZ_APP_VERSION;
 #endif

@@ -291,7 +291,7 @@ bool ObtainUpdaterArguments(int* argc, char*** argv)
 
 @end
 
-#ifndef TOR_BROWSER_UPDATE
+#ifndef I2P_BROWSER_UPDATE
 bool ServeElevatedUpdate(int argc, const char** argv)
 {
   MacAutoreleasePool pool;

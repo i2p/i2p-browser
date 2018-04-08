@@ -6,7 +6,7 @@ body {
   background-size: 100% 100%;
 }
 
-#torbrowser-version {
+#i2pbrowser-version {
   /* These CSS rules match the about:tor page */
   position: fixed;
   top: 6px;

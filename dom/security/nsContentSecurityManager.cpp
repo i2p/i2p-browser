@@ -697,6 +697,15 @@ nsContentSecurityManager::IsOriginPotentiallyTrustworthy(nsIPrincipal* aPrincipa
       *aIsTrustWorthy = true;
       return NS_OK;
     }
+
+    // Maybe we have a .i2p URL. Treat it as whitelisted as well when
+    // `dom.securecontext.whitelist_eepsites` is `true`.
+    bool whitelistOnions =
+      Preferences::GetBool("dom.securecontext.whitelist_eepsites", false);
+    if (whitelistOnions && StringEndsWith(host, NS_LITERAL_CSTRING(".i2p"))) {
+      *aIsTrustWorthy = true;
+      return NS_OK;
+    }
   }
 
   return NS_OK;

@@ -1131,16 +1131,18 @@ BrowserGlue.prototype = {
           if (addon.type == "experiment")
             continue;
 
-          // We don't need a false notification that our extensions are
+            // We don't need a false notification that our extensions are
           // disabled. Even if they lack Mozilla's blessing they are enabled
           // nevertheless.
-          if ((addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) &&
-              !(addon.id == "torbutton@torproject.org" ||
-                addon.id == "tor-launcher@torproject.org" ||
+          // TODO: MEEH: Disabled code
+          /*if ((addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) &&
+              !(addon.id == "i2pbutton@i2bb.net" ||
+                addon.id == "i2p-launcher@i2bb.net" ||
                 addon.id == "https-everywhere-eff@eff.org")) {
             this._notifyUnsignedAddonsDisabled();
             break;
           }
+          */
         }
       });
     }

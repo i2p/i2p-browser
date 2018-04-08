@@ -84,6 +84,7 @@ function* setupHosts(scripts) {
       break;
 
     case "win":
+    // TODO: MEEH: Need to find a way to resolve relative NativeMessagingHosts directory in windows
       const REGKEY = String.raw`Software\Mozilla\NativeMessagingHosts`;
 
       let registry = new MockRegistry();

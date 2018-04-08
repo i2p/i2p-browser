@@ -44,8 +44,8 @@ const NS_BINDING_ABORTED = Components.results.NS_BINDING_ABORTED;
 const NS_ERROR_WONT_HANDLE_CONTENT = 0x805d0001;
 const NS_ERROR_ABORT = Components.results.NS_ERROR_ABORT;
 
-#ifdef TOR_BROWSER_VERSION
-const kTBSavedVersionPref = "browser.startup.homepage_override.torbrowser.version";
+#ifdef I2P_BROWSER_VERSION
+const kTBSavedVersionPref = "browser.startup.homepage_override.i2pbrowser.version";
 #endif
 
 function shouldLoadURI(aURI) {
@@ -115,8 +115,8 @@ function needHomepageOverride(prefb) {
 
   var mstone = Services.appinfo.platformVersion;
 
-#ifdef TOR_BROWSER_VERSION
-#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
+#ifdef I2P_BROWSER_VERSION
+#expand const I2P_BROWSER_VERSION = __I2P_BROWSER_VERSION__;
 
   var savedTBVersion = null;
   try {
@@ -141,8 +141,8 @@ function needHomepageOverride(prefb) {
 
     prefb.setCharPref("browser.startup.homepage_override.mstone", mstone);
     prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
-#ifdef TOR_BROWSER_VERSION
-    prefb.setCharPref(kTBSavedVersionPref, TOR_BROWSER_VERSION);
+#ifdef I2P_BROWSER_VERSION
+    prefb.setCharPref(kTBSavedVersionPref, I2P_BROWSER_VERSION);
 
     // After an upgrade from an older release of Tor Browser (<= 5.5a1), the
     // savedmstone will be undefined because those releases included the
@@ -157,10 +157,10 @@ function needHomepageOverride(prefb) {
 #endif
   }
 
-#ifdef TOR_BROWSER_VERSION
-  if (TOR_BROWSER_VERSION != savedTBVersion) {
+#ifdef I2P_BROWSER_VERSION
+  if (I2P_BROWSER_VERSION != savedTBVersion) {
     prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
-    prefb.setCharPref(kTBSavedVersionPref, TOR_BROWSER_VERSION);
+    prefb.setCharPref(kTBSavedVersionPref, I2P_BROWSER_VERSION);
     return OVERRIDE_NEW_MSTONE;
   }
 #endif
@@ -529,7 +529,7 @@ nsBrowserContentHandler.prototype = {
         old_mstone = Services.prefs.getCharPref("browser.startup.homepage_override.mstone");
       } catch (ex) {}
 
-#ifdef TOR_BROWSER_VERSION
+#ifdef I2P_BROWSER_VERSION
       // We do the same for the Tor Browser version.
       var old_tbversion = null;
       try {
@@ -569,14 +569,14 @@ nsBrowserContentHandler.prototype = {
               overridePage = getPostUpdateOverridePage(overridePage);
 
             overridePage = overridePage.replace("%OLD_VERSION%", old_mstone);
-#ifdef TOR_BROWSER_VERSION
-            overridePage = overridePage.replace("%OLD_TOR_BROWSER_VERSION%",
+#ifdef I2P_BROWSER_VERSION
+            overridePage = overridePage.replace("%OLD_I2P_BROWSER_VERSION%",
                                                 old_tbversion);
 #endif
 
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
             if (overridePage)
-              overridePage = "about:tbupdate?" + encodeURIComponent(overridePage);
+              overridePage = "about:i2pupdate?" + encodeURIComponent(overridePage);
 #endif
             break;
         }

@@ -373,36 +373,28 @@ nsXREDirProvider::GetFile(const char* aProperty, bool* aPersistent,
   else if (!strcmp(aProperty, XRE_SYS_NATIVE_MESSAGING_MANIFESTS)) {
     nsCOMPtr<nsIFile> localDir;
 
-    rv = ::GetSystemParentDirectory(getter_AddRefs(localDir));
+    rv = GetI2PBrowserUserDataDir(getter_AddRefs(localDir));
     if (NS_SUCCEEDED(rv)) {
-      NS_NAMED_LITERAL_CSTRING(dirname,
-#if defined(XP_MACOSX)
-                               "NativeMessagingHosts"
-#else
-                               "native-messaging-hosts"
-#endif
-                               );
-      rv = localDir->AppendNative(dirname);
+      rv = localDir->AppendNative(NS_LITERAL_CSTRING("Browser"));
       if (NS_SUCCEEDED(rv)) {
-        localDir.swap(file);
+        // Use same name on all platforms
+        NS_NAMED_LITERAL_CSTRING(dirname,"NativeMessagingHosts");
+        rv = localDir->AppendNative(dirname);
+        if (NS_SUCCEEDED(rv)) {
+          localDir.swap(file);
+        }
       }
     }
   }
   else if (!strcmp(aProperty, XRE_USER_NATIVE_MESSAGING_MANIFESTS)) {
+
     nsCOMPtr<nsIFile> localDir;
-    rv = GetUserDataDirectoryHome(getter_AddRefs(localDir), false);
+    rv = GetI2PBrowserUserDataDir(getter_AddRefs(localDir));
     if (NS_SUCCEEDED(rv)) {
-#if defined(XP_MACOSX)
-      rv = localDir->AppendNative(NS_LITERAL_CSTRING("Mozilla"));
+      rv = localDir->AppendNative(NS_LITERAL_CSTRING("Browser"));
       if (NS_SUCCEEDED(rv)) {
         rv = localDir->AppendNative(NS_LITERAL_CSTRING("NativeMessagingHosts"));
       }
-#else
-      rv = localDir->AppendNative(NS_LITERAL_CSTRING(".mozilla"));
-      if (NS_SUCCEEDED(rv)) {
-        rv = localDir->AppendNative(NS_LITERAL_CSTRING("native-messaging-hosts"));
-      }
-#endif
     }
     if (NS_SUCCEEDED(rv)) {
       localDir.swap(file);
@@ -1371,18 +1363,18 @@ nsXREDirProvider::GetUpdateRootDir(nsIFile* *aResult)
                                       getter_AddRefs(updRoot));
   NS_ENSURE_SUCCESS(rv, rv);
 
-#elif defined(TOR_BROWSER_UPDATE)
-  // For Tor Browser, we store update history, etc. within the UpdateInfo
+#elif defined(I2P_BROWSER_UPDATE)
+  // For I2P Browser, we store update history, etc. within the UpdateInfo
   // directory under the user data directory.
-  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(updRoot));
+  nsresult rv = GetI2PBrowserUserDataDir(getter_AddRefs(updRoot));
   NS_ENSURE_SUCCESS(rv, rv);
   rv = updRoot->AppendNative(NS_LITERAL_CSTRING("UpdateInfo"));
   NS_ENSURE_SUCCESS(rv, rv);
-#if defined(XP_MACOSX) && defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
-  // Since the TorBrowser-Data directory may be shared among different
+#if defined(XP_MACOSX) && defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
+  // Since the I2PBrowser-Data directory may be shared among different
   // installations of the application, embed the app path in the update dir
   // so that the update history is partitioned. This is much less likely to
-  // be an issue on Linux or Windows because the Tor Browser packages for
+  // be an issue on Linux or Windows because the I2P Browser packages for
   // those platforms include a "container" folder that provides partitioning
   // by default, and we do not support use of a shared, OS-recommended area
   // for user data on those platforms.
@@ -1405,7 +1397,7 @@ nsXREDirProvider::GetUpdateRootDir(nsIFile* *aResult)
   rv = updRoot->AppendRelativePath(appDirPath);
   NS_ENSURE_SUCCESS(rv, rv);
 #endif
-#else // ! TOR_BROWSER_UPDATE
+#else // ! I2P_BROWSER_UPDATE
   nsCOMPtr<nsIFile> appFile;
   bool per = false;
   nsresult rv = GetFile(XRE_EXECUTABLE_FILE, &per, getter_AddRefs(appFile));
@@ -1536,7 +1528,7 @@ nsXREDirProvider::GetUpdateRootDir(nsIFile* *aResult)
   NS_ENSURE_SUCCESS(rv, rv);
 
 #endif // XP_WIN
-#endif // ! TOR_BROWSER_UPDATE
+#endif // ! I2P_BROWSER_UPDATE
   updRoot.forget(aResult);
   return NS_OK;
 }
@@ -1589,11 +1581,11 @@ nsXREDirProvider::GetUserDataDirectoryHome(nsIFile** aFile, bool aLocal)
   // Copied from nsAppFileLocationProvider (more or less)
   NS_ENSURE_ARG_POINTER(aFile);
   nsCOMPtr<nsIFile> localDir;
-  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(localDir));
+  nsresult rv = GetI2PBrowserUserDataDir(getter_AddRefs(localDir));
   NS_ENSURE_SUCCESS(rv, rv);
 
 #if !defined(ANDROID)
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
   rv = localDir->AppendNative(NS_LITERAL_CSTRING("Browser"));
 #else
   rv = localDir->AppendRelativeNativePath(NS_LITERAL_CSTRING("Data"
@@ -1680,14 +1672,14 @@ nsXREDirProvider::GetUserDataDirectory(nsIFile** aFile, bool aLocal,
 }
 
 nsresult
-nsXREDirProvider::GetTorBrowserUserDataDir(nsIFile* *aFile)
+nsXREDirProvider::GetI2PBrowserUserDataDir(nsIFile* *aFile)
 {
   NS_ENSURE_ARG_POINTER(aFile);
   nsCOMPtr<nsIFile> exeFile;
   bool per = false;
   nsresult rv = GetFile(XRE_EXECUTABLE_FILE, &per, getter_AddRefs(exeFile));
   NS_ENSURE_SUCCESS(rv, rv);
-  return TorBrowser_GetUserDataDir(exeFile, aFile);
+  return I2PBrowser_GetUserDataDir(exeFile, aFile);
 }
 
 nsresult

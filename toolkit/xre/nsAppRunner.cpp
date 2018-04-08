@@ -1833,15 +1833,16 @@ GetOverrideStringBundleForLocale(nsIStringBundleService* aSBS,
                                  nsIStringBundle* *aResult)
 {
   NS_ENSURE_ARG(aSBS);
-  NS_ENSURE_ARG(aTorbuttonURI);
+  //NS_ENSURE_ARG(aTorbuttonURI);
   NS_ENSURE_ARG(aLocale);
   NS_ENSURE_ARG(aResult);
-
-  const char* kFormatStr = "jar:%s!/chrome/locale/%s/torbutton.properties";
+  // TODO: MEEH: Disabled code
+/*
+  const char* kFormatStr = "jar:%s!/chrome/locale/%s/i2pbutton.properties";
   nsPrintfCString strBundleURL(kFormatStr, aTorbuttonURI, aLocale);
   nsresult rv = aSBS->CreateBundle(strBundleURL.get(), aResult);
   NS_ENSURE_SUCCESS(rv, rv);
-
+*/
   // To ensure that we have a valid string bundle, try to retrieve a string
   // that we know exists.
   nsXPIDLString val;
@@ -1865,12 +1866,12 @@ GetOverrideStringBundle(nsIStringBundleService* aSBS, nsIStringBundle* *aResult)
   if (!dirProvider)
     return;
 
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
   // Build Torbutton file URI by starting from the distribution directory.
   bool persistent = false; // ignored
   nsCOMPtr<nsIFile> distribDir;
-  nsresult rv = dirProvider->GetFile(XRE_APP_DISTRIBUTION_DIR, &persistent,
-                                     getter_AddRefs(distribDir));
+  nsresult rv = dirProvider->GetFile(XRE_APP_DISTRIBUTION_DIR, &persistent, getter_AddRefs(distribDir));
+
   if (NS_FAILED(rv))
     return;
 
@@ -1882,7 +1883,8 @@ GetOverrideStringBundle(nsIStringBundleService* aSBS, nsIStringBundle* *aResult)
     return;
   }
 
-  uriString.Append("extensions/torbutton@torproject.org.xpi");
+  // TODO: MEEH: Disabled code
+  //uriString.Append("extensions/i2pbutton@i2bb.net.xpi");
 #else
   // Build Torbutton file URI string by starting from the profiles directory.
   bool persistent = false; // ignored
@@ -1900,8 +1902,11 @@ GetOverrideStringBundle(nsIStringBundleService* aSBS, nsIStringBundle* *aResult)
     return;
   }
 
-  uriString.Append("profile.default/extensions/torbutton@torproject.org.xpi");
+  // TODO: MEEH: Disabled code
+  //uriString.Append("profile.default/extensions/i2pbutton@i2bb.net.xpi");
 #endif
+
+  uriString.Append("");
 
   nsCString userAgentLocale;
   if (!NS_SUCCEEDED(Preferences::GetCString("general.useragent.locale",
@@ -1951,7 +1956,7 @@ enum ProfileStatus {
   PROFILE_STATUS_READ_ONLY,
   PROFILE_STATUS_IS_LOCKED,
   PROFILE_STATUS_OTHER_ERROR
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
   , PROFILE_STATUS_MIGRATION_FAILED
 #endif
 };
@@ -2038,7 +2043,7 @@ ProfileErrorDialog(nsIFile* aProfileDir, nsIFile* aProfileLocalDir,
     static const char16_t kReadOnly[] = u"profileReadOnlyMac";
 #endif
     static const char16_t kAccessDenied[] = u"profileAccessDenied";
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
     static const char16_t kMigrationFailed[] = u"profileMigrationFailed";
 #endif
 
@@ -2047,7 +2052,7 @@ ProfileErrorDialog(nsIFile* aProfileDir, nsIFile* aProfileLocalDir,
     const char16_t* titleKey = u"profileProblemTitle";
     if (PROFILE_STATUS_READ_ONLY == aStatus)
       errorKey = kReadOnly;
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
     else if (PROFILE_STATUS_MIGRATION_FAILED == aStatus)
       errorKey = kMigrationFailed;
 #endif
@@ -2369,8 +2374,8 @@ static ProfileStatus CheckProfileWriteAccess(nsIToolkitProfile* aProfile)
   return CheckProfileWriteAccess(profileDir);
 }
 
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
-// Obtain an nsIFile for the app root directory, e.g., TorBrowser.app on
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
+// Obtain an nsIFile for the app root directory, e.g., I2PBrowser.app on
 // Mac OS and the directory that contains Browser/ on Linux and Windows.
 static nsresult GetAppRootDir(nsIFile *aAppDir, nsIFile **aAppRootDir)
 {
@@ -2386,16 +2391,16 @@ static nsresult GetAppRootDir(nsIFile *aAppDir, nsIFile **aAppRootDir)
 #endif
 }
 
-static ProfileStatus CheckTorBrowserDataWriteAccess(nsIFile *aAppDir)
+static ProfileStatus CheckI2PBrowserDataWriteAccess(nsIFile *aAppDir)
 {
   // Check whether we can write to the directory that will contain
-  // TorBrowser-Data.
+  // I2PBrowser-Data.
   nsCOMPtr<nsIFile> tbDataDir;
   nsXREDirProvider* dirProvider = nsXREDirProvider::GetSingleton();
   if (!dirProvider)
     return PROFILE_STATUS_OTHER_ERROR;
   nsresult rv =
-              dirProvider->GetTorBrowserUserDataDir(getter_AddRefs(tbDataDir));
+              dirProvider->GetI2PBrowserUserDataDir(getter_AddRefs(tbDataDir));
   NS_ENSURE_SUCCESS(rv, PROFILE_STATUS_OTHER_ERROR);
   nsCOMPtr<nsIFile> tbDataDirParent;
   rv = tbDataDir->GetParent(getter_AddRefs(tbDataDirParent));
@@ -2411,7 +2416,7 @@ static ProfileStatus CheckTorBrowserDataWriteAccess(nsIFile *aAppDir)
 // source directory has been moved (if the move fails for some reason, the
 // original contents of the destination directory are restored).
 static nsresult
-migrateOneTorBrowserDataDir(nsIFile *aSrcParentDir,
+migrateOneI2PBrowserDataDir(nsIFile *aSrcParentDir,
                             const nsACString &aSrcRelativePath,
                             nsIFile *aDestParentDir,
                             const nsACString &aDestRelativePath)
@@ -2508,11 +2513,11 @@ deleteFile(nsIFile *aParentDir, const nsACString &aRelativePath)
 // When this function is called, aProfile is a brand new profile and
 // aAppDir is the directory that contains the firefox executable.
 // Our strategy is to check if an old "in application" profile exists at
-// <AppRootDir>/TorBrowser/Data/Browser/profile.default. If so, we set
+// <AppRootDir>/I2PBrowser/Data/Browser/profile.default. If so, we set
 // aside the new profile directory and replace it with the old one.
 // We use a similar approach for the Tor data and UpdateInfo directories.
 static nsresult
-migrateInAppTorBrowserProfile(nsIToolkitProfile *aProfile, nsIFile *aAppDir)
+migrateInAppI2PBrowserProfile(nsIToolkitProfile *aProfile, nsIFile *aAppDir)
 {
   NS_ENSURE_ARG_POINTER(aProfile);
   NS_ENSURE_ARG_POINTER(aAppDir);
@@ -2521,20 +2526,19 @@ migrateInAppTorBrowserProfile(nsIToolkitProfile *aProfile, nsIFile *aAppDir)
   nsresult rv = GetAppRootDir(aAppDir, getter_AddRefs(appRootDir));
   NS_ENSURE_SUCCESS(rv, rv);
 
-  // Create an nsIFile for the old <AppRootDir>/TorBrowser directory.
-  nsCOMPtr<nsIFile> oldTorBrowserDir;
-  rv = appRootDir->Clone(getter_AddRefs(oldTorBrowserDir));
+  // Create an nsIFile for the old <AppRootDir>/I2PBrowser directory.
+  nsCOMPtr<nsIFile> oldI2PBrowserDir;
+  rv = appRootDir->Clone(getter_AddRefs(oldI2PBrowserDir));
   NS_ENSURE_SUCCESS(rv, rv);
-  rv = oldTorBrowserDir->AppendRelativeNativePath(
-                                        NS_LITERAL_CSTRING("TorBrowser"));
+  rv = oldI2PBrowserDir->AppendRelativeNativePath(NS_LITERAL_CSTRING("I2PBrowser"));
   NS_ENSURE_SUCCESS(rv, rv);
 
-  // Get an nsIFile for the TorBrowser-Data directory.
+  // Get an nsIFile for the I2PBrowser-Data directory.
   nsCOMPtr<nsIFile> newTBDataDir;
   nsXREDirProvider* dirProvider = nsXREDirProvider::GetSingleton();
   if (!dirProvider)
     return NS_ERROR_UNEXPECTED;
-  rv = dirProvider->GetTorBrowserUserDataDir(getter_AddRefs(newTBDataDir));
+  rv = dirProvider->GetI2PBrowserUserDataDir(getter_AddRefs(newTBDataDir));
   NS_ENSURE_SUCCESS(rv, rv);
 
   // Try to migrate the browser profile. If this fails, we return an error
@@ -2544,26 +2548,26 @@ migrateInAppTorBrowserProfile(nsIToolkitProfile *aProfile, nsIFile *aAppDir)
   NS_ENSURE_SUCCESS(rv, rv);
   nsAutoCString path(NS_LITERAL_CSTRING("Data" XPCOM_FILE_PATH_SEPARATOR
                     "Browser" XPCOM_FILE_PATH_SEPARATOR "profile.default"));
-  rv = migrateOneTorBrowserDataDir(oldTorBrowserDir, path,
+  rv = migrateOneI2PBrowserDataDir(oldI2PBrowserDir, path,
                                    newProfileDir, NS_LITERAL_CSTRING(""));
   NS_ENSURE_SUCCESS(rv, rv);  // Return immediately upon failure.
 
-  // Try to migrate the Tor data directory but do not return upon failure.
+  // Try to migrate the I2P data directory but do not return upon failure.
   nsAutoCString torDataDirPath(NS_LITERAL_CSTRING("Data"
-                                        XPCOM_FILE_PATH_SEPARATOR "Tor"));
-  rv = migrateOneTorBrowserDataDir(oldTorBrowserDir, torDataDirPath,
-                                   newTBDataDir, NS_LITERAL_CSTRING("Tor"));
+                                        XPCOM_FILE_PATH_SEPARATOR "I2P"));
+  rv = migrateOneI2PBrowserDataDir(oldI2PBrowserDir, torDataDirPath,
+                                   newTBDataDir, NS_LITERAL_CSTRING("I2P"));
   if (NS_SUCCEEDED(rv)) {
-    // Make a "best effort" attempt to remove the Tor data files that should
-    // no longer be stored in the Tor user data directory (they have been
-    // relocated to a read-only Tor directory, e.g.,
-    // TorBrowser.app/Contents/Resources/TorBrowser/Tor.
+    // Make a "best effort" attempt to remove the I2P data files that should
+    // no longer be stored in the I2P user data directory (they have been
+    // relocated to a read-only I2P directory, e.g.,
+    // I2PBrowser.app/Contents/Resources/I2PBrowser/I2P.
     deleteFile(newTBDataDir,
-         NS_LITERAL_CSTRING("Tor" XPCOM_FILE_PATH_SEPARATOR "geoip"));
+         NS_LITERAL_CSTRING("I2P" XPCOM_FILE_PATH_SEPARATOR "geoip"));
     deleteFile(newTBDataDir,
-         NS_LITERAL_CSTRING("Tor" XPCOM_FILE_PATH_SEPARATOR "geoip6"));
+         NS_LITERAL_CSTRING("I2P" XPCOM_FILE_PATH_SEPARATOR "geoip6"));
     deleteFile(newTBDataDir,
-         NS_LITERAL_CSTRING("Tor" XPCOM_FILE_PATH_SEPARATOR "torrc-defaults"));
+         NS_LITERAL_CSTRING("I2P" XPCOM_FILE_PATH_SEPARATOR "i2bb-defaults"));
   }
 
   // Try to migrate the UpdateInfo directory.
@@ -2572,14 +2576,14 @@ migrateInAppTorBrowserProfile(nsIToolkitProfile *aProfile, nsIFile *aAppDir)
                                             getter_AddRefs(newUpdateInfoDir));
   if (NS_SUCCEEDED(rv2)) {
     nsAutoCString updateInfoPath(NS_LITERAL_CSTRING("UpdateInfo"));
-    rv2 = migrateOneTorBrowserDataDir(oldTorBrowserDir, updateInfoPath,
+    rv2 = migrateOneI2PBrowserDataDir(oldI2PBrowserDir, updateInfoPath,
                                       newUpdateInfoDir, NS_LITERAL_CSTRING(""));
   }
 
-  // If all pieces of the migration succeeded, remove the old TorBrowser
+  // If all pieces of the migration succeeded, remove the old I2PBrowser
   // directory.
   if (NS_SUCCEEDED(rv) && NS_SUCCEEDED(rv2)) {
-    oldTorBrowserDir->Remove(true);
+    oldI2PBrowserDir->Remove(true);
   }
 
   return NS_OK;
@@ -2600,7 +2604,7 @@ static nsAutoCString gResetOldProfileName;
 // 6) display the profile-manager UI
 static nsresult
 SelectProfile(nsIProfileLock* *aResult, nsIToolkitProfileService* aProfileSvc,
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
               nsIFile *aAppDir,
 #endif
               nsINativeAppSupport* aNative,
@@ -2647,7 +2651,7 @@ SelectProfile(nsIProfileLock* *aResult, nsIToolkitProfileService* aProfileSvc,
   }
 
   nsCOMPtr<nsIFile> lf = GetFileFromEnv("XRE_PROFILE_PATH");
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
   // If we are transitioning away from an embedded profile, ignore the
   // XRE_PROFILE_PATH value if it matches the old default profile location.
   // This ensures that a new default profile will be created immediately
@@ -2658,7 +2662,7 @@ SelectProfile(nsIProfileLock* *aResult, nsIToolkitProfileService* aProfileSvc,
     nsresult rv = GetAppRootDir(aAppDir, getter_AddRefs(oldTorProfileDir));
     NS_ENSURE_SUCCESS(rv, rv);
     rv = oldTorProfileDir->AppendRelativeNativePath(
-                     NS_LITERAL_CSTRING("TorBrowser" XPCOM_FILE_PATH_SEPARATOR
+                     NS_LITERAL_CSTRING("I2PBrowser" XPCOM_FILE_PATH_SEPARATOR
                      "Data" XPCOM_FILE_PATH_SEPARATOR
                      "Browser" XPCOM_FILE_PATH_SEPARATOR "profile.default"));
     NS_ENSURE_SUCCESS(rv, rv);
@@ -2930,10 +2934,10 @@ SelectProfile(nsIProfileLock* *aResult, nsIToolkitProfileService* aProfileSvc,
       aProfileSvc->SetDefaultProfile(profile);
 #endif
       aProfileSvc->Flush();
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
       // Handle migration from an older version of Tor Browser in which the
       // user data was stored inside the application directory.
-      rv = migrateInAppTorBrowserProfile(profile, aAppDir);
+      rv = migrateInAppI2PBrowserProfile(profile, aAppDir);
       if (!NS_SUCCEEDED(rv)) {
         // Display an error alert and continue startup. Since XPCOM was
         // initialized in a limited way inside ProfileErrorDialog() and
@@ -3568,7 +3572,7 @@ XREMain::XRE_mainInit(bool* aExitFlag)
     NS_BREAK();
 #endif
 
-#if defined(XP_MACOSX) && defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(XP_MACOSX) && defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
   bool hideDockIcon = (CheckArg("invisible") == ARG_FOUND);
   if (hideDockIcon) {
     ProcessSerialNumber psn = { 0, kCurrentProcess };
@@ -4422,7 +4426,7 @@ XREMain::XRE_mainStartup(bool* aExitFlag)
   }
 #endif
 
-#if (defined(MOZ_UPDATER) && !defined(MOZ_WIDGET_ANDROID)) || defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if (defined(MOZ_UPDATER) && !defined(MOZ_WIDGET_ANDROID)) || defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
   nsCOMPtr<nsIFile> exeFile, exeDir;
   bool persistent;
   rv = mDirProvider.GetFile(XRE_EXECUTABLE_FILE, &persistent,
@@ -4469,15 +4473,15 @@ XREMain::XRE_mainStartup(bool* aExitFlag)
   if (CheckArg("test-process-updates")) {
     SaveToEnv("MOZ_TEST_PROCESS_UPDATES=1");
   }
-#ifdef TOR_BROWSER_UPDATE
-  nsAutoCString compatVersion(TOR_BROWSER_VERSION);
+#ifdef I2P_BROWSER_UPDATE
+  nsAutoCString compatVersion(I2P_BROWSER_VERSION);
 #endif
   ProcessUpdates(mDirProvider.GetGREDir(),
                  exeDir,
                  updRoot,
                  gRestartArgc,
                  gRestartArgv,
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
                  compatVersion.get()
 #else
                  mAppData->version
@@ -4491,13 +4495,13 @@ XREMain::XRE_mainStartup(bool* aExitFlag)
 #endif
 
   rv = NS_NewToolkitProfileService(getter_AddRefs(mProfileSvc));
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
   if (NS_FAILED(rv)) {
     // NS_NewToolkitProfileService() returns a generic NS_ERROR_FAILURE error
-    // if creation of the TorBrowser-Data directory fails due to access denied
+    // if creation of the I2PBrowser-Data directory fails due to access denied
     // or because of a read-only disk volume. Do an extra check here to detect
     // these errors so we can display an informative error message.
-    ProfileStatus status = CheckTorBrowserDataWriteAccess(exeDir);
+    ProfileStatus status = CheckI2PBrowserDataWriteAccess(exeDir);
     if ((PROFILE_STATUS_ACCESS_DENIED == status) ||
         (PROFILE_STATUS_READ_ONLY == status)) {
       ProfileErrorDialog(nullptr, nullptr, status, nullptr, mNativeApp,
@@ -4518,7 +4522,7 @@ XREMain::XRE_mainStartup(bool* aExitFlag)
   }
 
   rv = SelectProfile(getter_AddRefs(mProfileLock), mProfileSvc,
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
                      exeDir,
 #endif
                      mNativeApp, &mStartOffline, &mProfileName);
