@@ -1846,7 +1846,7 @@ GetOverrideStringBundleForLocale(nsIStringBundleService* aSBS,
   // To ensure that we have a valid string bundle, try to retrieve a string
   // that we know exists.
   nsXPIDLString val;
-  rv = (*aResult)->GetStringFromName(u"profileProblemTitle",
+  nsresult rv = (*aResult)->GetStringFromName(u"profileProblemTitle",
                                      getter_Copies(val));
   if (!NS_SUCCEEDED(rv))
     *aResult = nullptr;  // No good.  Discard it.
