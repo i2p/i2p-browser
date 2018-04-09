@@ -287,7 +287,7 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
             return false;
         }
         return GeckoSharedPrefs.forApp(context)
-                .getBoolean(GeckoPreferences.PREFS_VOICE_INPUT_ENABLED, true);
+                .getBoolean(GeckoPreferences.PREFS_VOICE_INPUT_ENABLED, false);
     }
 
     private void launchVoiceRecognizer() {
