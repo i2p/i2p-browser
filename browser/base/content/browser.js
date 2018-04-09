@@ -6347,14 +6347,12 @@ var CanvasPermissionPromptHelper = {
 
     var bundleSvc = Cc["@mozilla.org/intl/stringbundle;1"].
                         getService(Ci.nsIStringBundleService);
-    // TODO: MEEH: Disabled code
-    /*
-    var torBtnBundle;
+    
+    var i2pBtnBundle;
     try {
-      torBtnBundle = bundleSvc.createBundle(
-                             "chrome://i2pbutton/locale/i2pbutton.properties");
+      i2pBtnBundle = bundleSvc.createBundle("chrome://i2pctrl/locale/i2pctrl.properties");
     } catch (e) {}
-*/
+
     var message = getLocalizedString("canvas.siteprompt", [ uri.asciiHost ]);
 
     var mainAction = {
@@ -6383,18 +6381,18 @@ var CanvasPermissionPromptHelper = {
     ];
 
     // Since we have a process in place to perform localization for the
-    // Torbutton extension, get our strings from the extension if possible.
+    // i2pctrl.js extension, get our strings from the extension if possible.
     function getLocalizedString(aID, aParams) {
       var s;
       // TODO: MEEH: Disabled code
-      /*
-      if (torBtnBundle) try {
+      
+      if (i2pBtnBundle) try {
         if (aParams)
-          s = torBtnBundle.formatStringFromName(aID, aParams, aParams.length);
+          s = i2pBtnBundle.formatStringFromName(aID, aParams, aParams.length);
         else
-          s = torBtnBundle.GetStringFromName(aID);
+          s = i2pBtnBundle.GetStringFromName(aID);
       } catch (e) {}
-*/
+
       if (!s) {
         if (aParams)
           s = gNavigatorBundle.getFormattedString(aID, aParams);
@@ -7458,7 +7456,7 @@ var gIdentityHandler = {
     }
 
 #ifdef I2P_BROWSER_UPDATE
-    let whitelist = /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|home|license|newaddon|permissions|preferences|privatebrowsing|rights|searchreset|sessionrestore|support|welcomeback|i2p|i2pupdate)(?:[?#]|$)/i;
+    let whitelist = /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|home|license|newaddon|permissions|preferences|privatebrowsing|rights|searchreset|sessionrestore|support|welcomeback|i2p|i2bupdate)(?:[?#]|$)/i;
 #else
     let whitelist = /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|home|license|newaddon|permissions|preferences|privatebrowsing|rights|searchreset|sessionrestore|support|welcomeback|i2p)(?:[?#]|$)/i;
 #endif

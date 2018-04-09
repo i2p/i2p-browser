@@ -299,8 +299,8 @@ pref("extensions.autoDisableScopes", 0);
 pref("extensions.bootstrappedAddons", "{}");
 pref("extensions.checkCompatibility.4.*", false);
 pref("extensions.databaseSchema", 3);
-// TODO: MEEH: Disabled code
-//pref("extensions.enabledAddons", "https-everywhere%40eff.org:3.1.4,%7B73a6fe31-595d-460b-a920-fcc0f8843232%7D:2.6.6.1,i2pbutton%40i2bb.net:1.5.2,ubufox%40ubuntu.com:2.6,i2p-launcher%40i2bb.net:0.1.1pre-alpha,%7B972ce4c6-dead-4474-a285-3208198ce6fd%7D:17.0.5");
+
+pref("extensions.enabledAddons", "%7B73a6fe31-595d-460b-a920-fcc0f8843232%7D:2.6.6.1,i2pctrl%40i2bb.net:0.0.1,ubufox%40ubuntu.com:2.6,%7B972ce4c6-dead-4474-a285-3208198ce6fd%7D:17.0.5");
 pref("extensions.enabledItems", "langpack-en-US@firefox.mozilla.org:,{73a6fe31-595d-460b-a920-fcc0f8843232}:1.9.9.57,{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.4,{972ce4c6-7e08-4474-a285-3208198ce6fd}:3.5.8");
 pref("extensions.enabledScopes", 1);
 pref("extensions.pendingOperations", false);

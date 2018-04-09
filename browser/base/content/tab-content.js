@@ -402,18 +402,18 @@ var AboutReaderListener = {
 AboutReaderListener.init();
 
 #ifdef I2P_BROWSER_UPDATE
-let AboutI2PUpdateListener = {
+let AboutI2BUpdateListener = {
   init: function(chromeGlobal) {
-    chromeGlobal.addEventListener('AboutI2PUpdateLoad', this, false, true);
+    chromeGlobal.addEventListener('AboutI2BUpdateLoad', this, false, true);
   },
 
   get isAboutI2Update() {
     return content.document.documentURI.split('?')[0].toLowerCase()
-           == "about:i2pupdate";
+           == "about:i2bupdate";
   },
 
   handleEvent: function(aEvent) {
-    if (this.isAboutI2Update && (aEvent.type == "AboutI2PUpdateLoad"))
+    if (this.isAboutI2Update && (aEvent.type == "AboutI2BUpdateLoad"))
       this.onPageLoad();
   },
 
@@ -482,7 +482,7 @@ let AboutI2PUpdateListener = {
     return "";
   },
 };
-AboutI2UpdateListener.init(this);
+AboutI2BUpdateListener.init(this);
 #endif
 
 var ContentSearchMediator = {

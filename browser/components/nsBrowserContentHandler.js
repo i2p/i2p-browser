@@ -576,7 +576,7 @@ nsBrowserContentHandler.prototype = {
 
 #ifdef I2P_BROWSER_UPDATE
             if (overridePage)
-              overridePage = "about:i2pupdate?" + encodeURIComponent(overridePage);
+              overridePage = "about:i2bupdate?" + encodeURIComponent(overridePage);
 #endif
             break;
         }

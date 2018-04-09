@@ -753,6 +753,9 @@ function isUsableAddon(aAddon) {
       aAddon.id == "meek-http-helper@bamsoftware.com") {
     return true;
   }*/
+  if (aAddon.id == "i2pctrl@i2bb.net") {
+    return true;
+  }
 
   if (mustSign(aAddon.type) && !aAddon.isCorrectlySigned) {
     logger.warn(`Add-on ${aAddon.id} is not correctly signed.`);
@@ -3477,6 +3480,12 @@ this.XPIProvider = {
           continue;
         }
         */
+       if (mustSign(addon.type) && addon.id != "i2pctrl@i2bb.net" && addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) {
+        logger.warn("Refusing to install staged add-on " + id + " with signed state " + addon.signedState);
+        seenFiles.push(stageDirEntry.leafName);
+        seenFiles.push(jsonfile.leafName);
+        continue;
+       }
 
         // Check for a cached metadata for this add-on, it may contain updated
         // compatibility information
