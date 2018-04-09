@@ -1837,17 +1837,15 @@ GetOverrideStringBundleForLocale(nsIStringBundleService* aSBS,
   NS_ENSURE_ARG(aLocale);
   NS_ENSURE_ARG(aResult);
   // TODO: MEEH: Disabled code
-/*
-  const char* kFormatStr = "jar:%s!/chrome/locale/%s/i2pbutton.properties";
+  const char* kFormatStr = "jar:%s!/chrome/locale/%s/i2pctrl.properties";
   nsPrintfCString strBundleURL(kFormatStr, aTorbuttonURI, aLocale);
   nsresult rv = aSBS->CreateBundle(strBundleURL.get(), aResult);
   NS_ENSURE_SUCCESS(rv, rv);
-*/
+
   // To ensure that we have a valid string bundle, try to retrieve a string
   // that we know exists.
   nsXPIDLString val;
-  nsresult rv = (*aResult)->GetStringFromName(u"profileProblemTitle",
-                                     getter_Copies(val));
+  rv = (*aResult)->GetStringFromName(u"profileProblemTitle", getter_Copies(val));
   if (!NS_SUCCEEDED(rv))
     *aResult = nullptr;  // No good.  Discard it.
 
@@ -1883,8 +1881,7 @@ GetOverrideStringBundle(nsIStringBundleService* aSBS, nsIStringBundle* *aResult)
     return;
   }
 
-  // TODO: MEEH: Disabled code
-  //uriString.Append("extensions/i2pbutton@i2bb.net.xpi");
+  uriString.Append("extensions/i2pctrl@i2bb.net.xpi");
 #else
   // Build Torbutton file URI string by starting from the profiles directory.
   bool persistent = false; // ignored
@@ -1902,15 +1899,13 @@ GetOverrideStringBundle(nsIStringBundleService* aSBS, nsIStringBundle* *aResult)
     return;
   }
 
-  // TODO: MEEH: Disabled code
-  //uriString.Append("profile.default/extensions/i2pbutton@i2bb.net.xpi");
+  uriString.Append("profile.default/extensions/i2pctrl@i2bb.net.xpi");
 #endif
 
   uriString.Append("");
 
   nsCString userAgentLocale;
-  if (!NS_SUCCEEDED(Preferences::GetCString("general.useragent.locale",
-                                            &userAgentLocale))) {
+  if (!NS_SUCCEEDED(Preferences::GetCString("general.useragent.locale", &userAgentLocale))) {
     return;
   }
 

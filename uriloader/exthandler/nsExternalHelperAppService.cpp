@@ -131,10 +131,9 @@ static const char NEVER_ASK_FOR_SAVE_TO_DISK_PREF[] =
   "browser.helperApps.neverAsk.saveToDisk";
 static const char NEVER_ASK_FOR_OPEN_FILE_PREF[] =
   "browser.helperApps.neverAsk.openFile";
-/*
-static const char WARNING_DIALOG_CONTRACT_ID[] =
-  "@i2bb.net/i2pbutton-extAppBlocker;1";
-*/
+
+static const char WARNING_DIALOG_CONTRACT_ID[] = "@i2bb.net/i2pctrl-extAppBlocker;1";
+
 // Helper functions for Content-Disposition headers
 
 /**
