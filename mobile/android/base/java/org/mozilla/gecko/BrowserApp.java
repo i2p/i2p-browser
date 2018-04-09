@@ -71,6 +71,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
 
+import org.mozilla.gecko.AppConstants;
 import org.mozilla.gecko.AppConstants.Versions;
 import org.mozilla.gecko.DynamicToolbar.VisibilityTransition;
 import org.mozilla.gecko.Tabs.TabEvents;
@@ -703,7 +704,11 @@ public class BrowserApp extends GeckoApp
         showSplashScreen = true;
 
         final SafeIntent intent = new SafeIntent(getIntent());
-        final boolean isInAutomation = IntentUtils.getIsInAutomationFromEnvironment(intent);
+        // TBA: Disable Switchboard testing experiments and
+        // Telemetry-uploading by abusing the isInAutomation detection.
+        final boolean isInAutomation =
+          (IntentUtils.getIsInAutomationFromEnvironment(intent)
+           || AppConstants.isTorBrowser());
 
         GeckoProfile.setIntentArgs(intent.getStringExtra("args"));
 
