@@ -69,10 +69,10 @@ browser.jar:
         content/browser/aboutTabCrashed.js            (content/aboutTabCrashed.js)
         content/browser/aboutTabCrashed.xhtml         (content/aboutTabCrashed.xhtml)
 #ifdef I2P_BROWSER_UPDATE
-        content/browser/abouttbupdate/aboutTBUpdate.xhtml    (content/abouttbupdate/aboutTBUpdate.xhtml)
-        content/browser/abouttbupdate/aboutTBUpdate.js       (content/abouttbupdate/aboutTBUpdate.js)
-        content/browser/abouttbupdate/aboutTBUpdate.css      (content/abouttbupdate/aboutTBUpdate.css)
-        content/browser/abouttbupdate/aboutTBUpdateLogo.png  (content/abouttbupdate/aboutTBUpdateLogo.png)
+        content/browser/abouti2bupdate/aboutI2BUpdate.xhtml    (content/abouti2bupdate/aboutI2BUpdate.xhtml)
+        content/browser/abouti2bupdate/aboutI2BUpdate.js       (content/abouti2bupdate/aboutI2BUpdate.js)
+        content/browser/abouti2bupdate/aboutI2BUpdate.css      (content/abouti2bupdate/aboutI2BUpdate.css)
+        content/browser/abouti2bupdate/aboutI2BUpdateLogo.png  (content/abouti2bupdate/aboutI2BUpdateLogo.png)
 #endif
 *       content/browser/browser.css                   (content/browser.css)
 *       content/browser/browser.js                    (content/browser.js)
