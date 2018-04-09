@@ -30,9 +30,14 @@ MOZ_ANDROID_BROWSER_INTENT_CLASS=org.mozilla.gecko.BrowserApp
 
 MOZ_NO_SMART_CARDS=1
 
+# TBA: MOZ_XULRUNNER and MOZ_CAPTURE defines are dead/unused, leaving here for easier future rebasing
+# Bug 1478438
+
 MOZ_XULRUNNER=
 
 MOZ_CAPTURE=1
+
+# Adds MIME-type support for raw video
 MOZ_RAW=1
 
 # use custom widget for html:select
@@ -42,3 +47,15 @@ MOZ_APP_ID={aa3c5121-dab2-40e2-81ca-7ea25febc110}
 
 # Enable checking that add-ons are signed by the trusted root
 MOZ_ADDON_SIGNING=1
+
+### Tor Browser for Android ###
+
+# Disables support at compile-time for casting (Mozilla Media Manager)
+# and prevents dependency on Google Play Services support
+unset MOZ_NATIVE_DEVICES
+
+# Disable telemetry at compile-time
+unset MOZ_TELEMETRY_REPORTING
+
+# Disable data reporting at compile-time
+unset MOZ_DATA_REPORTING
