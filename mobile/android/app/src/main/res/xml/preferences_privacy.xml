@@ -84,7 +84,8 @@
 
         <CheckBoxPreference android:key="android.not_a_preference.app.geo.reportdata"
                             android:title="@string/datareporting_wifi_title"
-                            android:summary="@string/datareporting_wifi_geolocation_summary" />
+                            android:summary="@string/datareporting_wifi_geolocation_summary"
+                            android:defaultValue="false" />
 
         <org.mozilla.gecko.preferences.AlignRightLinkPreference android:key="android.not_a_preference.geo.learn_more"
                                                                 android:title="@string/pref_learn_more"
@@ -94,7 +95,7 @@
         <CheckBoxPreference android:key="android.not_a_preference.healthreport.uploadEnabled"
                             android:title="@string/datareporting_fhr_title"
                             android:summary="@string/datareporting_fhr_summary2"
-                            android:defaultValue="true" />
+                            android:defaultValue="false" />
 
     </PreferenceCategory>
 
