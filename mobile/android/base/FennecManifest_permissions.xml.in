@@ -8,14 +8,23 @@
      them during the same release, which should be Fennec 48.  Therefore we
      decouple the push permission from MOZ_ANDROID_GCM to let it ride ahead
      (potentially) of the push feature. -->
+
+#ifdef MOZ_ANDROID_GCM
 #include GcmAndroidManifest_permissions.xml.in
+#endif
 
 #include SamsungAppStoreManifest_permissions.xml.in
 
+#ifdef MOZ_ANDROID_NETWORK_STATE
+    <!-- Android WIFI state -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+#endif
+
+#ifdef MOZ_ANDROID_LOCATION
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+#endif
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 #ifdef MOZ_ANDROID_MLS_STUMBLER
@@ -25,7 +34,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+#ifdef MOZ_ANDROID_LOCATION
     <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
+#endif
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -34,12 +45,11 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 #endif
 
+#ifdef MOZ_ANDROID_LOCATION
     <uses-feature android:name="android.hardware.location" android:required="false"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
+#endif
     <uses-feature android:name="android.hardware.touchscreen"/>
-
-    <!-- Tab Queue -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <!-- To be able to install updates and other downloaded APKs on API 26+ -->
     <uses-permission-sdk-23 android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
@@ -55,10 +65,10 @@
     <uses-feature android:name="android.hardware.audio.low_latency" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.any" android:required="false"/>
     <uses-feature android:name="android.hardware.microphone" android:required="false"/>
-#endif
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+#endif
 
     <!-- App requires OpenGL ES 2.0 -->
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
