@@ -41,3 +41,5 @@ imply_option('MOZ_SERVICES_HEALTHREPORT', False)
 # them here, as well.
 #imply_option('MOZ_TELEMETRY_REPORTING', False)
 #imply_option('MOZ_DATA_REPORTING', False)
+
+imply_option('MOZ_ANDROID_NETWORK_STATE', False);

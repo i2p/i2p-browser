@@ -185,3 +185,7 @@ def check_android_gcm(android_gcm,
         if not google_play_services:
             die('You must specify --with-google-play-services when'
                 ' building with MOZ_ANDROID_GCM=1')
+
+project_flag('MOZ_ANDROID_NETWORK_STATE',
+             help='Include permission for accessing WiFi/network state on Android',
+             default=False)
