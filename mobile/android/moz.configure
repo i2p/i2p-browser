@@ -189,3 +189,7 @@ def check_android_gcm(android_gcm,
 project_flag('MOZ_ANDROID_NETWORK_STATE',
              help='Include permission for accessing WiFi/network state on Android',
              default=False)
+
+project_flag('MOZ_ANDROID_LOCATION',
+             help='Include permission for accessing fine and course-grain Location on Android',
+             default=False)
