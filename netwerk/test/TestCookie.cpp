@@ -831,6 +831,20 @@ TEST(TestCookie, TestCookieMain) {
   GetACookieNoHttp(cookieService, "http://www.security.test/", cookie);
   EXPECT_TRUE(CheckResult(cookie.get(), MUST_CONTAIN, "test=non-security2"));
 
+  // .onion secure cookie tests
+  SetACookie(cookieService, "http://123456789abcdef.onion/", nullptr,
+             "test=onion-security; secure", nullptr);
+  GetACookieNoHttp(cookieService, "https://123456789abcdef.onion/", cookie);
+  EXPECT_TRUE(CheckResult(cookie.get(), MUST_EQUAL, "test=onion-security"));
+  SetACookie(cookieService, "http://123456789abcdef.onion/", nullptr,
+             "test=onion-security2; secure", nullptr);
+  GetACookieNoHttp(cookieService, "http://123456789abcdef.onion/", cookie);
+  EXPECT_TRUE(CheckResult(cookie.get(), MUST_EQUAL, "test=onion-security2"));
+  SetACookie(cookieService, "https://123456789abcdef.onion/", nullptr,
+             "test=onion-security3; secure", nullptr);
+  GetACookieNoHttp(cookieService, "http://123456789abcdef.onion/", cookie);
+  EXPECT_TRUE(CheckResult(cookie.get(), MUST_EQUAL, "test=onion-security3"));
+
   // *** nsICookieManager interface tests
   nsCOMPtr<nsICookieManager> cookieMgr =
       do_GetService(NS_COOKIEMANAGER_CONTRACTID, &rv0);
