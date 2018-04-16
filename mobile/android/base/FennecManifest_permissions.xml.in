@@ -8,7 +8,10 @@
      them during the same release, which should be Fennec 48.  Therefore we
      decouple the push permission from MOZ_ANDROID_GCM to let it ride ahead
      (potentially) of the push feature. -->
+
+#ifdef MOZ_ANDROID_GCM
 #include GcmAndroidManifest_permissions.xml.in
+#endif
 
 #ifdef MOZ_ANDROID_NETWORK_STATE
     <!-- Android WIFI state -->
