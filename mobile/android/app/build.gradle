@@ -186,6 +186,11 @@ android {
         androidTest {
             java {
                 srcDir "${topsrcdir}/mobile/android/tests/browser/robocop/src"
+
+                if (!mozconfig.substs.MOZ_ANDROID_MLS_STUMBLER) {
+                    exclude 'org/mozilla/gecko/tests/testStumbler*.java'
+                }
+
                 // Bug 1229149 tracks pushing this into a :services Gradle project.
                 srcDir "${topsrcdir}/mobile/android/services/src/androidTest/java"
                 srcDir "${topsrcdir}/mobile/android/tests/browser/junit3/src"
