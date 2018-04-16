@@ -1,5 +1,7 @@
 
+#ifdef MOZ_ACCOUNT
 #include ../services/manifests/FxAccountAndroidManifest_permissions.xml.in
+#endif
 
 <!-- Bug 1261302: we have two new permissions to request,
      RECEIVE_BOOT_COMPLETED and the permission for push.  We want to ask for
@@ -25,7 +27,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+#ifdef MOZ_ANDROID_LOCATION
     <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
+#endif
 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
