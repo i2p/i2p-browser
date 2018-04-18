@@ -6235,6 +6235,10 @@ var ExternalApps = {
 
   filter: {
     matches: function(aElement) {
+      if (!Services.prefs.getBoolPref("network.protocol-handler.external-default")) {
+        return false;
+      }
+
       let uri = ExternalApps._getMediaLink(aElement);
       let apps = [];
       if (uri) {
