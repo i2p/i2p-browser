@@ -29,6 +29,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.mozilla.gecko.AppConstants;
 import org.mozilla.gecko.background.common.GlobalConstants;
 import org.mozilla.gecko.background.common.log.Logger;
 import org.mozilla.gecko.background.fxa.FxAccountUtils;
@@ -711,7 +712,11 @@ public class AndroidFxAccount {
    * @param ignoreSettings whether we should check if syncing is allowed via in-app or system settings.
    */
   public void requestImmediateSync(String[] stagesToSync, String[] stagesToSkip, boolean ignoreSettings) {
-    FirefoxAccounts.requestImmediateSync(getAndroidAccount(), stagesToSync, stagesToSkip, ignoreSettings);
+    if (AppConstants.isTorBrowser()) {
+      return;
+    } else {
+      FirefoxAccounts.requestImmediateSync(getAndroidAccount(), stagesToSync, stagesToSkip, ignoreSettings);
+    }
   }
 
   /**
@@ -722,7 +727,11 @@ public class AndroidFxAccount {
    * @param stagesToSkip stage names to skip; can be null to skip <b>no</b> known stages.
    */
   public void requestEventualSync(String[] stagesToSync, String[] stagesToSkip) {
-    FirefoxAccounts.requestEventualSync(getAndroidAccount(), stagesToSync, stagesToSkip);
+    if (AppConstants.isTorBrowser()) {
+      return;
+    } else {
+      FirefoxAccounts.requestEventualSync(getAndroidAccount(), stagesToSync, stagesToSkip);
+    }
   }
 
   public synchronized void setState(State state) {

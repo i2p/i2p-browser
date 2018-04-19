@@ -7,6 +7,7 @@ package org.mozilla.gecko.fxa;
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
 
+import org.mozilla.gecko.AppConstants;
 import org.mozilla.gecko.background.common.log.Logger;
 import org.mozilla.gecko.fxa.authenticator.AccountPickler;
 import org.mozilla.gecko.fxa.authenticator.AndroidFxAccount;
@@ -49,15 +50,22 @@ public class FirefoxAccounts {
    * @return Firefox account objects.
    */
   public static Account[] getFirefoxAccounts(final Context context) {
-    final Account[] accounts =
-        AccountManager.get(context).getAccountsByType(FxAccountConstants.ACCOUNT_TYPE);
-    if (accounts.length > 0) {
-      FirefoxAccountsUtils.optionallySeparateAccountsDuringFirstRun(context, accounts);
-      return accounts;
-    }
+    if (AppConstants.isTorBrowser()) {
+      return new Account[0];
+    } else {
+      // TBA: Conditionally disable this at run-time.
+      // XXX This will throw a java.lang.SecurityException because we don't declare
+      // the android.permission.GET_ACCOUNTS permission.
+      final Account[] accounts =
+          AccountManager.get(context).getAccountsByType(FxAccountConstants.ACCOUNT_TYPE);
+      if (accounts.length > 0) {
+        FirefoxAccountsUtils.optionallySeparateAccountsDuringFirstRun(context, accounts);
+        return accounts;
+      }
 
-    final Account pickledAccount = getPickledAccount(context);
-    return (pickledAccount != null) ? new Account[] {pickledAccount} : new Account[0];
+      final Account pickledAccount = getPickledAccount(context);
+      return (pickledAccount != null) ? new Account[] {pickledAccount} : new Account[0];
+    }
   }
 
   private static Account getPickledAccount(final Context context) {
@@ -111,9 +119,14 @@ public class FirefoxAccounts {
   }
 
   public static void logSyncOptions(Bundle syncOptions) {
-    final boolean scheduleNow = syncOptions.getBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF, false);
+    if (AppConstants.isTorBrowser()) {
+      // Don't log an erroneous message, this'll only confuse someone looking at the logs.
+      return;
+    } else {
+      final boolean scheduleNow = syncOptions.getBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF, false);
 
-    Logger.info(LOG_TAG, "Sync options -- scheduling now: " + scheduleNow);
+      Logger.info(LOG_TAG, "Sync options -- scheduling now: " + scheduleNow);
+    }
   }
 
   public static void requestImmediateSync(final Account account, String[] stagesToSync, String[] stagesToSkip, boolean ignoreSettings) {
@@ -145,28 +158,32 @@ public class FirefoxAccounts {
    * @param stagesToSkip stage names to skip.
    */
   protected static void requestSync(final Account account, final Bundle syncOptions, String[] stagesToSync, String[] stagesToSkip) {
-    if (account == null) {
-      throw new IllegalArgumentException("account must not be null");
-    }
-    if (syncOptions == null) {
-      throw new IllegalArgumentException("syncOptions must not be null");
-    }
-
-    Utils.putStageNamesToSync(syncOptions, stagesToSync, stagesToSkip);
-
-    Logger.info(LOG_TAG, "Requesting sync.");
-    logSyncOptions(syncOptions);
-
-    // We get strict mode warnings on some devices, so make the request on a
-    // background thread.
-    ThreadPool.run(new Runnable() {
-      @Override
-      public void run() {
-        for (String authority : AndroidFxAccount.DEFAULT_AUTHORITIES_TO_SYNC_AUTOMATICALLY_MAP.keySet()) {
-          ContentResolver.requestSync(account, authority, syncOptions);
-        }
+    if (AppConstants.isTorBrowser()) {
+      return;
+    } else {
+      if (account == null) {
+        throw new IllegalArgumentException("account must not be null");
       }
-    });
+      if (syncOptions == null) {
+        throw new IllegalArgumentException("syncOptions must not be null");
+      }
+
+      Utils.putStageNamesToSync(syncOptions, stagesToSync, stagesToSkip);
+
+      Logger.info(LOG_TAG, "Requesting sync.");
+      logSyncOptions(syncOptions);
+
+      // We get strict mode warnings on some devices, so make the request on a
+      // background thread.
+      ThreadPool.run(new Runnable() {
+        @Override
+        public void run() {
+          for (String authority : AndroidFxAccount.DEFAULT_AUTHORITIES_TO_SYNC_AUTOMATICALLY_MAP.keySet()) {
+            ContentResolver.requestSync(account, authority, syncOptions);
+          }
+        }
+      });
+    }
   }
 
   /**
