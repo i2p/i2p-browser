@@ -752,6 +752,20 @@ function LOG(string) {
 }
 
 /**
+ * Convert a string containing binary values to hex.
+ */
+function binaryToHex(input) {
+  var result = "";
+  for (var i = 0; i < input.length; ++i) {
+    var hex = input.charCodeAt(i).toString(16);
+    if (hex.length == 1)
+      hex = "0" + hex;
+    result += hex;
+  }
+  return result;
+}
+
+/**
  * Gets the specified directory at the specified hierarchy under the
  * update root directory and creates it if it doesn't exist.
  * @param   pathArray
@@ -1527,6 +1541,8 @@ function UpdatePatch(patch) {
         }
         break;
       case "finalURL":
+      case "hashFunction":
+      case "hashValue":
       case "state":
       case "type":
       case "URL":
@@ -1546,6 +1562,8 @@ UpdatePatch.prototype = {
   // over writing nsIUpdatePatch attributes.
   _attrNames: [
     "errorCode",
+    "hashFunction",
+    "hashValue",
     "finalURL",
     "selected",
     "size",
@@ -1559,6 +1577,8 @@ UpdatePatch.prototype = {
    */
   serialize: function UpdatePatch_serialize(updates) {
     var patch = updates.createElementNS(URI_UPDATE_NS, "patch");
+    patch.setAttribute("hashFunction", this.hashFunction);
+    patch.setAttribute("hashValue", this.hashValue);
     patch.setAttribute("size", this.size);
     patch.setAttribute("type", this.type);
     patch.setAttribute("URL", this.URL);
@@ -4383,7 +4403,49 @@ Downloader.prototype = {
     }
 
     LOG("Downloader:_verifyDownload downloaded size == expected size.");
-    return true;
+
+    // The hash check is not necessary when mar signatures are used to verify
+    // the downloaded mar file.
+    if (AppConstants.MOZ_VERIFY_MAR_SIGNATURE) {
+      return true;
+    }
+
+    let fileStream = Cc["@mozilla.org/network/file-input-stream;1"].
+                     createInstance(Ci.nsIFileInputStream);
+    fileStream.init(destination, FileUtils.MODE_RDONLY, FileUtils.PERMS_FILE, 0);
+
+    let digest;
+    try {
+      let hash = Cc["@mozilla.org/security/hash;1"].
+                 createInstance(Ci.nsICryptoHash);
+      var hashFunction = Ci.nsICryptoHash[this._patch.hashFunction.toUpperCase()];
+      if (hashFunction == undefined) {
+        throw Cr.NS_ERROR_UNEXPECTED;
+      }
+      hash.init(hashFunction);
+      hash.updateFromStream(fileStream, -1);
+      // NOTE: For now, we assume that the format of _patch.hashValue is hex
+      // encoded binary (such as what is typically output by programs like
+      // sha1sum).  In the future, this may change to base64 depending on how
+      // we choose to compute these hashes.
+      digest = binaryToHex(hash.finish(false));
+    } catch (e) {
+      LOG("Downloader:_verifyDownload - failed to compute hash of the " +
+          "downloaded update archive");
+      digest = "";
+    }
+
+    fileStream.close();
+
+    if (digest == this._patch.hashValue.toLowerCase()) {
+      LOG("Downloader:_verifyDownload hashes match.");
+      return true;
+    }
+
+    LOG("Downloader:_verifyDownload hashes do not match. ");
+    AUSTLMY.pingDownloadCode(this.isCompleteUpdate,
+                             AUSTLMY.DWNLD_ERR_VERIFY_NO_HASH_MATCH);
+    return false;
   },
 
   /**
@@ -4972,6 +5034,9 @@ Downloader.prototype = {
           " is higher than patch size: " +
           this._patch.size
       );
+      // It's important that we use a different code than
+      // NS_ERROR_CORRUPTED_CONTENT so that tests can verify the difference
+      // between a hash error and a wrong download error.
       AUSTLMY.pingDownloadCode(
         this.isCompleteUpdate,
         AUSTLMY.DWNLD_ERR_PATCH_SIZE_LARGER
@@ -4990,6 +5055,9 @@ Downloader.prototype = {
           " is not equal to expected patch size: " +
           this._patch.size
       );
+      // It's important that we use a different code than
+      // NS_ERROR_CORRUPTED_CONTENT so that tests can verify the difference
+      // between a hash error and a wrong download error.
       AUSTLMY.pingDownloadCode(
         this.isCompleteUpdate,
         AUSTLMY.DWNLD_ERR_PATCH_SIZE_NOT_EQUAL
