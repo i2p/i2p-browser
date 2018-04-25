@@ -979,9 +979,12 @@ public abstract class GeckoApp extends GeckoActivity
         // Tell Stumbler to register a local broadcast listener to listen for preference intents.
         // We do this via intents since we can't easily access Stumbler directly,
         // as it might be compiled outside of Fennec.
-        getApplicationContext().sendBroadcast(
+        // TBA: We don't want Fennec using or receiving Stumbler
+        if (!AppConstants.isTorBrowser()) {
+            getApplicationContext().sendBroadcast(
                 new Intent(INTENT_REGISTER_STUMBLER_LISTENER)
-        );
+            );
+        }
 
         // Did the OS locale change while we were backgrounded? If so,
         // we need to die so that Gecko will re-init add-ons that touch
@@ -1025,6 +1028,7 @@ public abstract class GeckoApp extends GeckoActivity
             final String uri = getURIFromIntent(intent);
             if (!TextUtils.isEmpty(uri)) {
                 // Start a speculative connection as soon as Gecko loads.
+                // XXX TBA: Check this doesn't leak, and is blocked by Tor bootstrap
                 GeckoThread.speculativeConnect(uri);
             }
         }
