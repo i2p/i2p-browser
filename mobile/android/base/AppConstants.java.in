@@ -131,20 +131,33 @@ public class AppConstants {
     public static final String OS_TARGET = "@OS_TARGET@";
     public static final String TARGET_XPCOM_ABI = "@TARGET_XPCOM_ABI@";
 
-    public static final String USER_AGENT_BOT_LIKE = "Redirector/" + AppConstants.MOZ_APP_VERSION +
-        " (Android; rv:" + AppConstants.MOZ_APP_VERSION + ")";
+    // TBA: Commented out, not used.
+    //public static final String USER_AGENT_BOT_LIKE = "Redirector/" + AppConstants.MOZ_APP_VERSION +
+    //    " (Android; rv:" + AppConstants.MOZ_APP_VERSION + ")";
 
-    public static final String USER_AGENT_FENNEC_MOBILE = "Mozilla/5.0 (Android " +
+    // TBA: Fennec's UAS now contains the Android version. Hard-code all users UAS
+    // so it matches the RFP string from necko.
+    // toolkit/components/resistfingerprinting/nsRFPService.h
+    public static final String USER_AGENT_FENNEC_MOBILE =
+//#ifdef TOR_BROWSER_VERSION
+        "Mozilla/5.0 (Android 6.0; Mobile; rv:60.0) Gecko/20100101 Firefox/60.0";
+//#else
+        "Mozilla/5.0 (Android " +
         Build.VERSION.RELEASE + "; Mobile; rv:" +
         AppConstants.MOZ_APP_VERSION + ") Gecko/" +
         AppConstants.MOZ_APP_VERSION + " Firefox/" +
         AppConstants.MOZ_APP_VERSION;
+//#endif
 
+//#ifdef TOR_BROWSER_VERSION
+    public static final String USER_AGENT_FENNEC_TABLET = USER_AGENT_FENNEC_MOBILE;
+//#else
     public static final String USER_AGENT_FENNEC_TABLET = "Mozilla/5.0 (Android " +
         Build.VERSION.RELEASE + "; Tablet; rv:" +
         AppConstants.MOZ_APP_VERSION + ") Gecko/" +
         AppConstants.MOZ_APP_VERSION + " Firefox/" +
         AppConstants.MOZ_APP_VERSION;
+//#endif
 
     public static final int MOZ_MIN_CPU_VERSION = @MOZ_MIN_CPU_VERSION@;
 
