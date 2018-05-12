@@ -176,7 +176,7 @@ public class FilePicker implements BundleEventListener {
             if (mimeType.equals("image/*") &&
                     hasPermissionsForMimeType(mimeType, availPermissions)) {
                 // We also add a capture intent
-                Intent intent = IntentHelper.getImageCaptureIntent(
+                Intent intent = IntentHelper.getImageCaptureIntent(context,
                         new File(Environment.getExternalStorageDirectory(),
                                 fileHandler.generateImageName()));
                 addActivities(intent, intents, baseIntents);
@@ -201,7 +201,7 @@ public class FilePicker implements BundleEventListener {
                 addActivities(intent, intents, baseIntents);
             }
             if (hasPermissionsForMimeType("image/*", availPermissions)) {
-                intent = IntentHelper.getImageCaptureIntent(
+                intent = IntentHelper.getImageCaptureIntent(context,
                         new File(Environment.getExternalStorageDirectory(),
                                 fileHandler.generateImageName()));
                 addActivities(intent, intents, baseIntents);
