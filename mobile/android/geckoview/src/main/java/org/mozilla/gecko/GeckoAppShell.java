@@ -86,6 +86,7 @@ import android.os.Environment;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -956,7 +957,14 @@ public class GeckoAppShell
         if (geckoInterface == null) {
             return false;
         }
-        return geckoInterface.openUriExternal(targetURI, mimeType, packageName, className, action, title);
+        // Bug 1450449 - Downloaded files already are already in a public directory and aren't
+        // really owned exclusively by Firefox, so there's no real benefit to using
+        // content:// URIs here.
+        StrictMode.VmPolicy prevPolicy = StrictMode.getVmPolicy();
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.LAX);
+        boolean success = geckoInterface.openUriExternal(targetURI, mimeType, packageName, className, action, title);
+        StrictMode.setVmPolicy(prevPolicy);
+        return success;
     }
 
     @WrapForJNI(dispatchTo = "gecko")
