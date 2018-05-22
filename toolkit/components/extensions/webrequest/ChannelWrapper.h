@@ -121,6 +121,9 @@ class ChannelWrapper final : public DOMEventTargetHelper,
 
   static already_AddRefed<extensions::ChannelWrapper> Get(
       const dom::GlobalObject& global, nsIChannel* channel);
+  static already_AddRefed<extensions::ChannelWrapper> GetRegisteredChannel(
+      const dom::GlobalObject& global, uint64_t aChannelId,
+      const WebExtensionPolicy& aAddon, nsITabParent* aTabParent);
 
   uint64_t Id() const { return mId; }
 
