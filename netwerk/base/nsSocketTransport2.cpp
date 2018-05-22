@@ -1107,13 +1107,32 @@ nsresult nsSocketTransport::BuildSocket(PRFileDesc *&fd, bool &proxyTransparent,
         // if this is the first type, we'll want the
         // service to allocate a new socket
 
+        // Most layers _ESPECIALLY_ PSM want the origin name here as they
+        // will use it for secure checks, etc.. and any connection management
+        // differences between the origin name and the routed name can be
+        // taken care of via DNS. However, SOCKS is a special case as there is
+        // no DNS. in the case of SOCKS and PSM the PSM is a separate layer
+        // and receives the origin name.
+        const char *socketProviderHost = host;
+        int32_t socketProviderPort = port;
+        if (mProxyTransparentResolvesHost &&
+            (!strcmp(mTypes[0], "socks") || !strcmp(mTypes[0], "socks4"))) {
+          SOCKET_LOG(("SOCKS %d Host/Route override: %s:%d -> %s:%d\n",
+                      mHttpsProxy, socketProviderHost, socketProviderPort,
+                      mHost.get(), mPort));
+          socketProviderHost = mHost.get();
+          socketProviderPort = mPort;
+        }
+
         // when https proxying we want to just connect to the proxy as if
         // it were the end host (i.e. expect the proxy's cert)
 
         rv = provider->NewSocket(
-            mNetAddr.raw.family, mHttpsProxy ? mProxyHost.get() : host,
-            mHttpsProxy ? mProxyPort : port, proxyInfo, mOriginAttributes,
-            controlFlags, mTlsFlags, &fd, getter_AddRefs(secinfo));
+            mNetAddr.raw.family,
+            mHttpsProxy ? mProxyHost.get() : socketProviderHost,
+            mHttpsProxy ? mProxyPort : socketProviderPort, proxyInfo,
+            mOriginAttributes, controlFlags, mTlsFlags, &fd,
+            getter_AddRefs(secinfo));
 
         if (NS_SUCCEEDED(rv) && !fd) {
           NS_NOTREACHED(
@@ -1944,9 +1963,9 @@ void nsSocketTransport::OnSocketEvent(uint32_t type, nsresult status,
       // connection.
       //
       if (mState == STATE_CLOSED) {
-      // Unix domain sockets are ready to connect; mNetAddr is all we
-      // need. Internet address families require a DNS lookup (or possibly
-      // several) before we can connect.
+        // Unix domain sockets are ready to connect; mNetAddr is all we
+        // need. Internet address families require a DNS lookup (or possibly
+        // several) before we can connect.
 #if defined(XP_UNIX)
         if (mNetAddrIsSet && mNetAddr.raw.family == AF_LOCAL)
           mCondition = InitiateSocket();

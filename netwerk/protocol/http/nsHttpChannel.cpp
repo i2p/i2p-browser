@@ -5222,7 +5222,7 @@ nsresult nsHttpChannel::InstallCacheListener(int64_t offset) {
     return NS_OK;
   }
 
-    // XXX disk cache does not support overlapped i/o yet
+  // XXX disk cache does not support overlapped i/o yet
 #if 0
     // Mark entry valid inorder to allow simultaneous reading...
     rv = mCacheEntry->MarkValid();
@@ -5930,8 +5930,8 @@ nsresult nsHttpChannel::BeginConnect() {
   RefPtr<AltSvcMapping> mapping;
   if (!mConnectionInfo && mAllowAltSvc &&  // per channel
       !(mLoadFlags & LOAD_FRESH_CONNECTION) &&
+      AltSvcMapping::AcceptableProxy(proxyInfo) &&
       (scheme.EqualsLiteral("http") || scheme.EqualsLiteral("https")) &&
-      (!proxyInfo || proxyInfo->IsDirect()) &&
       (mapping = gHttpHandler->GetAltServiceMapping(
            scheme, host, port, mPrivateBrowsing, originAttributes))) {
     LOG(("nsHttpChannel %p Alt Service Mapping Found %s://%s:%d [%s]\n", this,

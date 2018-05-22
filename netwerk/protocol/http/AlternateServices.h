@@ -65,6 +65,10 @@ class AltSvcMapping {
                             nsProxyInfo *proxyInfo, uint32_t caps,
                             const OriginAttributes &originAttributes);
 
+  // AcceptableProxy() decides whether a particular proxy configuration (pi) is
+  // suitable for use with Alt-Svc. No proxy (including a null pi) is suitable.
+  static bool AcceptableProxy(nsProxyInfo *pi);
+
   const nsCString &AlternateHost() const { return mAlternateHost; }
   const nsCString &OriginHost() const { return mOriginHost; }
   uint32_t OriginPort() const { return mOriginPort; }
