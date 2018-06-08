@@ -9361,6 +9361,25 @@ bool nsContentUtils::HttpsStateIsModern(Document* aDocument) {
   return false;
 }
 
+/* static */ bool nsContentUtils::DocumentHasOnionURI(Document* aDocument) {
+  if (!aDocument) {
+    return false;
+  }
+
+  nsIURI* uri = aDocument->GetDocumentURI();
+  if (!uri) {
+    return false;
+  }
+
+  nsAutoCString host;
+  if (NS_SUCCEEDED(uri->GetHost(host))) {
+    bool hasOnionURI = StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+    return hasOnionURI;
+  }
+
+  return false;
+}
+
 /* static */
 void nsContentUtils::TryToUpgradeElement(Element* aElement) {
   NodeInfo* nodeInfo = aElement->NodeInfo();

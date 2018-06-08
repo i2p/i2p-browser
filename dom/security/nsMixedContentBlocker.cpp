@@ -728,8 +728,8 @@ nsresult nsMixedContentBlocker::ShouldLoad(
     return NS_OK;
   }
 
-  // Check the parent scheme. If it is not an HTTPS page then mixed content
-  // restrictions do not apply.
+  // Check the parent scheme. If it is not an HTTPS or .onion page then mixed
+  // content restrictions do not apply.
   bool parentIsHttps;
   nsCOMPtr<nsIURI> innerRequestingLocation =
       NS_GetInnermostURI(requestingLocation);
@@ -746,6 +746,29 @@ nsresult nsMixedContentBlocker::ShouldLoad(
     return NS_OK;
   }
   if (!parentIsHttps) {
+    nsAutoCString parentHost;
+    rv = innerRequestingLocation->GetHost(parentHost);
+    if (NS_FAILED(rv)) {
+      NS_ERROR("requestingLocation->GetHost failed");
+      *aDecision = REJECT_REQUEST;
+      return NS_OK;
+    }
+
+    bool parentIsOnion =
+        StringEndsWith(parentHost, NS_LITERAL_CSTRING(".onion"));
+    if (!parentIsOnion) {
+      *aDecision = ACCEPT;
+      return NS_OK;
+    }
+  }
+
+  bool isHttpScheme = false;
+  rv = innerContentLocation->SchemeIs("http", &isHttpScheme);
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  // .onion URLs are encrypted and authenticated. Don't treat them as mixed
+  // content if potentially trustworthy (i.e. whitelisted).
+  if (isHttpScheme && IsPotentiallyTrustworthyOnion(innerContentLocation)) {
     *aDecision = ACCEPT;
     return NS_OK;
   }
@@ -768,15 +791,6 @@ nsresult nsMixedContentBlocker::ShouldLoad(
     MOZ_ASSERT(!isHttpsScheme);
 #endif
     *aDecision = REJECT_REQUEST;
-    return NS_OK;
-  }
-
-  bool isHttpScheme = false;
-  rv = innerContentLocation->SchemeIs("http", &isHttpScheme);
-  NS_ENSURE_SUCCESS(rv, rv);
-
-  if (isHttpScheme && IsPotentiallyTrustworthyOrigin(innerContentLocation)) {
-    *aDecision = ACCEPT;
     return NS_OK;
   }
 

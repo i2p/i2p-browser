@@ -465,7 +465,8 @@ bool PresentationRequest::IsProhibitMixedSecurityContexts(Document* aDocument) {
 
   nsCOMPtr<Document> doc = aDocument;
   while (doc && !nsContentUtils::IsChromeDoc(doc)) {
-    if (nsContentUtils::HttpsStateIsModern(doc)) {
+    if (nsContentUtils::HttpsStateIsModern(doc) ||
+        nsContentUtils::DocumentHasOnionURI(doc)) {
       return true;
     }
 

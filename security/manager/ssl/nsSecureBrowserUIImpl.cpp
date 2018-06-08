@@ -9,6 +9,7 @@
 #include "mozilla/Logging.h"
 #include "mozilla/Unused.h"
 #include "mozilla/dom/Document.h"
+#include "mozilla/dom/nsMixedContentBlocker.h"
 #include "nsContentUtils.h"
 #include "nsIChannel.h"
 #include "nsDocShell.h"
@@ -246,7 +247,10 @@ static nsresult URICanBeConsideredSecure(
     return rv;
   }
 
-  canBeConsideredSecure = isHttps;
+  bool isOnion =
+      nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(innermostURI);
+
+  canBeConsideredSecure = isHttps || isOnion;
 
   return NS_OK;
 }
@@ -311,24 +315,35 @@ nsresult nsSecureBrowserUIImpl::UpdateStateAndSecurityInfo(nsIChannel* channel,
     if (NS_FAILED(rv)) {
       return rv;
     }
-    // If the security state is STATE_IS_INSECURE, the TLS handshake never
-    // completed. Don't set any further state.
-    if (mState == STATE_IS_INSECURE) {
-      return NS_OK;
+    // Skip setting some state if mState == STATE_IS_INSECURE (TLS handshake
+    // never completed). But do not return in that case, since a
+    // STATE_IS_INSECURE can still be changed later to STATE_IS_SECURE if it's
+    // routed over tor (.onion).
+    if (mState != STATE_IS_INSECURE) {
+      mTopLevelSecurityInfo = securityInfo;
+      MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug,
+              ("  set mTopLevelSecurityInfo"));
+      bool isEV;
+      rv = mTopLevelSecurityInfo->GetIsExtendedValidation(&isEV);
+      if (NS_FAILED(rv)) {
+        return rv;
+      }
+      if (isEV) {
+        MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug, ("  is EV"));
+        mState |= STATE_IDENTITY_EV_TOPLEVEL;
+      }
     }
+  }
 
-    mTopLevelSecurityInfo = securityInfo;
-    MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug,
-            ("  set mTopLevelSecurityInfo"));
-    bool isEV;
-    rv = mTopLevelSecurityInfo->GetIsExtendedValidation(&isEV);
-    if (NS_FAILED(rv)) {
-      return rv;
+  // any protocol routed over tor is secure
+  if ((mState & STATE_IS_SECURE) == 0) {
+    if (nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(uri)) {
+      MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug, ("  URI is onion"));
+      mState = STATE_IS_SECURE;
     }
-    if (isEV) {
-      MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug, ("  is EV"));
-      mState |= STATE_IDENTITY_EV_TOPLEVEL;
-    }
+  }
+
+  if (mState != STATE_IS_INSECURE) {
     // Proactively check for mixed content in case GetState() is never called
     // (this can happen when loading from the BF cache).
     CheckForMixedContent();
