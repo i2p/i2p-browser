@@ -200,6 +200,26 @@
   visibility: visible;
 }
 
+#urlbar[pageproxystate="valid"] > #identity-box.onionUnknownIdentity > #connection-icon,
+#urlbar[pageproxystate="valid"] > #identity-box.onionSelfSigned > #connection-icon {
+  list-style-image: url(chrome://browser/skin/onion.svg);
+  visibility: visible;
+}
+
+#urlbar[pageproxystate="valid"] > #identity-box.onionVerifiedDomain > #connection-icon,
+#urlbar[pageproxystate="valid"] > #identity-box.onionVerifiedIdentity > #connection-icon,
+#urlbar[pageproxystate="valid"] > #identity-box.onionMixedActiveBlocked > #connection-icon {
+  list-style-image: url(chrome://browser/skin/onion-lock.svg);
+  visibility: visible;
+}
+
+#urlbar[pageproxystate="valid"] > #identity-box.onionMixedActiveContent > #connection-icon,
+#urlbar[pageproxystate="valid"] > #identity-box.onionMixedDisplayContentLoadedActiveBlocked > #connection-icon,
+#urlbar[pageproxystate="valid"] > #identity-box.onionMixedDisplayContent > #connection-icon {
+  list-style-image: url(chrome://browser/skin/onion-disabled.svg);
+  visibility: visible;
+}
+
 #identity-box.extensionPage > #extension-icon {
   list-style-image: url(chrome://mozapps/skin/extensions/extensionGeneric-16.svg);
   visibility: visible;

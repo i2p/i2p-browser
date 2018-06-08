@@ -276,40 +276,39 @@ static uint32_t GetSecurityStateFromSecurityInfoAndRequest(
   uint32_t securityState;
 
   nsCOMPtr<nsITransportSecurityInfo> psmInfo(do_QueryInterface(info));
+  MOZ_LOG(gSecureDocLog, LogLevel::Debug,
+          ("SecureUI: GetSecurityState: - info is %p\n", (nsISupports*)info));
   if (!psmInfo) {
     MOZ_LOG(
         gSecureDocLog, LogLevel::Debug,
         ("SecureUI: GetSecurityState: - no nsITransportSecurityInfo for %p\n",
          (nsISupports*)info));
-    return nsIWebProgressListener::STATE_IS_INSECURE;
-  }
-  MOZ_LOG(gSecureDocLog, LogLevel::Debug,
-          ("SecureUI: GetSecurityState: - info is %p\n", (nsISupports*)info));
-
-  res = psmInfo->GetSecurityState(&securityState);
-  if (NS_FAILED(res)) {
-    MOZ_LOG(
-        gSecureDocLog, LogLevel::Debug,
-        ("SecureUI: GetSecurityState: - GetSecurityState failed: %" PRIu32 "\n",
-         static_cast<uint32_t>(res)));
-    securityState = nsIWebProgressListener::STATE_IS_BROKEN;
-  }
-
-  if (securityState != nsIWebProgressListener::STATE_IS_INSECURE) {
-    // A secure connection does not yield a secure per-uri channel if the
-    // scheme is plain http.
-
-    nsCOMPtr<nsIURI> uri;
-    nsCOMPtr<nsIChannel> channel(do_QueryInterface(request));
-    if (channel) {
-      channel->GetURI(getter_AddRefs(uri));
-    } else {
-      nsCOMPtr<imgIRequest> imgRequest(do_QueryInterface(request));
-      if (imgRequest) {
-        imgRequest->GetURI(getter_AddRefs(uri));
-      }
+    securityState = nsIWebProgressListener::STATE_IS_INSECURE;
+  } else {
+    res = psmInfo->GetSecurityState(&securityState);
+    if (NS_FAILED(res)) {
+      MOZ_LOG(gSecureDocLog, LogLevel::Debug,
+              ("SecureUI: GetSecurityState: - GetSecurityState failed: %" PRIu32
+               "\n",
+               static_cast<uint32_t>(res)));
+      securityState = nsIWebProgressListener::STATE_IS_BROKEN;
     }
-    if (uri) {
+  }
+
+  nsCOMPtr<nsIURI> uri;
+  nsCOMPtr<nsIChannel> channel(do_QueryInterface(request));
+  if (channel) {
+    channel->GetURI(getter_AddRefs(uri));
+  } else {
+    nsCOMPtr<imgIRequest> imgRequest(do_QueryInterface(request));
+    if (imgRequest) {
+      imgRequest->GetURI(getter_AddRefs(uri));
+    }
+  }
+
+  if (uri) {
+    // http and ftp are always insecure
+    if (securityState != nsIWebProgressListener::STATE_IS_INSECURE) {
       bool isHttp, isFtp;
       if ((NS_SUCCEEDED(uri->SchemeIs("http", &isHttp)) && isHttp) ||
           (NS_SUCCEEDED(uri->SchemeIs("ftp", &isFtp)) && isFtp)) {
@@ -317,6 +316,19 @@ static uint32_t GetSecurityStateFromSecurityInfoAndRequest(
                 ("SecureUI: GetSecurityState: - "
                  "channel scheme is insecure.\n"));
         securityState = nsIWebProgressListener::STATE_IS_INSECURE;
+      }
+    }
+
+    // any protocol routed over tor is secure
+    if (securityState != nsIWebProgressListener::STATE_IS_SECURE) {
+      nsAutoCString host;
+      if (NS_SUCCEEDED(uri->GetHost(host))) {
+        if (StringEndsWith(host, NS_LITERAL_CSTRING(".onion"))) {
+          MOZ_LOG(gSecureDocLog, LogLevel::Debug,
+                  ("SecureUI: GetSecurityState: - "
+                   "uri is onion.\n"));
+          securityState = nsIWebProgressListener::STATE_IS_SECURE;
+        }
       }
     }
   }

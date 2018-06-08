@@ -7523,6 +7523,10 @@ var gIdentityHandler = {
            Services.prefs.getBoolPref("security.insecure_password.ui.enabled");
   },
 
+  get _uriIsOnionHost() {
+    return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".onion") : false;
+  },
+
   // smart getters
   get _identityPopup() {
     delete this._identityPopup;
@@ -7822,12 +7826,12 @@ var gIdentityHandler = {
   get pointerlockFsWarningClassName() {
     // Note that the fullscreen warning does not handle _isSecureInternalUI.
     if (this._uriHasHost && this._isEV) {
-      return "verifiedIdentity";
+      return this._uriIsOnionHost ? "onionVerifiedIdentity" : "verifiedIdentity";
     }
     if (this._uriHasHost && this._isSecure) {
-      return "verifiedDomain";
+      return this._uriIsOnionHost ? "onionVerifiedDomain" : "verifiedDomain";
     }
-    return "unknownIdentity";
+    return this._uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
   },
 
   /**
@@ -7848,9 +7852,10 @@ var gIdentityHandler = {
       let brandBundle = document.getElementById("bundle_brand");
       icon_label = brandBundle.getString("brandShorterName");
     } else if (this._uriHasHost && this._isEV) {
-      this._identityBox.className = "verifiedIdentity";
+      let uriIsOnionHost = this._uriIsOnionHost;
+      this._identityBox.className = uriIsOnionHost ? "onionVerifiedIdentity" : "verifiedIdentity";
       if (this._isMixedActiveContentBlocked) {
-        this._identityBox.classList.add("mixedActiveBlocked");
+        this._identityBox.classList.add(uriIsOnionHost ? "onionMixedActiveBlocked" : "mixedActiveBlocked");
       }
 
       if (!this._isCertUserOverridden) {
@@ -7876,10 +7881,17 @@ var gIdentityHandler = {
       let extensionName = this._pageExtensionPolicy.name;
       icon_label = gNavigatorBundle.getFormattedString(
         "identity.extension.label", [extensionName]);
-    } else if (this._uriHasHost && this._isSecure) {
-      this._identityBox.className = "verifiedDomain";
+    // _isSecure implicitly includes onion services, which may not have an SSL certificate
+    } else if (this._uriHasHost && this._isSecure && this._sslStatus != null) {
+      let uriIsOnionHost = this._uriIsOnionHost;
+      if (uriIsOnionHost) {
+        this._identityBox.className = this._sslStatus.serverCert.isSelfSigned ? "onionSelfSigned" : "onionVerifiedDomain";
+      } else {
+        this._identityBox.className = "verifiedDomain";
+      }
+
       if (this._isMixedActiveContentBlocked) {
-        this._identityBox.classList.add("mixedActiveBlocked");
+        this._identityBox.classList.add(uriIsOnionHost ? "onionMixedActiveBlocked" : "mixedActiveBlocked");
       }
       if (!this._isCertUserOverridden) {
         // It's a normal cert, verifier is the CA Org.
@@ -7894,31 +7906,37 @@ var gIdentityHandler = {
         // For net errors we should not show notSecure as it's likely confusing
       this._identityBox.className = "unknownIdentity";
     } else {
+      let uriIsOnionHost = this._uriIsOnionHost;
       if (this._isBroken) {
-        this._identityBox.className = "unknownIdentity";
+        this._identityBox.className = uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
 
         if (this._isMixedActiveContentLoaded) {
-          this._identityBox.classList.add("mixedActiveContent");
+          this._identityBox.classList.add(uriIsOnionHost ? "onionMixedActiveContent" : "mixedActiveContent");
         } else if (this._isMixedActiveContentBlocked) {
-          this._identityBox.classList.add("mixedDisplayContentLoadedActiveBlocked");
+          this._identityBox.classList.add(uriIsOnionHost ? "onionMixedDisplayContentLoadedActiveBlocked" : "mixedDisplayContentLoadedActiveBlocked");
         } else if (this._isMixedPassiveContentLoaded) {
-          this._identityBox.classList.add("mixedDisplayContent");
+          this._identityBox.classList.add(uriIsOnionHost ? "onionMixedDisplayContent" : "mixedDisplayContent");
         } else {
           this._identityBox.classList.add("weakCipher");
         }
       } else {
-        let warnOnInsecure = Services.prefs.getBoolPref("security.insecure_connection_icon.enabled") ||
-                             (Services.prefs.getBoolPref("security.insecure_connection_icon.pbmode.enabled") &&
-                             PrivateBrowsingUtils.isWindowPrivate(window));
-        let className = warnOnInsecure ? "notSecure" : "unknownIdentity";
-        this._identityBox.className = className;
+        if (!uriIsOnionHost) {
+          let warnOnInsecure = Services.prefs.getBoolPref("security.insecure_connection_icon.enabled") ||
+                               (Services.prefs.getBoolPref("security.insecure_connection_icon.pbmode.enabled") &&
+                               PrivateBrowsingUtils.isWindowPrivate(window));
+          let className = warnOnInsecure ? "notSecure" : "unknownIdentity";
+          this._identityBox.className = className;
 
-        let warnTextOnInsecure = Services.prefs.getBoolPref("security.insecure_connection_text.enabled") ||
-                                 (Services.prefs.getBoolPref("security.insecure_connection_text.pbmode.enabled") &&
-                                 PrivateBrowsingUtils.isWindowPrivate(window));
-        if (warnTextOnInsecure) {
-          icon_label = gNavigatorBundle.getString("identity.notSecure.label");
-          this._identityBox.classList.add("notSecureText");
+          let warnTextOnInsecure = Services.prefs.getBoolPref("security.insecure_connection_text.enabled") ||
+                                   (Services.prefs.getBoolPref("security.insecure_connection_text.pbmode.enabled") &&
+                                   PrivateBrowsingUtils.isWindowPrivate(window));
+          if (warnTextOnInsecure) {
+            icon_label = gNavigatorBundle.getString("identity.notSecure.label");
+            this._identityBox.classList.add("notSecureText");
+          }
+        // http onion is secure
+        } else {
+          this._identityBox.className = "onionUnknownIdentity";
         }
       }
       if (this._hasInsecureLoginForms) {

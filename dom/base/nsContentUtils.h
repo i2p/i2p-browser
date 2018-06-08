@@ -2933,6 +2933,11 @@ class nsContentUtils {
   static bool HttpsStateIsModern(nsIDocument* aDocument);
 
   /**
+   * Returns true of the document's URI is a .onion
+   */
+  static bool DocumentHasOnionURI(nsIDocument* aDocument);
+
+  /**
    * Try to upgrade an element.
    * https://html.spec.whatwg.org/multipage/custom-elements.html#concept-try-upgrade
    */

@@ -3791,10 +3791,10 @@ nsresult nsContentUtils::FormatLocalizedString(
     const nsTArray<nsString>& aParamArray, nsAString& aResult) {
   MOZ_ASSERT(NS_IsMainThread());
 
-  UniquePtr<const char16_t* []> params;
+  UniquePtr<const char16_t*[]> params;
   uint32_t paramsLength = aParamArray.Length();
   if (paramsLength > 0) {
-    params = MakeUnique<const char16_t* []>(paramsLength);
+    params = MakeUnique<const char16_t*[]>(paramsLength);
     for (uint32_t i = 0; i < paramsLength; ++i) {
       params[i] = aParamArray[i].get();
     }
@@ -9202,6 +9202,25 @@ bool nsContentUtils::IsSpecificAboutPage(JSObject* aGlobal, const char* aUri) {
   return false;
 }
 
+/* static */ bool nsContentUtils::DocumentHasOnionURI(nsIDocument* aDocument) {
+  if (!aDocument) {
+    return false;
+  }
+
+  nsIURI* uri = aDocument->GetDocumentURI();
+  if (!uri) {
+    return false;
+  }
+
+  nsAutoCString host;
+  if (NS_SUCCEEDED(uri->GetHost(host))) {
+    bool hasOnionURI = StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+    return hasOnionURI;
+  }
+
+  return false;
+}
+
 /* static */ void nsContentUtils::TryToUpgradeElement(Element* aElement) {
   NodeInfo* nodeInfo = aElement->NodeInfo();
   RefPtr<nsAtom> typeAtom =
@@ -9567,8 +9586,8 @@ nsContentUtils::LookupCustomElementDefinition(nsIDocument* aDoc,
     return false;
   }
 
-    // On Win32 systems, we want to behave differently, so set the isWin32 bool
-    // to be true iff we are on win32.
+  // On Win32 systems, we want to behave differently, so set the isWin32 bool
+  // to be true iff we are on win32.
 #if defined(XP_WIN) && defined(_X86_)
   const bool isWin32 = true;
 #else
