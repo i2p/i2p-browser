@@ -43,6 +43,8 @@ ChromeUtils.defineModuleGetter(this, "CustomizableUI",
                                "resource:///modules/CustomizableUI.jsm");
 ChromeUtils.defineModuleGetter(this, "CustomizableWidgets",
                                "resource:///modules/CustomizableWidgets.jsm");
+ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
+                               "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 XPCOMUtils.defineLazyGetter(this, "StartupBundle", function () {
   const url = "chrome://devtools-shim/locale/startup.properties";
@@ -901,16 +903,32 @@ const JsonView = {
       // Save original contents
       chrome.saveBrowser(browser);
     } else {
+      if (!message.data.startsWith("blob:null") || !browser.contentPrincipal.isNullPrincipal) {
+        Cu.reportError("Got invalid request to save JSON data");
+        return;
+      }
       // The following code emulates saveBrowser, but:
       // - Uses the given blob URL containing the custom contents to save.
       // - Obtains the file name from the URL of the document, not the blob.
+      // - avoids passing the document and explicitly passes system principal.
+      //   We have a blob created by a null principal to save, and the null
+      //   principal is from the child. Null principals don't survive crossing
+      //   over IPC, so there's no other principal that'll work.
       let persistable = browser.frameLoader;
       persistable.startPersistence(0, {
         onDocumentReady(doc) {
           let uri = chrome.makeURI(doc.documentURI, doc.characterSet);
           let filename = chrome.getDefaultFileName(undefined, uri, doc, null);
-          chrome.internalSave(message.data, doc, filename, null, doc.contentType,
-            false, null, null, null, doc, false, null, undefined);
+          chrome.internalSave(message.data, null, filename, null, doc.contentType,
+            false /* bypass cache */,
+            null, /* filepicker title key */
+            null, /* file chosen */
+            null, /* referrer */
+            null, /* initiating document */
+            false, /* don't skip prompt for a location */
+            null, /* cache key */
+            PrivateBrowsingUtils.isBrowserPrivate(browser), /* private browsing ? */
+            Services.scriptSecurityManager.getSystemPrincipal());
         },
         onError(status) {
           throw new Error("JSON Viewer's onSave failed in startPersistence");

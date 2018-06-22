@@ -129,9 +129,9 @@ NS_IMPL_ISUPPORTS(nsContentAreaDragDropDataProvider, nsIFlavorDataProvider)
 // SaveURIToFile
 // used on platforms where it's possible to drag items (e.g. images)
 // into the file system
-nsresult nsContentAreaDragDropDataProvider::SaveURIToFile(nsIURI* inSourceURI,
-                                                          nsIFile* inDestFile,
-                                                          bool isPrivate) {
+nsresult nsContentAreaDragDropDataProvider::SaveURIToFile(
+    nsIURI* inSourceURI, nsIPrincipal* inTriggeringPrincipal,
+    nsIFile* inDestFile, bool isPrivate) {
   nsCOMPtr<nsIURL> sourceURL = do_QueryInterface(inSourceURI);
   if (!sourceURL) {
     return NS_ERROR_NO_INTERFACE;
@@ -150,9 +150,9 @@ nsresult nsContentAreaDragDropDataProvider::SaveURIToFile(nsIURI* inSourceURI,
       nsIWebBrowserPersist::PERSIST_FLAGS_AUTODETECT_APPLY_CONVERSION);
 
   // referrer policy can be anything since the referrer is nullptr
-  return persist->SavePrivacyAwareURI(inSourceURI, nullptr, nullptr,
-                                      mozilla::net::RP_Unset, nullptr, nullptr,
-                                      inDestFile, isPrivate);
+  return persist->SavePrivacyAwareURI(inSourceURI, inTriggeringPrincipal,
+                                      nullptr, nullptr, mozilla::net::RP_Unset,
+                                      nullptr, nullptr, inDestFile, isPrivate);
 }
 
 /*
@@ -317,7 +317,9 @@ nsContentAreaDragDropDataProvider::GetFlavorData(nsITransferable* aTransferable,
     bool isPrivate;
     aTransferable->GetIsPrivateData(&isPrivate);
 
-    rv = SaveURIToFile(sourceURI, file, isPrivate);
+    nsCOMPtr<nsIPrincipal> principal;
+    aTransferable->GetRequestingPrincipal(getter_AddRefs(principal));
+    rv = SaveURIToFile(sourceURI, principal, file, isPrivate);
     // send back an nsIFile
     if (NS_SUCCEEDED(rv)) {
       CallQueryInterface(file, aData);

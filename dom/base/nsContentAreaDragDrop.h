@@ -69,8 +69,9 @@ class nsContentAreaDragDropDataProvider : public nsIFlavorDataProvider {
   NS_DECL_ISUPPORTS
   NS_DECL_NSIFLAVORDATAPROVIDER
 
-  nsresult SaveURIToFile(nsIURI* inSourceURI, nsIFile* inDestFile,
-                         bool isPrivate);
+  nsresult SaveURIToFile(nsIURI* inSourceURI,
+                         nsIPrincipal* inTriggeringPrincipal,
+                         nsIFile* inDestFile, bool isPrivate);
 };
 
 #endif /* nsContentAreaDragDrop_h__ */

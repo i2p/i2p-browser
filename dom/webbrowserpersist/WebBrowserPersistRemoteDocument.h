@@ -13,6 +13,8 @@
 #include "nsIWebBrowserPersistDocument.h"
 #include "nsIInputStream.h"
 
+class nsIPrincipal;
+
 // This class is the XPCOM half of the glue between the
 // nsIWebBrowserPersistDocument interface and a remote document; it is
 // created by WebBrowserPersistDocumentParent when (and if) it
@@ -39,6 +41,7 @@ class WebBrowserPersistRemoteDocument final
   WebBrowserPersistDocumentParent* mActor;
   Attrs mAttrs;
   nsCOMPtr<nsIInputStream> mPostData;
+  nsCOMPtr<nsIPrincipal> mPrincipal;
 
   friend class WebBrowserPersistDocumentParent;
   WebBrowserPersistRemoteDocument(WebBrowserPersistDocumentParent* aActor,

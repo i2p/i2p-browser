@@ -9,6 +9,9 @@
 #include "WebBrowserPersistResourcesParent.h"
 #include "WebBrowserPersistSerializeParent.h"
 #include "mozilla/Unused.h"
+#include "mozilla/ipc/BackgroundUtils.h"
+
+#include "nsIPrincipal.h"
 
 namespace mozilla {
 
@@ -17,7 +20,10 @@ NS_IMPL_ISUPPORTS(WebBrowserPersistRemoteDocument, nsIWebBrowserPersistDocument)
 WebBrowserPersistRemoteDocument ::WebBrowserPersistRemoteDocument(
     WebBrowserPersistDocumentParent* aActor, const Attrs& aAttrs,
     nsIInputStream* aPostData)
-    : mActor(aActor), mAttrs(aAttrs), mPostData(aPostData) {}
+    : mActor(aActor), mAttrs(aAttrs), mPostData(aPostData) {
+  nsresult rv;
+  mPrincipal = ipc::PrincipalInfoToPrincipal(mAttrs.principal(), &rv);
+}
 
 WebBrowserPersistRemoteDocument::~WebBrowserPersistRemoteDocument() {
   if (mActor) {
@@ -106,6 +112,13 @@ NS_IMETHODIMP
 WebBrowserPersistRemoteDocument::GetPostData(nsIInputStream** aStream) {
   nsCOMPtr<nsIInputStream> stream = mPostData;
   stream.forget(aStream);
+  return NS_OK;
+}
+
+NS_IMETHODIMP
+WebBrowserPersistRemoteDocument::GetPrincipal(nsIPrincipal** aPrincipal) {
+  nsCOMPtr<nsIPrincipal> nodePrincipal = mPrincipal;
+  nodePrincipal.forget(aPrincipal);
   return NS_OK;
 }
 

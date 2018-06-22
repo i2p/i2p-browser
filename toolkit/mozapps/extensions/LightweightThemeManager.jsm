@@ -869,7 +869,8 @@ function _persistImage(sourceURL, localFileName, successCallback) {
 
   persist.progressListener = new _persistProgressListener(successCallback);
 
-  persist.saveURI(sourceURI, null,
+  let sourcePrincipal = Services.scriptSecurityManager.createCodebasePrincipal(sourceURI, {});
+  persist.saveURI(sourceURI, sourcePrincipal, null,
                   null, Ci.nsIHttpChannel.REFERRER_POLICY_UNSET,
                   null, null, targetURI, null);
 }

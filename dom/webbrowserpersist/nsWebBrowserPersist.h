@@ -55,10 +55,11 @@ class nsWebBrowserPersist final : public nsIInterfaceRequestor,
   // Private members
  private:
   virtual ~nsWebBrowserPersist();
-  nsresult SaveURIInternal(nsIURI *aURI, nsISupports *aCacheKey,
-                           nsIURI *aReferrer, uint32_t aReferrerPolicy,
-                           nsIInputStream *aPostData, const char *aExtraHeaders,
-                           nsIURI *aFile, bool aCalcFileExt, bool aIsPrivate);
+  nsresult SaveURIInternal(nsIURI *aURI, nsIPrincipal *aTriggeringPrincipal,
+                           nsISupports *aCacheKey, nsIURI *aReferrer,
+                           uint32_t aReferrerPolicy, nsIInputStream *aPostData,
+                           const char *aExtraHeaders, nsIURI *aFile,
+                           bool aCalcFileExt, bool aIsPrivate);
   nsresult SaveChannelInternal(nsIChannel *aChannel, nsIURI *aFile,
                                bool aCalcFileExt);
   nsresult SaveDocumentInternal(nsIWebBrowserPersistDocument *aDocument,
