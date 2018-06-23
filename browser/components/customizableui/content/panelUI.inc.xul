@@ -217,6 +217,14 @@
                        class="subviewbutton subviewbutton-iconic"
                        command="Browser:RestoreLastSession"/>
         <toolbarseparator/>
+        <!-- To be modified by torbutton #26321 -->
+        <toolbarbutton id="appMenuNewIdentity"
+                       label="New Identity"
+                       class="subviewbutton subviewbutton-iconic"/>
+        <toolbarbutton id="appMenuNewCircuit"
+                       label="New Tor Circuit for this Site"
+                       class="subviewbutton subviewbutton-iconic"/>
+        <toolbarseparator/>
         <toolbaritem id="appMenu-zoom-controls" class="toolbaritem-combined-buttons" closemenu="none">
           <!-- Use a spacer, because panel sizing code gets confused when using CSS methods. -->
           <spacer class="before-label"/>
