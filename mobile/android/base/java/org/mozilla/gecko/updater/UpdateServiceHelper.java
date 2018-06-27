@@ -133,7 +133,7 @@ public class UpdateServiceHelper {
     }
 
     public static boolean isUpdaterEnabled(final Context context) {
-        return AppConstants.MOZ_UPDATER && isEnabled && !ContextUtils.isInstalledFromGooglePlay(context);
+        return AppConstants.MOZ_UPDATER && isEnabled && !ContextUtils.isInstalledFromAppStore(context);
     }
 
     public static void setUpdateUrl(Context context, String url) {

@@ -663,7 +663,7 @@ public class GeckoPreferences
 
                 pref.setOnPreferenceChangeListener(this);
                 if (PREFS_UPDATER_AUTODOWNLOAD.equals(key)) {
-                    if (!AppConstants.MOZ_UPDATER || ContextUtils.isInstalledFromGooglePlay(this)) {
+                    if (!AppConstants.MOZ_UPDATER || ContextUtils.isInstalledFromAppStore(this)) {
                         preferences.removePreference(pref);
                         i--;
                         continue;
