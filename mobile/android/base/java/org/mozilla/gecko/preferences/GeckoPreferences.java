@@ -698,8 +698,8 @@ public class GeckoPreferences
                         i--;
                         continue;
                     }
-                } else  if (PREFS_UPDATER_AUTODOWNLOAD.equals(key)) {
-                    if (!AppConstants.MOZ_UPDATER || ContextUtils.isInstalledFromGooglePlay(this)) {
+                } else if (PREFS_UPDATER_AUTODOWNLOAD.equals(key)) {
+                    if (!AppConstants.MOZ_UPDATER || ContextUtils.isInstalledFromAppStore(this)) {
                         preferences.removePreference(pref);
                         i--;
                         continue;

@@ -17,6 +17,7 @@ import android.text.TextUtils;
 
 public class ContextUtils {
     private static final String INSTALLER_GOOGLE_PLAY = "com.android.vending";
+    private static final String INSTALLER_FDROID = "org.fdroid.fdroid";
 
     private ContextUtils() {}
 
@@ -41,14 +42,14 @@ public class ContextUtils {
         }
     }
 
-    public static boolean isInstalledFromGooglePlay(final Context context) {
+    public static boolean isInstalledFromAppStore(final Context context) {
         final String installerPackageName = context.getPackageManager().getInstallerPackageName(context.getPackageName());
 
         if (TextUtils.isEmpty(installerPackageName)) {
             return false;
         }
 
-        return INSTALLER_GOOGLE_PLAY.equals(installerPackageName);
+        return INSTALLER_GOOGLE_PLAY.equals(installerPackageName) || INSTALLER_FDROID.equals(installerPackageName);
     }
 
     public static boolean isApplicationDebuggable(final @NonNull Context context) {
