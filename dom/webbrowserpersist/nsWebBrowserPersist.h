@@ -91,6 +91,7 @@ class nsWebBrowserPersist final : public nsIInterfaceRequestor,
   static nsresult AppendPathToURI(nsIURI *aURI, const nsAString &aPath,
                                   nsCOMPtr<nsIURI> &aOutURI);
   nsresult MakeAndStoreLocalFilenameInURIMap(nsIURI *aURI,
+                                             nsIWebBrowserPersistDocument *aDoc,
                                              bool aNeedsPersisting,
                                              URIData **aData);
   nsresult MakeOutputStream(nsIURI *aFile, nsIOutputStream **aOutputStream);
@@ -107,13 +108,14 @@ class nsWebBrowserPersist final : public nsIInterfaceRequestor,
                                      nsCOMPtr<nsIURI> &aOutURI);
   nsresult CalculateUniqueFilename(nsIURI *aURI, nsCOMPtr<nsIURI> &aOutURI);
   nsresult MakeFilenameFromURI(nsIURI *aURI, nsString &aFilename);
-  nsresult StoreURI(const char *aURI, bool aNeedsPersisting = true,
-                    URIData **aData = nullptr);
-  nsresult StoreURI(nsIURI *aURI, bool aNeedsPersisting = true,
-                    URIData **aData = nullptr);
+  nsresult StoreURI(const char *aURI, nsIWebBrowserPersistDocument *aDoc,
+                    bool aNeedsPersisting = true, URIData **aData = nullptr);
+  nsresult StoreURI(nsIURI *aURI, nsIWebBrowserPersistDocument *aDoc,
+                    bool aNeedsPersisting = true, URIData **aData = nullptr);
   bool DocumentEncoderExists(const char *aContentType);
 
   nsresult SaveSubframeContent(nsIWebBrowserPersistDocument *aFrameContent,
+                               nsIWebBrowserPersistDocument *aParentDocument,
                                const nsCString &aURISpec, URIData *aData);
   nsresult SendErrorStatusChange(bool aIsReadError, nsresult aResult,
                                  nsIRequest *aRequest, nsIURI *aURI);
