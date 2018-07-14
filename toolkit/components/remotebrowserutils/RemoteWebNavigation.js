@@ -72,6 +72,10 @@ RemoteWebNavigation.prototype = {
   },
   loadURIWithOptions(aURI, aLoadFlags, aReferrer, aReferrerPolicy,
                      aPostData, aHeaders, aBaseURI, aTriggeringPrincipal) {
+/*******************************************************************************
+   TOR BROWSER: Disable the following speculative connect until
+   we can make it properly obey first-party isolation.
+
     // We know the url is going to be loaded, let's start requesting network
     // connection before the content process asks.
     // Note that we might have already setup the speculative connection in some
@@ -95,6 +99,7 @@ RemoteWebNavigation.prototype = {
         // reason (such as failing to parse the URI), just ignore it.
       }
     }
+*******************************************************************************/
     this._sendMessage("WebNavigation:LoadURI", {
       uri: aURI,
       flags: aLoadFlags,
