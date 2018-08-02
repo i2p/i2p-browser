@@ -15,9 +15,14 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Downloader.Response;
 import com.squareup.picasso.UrlConnectionDownloader;
 
+import org.mozilla.gecko.util.ProxySelector;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -82,6 +87,23 @@ public class ImageLoader {
             super(context);
             this.context = context;
             this.distribution = distribution;
+        }
+
+        @Override
+        protected HttpURLConnection openConnection(Uri path) throws IOException {
+            try {
+                // This is annoying, but |path| is an android.net.Uri and
+                // openConnectionWithProxy() accepts a java.net.URI
+                return (HttpURLConnection)ProxySelector.openConnectionWithProxy(
+                        new URI(
+                            path.getScheme(), path.getHost(), path.getPath(),
+                            path.getEncodedFragment()));
+            } catch (URISyntaxException ex) {
+                // And android.net.Uri is more lenient than java.net.URI.
+                // Uri does not catch syntax errors which URI may catch.
+                // We'll re-throw this as an IOException
+                throw new IOException(ex.getMessage());
+            }
         }
 
         private Density getDensity(float factor) {
