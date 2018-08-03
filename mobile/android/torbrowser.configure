@@ -44,3 +44,8 @@ imply_option('MOZ_SERVICES_HEALTHREPORT', False)
 
 imply_option('MOZ_ANDROID_NETWORK_STATE', False);
 imply_option('MOZ_ANDROID_LOCATION', False);
+
+# Exclude Leanplum MMA (marketing automation and user behavior)
+imply_option('MOZ_ANDROID_MMA', False);
+# Exclude Adjust (installation tracking)
+imply_option('MOZ_INSTALL_TRACKING', False);
