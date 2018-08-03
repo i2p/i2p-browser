@@ -37,6 +37,7 @@
     <SwitchPreference android:key="android.not_a_preference.tab_queue"
                       android:title="@string/pref_tab_queue_title"
                       android:summary="@string/pref_tab_queue_summary"
+                      android:selectable="false"
                       android:defaultValue="false" />
 
 </PreferenceScreen>

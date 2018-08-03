@@ -46,9 +46,6 @@
 #endif
     <uses-feature android:name="android.hardware.touchscreen"/>
 
-    <!-- Tab Queue -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
 #ifdef MOZ_ANDROID_BEAM
     <!-- Android Beam support -->
     <uses-permission android:name="android.permission.NFC"/>
