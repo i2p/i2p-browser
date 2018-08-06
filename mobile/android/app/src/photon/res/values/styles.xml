@@ -729,6 +729,7 @@
 
     <style name="TextAppearance.FirstrunLight"/>
     <style name="TextAppearance.FirstrunRegular"/>
+    <style name="TextAppearance.FirstrunTorRegular"/>
 
     <style name="TextAppearance.FirstrunLight.Main">
         <item name="android:textSize">20sp</item>
@@ -739,6 +740,12 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/ob_subtitle</item>
         <item name="android:lineSpacingMultiplier">1.25</item>
+    </style>
+
+    <style name="TextAppearance.FirstrunTorRegular.Body">
+      <item name="android:textSize">16sp</item>
+      <item name="android:textColor">@color/ob_subtitle</item>
+      <item name="android:lineSpacingMultiplier">2</item>
     </style>
 
     <style name="TextAppearance.Link">

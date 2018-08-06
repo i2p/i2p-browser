@@ -6,6 +6,7 @@
 package org.mozilla.gecko.firstrun;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mozilla.gecko.R;
-import org.mozilla.gecko.Telemetry;
-import org.mozilla.gecko.TelemetryContract;
 
 public class LastPanel extends FirstrunPanel {
     @Override
@@ -29,18 +28,18 @@ public class LastPanel extends FirstrunPanel {
             ((ImageView) root.findViewById(R.id.firstrun_image)).setImageResource(imageRes);
             ((TextView) root.findViewById(R.id.firstrun_text)).setText(textRes);
             ((TextView) root.findViewById(R.id.firstrun_subtext)).setText(subtextRes);
-            ((TextView) root.findViewById(R.id.firstrun_link)).setText(R.string.firstrun_welcome_button_browser);
-
         }
+
+        TextView nextLink = (TextView) root.findViewById(R.id.firstrun_link);
+        nextLink.setText(R.string.firstrun_welcome_button_browser);
+        nextLink.setGravity(Gravity.CENTER);
 
         root.findViewById(R.id.firstrun_link).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Telemetry.sendUIEvent(TelemetryContract.Event.ACTION, TelemetryContract.Method.BUTTON, "firstrun-next");
                 close();
             }
         });
-
 
         return root;
     }

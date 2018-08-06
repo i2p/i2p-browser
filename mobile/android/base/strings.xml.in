@@ -32,7 +32,7 @@
   <string name="firstrun_urlbar_message">&firstrun_urlbar_message2;</string>
   <string name="firstrun_urlbar_subtext">&firstrun_urlbar_subtext2;</string>
   <string name="firstrun_panel_title_privacy">&firstrun_panel_title_privacy;</string>
-  <string name="firstrun_privacy_message">&firstrun_privacy_message;</string>
+  <!--string name="firstrun_privacy_message">&firstrun_privacy_message;</string-->
   <string name="firstrun_privacy_subtext">&firstrun_privacy_subtext;</string>
   <string name="firstrun_panel_title_customize">&firstrun_panel_title_customize;</string>
   <string name="firstrun_customize_message">&firstrun_customize_message;</string>
@@ -50,6 +50,26 @@
   <string name="firstrun_tabqueue_subtext_on">&firstrun_tabqueue_subtext_on;</string>
 
   <string name="firstrun_welcome_restricted">&onboard_start_restricted1;</string>
+
+  <string name="firstrun_welcome_tab_title">&firstrun_welcome_tab_title;</string>
+  <string name="firstrun_welcome_title">&firstrun_welcome_title;</string>
+  <string name="firstrun_welcome_message">&firstrun_welcome_message;</string>
+
+  <string name="firstrun_privacy_tab_title">&firstrun_privacy_tab_title;</string>
+  <string name="firstrun_privacy_title">&firstrun_privacy_title;</string>
+  <string name="firstrun_privacy_message">&firstrun_privacy_message;</string>
+
+  <string name="firstrun_tornetwork_tab_title">&firstrun_tornetwork_tab_title;</string>
+  <string name="firstrun_tornetwork_title">&firstrun_tornetwork_title;</string>
+  <string name="firstrun_tornetwork_message">&firstrun_tornetwork_message;</string>
+
+  <string name="firstrun_tips_tab_title">&firstrun_tips_tab_title;</string>
+  <string name="firstrun_tips_title">&firstrun_tips_title;</string>
+  <string name="firstrun_tips_message">&firstrun_tips_message;</string>
+
+  <string name="firstrun_onionservices_tab_title">&firstrun_onionservices_tab_title;</string>
+  <string name="firstrun_onionservices_title">&firstrun_onionservices_title;</string>
+  <string name="firstrun_onionservices_message">&firstrun_onionservices_message;</string>
 
   <string name="bookmarks_title">&bookmarks_title;</string>
   <string name="history_title">&history_title;</string>

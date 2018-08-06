@@ -6,7 +6,7 @@
 <!ENTITY firstrun_urlbar_message2 "Thanks for choosing &brandShortName;">
 <!ENTITY firstrun_urlbar_subtext2 "A modern mobile browser from The Tor Project, the non-profit committed to a free and open web.">
 <!ENTITY firstrun_panel_title_privacy "Privacy">
-<!ENTITY firstrun_privacy_message "Browse like no one\'s watching">
+<!--!ENTITY firstrun_privacy_message "Browse like no one\'s watching"-->
 <!ENTITY firstrun_privacy_subtext "Private Browsing with Tracking Protection blocks trackers while you browse and won’t remember your history when you finish browsing.">
 <!ENTITY firstrun_panel_title_customize "Customize">
 <!ENTITY firstrun_customize_message "Make &brandShortName; your own.">
@@ -42,6 +42,24 @@
 <!-- Localization note (firstrun_devices_title): This is a casual way of addressing the user, somewhat referring to their online identity (which would include other devices, Firefox usage, accounts, etc). -->
 <!ENTITY firstrun_account_title "You">
 <!ENTITY firstrun_account_message "Have &brandShortName; on another device?">
+
+<!-- Location note: Tor First run messages -->
+<!ENTITY firstrun_welcome_tab_title "Welcome">
+<!ENTITY firstrun_welcome_title "You\'re ready">
+<!ENTITY firstrun_welcome_message "Tor Browser for Android offers the highest standard of privacy and security while browsing the web. You are now protected against tracking, surveillance, and censorship. Here\'s a quick onboarding about how it works.">
+<!ENTITY firstrun_privacy_tab_title "Privacy">
+<!ENTITY firstrun_privacy_title "Snub trackers and snoopers">
+<!ENTITY firstrun_privacy_message "Tor Browser isolates each domain you visit. That means trackers and advertisers can’t follow you. And any information stored, such as isolated cookies or your browsing history, is deleted after your session. These modifications ensure your privacy is protected while you\'re browsing. Click \'Tor Network\' to learn how we protect you on the network level.">
+<!ENTITY firstrun_tornetwork_tab_title "Tor Network">
+<!ENTITY firstrun_tornetwork_title "Travel a decentralized network">
+<!ENTITY firstrun_tornetwork_message "Tor Browser for Android routes your connection over the Tor network. Tor is a network of servers, we call them relays, run by thousands of volunteers all around the world. This way, there\'s no single point of failure and no centralized entity you need to trust in order to enjoy the internet, unlike when you use a VPN. For each domain you access, a new circuit through the network is created for you.">
+<!ENTITY firstrun_tips_tab_title "Tips">
+<!ENTITY firstrun_tips_title "Experience Tips">
+<!ENTITY firstrun_tips_message "With all the security and privacy features provided by the Tor Browser and the Tor network, your experience while browsing the internet will be a little bit different.  Since your connection is going through 3 relays around the world, things may run a bit slower than you\'re used to. Sometimes sites will ask you to prove you are a human, not a robot, and depending on your security options, some things might not work or load. Our goal is to always provide the best experience for our users while not lowering the bar on providing real privacy.">
+<!ENTITY firstrun_onionservices_tab_title "Onion Services">
+<!ENTITY firstrun_onionservices_title "Onion Services">
+<!ENTITY firstrun_onionservices_message "For enhanced privacy and security, sites ending in .onion are configured using the Tor network. Onion services provide extra protections to publishers and
+visitors, including added safeguards against censorship. The same way Tor Browser for Android allows you to browse the web with a high degree of privacy onion services allow people to provide content and services privately. You can access .onion sites using Tor Browser for Android.">
 
 <!ENTITY  onboard_start_restricted1 "Stay safe and in control with this simplified version of &brandShortName;.">
 

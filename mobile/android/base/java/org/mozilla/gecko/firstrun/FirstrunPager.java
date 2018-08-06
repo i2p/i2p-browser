@@ -64,15 +64,7 @@ public class FirstrunPager extends RtlViewPager {
     }
 
     public void load(Context appContext, FragmentManager fm, final FirstrunAnimationContainer.OnFinishListener onFinishListener) {
-        final List<FirstrunPagerConfig.FirstrunPanelConfig> panels;
-
-        if (Restrictions.isRestrictedProfile(context)) {
-            panels = FirstrunPagerConfig.getRestricted();
-        } else if (FirefoxAccounts.firefoxAccountsExist(context)) {
-            panels = FirstrunPagerConfig.forFxAUser(appContext);
-        } else {
-            panels = FirstrunPagerConfig.getDefault(appContext);
-        }
+        final List<FirstrunTorPagerConfig.FirstrunTorPanelConfig> panels = FirstrunTorPagerConfig.getDefault(appContext);
 
         setAdapter(new ViewPagerAdapter(fm, panels));
         this.pagerNavigation = new FirstrunPanel.PagerNavigation() {
@@ -136,14 +128,14 @@ public class FirstrunPager extends RtlViewPager {
     }
 
     protected class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<FirstrunPagerConfig.FirstrunPanelConfig> panels;
+        private final List<FirstrunTorPagerConfig.FirstrunTorPanelConfig> panels;
         private final Fragment[] fragments;
 
-        public ViewPagerAdapter(FragmentManager fm, List<FirstrunPagerConfig.FirstrunPanelConfig> panels) {
+        public ViewPagerAdapter(FragmentManager fm, List<FirstrunTorPagerConfig.FirstrunTorPanelConfig> panels) {
             super(fm);
             this.panels = panels;
             this.fragments = new Fragment[panels.size()];
-            for (FirstrunPagerConfig.FirstrunPanelConfig panel : panels) {
+            for (FirstrunTorPagerConfig.FirstrunTorPanelConfig panel : panels) {
                 mDecor.onAddPagerView(context.getString(panel.getTitleRes()));
             }
 
@@ -156,7 +148,7 @@ public class FirstrunPager extends RtlViewPager {
         public Fragment getItem(int i) {
             Fragment fragment = this.fragments[i];
             if (fragment == null) {
-                FirstrunPagerConfig.FirstrunPanelConfig panelConfig = panels.get(i);
+                FirstrunTorPagerConfig.FirstrunTorPanelConfig panelConfig = panels.get(i);
                 fragment = Fragment.instantiate(context, panelConfig.getClassname(), panelConfig.getArgs());
                 ((FirstrunPanel) fragment).setPagerNavigation(pagerNavigation);
                 fragments[i] = fragment;

@@ -130,7 +130,7 @@
     <color name="private_browsing_purple">#CF68FF</color>
 
     <!-- On boarding -->
-    <color name="ob_click">#0A84FF</color>
+    <color name="ob_click">#7D4698</color>
     <color name="ob_press">#003EAA</color>
     <color name="ob_title">#212121</color>
     <color name="ob_subtitle">#737373</color>
@@ -151,6 +151,8 @@
 
     <color name="url_bar_shadow_private">#272727</color>
 
+    <color name="tor_tab_inactive_text">#484848</color>
+    <color name="tor_tab_active_text">#7D4698</color>
     <!-- Restricted profiles palette -->
 
     <color name="restricted_profile_background_gold">#ffffcb51</color>
