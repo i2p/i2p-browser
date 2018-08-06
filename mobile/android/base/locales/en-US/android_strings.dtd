@@ -8,7 +8,7 @@
 <!ENTITY firstrun_urlbar_subtext2 "A modern mobile browser from Mozilla, the non-profit committed to a free and open web.">
 <!ENTITY newfirstrun_urlbar_subtext "Fast, private, and on your side.">
 <!ENTITY firstrun_panel_title_privacy "Privacy">
-<!ENTITY firstrun_privacy_message "Browse like no one\'s watching">
+<!--!ENTITY firstrun_privacy_message "Browse like no one\'s watching"-->
 <!ENTITY firstrun_privacy_subtext "Private Browsing with Tracking Protection blocks trackers while you browse and won’t remember your history when you finish browsing.">
 <!ENTITY newfirstrun_privacy_subtext "Private browsing blocks ad trackers that follow you online.">
 <!ENTITY firstrun_panel_title_customize "Customize">

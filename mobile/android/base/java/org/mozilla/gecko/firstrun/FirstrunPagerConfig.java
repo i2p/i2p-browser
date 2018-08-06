@@ -20,6 +20,7 @@ class FirstrunPagerConfig {
     static final String KEY_IMAGE = "panelImage";
     static final String KEY_MESSAGE = "panelMessage";
     static final String KEY_SUBTEXT = "panelDescription";
+    static final String KEY_CTATEXT = "panelCtaText";
 
     static List<FirstrunPanelConfig> getDefault(Context context, final boolean useLocalValues) {
         final List<FirstrunPanelConfig> panels = new LinkedList<>();

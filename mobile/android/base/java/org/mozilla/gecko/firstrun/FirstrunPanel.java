@@ -36,10 +36,12 @@ public class FirstrunPanel extends Fragment {
             final int image = args.getInt(FirstrunPagerConfig.KEY_IMAGE);
             final String message = args.getString(FirstrunPagerConfig.KEY_MESSAGE);
             final String subtext = args.getString(FirstrunPagerConfig.KEY_SUBTEXT);
+            final String ctatext = args.getString(FirstrunPagerConfig.KEY_CTATEXT);
 
             ((ImageView) root.findViewById(R.id.firstrun_image)).setImageDrawable(getResources().getDrawable(image));
             ((TextView) root.findViewById(R.id.firstrun_text)).setText(message);
             ((TextView) root.findViewById(R.id.firstrun_subtext)).setText(subtext);
+            ((TextView) root.findViewById(R.id.firstrun_link)).setText(ctatext);
 
             final TextView messageView = root.findViewById(R.id.firstrun_text);
             if (NO_MESSAGE.equals(message)) {

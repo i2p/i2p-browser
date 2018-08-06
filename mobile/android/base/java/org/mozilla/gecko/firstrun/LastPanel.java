@@ -7,6 +7,7 @@ package org.mozilla.gecko.firstrun;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mozilla.gecko.R;
-import org.mozilla.gecko.Telemetry;
-import org.mozilla.gecko.TelemetryContract;
 
 public class LastPanel extends FirstrunPanel {
     @Override
@@ -26,10 +25,11 @@ public class LastPanel extends FirstrunPanel {
             final int image = args.getInt(FirstrunPagerConfig.KEY_IMAGE);
             final String message = args.getString(FirstrunPagerConfig.KEY_MESSAGE);
             final String subtext = args.getString(FirstrunPagerConfig.KEY_SUBTEXT);
+            final String ctatext = args.getString(FirstrunPagerConfig.KEY_CTATEXT);
 
             ((ImageView) root.findViewById(R.id.firstrun_image)).setImageDrawable(getResources().getDrawable(image));
             ((TextView) root.findViewById(R.id.firstrun_subtext)).setText(subtext);
-            ((TextView) root.findViewById(R.id.firstrun_link)).setText(R.string.firstrun_welcome_button_browser);
+            ((TextView) root.findViewById(R.id.firstrun_link)).setText(ctatext);
 
             final TextView messageView = root.findViewById(R.id.firstrun_text);
             if (NO_MESSAGE.equals(message)) {
@@ -42,7 +42,6 @@ public class LastPanel extends FirstrunPanel {
         root.findViewById(R.id.firstrun_link).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Telemetry.sendUIEvent(TelemetryContract.Event.ACTION, TelemetryContract.Method.BUTTON, "firstrun-next");
                 close();
             }
         });
