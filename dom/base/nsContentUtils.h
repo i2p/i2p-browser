@@ -1074,6 +1074,7 @@ class nsContentUtils {
     eMATHML_PROPERTIES,
     eSECURITY_PROPERTIES,
     eNECKO_PROPERTIES,
+    eFORMS_PROPERTIES_en_US,
     PropertiesFile_COUNT
   };
   static nsresult ReportToConsole(
@@ -3380,6 +3381,8 @@ class nsContentUtils {
 
   static int32_t sInnerOrOuterWindowCount;
   static uint32_t sInnerOrOuterWindowSerialCounter;
+
+  static int32_t sSpoofEnglish;
 };
 
 /* static */ inline nsContentPolicyType
