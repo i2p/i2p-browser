@@ -18,6 +18,15 @@ let onCanSetDefaultBrowserInBackground = () => {
 
 let onClick = evt => {
   switch (evt.target.id) {
+    case "onboarding-tour-tor-circuit-display-button":
+      // TODO: open circuit display onboarding
+      break;
+    case "onboarding-tour-tor-security-button":
+      Mozilla.UITour.torBrowserOpenSecurityLevelPanel();
+      break;
+#if 0
+// Firefox onboarding actions. To reduce conflicts when rebasing against
+// newer Firefox code, we use the preprocessor to omit this code block.
     case "onboarding-tour-addons-button":
       Mozilla.UITour.showHighlight("addons");
       break;
@@ -60,6 +69,7 @@ let onClick = evt => {
     case "onboarding-tour-sync-connect-device-button":
       Mozilla.UITour.showConnectAnotherDevice();
       break;
+#endif
   }
   let classList = evt.target.classList;
   // On keyboard navigation the target would be .onboarding-tour-item.

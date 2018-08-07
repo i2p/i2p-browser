@@ -69,7 +69,11 @@ ChromeUtils.defineModuleGetter(
 const PREF_LOG_LEVEL = "browser.uitour.loglevel";
 
 const TOR_BROWSER_PAGE_ACTIONS_ALLOWED = new Set([
-  // Add page actions used by Tor Browser's new user/feature onboarding here.
+  "showInfo",  // restricted to TOR_BROWSER_TARGETS_ALLOWED
+  "showMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
+  "hideMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
+  "closeTab",
+  "torBrowserOpenSecurityLevelPanel",
 ]);
 
 const BACKGROUND_PAGE_ACTIONS_ALLOWED = new Set([
@@ -762,6 +766,13 @@ var UITour = {
         }
         break;
       }
+
+      case "torBrowserOpenSecurityLevelPanel":
+        let securityLevelButton =
+                      window.document.getElementById("security-level-button");
+        if (securityLevelButton)
+	  securityLevelButton.click();
+        break;
     }
 
     // For performance reasons, only call initForBrowser if we did something

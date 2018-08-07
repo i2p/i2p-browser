@@ -310,6 +310,11 @@ pref("browser.download.panel.shown", true);
 // Treat .onions as secure
 pref("dom.securecontext.whitelist_onions", true);
 
+// Onboarding.
+pref("browser.onboarding.newtour", "welcome,privacy,tor-network,circuit-display,security,expect-differences,onion-services");
+pref("browser.onboarding.updatetour", "welcome,privacy,tor-network,circuit-display,security,expect-differences,onion-services");
+pref("browser.onboarding.skip-tour-button.hide", true);
+
 // prefs to disable jump-list entries in the taskbar on Windows (see bug #12885)
 #ifdef XP_WIN
 // this pref changes the app's set AUMID to be dependent on the profile path, rather than
