@@ -45,6 +45,9 @@
 #endif
     <uses-feature android:name="android.hardware.touchscreen"/>
 
+    <!-- To be able to install updates and other downloaded APKs on API 26+ -->
+    <uses-permission-sdk-23 android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
 #ifdef MOZ_ANDROID_BEAM
     <!-- Android Beam support -->
     <uses-permission android:name="android.permission.NFC"/>
