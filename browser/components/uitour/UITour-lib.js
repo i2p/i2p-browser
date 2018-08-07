@@ -789,6 +789,13 @@ if (typeof Mozilla == "undefined") {
   Mozilla.UITour.closeTab = function() {
     _sendEvent("closeTab");
   };
+
+  /**
+  * @summary Opens the Security Level Panel.
+  */
+  Mozilla.UITour.torBrowserOpenSecurityLevelPanel = function() {
+    _sendEvent("torBrowserOpenSecurityLevelPanel");
+  };
 })();
 
 // Make this library Require-able.

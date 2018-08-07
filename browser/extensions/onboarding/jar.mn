@@ -6,9 +6,12 @@
   # resource://onboarding/ is referenced in about:home and about:newtab,
   # so make it content-accessible.
 % resource onboarding %content/ contentaccessible=yes
-  content/ (content/*)
+  content/ (content/*.css)
+  content/img/ (content/img/*)
+* content/onboarding-tour-agent.js (content/onboarding-tour-agent.js)
+* content/onboarding.js (content/onboarding.js)
   # Package UITour-lib.js in here rather than under
   # /browser/components/uitour to avoid "unreferenced files" error when
   # Onboarding extension is not built.
   content/lib/UITour-lib.js (/browser/components/uitour/UITour-lib.js)
-  content/modules/ (*.jsm)
+  content/modules/OnboardingTourType.jsm (OnboardingTourType.jsm)

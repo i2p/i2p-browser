@@ -11,6 +11,9 @@ ChromeUtils.import("resource://gre/modules/Services.jsm");
 const ONBOARDING_CSS_URL = "resource://onboarding/onboarding.css";
 const ABOUT_HOME_URL = "about:home";
 const ABOUT_NEWTAB_URL = "about:newtab";
+const ABOUT_TOR_URL = "about:tor";
+const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
+const TORBROWSER_WELCOME_TOUR_NAME_KEY = "onboarding.tour-tor-welcome";
 const BUNDLE_URI = "chrome://onboarding/locale/onboarding.properties";
 const UITOUR_JS_URI = "resource://onboarding/lib/UITour-lib.js";
 const TOUR_AGENT_JS_URI = "resource://onboarding/onboarding-tour-agent.js";
@@ -20,8 +23,8 @@ const BRAND_SHORT_NAME = Services.strings
 const PROMPT_COUNT_PREF = "browser.onboarding.notification.prompt-count";
 const NOTIFICATION_FINISHED_PREF = "browser.onboarding.notification.finished";
 const ONBOARDING_DIALOG_ID = "onboarding-overlay-dialog";
-const ONBOARDING_MIN_WIDTH_PX = 960;
-const SPEECH_BUBBLE_MIN_WIDTH_PX = 1130;
+const ONBOARDING_MIN_WIDTH_PX = 200;
+const SPEECH_BUBBLE_MIN_WIDTH_PX = 200;
 const SPEECH_BUBBLE_NEWTOUR_STRING_ID = "onboarding.overlay-icon-tooltip2";
 const SPEECH_BUBBLE_UPDATETOUR_STRING_ID = "onboarding.overlay-icon-tooltip-updated2";
 const ICON_STATE_WATERMARK = "watermark";
@@ -103,6 +106,133 @@ function createOnboardingTourButton(div, buttonId, l10nId, buttonElementTagName 
  *   getPage() {},
  * },
  **/
+// Tor Browser tours:
+var onboardingTourset = {
+  "welcome": {
+    id: "onboarding-tour-tor-welcome",
+    tourNameId: TORBROWSER_WELCOME_TOUR_NAME_KEY,
+    instantComplete: true,
+    getPage(win) {
+      let div = win.document.createElement("div");
+
+      createOnboardingTourDescription(div,
+        "onboarding.tour-tor-welcome.title", "onboarding.tour-tor-welcome.description");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-welcome.png");
+      createOnboardingTourButton(div,
+        "onboarding-tour-tor-welcome-button", "onboarding.tour-tor-welcome.next-button");
+
+      return div;
+    },
+  },
+  "privacy": {
+    id: "onboarding-tour-tor-privacy",
+    tourNameId: "onboarding.tour-tor-privacy",
+    instantComplete: true,
+    getPage(win) {
+      let div = win.document.createElement("div");
+
+      createOnboardingTourDescription(div,
+        "onboarding.tour-tor-privacy.title", "onboarding.tour-tor-privacy.description");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-privacy.png");
+      createOnboardingTourButton(div,
+        "onboarding-tour-tor-privacy-button", "onboarding.tour-tor-privacy.button");
+
+      return div;
+    },
+  },
+  "tor-network": {
+    id: "onboarding-tour-tor-network",
+    tourNameId: "onboarding.tour-tor-network",
+    instantComplete: true,
+    getPage(win) {
+      let div = win.document.createElement("div");
+
+      createOnboardingTourDescription(div,
+        "onboarding.tour-tor-network.title", "onboarding.tour-tor-network.description");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-network.png");
+      createOnboardingTourButton(div,
+        "onboarding-tour-tor-network-button", "onboarding.tour-tor-network.button");
+
+      return div;
+    },
+  },
+  "circuit-display": {
+    id: "onboarding-tour-tor-circuit-display",
+    tourNameId: "onboarding.tour-tor-circuit-display",
+    instantComplete: true,
+    getPage(win) {
+      let div = win.document.createElement("div");
+
+      createOnboardingTourDescription(div,
+        "onboarding.tour-tor-circuit-display.title", "onboarding.tour-tor-circuit-display.description");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-circuit-display.png");
+      let btnContainer = createOnboardingTourButton(div,
+        "onboarding-tour-tor-circuit-display-button", "onboarding.tour-tor-circuit-display.button");
+      btnContainer.className = "onboarding-tour-tor-action-button-container";
+      createOnboardingTourButton(div,
+        "onboarding-tour-tor-circuit-display-next-button", "onboarding.tour-tor-circuit-display.next-button");
+
+      return div;
+    },
+  },
+  "security": {
+    id: "onboarding-tour-tor-security",
+    tourNameId: "onboarding.tour-tor-security",
+    getPage(win) {
+      let div = win.document.createElement("div");
+
+      createOnboardingTourDescription(div,
+        "onboarding.tour-tor-security.title", "onboarding.tour-tor-security.description");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-security.png");
+      let btnContainer = createOnboardingTourButton(div,
+        "onboarding-tour-tor-security-button", "onboarding.tour-tor-security-level.button");
+      btnContainer.className = "onboarding-tour-tor-action-button-container";
+      createOnboardingTourButton(div,
+        "onboarding-tour-tor-security-next-button", "onboarding.tour-tor-security-level.next-button");
+
+      return div;
+    },
+  },
+  "expect-differences": {
+    id: "onboarding-tour-tor-expect-differences",
+    tourNameId: "onboarding.tour-tor-expect-differences",
+    getPage(win) {
+      let div = win.document.createElement("div");
+
+      createOnboardingTourDescription(div,
+        "onboarding.tour-tor-expect-differences.title", "onboarding.tour-tor-expect-differences.description");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-expect-differences.png");
+      let btnContainer = createOnboardingTourButton(div,
+        "onboarding-tour-tor-expect-differences-button", "onboarding.tour-tor-expect-differences.button");
+      btnContainer.className = "onboarding-tour-tor-action-button-container";
+      createOnboardingTourButton(div,
+        "onboarding-tour-tor-expect-differences-next-button", "onboarding.tour-tor-expect-differences.next-button");
+
+      return div;
+    },
+  },
+  "onion-services": {
+    id: "onboarding-tour-tor-onion-services",
+    tourNameId: "onboarding.tour-tor-onion-services",
+    getPage(win) {
+      let div = win.document.createElement("div");
+
+      createOnboardingTourDescription(div,
+        "onboarding.tour-tor-onion-services.title", "onboarding.tour-tor-onion-services.description");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-onion-services.png");
+      let btnContainer = createOnboardingTourButton(div,
+        "onboarding-tour-tor-onion-services-button", "onboarding.tour-tor-onion-services.button");
+      btnContainer.className = "onboarding-tour-tor-action-button-container";
+      createOnboardingTourButton(div,
+        "onboarding-tour-tor-onion-services-next-button", "onboarding.tour-tor-onion-services.next-button");
+
+      return div;
+    },
+  },
+};
+#if 0
+// Firefox tours. To reduce conflicts when rebasing against newer Firefox
+// code, we use the preprocessor to omit this code block.
 var onboardingTourset = {
   "private": {
     id: "onboarding-tour-private-browsing",
@@ -415,6 +545,7 @@ var onboardingTourset = {
     },
   },
 };
+#endif
 
 /**
  * @param {String} action the action to ask the chrome to do
@@ -471,7 +602,10 @@ class Onboarding {
     // We want to create and append elements after CSS is loaded so
     // no flash of style changes and no additional reflow.
     await this._loadCSS();
-    this._bundle = Services.strings.createBundle(BUNDLE_URI);
+    this._bundle = new _TorOnboardingStringBundle();
+    if (!this._bundle.inited) {
+      return;
+    }
 
     this._loadJS(UITOUR_JS_URI);
 
@@ -513,7 +647,11 @@ class Onboarding {
   }
 
   _resizeUI() {
-    this._windowWidth = this._window.document.body.getBoundingClientRect().width;
+    // In Tor Browser we check against innerWidth instead of against the
+    // body's bounding rect because about:tor keeps its body hidden until
+    // the Tor status is known, and the bounding rect is zero while the
+    // body is hidden.
+    this._windowWidth = this._window.innerWidth;
     if (this._windowWidth < ONBOARDING_MIN_WIDTH_PX) {
       // Don't show the overlay UI before we get to a better, responsive design.
       this.destroy();
@@ -521,7 +659,13 @@ class Onboarding {
     }
 
     this._initUI();
-    if (this._isFirstSession && this._windowWidth >= SPEECH_BUBBLE_MIN_WIDTH_PX) {
+    // For Tor Browser, show the "Let's get started" speech bubble until each
+    // tour item has been completed.
+    let isTourComplete = (ICON_STATE_WATERMARK ==
+                      Services.prefs.getStringPref("browser.onboarding.state",
+                      ICON_STATE_DEFAULT));
+    if ((!isTourComplete || this._isFirstSession) &&
+        this._windowWidth >= SPEECH_BUBBLE_MIN_WIDTH_PX) {
       this._overlayIcon.classList.add("onboarding-speech-bubble");
     } else {
       this._overlayIcon.classList.remove("onboarding-speech-bubble");
@@ -554,7 +698,8 @@ class Onboarding {
     this._onIconStateChange(Services.prefs.getStringPref("browser.onboarding.state", ICON_STATE_DEFAULT));
 
     // Doing tour notification takes some effort. Let's do it on idle.
-    this._window.requestIdleCallback(() => this.showNotification());
+// For now, onboarding notifications are disabled in Tor Browser.
+//    this._window.requestIdleCallback(() => this.showNotification());
   }
 
   _getTourIDList() {
@@ -696,6 +841,7 @@ class Onboarding {
       ({ id, classList } = target.firstChild);
     }
 
+    let handledTourActionClick = false;
     switch (id) {
       case "onboarding-overlay-button":
         telemetry({
@@ -764,6 +910,16 @@ class Onboarding {
         this.gotoPage(tourId);
         this._removeTourFromNotificationQueue(tourId);
         break;
+      case "onboarding-tour-tor-welcome-button":
+      case "onboarding-tour-tor-privacy-button":
+      case "onboarding-tour-tor-network-button":
+      case "onboarding-tour-tor-circuit-display-next-button":
+      case "onboarding-tour-tor-security-next-button":
+      case "onboarding-tour-tor-expect-differences-next-button":
+      case "onboarding-tour-tor-onion-services-next-button":
+        this.gotoNextTourItem();
+        handledTourActionClick = true;
+        break;
     }
     if (classList.contains("onboarding-tour-item")) {
       telemetry({
@@ -777,7 +933,8 @@ class Onboarding {
       // Keep focus (not visible) on current item for potential keyboard
       // navigation.
       target.focus();
-    } else if (classList.contains("onboarding-tour-action-button")) {
+    } else if (!handledTourActionClick &&
+               classList.contains("onboarding-tour-action-button")) {
       let activeTourId = this._activeTourId;
       this.setToursCompleted([ activeTourId ]);
       telemetry({
@@ -787,6 +944,21 @@ class Onboarding {
         target_tour_id: activeTourId,
         width: this._windowWidthRounded,
       });
+    }
+  }
+
+  gotoNextTourItem() {
+    let activeTourID = this._activeTourId;
+    if (activeTourID) {
+      let idx = this._tourItems.findIndex(item => (item.id === activeTourID));
+      if (idx >= 0) {
+        // If at the end of the list, close onboarding; otherwise, go to next.
+        if (++idx >= this._tourItems.length) {
+          this.hideOverlay();
+        } else {
+          this.gotoPage(this._tourItems[idx].id);
+        }
+      }
     }
   }
 
@@ -1419,7 +1591,8 @@ class Onboarding {
 
     let header = this._window.document.createElement("header");
     header.id = "onboarding-header";
-    header.textContent = this._bundle.GetStringFromName("onboarding.overlay-title2");
+// In Tor Browser, we do not want header text.
+//    header.textContent = this._bundle.GetStringFromName("onboarding.overlay-title2");
     this._dialog.appendChild(header);
 
     let nav = this._window.document.createElement("nav");
@@ -1488,7 +1661,7 @@ class Onboarding {
     watermarkImg.id = "onboarding-overlay-button-watermark-icon";
     watermarkImg.setAttribute("role", "presentation");
     watermarkImg.src = Services.prefs.getStringPref("browser.onboarding.watermark-icon-src",
-      "resource://onboarding/img/watermark.svg");
+      "resource://onboarding/img/tor-watermark.png");
     button.appendChild(watermarkImg);
     return button;
   }
@@ -1577,6 +1750,48 @@ class Onboarding {
   }
 }
 
+// _TorOnboardingStringBundle implements the subset of the nsIStringBundle
+// that is used by the code in this file. It checks first for strings inside
+// Torbutton's browserOnboarding.properties file and secondarily in Firefox's
+// onboarding.properties file.
+class _TorOnboardingStringBundle {
+  constructor() {
+    this._mFirefoxBundle = Services.strings.createBundle(BUNDLE_URI);
+    this._mTorButtonBundle = Services.strings.createBundle(TORBUTTON_BUNDLE_URI);
+
+    // If the Tor Browser onboarding strings which ship inside Torbutton are
+    // not available, fail initialization so that no tours are shown.
+    try {
+      let result = this._mTorButtonBundle.GetStringFromName(
+                                            TORBROWSER_WELCOME_TOUR_NAME_KEY);
+      this.inited = true;
+    } catch (e) {}
+  }
+
+  GetStringFromName(aName) {
+    let result;
+    try {
+      result = this._mTorButtonBundle.GetStringFromName(aName);
+    } catch (e) {
+      result = this._mFirefoxBundle.GetStringFromName(aName);
+    }
+    return result;
+  }
+
+  formatStringFromName(aName, aParams, aLength) {
+    let result;
+    try {
+      result = this._mTorButtonBundle.formatStringFromName(aName, aParams,
+                                                             aLength);
+    } catch (e) {
+      result = this._mFirefoxBundle.formatStringFromName(aName, aParams,
+                                                         aLength);
+    }
+    return result;
+  }
+}
+
+
 // Load onboarding module only when we enable it.
 if (Services.prefs.getBoolPref("browser.onboarding.enabled", false)) {
   addEventListener("load", function onLoad(evt) {
@@ -1586,7 +1801,8 @@ if (Services.prefs.getBoolPref("browser.onboarding.enabled", false)) {
 
     let window = evt.target.defaultView;
     let location = window.location.href;
-    if (location == ABOUT_NEWTAB_URL || location == ABOUT_HOME_URL) {
+    if (location == ABOUT_NEWTAB_URL || location == ABOUT_HOME_URL ||
+        location == ABOUT_TOR_URL) {
       // We just want to run tests as quickly as possible
       // so in the automation test, we don't do `requestIdleCallback`.
       if (Cu.isInAutomation) {
