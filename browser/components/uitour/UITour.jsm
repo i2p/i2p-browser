@@ -41,6 +41,10 @@ ChromeUtils.defineModuleGetter(this, "UpdateUtils",
 const PREF_LOG_LEVEL      = "browser.uitour.loglevel";
 const PREF_SEENPAGEIDS    = "browser.uitour.seenPageIDs";
 
+const TOR_BROWSER_PAGE_ACTIONS_ALLOWED = new Set([
+  // Add page actions used by Tor Browser's new user/feature onboarding here.
+]);
+
 const BACKGROUND_PAGE_ACTIONS_ALLOWED = new Set([
   "forceShowReaderIcon",
   "getConfiguration",
@@ -373,6 +377,11 @@ var UITour = {
          aEvent.pageVisibilityState == "unloaded") &&
         !BACKGROUND_PAGE_ACTIONS_ALLOWED.has(action)) {
       log.warn("Ignoring disallowed action from a hidden page:", action);
+      return false;
+    }
+
+    if (!TOR_BROWSER_PAGE_ACTIONS_ALLOWED.has(action)) {
+      log.warn("Ignoring disallowed action:", action);
       return false;
     }
 
@@ -930,9 +939,7 @@ var UITour = {
 
   // This function is copied to UITourListener.
   isSafeScheme(aURI) {
-    let allowedSchemes = new Set(["https", "about"]);
-    if (!Services.prefs.getBoolPref("browser.uitour.requireSecure"))
-      allowedSchemes.add("http");
+    let allowedSchemes = new Set(["about"]);
 
     if (!allowedSchemes.has(aURI.scheme)) {
       log.error("Unsafe scheme:", aURI.scheme);
