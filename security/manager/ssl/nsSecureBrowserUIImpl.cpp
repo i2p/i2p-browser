@@ -358,7 +358,6 @@ void nsSecureBrowserUIImpl::EvaluateAndUpdateSecurityState(nsIRequest* aRequest,
   mNewToplevelIsEV = false;
 
   bool updateStatus = false;
-  nsCOMPtr<nsISSLStatus> temp_SSLStatus;
 
   mNewToplevelSecurityState =
       GetSecurityStateFromSecurityInfoAndRequest(info, aRequest);
@@ -370,21 +369,27 @@ void nsSecureBrowserUIImpl::EvaluateAndUpdateSecurityState(nsIRequest* aRequest,
 
   nsCOMPtr<nsISSLStatusProvider> sp(do_QueryInterface(info));
   if (sp) {
-    // Ignore result
+    // Ignore GetSSLStatus result
     updateStatus = true;
-    (void)sp->GetSSLStatus(getter_AddRefs(temp_SSLStatus));
-    if (temp_SSLStatus) {
+    (void)sp->GetSSLStatus(getter_AddRefs(mSSLStatus));
+    if (mSSLStatus) {
       bool aTemp;
-      if (NS_SUCCEEDED(temp_SSLStatus->GetIsExtendedValidation(&aTemp))) {
+      if (NS_SUCCEEDED(mSSLStatus->GetIsExtendedValidation(&aTemp))) {
         mNewToplevelIsEV = aTemp;
       }
     }
+  } else {
+    // No new SSL status, so clear out previous mSSLStatus and mark it for
+    // update
+    if (mSSLStatus != nullptr) {
+      mSSLStatus = nullptr;
+      updateStatus = true;
+    }
+    // also clear out EV flag
+    mNewToplevelIsEV = false;
   }
 
   mNewToplevelSecurityStateKnown = true;
-  if (updateStatus) {
-    mSSLStatus = temp_SSLStatus;
-  }
   MOZ_LOG(gSecureDocLog, LogLevel::Debug,
           ("SecureUI:%p: remember securityInfo %p\n", this, info));
   nsCOMPtr<nsIAssociatedContentSecurity> associatedContentSecurityFromRequest(
