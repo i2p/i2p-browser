@@ -70,4 +70,10 @@ interface IntlUtils {
    */
   [Throws]
   LocaleInfo getLocaleInfo(sequence<DOMString> locales);
+
+  /**
+   * Attribute that indicates whether the user has chosen
+   * to spoof the locale as en-US in content.
+   */
+  readonly attribute boolean spoofEnglish;
 };

@@ -27,13 +27,13 @@
       <constructor>
       <![CDATA[
         /* eslint-disable no-multi-spaces */
-        this.mYearPlaceHolder = ]]>"&date.year.placeholder;"<![CDATA[;
-        this.mMonthPlaceHolder = ]]>"&date.month.placeholder;"<![CDATA[;
-        this.mDayPlaceHolder = ]]>"&date.day.placeholder;"<![CDATA[;
+        this.mYearPlaceHolder = this.mSpoofEnglish ? "yyyy" : ]]>"&date.year.placeholder;"<![CDATA[;
+        this.mMonthPlaceHolder = this.mSpoofEnglish ? "mm" : ]]>"&date.month.placeholder;"<![CDATA[;
+        this.mDayPlaceHolder = this.mSpoofEnglish ? "dd" : ]]>"&date.day.placeholder;"<![CDATA[;
 
-        this.mYearLabel = ]]>"&date.year.label;"<![CDATA[;
-        this.mMonthLabel = ]]>"&date.month.label;"<![CDATA[;
-        this.mDayLabel = ]]>"&date.day.label;"<![CDATA[;
+        this.mYearLabel = this.mSpoofEnglish ? "Year" : ]]>"&date.year.label;"<![CDATA[;
+        this.mMonthLabel = this.mSpoofEnglish ? "Month" : ]]>"&date.month.label;"<![CDATA[;
+        this.mDayLabel = this.mSpoofEnglish ? "Day" : ]]>"&date.day.label;"<![CDATA[;
         /* eslint-enable no-multi-spaces */
 
         this.mMinMonth = 1;
@@ -451,17 +451,17 @@
         this.mPMIndicator = pmString || kDefaultPMString;
 
         /* eslint-disable no-multi-spaces */
-        this.mHourPlaceHolder = ]]>"&time.hour.placeholder;"<![CDATA[;
-        this.mMinutePlaceHolder = ]]>"&time.minute.placeholder;"<![CDATA[;
-        this.mSecondPlaceHolder = ]]>"&time.second.placeholder;"<![CDATA[;
-        this.mMillisecPlaceHolder = ]]>"&time.millisecond.placeholder;"<![CDATA[;
-        this.mDayPeriodPlaceHolder = ]]>"&time.dayperiod.placeholder;"<![CDATA[;
+        this.mHourPlaceHolder = this.mSpoofEnglish ? "--" : ]]>"&time.hour.placeholder;"<![CDATA[;
+        this.mMinutePlaceHolder = this.mSpoofEnglish ? "--" : ]]>"&time.minute.placeholder;"<![CDATA[;
+        this.mSecondPlaceHolder = this.mSpoofEnglish ? "--" : ]]>"&time.second.placeholder;"<![CDATA[;
+        this.mMillisecPlaceHolder = this.mSpoofEnglish ? "--" : ]]>"&time.millisecond.placeholder;"<![CDATA[;
+        this.mDayPeriodPlaceHolder = this.mSpoofEnglish ? "--" : ]]>"&time.dayperiod.placeholder;"<![CDATA[;
 
-        this.mHourLabel = ]]>"&time.hour.label;"<![CDATA[;
-        this.mMinuteLabel = ]]>"&time.minute.label;"<![CDATA[;
-        this.mSecondLabel = ]]>"&time.second.label;"<![CDATA[;
-        this.mMillisecLabel = ]]>"&time.millisecond.label;"<![CDATA[;
-        this.mDayPeriodLabel = ]]>"&time.dayperiod.label;"<![CDATA[;
+        this.mHourLabel = this.mSpoofEnglish ? "Hours" : ]]>"&time.hour.label;"<![CDATA[;
+        this.mMinuteLabel = this.mSpoofEnglish ? "Minutes" :]]>"&time.minute.label;"<![CDATA[;
+        this.mSecondLabel = this.mSpoofEnglish ? "Seconds" :]]>"&time.second.label;"<![CDATA[;
+        this.mMillisecLabel = this.mSpoofEnglish ? "Milliseconds" :]]>"&time.millisecond.label;"<![CDATA[;
+        this.mDayPeriodLabel = this.mSpoofEnglish ? "AM/PM" :]]>"&time.dayperiod.label;"<![CDATA[;
         /* eslint-enable no-multi-spaces */
 
         this.mHour12 = this.is12HourTime(this.mLocales);
@@ -1218,10 +1218,11 @@
       <![CDATA[
         this.DEBUG = false;
         this.mInputElement = this.parentNode;
-        this.mLocales = window.getRegionalPrefsLocales();
+        let intlUtils = window.intlUtils;
+        this.mSpoofEnglish = intlUtils.spoofEnglish;
+        this.mLocales = this.mSpoofEnglish ? ["en-US"] : window.getRegionalPrefsLocales();
 
         this.mIsRTL = false;
-        let intlUtils = window.intlUtils;
         if (intlUtils) {
           this.mIsRTL =
             intlUtils.getLocaleInfo(this.mLocales).direction === "rtl";
@@ -1242,6 +1243,10 @@
         this.mResetButton =
           document.getAnonymousElementByAttribute(this, "anonid", "reset-button");
         this.mResetButton.style.visibility = "hidden";
+        if (this.mSpoofEnglish) {
+          // Use the US English version of datetime.reset.label.
+          this.mResetButton.setAttribute("aria-label", "Clear");
+        }
 
         this.EVENTS.forEach((eventName) => {
           this.addEventListener(eventName, this, { mozSystemGroup: true }, false);

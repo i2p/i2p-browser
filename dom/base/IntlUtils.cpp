@@ -132,5 +132,9 @@ void IntlUtils::GetLocaleInfo(const Sequence<nsString>& aLocales,
   }
 }
 
+bool IntlUtils::SpoofEnglish() const {
+  return Preferences::GetInt("privacy.spoof_english", 0) == 2;
+}
+
 }  // namespace dom
 }  // namespace mozilla
