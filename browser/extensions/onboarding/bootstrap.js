@@ -91,6 +91,19 @@ function setPrefs(prefs) {
   });
 }
 
+function openTorCircuitDisplayPage() {
+  let kFrameScript = "resource://onboarding/onboarding-tor-circuit-display.js";
+  const kOnionURL = "https://3g2upl4pq6kufc4m.onion/";	// DuckDuckGo
+  let win = Services.wm.getMostRecentWindow('navigator:browser');
+  if (win) {
+    let tabBrowser = win.gBrowser;
+    let tab = tabBrowser.addTab(kOnionURL);
+    tabBrowser.selectedTab = tab;
+    let b = tabBrowser.getBrowserForTab(tab);
+    b.messageManager.loadFrameScript(kFrameScript, true);
+  }
+}
+
 /**
  * syncTourChecker listens to and maintains the login status inside, and can be
  * queried at any time once initialized.
@@ -163,6 +176,9 @@ function initContentMessageListener() {
         msg.target.messageManager.sendAsyncMessage("Onboarding:ResponseLoginStatus", {
           isLoggedIn: syncTourChecker.isLoggedIn()
         });
+        break;
+      case "tor-open-circuit-display-page":
+        openTorCircuitDisplayPage();
         break;
 #if 0
 // No telemetry in Tor Browser.

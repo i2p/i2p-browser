@@ -18,9 +18,6 @@ let onCanSetDefaultBrowserInBackground = () => {
 
 let onClick = evt => {
   switch (evt.target.id) {
-    case "onboarding-tour-tor-circuit-display-button":
-      // TODO: open circuit display onboarding
-      break;
     case "onboarding-tour-tor-security-button":
       Mozilla.UITour.torBrowserOpenSecurityLevelPanel();
       break;

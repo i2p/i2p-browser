@@ -7,6 +7,8 @@
 # See nsPermissionManager.cpp for more...
 
 # UITour
+# DuckDuckGo .onion (used for circuit display onboarding).
+origin	uitour	1	https://3g2upl4pq6kufc4m.onion
 origin	uitour	1	about:home
 origin	uitour	1	about:newtab
 origin	uitour	1	about:tor

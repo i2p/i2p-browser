@@ -159,7 +159,6 @@ var onboardingTourset = {
   "circuit-display": {
     id: "onboarding-tour-tor-circuit-display",
     tourNameId: "onboarding.tour-tor-circuit-display",
-    instantComplete: true,
     getPage(win) {
       let div = win.document.createElement("div");
 
@@ -919,6 +918,9 @@ class Onboarding {
       case "onboarding-tour-tor-onion-services-next-button":
         this.gotoNextTourItem();
         handledTourActionClick = true;
+        break;
+      case "onboarding-tour-tor-circuit-display-button":
+        sendMessageToChrome("tor-open-circuit-display-page");
         break;
     }
     if (classList.contains("onboarding-tour-item")) {
