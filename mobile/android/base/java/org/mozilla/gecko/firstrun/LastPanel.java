@@ -24,15 +24,13 @@ public class LastPanel extends FirstrunPanel {
             final int imageRes = args.getInt(FirstrunPagerConfig.KEY_IMAGE);
             final int textRes = args.getInt(FirstrunPagerConfig.KEY_TEXT);
             final int subtextRes = args.getInt(FirstrunPagerConfig.KEY_SUBTEXT);
+            final int ctatextRes = args.getInt(FirstrunPagerConfig.KEY_CTATEXT);
 
             ((ImageView) root.findViewById(R.id.firstrun_image)).setImageResource(imageRes);
             ((TextView) root.findViewById(R.id.firstrun_text)).setText(textRes);
             ((TextView) root.findViewById(R.id.firstrun_subtext)).setText(subtextRes);
+            ((TextView) root.findViewById(R.id.firstrun_link)).setText(ctatextRes);
         }
-
-        TextView nextLink = (TextView) root.findViewById(R.id.firstrun_link);
-        nextLink.setText(R.string.firstrun_welcome_button_browser);
-        nextLink.setGravity(Gravity.CENTER);
 
         root.findViewById(R.id.firstrun_link).setOnClickListener(new View.OnClickListener() {
             @Override

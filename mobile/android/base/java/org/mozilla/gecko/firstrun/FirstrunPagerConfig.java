@@ -23,6 +23,7 @@ public class FirstrunPagerConfig {
     public static final String KEY_IMAGE = "imageRes";
     public static final String KEY_TEXT = "textRes";
     public static final String KEY_SUBTEXT = "subtextRes";
+    public static final String KEY_CTATEXT = "ctatextRes";
 
    public static List<FirstrunPanelConfig> getDefault(Context context) {
         final List<FirstrunPanelConfig> panels = new LinkedList<>();

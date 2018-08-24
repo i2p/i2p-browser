@@ -23,12 +23,14 @@ public class FirstrunTorPagerConfig {
     public static final String KEY_IMAGE = "imageRes";
     public static final String KEY_TEXT = "textRes";
     public static final String KEY_SUBTEXT = "subtextRes";
+    public static final String KEY_CTATEXT = "ctatextRes";
 
     public static List<FirstrunTorPanelConfig> getDefault(Context context) {
        final List<FirstrunTorPanelConfig> panels = new LinkedList<>();
        panels.add(SimplePanelConfigs.welcomeTorPanelConfig);
        panels.add(SimplePanelConfigs.privacyPanelConfig);
        panels.add(SimplePanelConfigs.torNetworkPanelConfig);
+       panels.add(SimplePanelConfigs.secSettingsPanelConfig);
        panels.add(SimplePanelConfigs.tipsPanelConfig);
        panels.add(SimplePanelConfigs.onionServicesPanelConfig);
 
@@ -41,7 +43,7 @@ public class FirstrunTorPagerConfig {
         private int titleRes;
         private Bundle args;
 
-        public FirstrunTorPanelConfig(String classname, int titleRes, int imageRes, int textRes, int subtextRes) {
+        public FirstrunTorPanelConfig(String classname, int titleRes, int imageRes, int textRes, int subtextRes, int ctatextRes) {
             this.classname = classname;
             this.titleRes = titleRes;
 
@@ -49,6 +51,7 @@ public class FirstrunTorPagerConfig {
             this.args.putInt(KEY_IMAGE, imageRes);
             this.args.putInt(KEY_TEXT, textRes);
             this.args.putInt(KEY_SUBTEXT, subtextRes);
+            this.args.putInt(KEY_CTATEXT, ctatextRes);
         }
 
         public String getClassname() {
@@ -65,10 +68,11 @@ public class FirstrunTorPagerConfig {
     }
 
     private static class SimplePanelConfigs {
-        public static final FirstrunTorPanelConfig welcomeTorPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_welcome_tab_title, R.drawable.figure_welcome, R.string.firstrun_welcome_title, R.string.firstrun_welcome_message);
-        public static final FirstrunTorPanelConfig privacyPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_privacy_tab_title, R.drawable.figure_privacy, R.string.firstrun_privacy_title, R.string.firstrun_privacy_message);
-        public static final FirstrunTorPanelConfig torNetworkPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_tornetwork_tab_title, R.drawable.figure_network, R.string.firstrun_tornetwork_title, R.string.firstrun_tornetwork_message);
-        public static final FirstrunTorPanelConfig tipsPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_tips_tab_title, R.drawable.figure_experience, R.string.firstrun_tips_title, R.string.firstrun_tips_message);
-        public static final FirstrunTorPanelConfig onionServicesPanelConfig = new FirstrunTorPanelConfig(LastPanel.class.getName(), R.string.firstrun_onionservices_tab_title, R.drawable.figure_onion, R.string.firstrun_onionservices_title, R.string.firstrun_onionservices_message);
+        public static final FirstrunTorPanelConfig welcomeTorPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_welcome_tab_title, R.drawable.figure_welcome, R.string.firstrun_welcome_title, R.string.firstrun_welcome_message, R.string.firstrun_welcome_next);
+        public static final FirstrunTorPanelConfig privacyPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_privacy_tab_title, R.drawable.figure_privacy, R.string.firstrun_privacy_title, R.string.firstrun_privacy_message, R.string.firstrun_privacy_next);
+        public static final FirstrunTorPanelConfig torNetworkPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_tornetwork_tab_title, R.drawable.figure_network, R.string.firstrun_tornetwork_title, R.string.firstrun_tornetwork_message, R.string.firstrun_tornetwork_next);
+        public static final FirstrunTorPanelConfig secSettingsPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_secsettings_tab_title, R.drawable.figure_security, R.string.firstrun_secsettings_title, R.string.firstrun_secsettings_message, R.string.firstrun_secsettings_next);
+        public static final FirstrunTorPanelConfig tipsPanelConfig = new FirstrunTorPanelConfig(FirstrunPanel.class.getName(), R.string.firstrun_tips_tab_title, R.drawable.figure_experience, R.string.firstrun_tips_title, R.string.firstrun_tips_message, R.string.firstrun_tips_next);
+        public static final FirstrunTorPanelConfig onionServicesPanelConfig = new FirstrunTorPanelConfig(LastPanel.class.getName(), R.string.firstrun_onionservices_tab_title, R.drawable.figure_onion, R.string.firstrun_onionservices_title, R.string.firstrun_onionservices_message, R.string.firstrun_onionservices_next);
     }
 }

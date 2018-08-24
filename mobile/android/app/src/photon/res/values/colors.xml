@@ -153,6 +153,7 @@
 
     <color name="tor_tab_inactive_text">#484848</color>
     <color name="tor_tab_active_text">#7D4698</color>
+    <color name="tor_description_background_text">#FAFAFA</color>
     <!-- Restricted profiles palette -->
 
     <color name="restricted_profile_background_gold">#ffffcb51</color>
