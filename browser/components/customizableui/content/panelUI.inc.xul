@@ -123,7 +123,7 @@
   <popupnotification id="appMenu-update-restart-notification"
                      popupid="update-restart"
                      label="&updateRestart.header.message2;"
-                     buttonlabel="&updateRestart.acceptButton.label;"
+                     buttonlabel="&updateRestart.header.message2;"
                      buttonaccesskey="&updateRestart.acceptButton.accesskey;"
                      closebuttonhidden="true"
                      secondarybuttonlabel="&updateRestart.cancelButton.label;"
@@ -133,7 +133,7 @@
                      buttonhighlight="true"
                      hidden="true">
     <popupnotificationcontent id="update-restart-notification-content" orient="vertical">
-      <description id="update-restart-description">&updateRestart.message2;</description>
+      <description id="update-restart-description">&#160;</description>
     </popupnotificationcontent>
   </popupnotification>
 </panel>
