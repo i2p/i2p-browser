@@ -519,8 +519,8 @@ mozilla::ipc::IPCResult TabParent::RecvDropLinks(nsTArray<nsString>&& aLinks) {
     if (aLinks.Length() != mVerifyDropLinks.Length()) {
       loadUsingSystemPrincipal = false;
     }
-    UniquePtr<const char16_t* []> links;
-    links = MakeUnique<const char16_t* []>(aLinks.Length());
+    UniquePtr<const char16_t*[]> links;
+    links = MakeUnique<const char16_t*[]>(aLinks.Length());
     for (uint32_t i = 0; i < aLinks.Length(); i++) {
       if (loadUsingSystemPrincipal) {
         if (!aLinks[i].Equals(mVerifyDropLinks[i])) {
@@ -1878,14 +1878,14 @@ mozilla::ipc::IPCResult TabParent::RecvEnableDisableCommands(
     UniquePtr<const char*[]> enabledCommands, disabledCommands;
 
     if (aEnabledCommands.Length()) {
-      enabledCommands = MakeUnique<const char* []>(aEnabledCommands.Length());
+      enabledCommands = MakeUnique<const char*[]>(aEnabledCommands.Length());
       for (uint32_t c = 0; c < aEnabledCommands.Length(); c++) {
         enabledCommands[c] = aEnabledCommands[c].get();
       }
     }
 
     if (aDisabledCommands.Length()) {
-      disabledCommands = MakeUnique<const char* []>(aDisabledCommands.Length());
+      disabledCommands = MakeUnique<const char*[]>(aDisabledCommands.Length());
       for (uint32_t c = 0; c < aDisabledCommands.Length(); c++) {
         disabledCommands[c] = aDisabledCommands[c].get();
       }
@@ -1936,7 +1936,7 @@ LayoutDeviceIntPoint TabParent::GetChildProcessOffset() {
     return offset;
   }
 
-    // Note that we don't want to take into account transforms here:
+  // Note that we don't want to take into account transforms here:
 #if 0
   nsPoint pt(0, 0);
   nsLayoutUtils::TransformPoint(targetFrame, rootFrame, pt);
@@ -3241,7 +3241,7 @@ mozilla::ipc::IPCResult TabParent::RecvLookUpDictionary(
 }
 
 mozilla::ipc::IPCResult TabParent::RecvShowCanvasPermissionPrompt(
-    const nsCString& aFirstPartyURI, const bool& aHideDoorHanger) {
+    const nsCString& aOrigin, const bool& aHideDoorHanger) {
   nsCOMPtr<nsIBrowser> browser = do_QueryInterface(mFrameElement);
   if (!browser) {
     // If the tab is being closed, the browser may not be available.
@@ -3256,7 +3256,7 @@ mozilla::ipc::IPCResult TabParent::RecvShowCanvasPermissionPrompt(
       browser,
       aHideDoorHanger ? "canvas-permissions-prompt-hide-doorhanger"
                       : "canvas-permissions-prompt",
-      NS_ConvertUTF8toUTF16(aFirstPartyURI).get());
+      NS_ConvertUTF8toUTF16(aOrigin).get());
   if (NS_FAILED(rv)) {
     return IPC_FAIL_NO_REASON(this);
   }
