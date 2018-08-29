@@ -330,6 +330,11 @@ pref("browser.onboarding.newtour", "welcome,privacy,tor-network,circuit-display,
 pref("browser.onboarding.updatetour", "welcome,privacy,tor-network,circuit-display,security,expect-differences,onion-services");
 pref("browser.onboarding.skip-tour-button.hide", true);
 
+#ifdef XP_WIN
+// For now, reduce sandboxing level to 2 (see #26381).
+pref("security.sandbox.content.level", 2);
+#endif
+
 #ifdef TOR_BROWSER_VERSION
 #expand pref("torbrowser.version", __TOR_BROWSER_VERSION__);
 #endif
