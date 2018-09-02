@@ -76,11 +76,11 @@ pref("extensions.geckoProfiler.getSymbolRules", "localBreakpad,remoteBreakpad");
 pref("extensions.webextensions.base-content-security-policy", "script-src 'self' https://* moz-extension: blob: filesystem: 'unsafe-eval' 'unsafe-inline'; object-src 'self' https://* moz-extension: blob: filesystem:;");
 pref("extensions.webextensions.default-content-security-policy", "script-src 'self'; object-src 'self';");
 
-#if defined(XP_WIN)
-pref("extensions.webextensions.remote", true);
-#elif defined(XP_MACOSX) && !defined(RELEASE_OR_BETA)
-pref("extensions.webextensions.remote", true);
-#endif
+//#if defined(XP_WIN)
+//pref("extensions.webextensions.remote", true);
+//#elif defined(XP_MACOSX) && !defined(RELEASE_OR_BETA)
+//pref("extensions.webextensions.remote", true);
+//#endif
 
 // Extensions that should not be flagged as legacy in about:addons
 pref("extensions.legacy.exceptions", "{972ce4c6-7e08-4474-a285-3208198ce6fd},testpilot@cliqz.com,@testpilot-containers,jid1-NeEaf3sAHdKHPA@jetpack,@activity-streams,pulse@mozilla.com,@testpilot-addon,@min-vid,tabcentertest1@mozilla.com,snoozetabs@mozilla.com,speaktome@mozilla.com,hoverpad@mozilla.com");
