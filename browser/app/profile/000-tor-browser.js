@@ -121,7 +121,6 @@ pref("general.appname.override", "Netscape");
 pref("general.appversion.override", "5.0 (Windows)");
 pref("general.oscpu.override", "Windows NT 6.1");
 pref("general.platform.override", "Win32");
-pref("general.useragent.override", "Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0");
 pref("general.productSub.override", "20100101");
 pref("general.buildID.override", "20100101");
 pref("browser.startup.homepage_override.buildID", "20100101");

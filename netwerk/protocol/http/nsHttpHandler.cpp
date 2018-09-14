@@ -342,7 +342,7 @@ void nsHttpHandler::SetFastOpenOSSupport() {
   LOG(("nsHttpHandler::SetFastOpenOSSupport version %s", version.get()));
 
   if (NS_SUCCEEDED(rv)) {
-  // set min version minus 1.
+    // set min version minus 1.
 #if XP_MACOSX
     int min_version[] = {17, 5};  // High Sierra 10.13.4
 #elif ANDROID
@@ -1008,7 +1008,7 @@ void nsHttpHandler::InitUserAgentComponents() {
 #endif  // MOZ_MULET
 
 #ifndef MOZ_UA_OS_AGNOSTIC
-    // Gather OS/CPU.
+  // Gather OS/CPU.
 #if defined(XP_WIN)
   OSVERSIONINFO info = {sizeof(OSVERSIONINFO)};
 #pragma warning(push)
