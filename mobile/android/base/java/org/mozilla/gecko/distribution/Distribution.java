@@ -555,6 +555,11 @@ public class Distribution {
             return false;
         }
 
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            return false;
+        }
+
         URI uri = getReferredDistribution(referrer);
         if (uri == null) {
             return false;

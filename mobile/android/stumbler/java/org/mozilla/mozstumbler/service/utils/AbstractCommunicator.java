@@ -68,6 +68,11 @@ public abstract class AbstractCommunicator {
     }
 
     private void openConnectionAndSetHeaders() {
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOG_TAG, "This is Tor Browser. Skipping.");
+            throw new Exception();
+        }
+
         try {
             Prefs prefs = Prefs.getInstanceWithoutContext();
             if (sMozApiKey == null || prefs != null) {

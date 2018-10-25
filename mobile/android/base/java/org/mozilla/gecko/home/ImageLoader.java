@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Downloader.Response;
 import com.squareup.picasso.UrlConnectionDownloader;
 
+import org.mozilla.gecko.AppConstants;
 import org.mozilla.gecko.util.ProxySelector;
 
 import java.io.File;
@@ -91,6 +92,12 @@ public class ImageLoader {
 
         @Override
         protected HttpURLConnection openConnection(Uri path) throws IOException {
+            if (AppConstants.isTorBrowser()) {
+                String err = "This is Tor Browser. Downloading is disabled for: " + path.toString();
+                Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+                throw new IOException(err);
+            }
+
             try {
                 // This is annoying, but |path| is an android.net.Uri and
                 // openConnectionWithProxy() accepts a java.net.URI

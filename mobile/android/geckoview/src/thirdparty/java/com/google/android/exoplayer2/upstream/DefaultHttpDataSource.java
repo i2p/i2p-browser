@@ -395,51 +395,56 @@ public class DefaultHttpDataSource implements HttpDataSource {
    */
   private HttpURLConnection makeConnection(URL url, byte[] postBody, long position,
       long length, boolean allowGzip, boolean followRedirects) throws IOException, URISyntaxException {
+    // AppConstants.isTorBrowser() is in base/, so it's not available in geckoview/
+    Log.i(TAG, "This is Tor Browser. Skipping.");
+    throw new IOException();
+
     /**
      * Tor Project modified the way the connection object was created. For the sake of
      * simplicity, instead of duplicating the whole file we changed the connection object
      * to use the ProxySelector.
      */
-    HttpURLConnection connection = (HttpURLConnection) ProxySelector.openConnectionWithProxy(url.toURI());
+    /* Dead code */
+    //HttpURLConnection connection = (HttpURLConnection) ProxySelector.openConnectionWithProxy(url.toURI());
 
-    connection.setConnectTimeout(connectTimeoutMillis);
-    connection.setReadTimeout(readTimeoutMillis);
-    if (defaultRequestProperties != null) {
-      for (Map.Entry<String, String> property : defaultRequestProperties.getSnapshot().entrySet()) {
-        connection.setRequestProperty(property.getKey(), property.getValue());
-      }
-    }
-    for (Map.Entry<String, String> property : requestProperties.getSnapshot().entrySet()) {
-      connection.setRequestProperty(property.getKey(), property.getValue());
-    }
-    if (!(position == 0 && length == C.LENGTH_UNSET)) {
-      String rangeRequest = "bytes=" + position + "-";
-      if (length != C.LENGTH_UNSET) {
-        rangeRequest += (position + length - 1);
-      }
-      connection.setRequestProperty("Range", rangeRequest);
-    }
-    connection.setRequestProperty("User-Agent", userAgent);
-    if (!allowGzip) {
-      connection.setRequestProperty("Accept-Encoding", "identity");
-    }
-    connection.setInstanceFollowRedirects(followRedirects);
-    connection.setDoOutput(postBody != null);
-    if (postBody != null) {
-      connection.setRequestMethod("POST");
-      if (postBody.length == 0) {
-        connection.connect();
-      } else  {
-        connection.setFixedLengthStreamingMode(postBody.length);
-        connection.connect();
-        OutputStream os = connection.getOutputStream();
-        os.write(postBody);
-        os.close();
-      }
-    } else {
-      connection.connect();
-    }
-    return connection;
+    //connection.setConnectTimeout(connectTimeoutMillis);
+    //connection.setReadTimeout(readTimeoutMillis);
+    //if (defaultRequestProperties != null) {
+    //  for (Map.Entry<String, String> property : defaultRequestProperties.getSnapshot().entrySet()) {
+    //    connection.setRequestProperty(property.getKey(), property.getValue());
+    //  }
+    //}
+    //for (Map.Entry<String, String> property : requestProperties.getSnapshot().entrySet()) {
+    //  connection.setRequestProperty(property.getKey(), property.getValue());
+    //}
+    //if (!(position == 0 && length == C.LENGTH_UNSET)) {
+    //  String rangeRequest = "bytes=" + position + "-";
+    //  if (length != C.LENGTH_UNSET) {
+    //    rangeRequest += (position + length - 1);
+    //  }
+    //  connection.setRequestProperty("Range", rangeRequest);
+    //}
+    //connection.setRequestProperty("User-Agent", userAgent);
+    //if (!allowGzip) {
+    //  connection.setRequestProperty("Accept-Encoding", "identity");
+    //}
+    //connection.setInstanceFollowRedirects(followRedirects);
+    //connection.setDoOutput(postBody != null);
+    //if (postBody != null) {
+    //  connection.setRequestMethod("POST");
+    //  if (postBody.length == 0) {
+    //    connection.connect();
+    //  } else  {
+    //    connection.setFixedLengthStreamingMode(postBody.length);
+    //    connection.connect();
+    //    OutputStream os = connection.getOutputStream();
+    //    os.write(postBody);
+    //    os.close();
+    //  }
+    //} else {
+    //  connection.connect();
+    //}
+    //return connection;
   }
 
   /**

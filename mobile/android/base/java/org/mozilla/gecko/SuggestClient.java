@@ -72,6 +72,11 @@ public class SuggestClient {
             return mPrevResults;
 
         ArrayList<String> suggestions = new ArrayList<String>();
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            return suggestions;
+        }
+
         if (TextUtils.isEmpty(mSuggestTemplate) || TextUtils.isEmpty(query)) {
             return suggestions;
         }

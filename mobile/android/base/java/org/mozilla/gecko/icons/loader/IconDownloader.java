@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
+import org.mozilla.gecko.AppConstants;
 import org.mozilla.gecko.GeckoApplication;
 import org.mozilla.gecko.icons.decoders.FaviconDecoder;
 import org.mozilla.gecko.icons.decoders.LoadFaviconResult;
@@ -132,6 +133,11 @@ public class IconDownloader implements IconLoader {
             return null;
         }
 
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            return null;
+        }
+
         HttpURLConnection connection = null;
 
         try {
@@ -183,6 +189,11 @@ public class IconDownloader implements IconLoader {
     @VisibleForTesting
     @NonNull
     HttpURLConnection connectTo(String uri) throws URISyntaxException, IOException {
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            throw new IOException();
+        }
+
         final HttpURLConnection connection = (HttpURLConnection) ProxySelector.openConnectionWithProxy(
                 new URI(uri));
 
