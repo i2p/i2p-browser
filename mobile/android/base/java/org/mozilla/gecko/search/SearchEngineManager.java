@@ -379,6 +379,11 @@ public class SearchEngineManager implements SharedPreferences.OnSharedPreference
      * @return String containing the country code
      */
     private String fetchCountryCode() {
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOG_TAG, "This is Tor Browser. Skipping.");
+            return null;
+        }
+
         // First, we look to see if we have a cached code.
         final String region = GeckoSharedPrefs.forApp(context).getString(PREF_REGION_KEY, null);
         if (region != null) {

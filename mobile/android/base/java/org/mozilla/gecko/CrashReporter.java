@@ -472,6 +472,11 @@ public class CrashReporter extends AppCompatActivity
     }
 
     private void sendReport(File minidumpFile, Map<String, String> extras, File extrasFile) {
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOGTAG, "sendReport: This is Tor Browser. Skipping.");
+            return;
+        }
+
         Log.i(LOGTAG, "sendReport: " + minidumpFile.getPath());
         final CheckBox includeURLCheckbox = (CheckBox) findViewById(R.id.include_url);
 

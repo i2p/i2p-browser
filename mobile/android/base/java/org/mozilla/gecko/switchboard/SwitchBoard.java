@@ -409,6 +409,12 @@ public class SwitchBoard {
         HttpURLConnection connection = null;
         InputStreamReader inputStreamReader = null;
         BufferedReader bufferReader = null;
+
+        if (AppConstants.isTorBrowser()) {
+            Log.i(TAG, "This is Tor Browser. Skipping.");
+            return null;
+        }
+
         try {
             connection = (HttpURLConnection) ProxySelector.openConnectionWithProxy(url.toURI());
             connection.setRequestProperty("User-Agent", HardwareUtils.isTablet() ?

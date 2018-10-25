@@ -151,6 +151,12 @@ public abstract class BaseAction {
     protected HttpURLConnection buildHttpURLConnection(String url)
             throws UnrecoverableDownloadContentException, IOException {
         try {
+            if (AppConstants.isTorBrowser()) {
+                String erdcl = "This is Tor Browser. Downloading is disabled for: " + url;
+                Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+                throw new UnrecoverableDownloadContentException(erdcl);
+            }
+
             System.setProperty("http.keepAlive", "true");
 
             HttpURLConnection connection = (HttpURLConnection) ProxySelector.openConnectionWithProxy(new URI(url));

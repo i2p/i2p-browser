@@ -379,6 +379,11 @@ public class UpdateService extends IntentService {
         try {
             URI uri = getUpdateURI(force);
 
+            if (AppConstants.isTorBrowser()) {
+              Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+              return null;
+            }
+
             if (uri == null) {
               Log.e(LOGTAG, "failed to get update URI");
               return null;
@@ -527,6 +532,12 @@ public class UpdateService extends IntentService {
 
     private File downloadUpdatePackage(UpdateInfo info, boolean overwriteExisting) {
         URL url = null;
+
+        if (AppConstants.isTorBrowser()) {
+          Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+          return null;
+        }
+
         try {
             url = info.uri.toURL();
         } catch (java.net.MalformedURLException e) {

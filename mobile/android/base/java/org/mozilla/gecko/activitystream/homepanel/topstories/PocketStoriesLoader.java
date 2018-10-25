@@ -124,6 +124,11 @@ public class PocketStoriesLoader extends AsyncTaskLoader<List<TopStory>> {
     }
 
     protected String makeAPIRequestWithKey(final String apiKey) {
+        if (AppConstants.isTorBrowser()) {
+            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            return null;
+        }
+
         HttpURLConnection connection = null;
 
         final Uri uri = Uri.parse(GLOBAL_ENDPOINT)
