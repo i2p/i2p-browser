@@ -28,5 +28,14 @@
     <item
         android:drawable="@drawable/ic_search_icon"
         android:maxLevel="6" />
+    <item
+        android:drawable="@drawable/ic_onion"
+        android:maxLevel="7"/>
+    <item
+        android:drawable="@drawable/ic_onion_lock"
+        android:maxLevel="8"/>
+    <item
+        android:drawable="@drawable/ic_onion_disabled"
+        android:maxLevel="9"/>
 
 </level-list>

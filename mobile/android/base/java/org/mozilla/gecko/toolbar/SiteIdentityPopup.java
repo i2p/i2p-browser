@@ -144,8 +144,9 @@ public class SiteIdentityPopup extends AnchoredPopup implements BundleEventListe
             init();
         }
 
-        final boolean isIdentityKnown = (siteIdentity.getSecurityMode() == SecurityMode.IDENTIFIED ||
-                                         siteIdentity.getSecurityMode() == SecurityMode.VERIFIED);
+        final boolean isIdentityKnown = ((siteIdentity.getSecurityMode() == SecurityMode.IDENTIFIED ||
+                                         siteIdentity.getSecurityMode() == SecurityMode.VERIFIED) &&
+                                         siteIdentity.hasCert());
         updateConnectionState(siteIdentity);
         toggleIdentityKnownContainerVisibility(isIdentityKnown);
 
@@ -322,7 +323,8 @@ public class SiteIdentityPopup extends AnchoredPopup implements BundleEventListe
         } else if (!siteIdentity.isSecure()) {
             if (siteIdentity.getMixedModeActive() == MixedMode.LOADED) {
                 // Active Mixed Content loaded because user has disabled blocking.
-                mIcon.setImageResource(R.drawable.ic_lock_disabled);
+                int resId = siteIdentity.isOnionHost() ? R.drawable.ic_onion_disabled : R.drawable.ic_lock_disabled;
+                mIcon.setImageResource(resId);
                 clearSecurityStateIcon();
                 mMixedContentActivity.setVisibility(View.VISIBLE);
                 mMixedContentActivity.setText(R.string.mixed_content_protection_disabled);
@@ -330,7 +332,8 @@ public class SiteIdentityPopup extends AnchoredPopup implements BundleEventListe
                 mLink.setVisibility(View.VISIBLE);
             } else if (siteIdentity.getMixedModeDisplay() == MixedMode.LOADED) {
                 // Passive Mixed Content loaded.
-                mIcon.setImageResource(R.drawable.ic_lock_inactive);
+                int resId = siteIdentity.isOnionHost() ? R.drawable.ic_onion_disabled : R.drawable.ic_lock_inactive;
+                mIcon.setImageResource(resId);
                 setSecurityStateIcon(R.drawable.ic_warning_major, 1);
                 mMixedContentActivity.setVisibility(View.VISIBLE);
                 if (siteIdentity.getMixedModeActive() == MixedMode.BLOCKED) {
@@ -342,7 +345,8 @@ public class SiteIdentityPopup extends AnchoredPopup implements BundleEventListe
 
             } else {
                 // Unencrypted connection with no mixed content.
-                mIcon.setImageResource(R.drawable.globe_light);
+                int resId = siteIdentity.isOnionHost() ? R.drawable.ic_onion : R.drawable.globe_light;
+                mIcon.setImageResource(resId);
                 clearSecurityStateIcon();
 
                 mMixedContentActivity.setVisibility(View.GONE);
@@ -361,7 +365,8 @@ public class SiteIdentityPopup extends AnchoredPopup implements BundleEventListe
 
         } else {
             // Connection is secure.
-            mIcon.setImageResource(R.drawable.ic_lock);
+            int resId = siteIdentity.isOnionHost() ? (siteIdentity.hasCert() ? R.drawable.ic_onion_lock : R.drawable.ic_onion) : R.drawable.ic_lock;
+            mIcon.setImageResource(resId);
 
             setSecurityStateIcon(R.drawable.img_check, 2);
             mSecurityState.setTextColor(ContextCompat.getColor(mContext, R.color.affirmative_green));

@@ -35,6 +35,9 @@ public class SecurityModeUtil {
         LOCK_SECURE(1),
         LOCK_WARNING(-1), // not used for now. reserve for MixedDisplayContent icon, if any.
         LOCK_INSECURE(3),
+        ONION(7),
+        ONION_ACTIVATE(8),
+        ONION_DISABLED(9),
         WARNING(2),
         TRACKING_CONTENT_BLOCKED(4),
         TRACKING_CONTENT_LOADED(5);
@@ -100,6 +103,8 @@ public class SecurityModeUtil {
         final MixedMode displayMixedMode = identity.getMixedModeDisplay();
         final TrackingMode trackingMode = identity.getTrackingMode();
         final boolean securityException = identity.isSecurityException();
+        final boolean isOnionHost = identity.isOnionHost();
+        final boolean hasCert = identity.hasCert();
 
         if (securityException) {
             return IconType.WARNING;
@@ -108,9 +113,9 @@ public class SecurityModeUtil {
         } else if (trackingMode == TrackingMode.TRACKING_CONTENT_BLOCKED) {
             return IconType.TRACKING_CONTENT_BLOCKED;
         } else if (activeMixedMode == MixedMode.LOADED) {
-            return IconType.LOCK_INSECURE;
+            return isOnionHost ? IconType.ONION_DISABLED : IconType.LOCK_INSECURE;
         } else if (displayMixedMode == MixedMode.LOADED) {
-            return IconType.WARNING;
+            return isOnionHost ? IconType.ONION_DISABLED : IconType.WARNING;
         }
 
         // Chrome-UI checking is after tracking/mixed-content, even for about: pages, as they
@@ -119,9 +124,15 @@ public class SecurityModeUtil {
             return IconType.DEFAULT;
         }
 
-        return securityModeMap.containsKey(securityMode)
-                ? securityModeMap.get(securityMode)
-                : IconType.UNKNOWN;
+        if (securityMode == SecurityMode.UNKNOWN) {
+            return isOnionHost ? IconType.ONION : IconType.UNKNOWN;
+        } else if (securityMode == SecurityMode.IDENTIFIED) {
+            return isOnionHost ? (hasCert ? IconType.ONION_ACTIVATE : IconType.ONION) : IconType.LOCK_SECURE;
+        } else if (securityMode == SecurityMode.VERIFIED) {
+            return isOnionHost ? IconType.ONION_ACTIVATE : IconType.LOCK_SECURE;
+        } else {
+            return IconType.UNKNOWN;
+        }
     }
 
     /**
