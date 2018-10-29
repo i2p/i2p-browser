@@ -25,6 +25,8 @@ public class SiteIdentity {
     private String mCountry;
     private String mVerifier;
     private String mOrigin;
+    private boolean mIsOnionHost;
+    private boolean mHasCert;
 
     public enum SecurityMode {
         UNKNOWN,
@@ -59,6 +61,8 @@ public class SiteIdentity {
         mCountry = null;
         mVerifier = null;
         mSecure = false;
+        mIsOnionHost = false;
+        mHasCert = false;
     }
 
     public void reset() {
@@ -110,6 +114,8 @@ public class SiteIdentity {
         mVerifier = identityData.getString("verifier");
         mSecure = identityData.getBoolean("secure");
         mSecurityException = identityData.getBoolean("securityException");
+        mIsOnionHost = identityData.getBoolean("isOnionHost");
+        mHasCert = identityData.getBoolean("hasCert");
     }
 
     public SecurityMode getSecurityMode() {
@@ -150,6 +156,14 @@ public class SiteIdentity {
 
     public boolean isSecure() {
         return mSecure;
+    }
+
+    public boolean isOnionHost() {
+        return mIsOnionHost;
+    }
+
+    public boolean hasCert() {
+        return mHasCert;
     }
 
     public MixedMode getMixedModeActive() {
