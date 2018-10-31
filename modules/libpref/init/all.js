@@ -2274,9 +2274,9 @@ pref("network.auth.non-web-content-triggered-resources-http-auth-allow", false);
 // in that case default credentials will always be used.
 pref("network.auth.private-browsing-sso", false);
 
-// Control how throttling of http responses works - number of ms that each
-// suspend and resume period lasts (prefs named appropriately)
-pref("network.http.throttle.enable", true);
+// This feature is occasionally causing visible regressions (download too slow for
+// too long time, jitter in video/audio in background tabs...)
+pref("network.http.throttle.enable", false);
 pref("network.http.throttle.version", 1);
 
 // V1 prefs
