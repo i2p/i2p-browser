@@ -1263,7 +1263,7 @@ nsresult nsWebBrowserPersist::SaveURIInternal(
   nsCOMPtr<nsIChannel> inputChannel;
   rv = NS_NewChannel(getter_AddRefs(inputChannel), aURI, aTriggeringPrincipal,
                      nsILoadInfo::SEC_ALLOW_CROSS_ORIGIN_DATA_IS_NULL,
-                     nsIContentPolicy::TYPE_OTHER,
+                     nsIContentPolicy::TYPE_SAVEAS_DOWNLOAD,
                      nullptr,  // aPerformanceStorage
                      nullptr,  // aLoadGroup
                      static_cast<nsIInterfaceRequestor *>(this), loadFlags);
