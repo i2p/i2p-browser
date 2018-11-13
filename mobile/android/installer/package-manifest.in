@@ -426,6 +426,10 @@
 @BINPATH@/chrome/devtools@JAREXT@
 @BINPATH@/chrome/devtools.manifest
 
+; Torbutton
+@BINPATH@/chrome/torbutton@JAREXT@
+@BINPATH@/chrome/torbutton.manifest
+
 ; [Default Preferences]
 ; All the pref files must be part of base to prevent migration bugs
 #ifdef MOZ_GECKOVIEW_JAR
