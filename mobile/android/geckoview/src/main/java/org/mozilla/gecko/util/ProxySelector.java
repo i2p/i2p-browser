@@ -30,8 +30,8 @@ import java.util.List;
 
 public class ProxySelector {
     private static final String TOR_PROXY_ADDRESS = "127.0.0.1";
-    private static final int TOR_SOCKS_PROXY_PORT = 9050;
-    private static final int TOR_HTTP_PROXY_PORT = 8118;
+    private static final int TOR_SOCKS_PROXY_PORT = 9150;
+    private static final int TOR_HTTP_PROXY_PORT = 8218;
 
     public static URLConnection openConnectionWithProxy(URI uri) throws IOException {
         java.net.ProxySelector ps = java.net.ProxySelector.getDefault();
