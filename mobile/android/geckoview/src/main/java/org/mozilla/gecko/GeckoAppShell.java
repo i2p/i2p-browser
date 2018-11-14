@@ -1895,15 +1895,4 @@ public class GeckoAppShell
     public static String getDefaultLocale() {
         return Locale.getDefault().toString();
     }
-
-    public static void setTorStatus(Intent intent) {
-        sTorStatus = intent.getStringExtra(OrbotHelper.EXTRA_STATUS);
-        if (OrbotHelper.STATUS_ON.equals(sTorStatus)) {
-            sendPendingUrlIntents();
-        }
-    }
-
-    public static String getTorStatus() {
-        return sTorStatus;
-    }
 }

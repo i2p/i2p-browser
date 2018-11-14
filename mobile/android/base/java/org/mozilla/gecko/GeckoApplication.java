@@ -62,6 +62,9 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.UUID;
 
+import org.torproject.android.service.util.Prefs;
+import org.torproject.android.settings.Languages;
+
 public class GeckoApplication extends Application
                               implements HapticFeedbackDelegate {
     private static final String LOG_TAG = "GeckoApplication";
@@ -318,6 +321,13 @@ public class GeckoApplication extends Application
                 "Image:SetAs",
                 "Profile:Create",
                 null);
+
+        // Give Orbot the base Context
+        Prefs.setContext(context);
+
+        // Initialize Orbot's Language settings
+        Languages.setup(BrowserApp.class, R.string.menu_settings);
+        Languages.setLanguage(this, Prefs.getDefaultLocale(), true);
 
         super.onCreate();
     }
