@@ -100,6 +100,8 @@ import org.mozilla.geckoview.GeckoViewBridge;
 // SafeReceiver excluded at compile-time
 //import org.mozilla.mozstumbler.service.mainthread.SafeReceiver;
 
+import org.torproject.android.service.TorService;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -625,6 +627,9 @@ public abstract class GeckoApp extends GeckoActivity
         }
 
         EventDispatcher.getInstance().dispatch("Browser:Quit", res);
+
+        Intent torService = new Intent(this, TorService.class);
+        stopService(torService);
 
         // We don't call shutdown here because this creates a race condition which
         // can cause the clearing of private data to fail. Instead, we shut down the
@@ -2238,6 +2243,11 @@ public abstract class GeckoApp extends GeckoActivity
         if (mShutdownOnDestroy) {
             GeckoApplication.shutdown(!mRestartOnShutdown ? null : new Intent(
                     Intent.ACTION_MAIN, /* uri */ null, getApplicationContext(), getClass()));
+        }
+
+        if (isFinishing()) {
+            Log.i(LOGTAG, "onDestroy() is finishing.");
+            quitAndClear();
         }
     }
 

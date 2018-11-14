@@ -235,6 +235,14 @@ dependencies {
     // to generate the `Application` class or fork the file on disk.
     implementation "com.android.support:multidex:1.0.3"
 
+    // tor-android-services
+    implementation files('service-release.aar')
+    implementation files('jsocksAndroid-release.aar')
+
+    // Tor_Onion_Proxy_Library
+    implementation files('universal-0.0.3.jar')
+    implementation files('android-release.aar')
+
     if (mozconfig.substs.MOZ_NATIVE_DEVICES) {
         implementation "com.android.support:mediarouter-v7:$support_library_version"
         implementation "com.google.android.gms:play-services-basement:$google_play_services_version"
@@ -277,6 +285,11 @@ dependencies {
 
     // Including the Robotium JAR directly can cause issues with dexing.
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.5.4'
+
+    // tor-android-service Dependencies
+    implementation 'net.freehaven.tor.control:jtorctl:0.2'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-android:1.7.25'
 }
 
 // TODO: (bug 1261486): This impl is not robust -

@@ -572,5 +572,13 @@
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 #endif
 
+        <!-- Define Orbotservice's TorService -->
+        <service
+            android:name="org.torproject.android.service.TorService"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="true">
+        </service>
+
     </application>
 </manifest>
