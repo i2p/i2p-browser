@@ -32,6 +32,10 @@ allprojects {
                 url repository
             }
         }
+        // These are needed for Orbot's dependencies
+        maven { url "https://raw.githubusercontent.com/guardianproject/gpmaven/master" }
+        maven { url 'https://jitpack.io' }
+        jcenter()
     }
 }
 

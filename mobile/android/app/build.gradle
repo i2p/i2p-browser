@@ -225,6 +225,9 @@ dependencies {
     implementation "com.android.support:design:${mozconfig.substs.ANDROID_SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:customtabs:${mozconfig.substs.ANDROID_SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:palette-v7:${mozconfig.substs.ANDROID_SUPPORT_LIBRARY_VERSION}"
+    implementation files('Orbot-16.0.5-RC-1-tor-0.3.4.9-fullperm-release.aar')
+    implementation files('orbotservice-release.aar')
+    implementation files('jsocksAndroid-release.aar')
 
     if (mozconfig.substs.MOZ_NATIVE_DEVICES) {
         implementation "com.android.support:mediarouter-v7:${mozconfig.substs.ANDROID_SUPPORT_LIBRARY_VERSION}"
@@ -262,6 +265,14 @@ dependencies {
 
     // Including the Robotium JAR directly can cause issues with dexing.
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.5.4'
+
+    // Orbot
+    implementation 'com.github.delight-im:Android-Languages:v1.0.1'
+    implementation 'pl.bclogic:pulsator4droid:1.0.3'
+
+    // Orbotservice
+    implementation 'org.torproject:tor-android-binary:0.3.4.9'
+    implementation 'com.jrummyapps:android-shell:1.0.1'
 }
 
 // TODO: (bug 1261486): This impl is not robust -
