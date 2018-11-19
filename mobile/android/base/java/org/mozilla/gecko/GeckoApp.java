@@ -562,10 +562,7 @@ public abstract class GeckoApp extends GeckoActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void quitAndClear() {
-        // Make sure the Guest Browsing notification goes away when we quit.
-        GuestSession.hideNotification(this);
-
+    private GeckoBundle createSanitizeData() {
         final SharedPreferences prefs = getSharedPreferencesForProfile();
         final Set<String> clearSet = PrefUtils.getStringSet(
             prefs, ClearOnShutdownPref.PREF, new HashSet<String>());
@@ -574,7 +571,14 @@ public abstract class GeckoApp extends GeckoActivity
         for (final String clear : clearSet) {
             clearObj.putBoolean(clear, true);
         }
+        return clearObj;
+    }
 
+    private void quitAndClear() {
+        // Make sure the Guest Browsing notification goes away when we quit.
+        GuestSession.hideNotification(this);
+
+        final GeckoBundle clearObj = createSanitizeData();
         final GeckoBundle res = new GeckoBundle(2);
         res.putBundle("sanitize", clearObj);
 
@@ -1130,6 +1134,13 @@ public abstract class GeckoApp extends GeckoActivity
         mTextSelection.create();
 
         final Bundle finalSavedInstanceState = savedInstanceState;
+
+        // When the browser is forcefully closed, its private data is not
+        // deleted, even if the history.clear_on_exit is set. Here we are calling
+        // the Sanitize:ClearData in the startup to make sure the private
+        // data was cleared.
+        EventDispatcher.getInstance().dispatch("Sanitize:ClearData", createSanitizeData());
+
         ThreadUtils.postToBackgroundThread(new Runnable() {
             @Override
             public void run() {
