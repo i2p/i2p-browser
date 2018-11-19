@@ -11,10 +11,13 @@ import org.mozilla.gecko.distribution.Distribution;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class DistroSharedPrefsImport {
 
@@ -58,7 +61,21 @@ public class DistroSharedPrefsImport {
             } else if (value instanceof Long) {
                 sharedPreferences.putLong(GeckoPreferences.NON_PREF_PREFIX + key, (long) value);
             } else {
-                Log.d(LOGTAG, "Unknown preference value type whilst importing android preferences from distro file.");
+                JSONArray jsonArray = preferences.optJSONArray(key);
+                if (jsonArray != null) {
+                    Set<String> prefValues = new HashSet<String>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        try {
+                            prefValues.add(jsonArray.getString(i));
+                        } catch (JSONException e) {
+                            Log.e(LOGTAG, "Unable to parse Android Preferences.", e);
+                            continue;
+                        }
+                    }
+                    sharedPreferences.putStringSet(GeckoPreferences.NON_PREF_PREFIX + key, prefValues);
+                } else {
+                    Log.d(LOGTAG, "Unknown preference value type whilst importing android preferences from distro file.");
+                }
             }
         }
         sharedPreferences.apply();
