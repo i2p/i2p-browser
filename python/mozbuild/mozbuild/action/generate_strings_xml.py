@@ -11,7 +11,7 @@ import buildconfig
 from mozbuild import preprocessor
 
 
-def main(output, strings_xml, android_strings_dtd, sync_strings_dtd, locale=None):
+def main(output, strings_xml, android_strings_dtd, sync_strings_dtd, torbrowser_strings_dtd, locale=None):
     if not locale:
         raise ValueError('locale must be specified!')
 
@@ -23,6 +23,7 @@ def main(output, strings_xml, android_strings_dtd, sync_strings_dtd, locale=None
     # Includes.
     defines['STRINGSPATH'] = android_strings_dtd
     defines['SYNCSTRINGSPATH'] = sync_strings_dtd
+    defines['TBSTRINGSPATH'] = torbrowser_strings_dtd
     # Fennec branding is en-US only: see
     # $(MOZ_BRANDING_DIRECTORY)/locales/jar.mn.
     defines['BRANDPATH'] = '{}/{}/locales/en-US/brand.dtd'.format(

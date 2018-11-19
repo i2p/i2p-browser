@@ -65,4 +65,5 @@ for f in ['../res/values/strings.xml',
         # The `en-US/` will be rewritten to the locale-specific path.
         'en-US/android_strings.dtd',
         'en-US/sync_strings.dtd',
+        'en-US/torbrowser_strings.dtd',
     ]

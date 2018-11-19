@@ -1,0 +1,25 @@
+<!-- Location note: Tor First run messages -->
+<!ENTITY firstrun_welcome_tab_title "Welcome">
+<!ENTITY firstrun_welcome_title "You\'re ready.">
+<!ENTITY firstrun_welcome_message "Tor Browser offers the highest standard of privacy and security while browsing the web. You\'re now protected against tracking, surveillance, and censorship. This quick onboarding will show you how.">
+<!ENTITY firstrun_welcome_next "Start now">
+<!ENTITY firstrun_privacy_tab_title "Privacy">
+<!ENTITY firstrun_privacy_title "Snub trackers and snoopers.">
+<!ENTITY firstrun_privacy_message "Tor Browser isolates cookies and deletes your browser history after your session. These modifications ensure your privacy and security are protected in the browser. Click ‘Tor Network’ to learn how we protect you on the network level.">
+<!ENTITY firstrun_privacy_next "Go to Tor Network">
+<!ENTITY firstrun_tornetwork_tab_title "Tor Network">
+<!ENTITY firstrun_tornetwork_title "Travel a decentralized network.">
+<!ENTITY firstrun_tornetwork_message "Tor Browser connects you to the Tor network run by thousands of volunteers around the world. Unlike a VPN, there\'s no one point of failure or centralized entity you need to trust in order to enjoy the internet privately.">
+<!ENTITY firstrun_tornetwork_next "Next">
+<!ENTITY firstrun_secsettings_tab_title "Security">
+<!ENTITY firstrun_secsettings_title "Choose your experience.">
+<!ENTITY firstrun_secsettings_message "We also provide you with additional settings for bumping up your browser security. Our Security Settings allow you to block elements that could be used to attack your computer.">
+<!ENTITY firstrun_secsettings_next "Next">
+<!ENTITY firstrun_tips_tab_title "Tips">
+<!ENTITY firstrun_tips_title "Experience Tips.">
+<!ENTITY firstrun_tips_message "With all the security and privacy features provided by Tor, your experience while browsing the internet may be a little different. Things may be a bit slower and depending on your security level, some elements may not work or load. You may also be asked to prove you are a human and not a robot.">
+<!ENTITY firstrun_tips_next "Next">
+<!ENTITY firstrun_onionservices_tab_title "Onions">
+<!ENTITY firstrun_onionservices_title "Onion Services.">
+<!ENTITY firstrun_onionservices_message "Onion services are sites that end with a .onion that provide extra protections to publishers and visitors, including added safeguards against censorship. Onion services allow anyone to provide content and services anonymously.">
+<!ENTITY firstrun_onionservices_next "Go to explore">
