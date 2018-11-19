@@ -5,6 +5,18 @@
   "AndroidPreferences": {
     "homepage": "about:tor",
     "startpane_enabled_after_57": true,
-    "startpane_enabled": true
+    "startpane_enabled": true,
+    "history.clear_on_exit":  [
+      "private.data.openTabs",
+      "private.data.history",
+      "private.data.searchHistory",
+      "private.data.formdata",
+      "private.data.cookies_sessions",
+      "private.data.cache",
+      "private.data.offlineApps",
+      "private.data.siteSettings",
+      "private.data.syncedTabs",
+      "private.data.passwords"
+    ]
   }
 }
