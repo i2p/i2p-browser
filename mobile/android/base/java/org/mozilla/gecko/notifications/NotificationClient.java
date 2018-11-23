@@ -7,12 +7,15 @@ package org.mozilla.gecko.notifications;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -28,6 +31,8 @@ import org.mozilla.gecko.NotificationListener;
 import org.mozilla.gecko.R;
 import org.mozilla.gecko.util.BitmapUtils;
 
+import org.torproject.android.service.util.NotificationBuilderCompat;
+
 /**
  * Client for posting notifications.
  */
@@ -37,8 +42,11 @@ public final class NotificationClient implements NotificationListener {
     /* package */ static final String CLOSE_ACTION = AppConstants.ANDROID_PACKAGE_NAME + ".NOTIFICATION_CLOSE";
     /* package */ static final String PERSISTENT_INTENT_EXTRA = "persistentIntent";
 
+    private static final String NOTIFICATION_CHANNEL_ID = NotificationBuilderCompat.DEFAULT_CHANNEL_ID;
+
     private final Context mContext;
     private final NotificationManagerCompat mNotificationManager;
+    private NotificationManager mNativeNotificationManager;
 
     private final HashMap<String, Notification> mNotifications = new HashMap<>();
 
@@ -57,6 +65,8 @@ public final class NotificationClient implements NotificationListener {
     public NotificationClient(Context context) {
         mContext = context.getApplicationContext();
         mNotificationManager = NotificationManagerCompat.from(mContext);
+
+        createNotificationChannel();
     }
 
     @Override // NotificationListener
@@ -70,6 +80,31 @@ public final class NotificationClient implements NotificationListener {
                                            String text, String host, String imageUrl,
                                            String data) {
         showNotification(name, cookie, title, text, host, imageUrl, data != null ? data : "");
+    }
+
+    /* Only create the notification channel if we're running on Android O or later.
+     * The notification channel is required for notifications on new Android versions.
+     */
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+
+        NotificationManager mNativeNotificationManager =
+            (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        CharSequence name = mContext.getString(R.string.app_name);
+        String description = mContext.getString(R.string.app_description);
+        int importance = NotificationManager.IMPORTANCE_LOW;
+
+        NotificationChannel mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
+        mChannel.setDescription(description);
+        mChannel.enableLights(false);
+        mChannel.enableVibration(false);
+        mChannel.setShowBadge(false);
+        mChannel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
+
+        mNativeNotificationManager.createNotificationChannel(mChannel);
     }
 
     private void showNotification(String name, String cookie, String title,
@@ -142,7 +177,7 @@ public final class NotificationClient implements NotificationListener {
     private void add(final String name, final String imageUrl, final String host,
                      final String alertTitle, final String alertText,
                      final PendingIntent contentIntent, final PendingIntent deleteIntent) {
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
+        final NotificationBuilderCompat builder = new NotificationBuilderCompat(mContext)
                 .setContentTitle(alertTitle)
                 .setContentText(alertText)
                 .setSmallIcon(R.drawable.ic_status_logo)
@@ -150,7 +185,7 @@ public final class NotificationClient implements NotificationListener {
                 .setDeleteIntent(deleteIntent)
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_SOUND)
-                .setStyle(new NotificationCompat.BigTextStyle()
+                .setStyle(new Notification.BigTextStyle()
                         .bigText(alertText)
                         .setSummaryText(host));
 
