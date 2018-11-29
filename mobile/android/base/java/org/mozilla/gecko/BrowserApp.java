@@ -3155,6 +3155,29 @@ public class BrowserApp extends GeckoApp
         // Don't show any onFinish actions when hiding from this Activity.
         mFirstrunAnimationContainer.registerOnFinishListener(null);
         mFirstrunAnimationContainer.hide();
+
+        // This is a little hacky, but this ensures about:tor (or whichever homepage
+        // is configured) shows when the user closes the FirstRun panels.
+        String homepageUrl = Tabs.getHomepage(BrowserApp.this);
+
+        // If the homepage is already open in one of the tabs, then switch to that tab.
+        int homepage_index = Tabs.getInstance().isOpen(homepageUrl);
+        if (homepage_index != Tabs.INVALID_TAB_ID) {
+            Tabs.getInstance().selectTab(homepage_index);
+            return true;
+        }
+
+        // Open in the currently selected tab by default
+        int tab_flags = Tabs.LOADURL_NONE;
+
+        // If there's more than one tab open, then the user opened at least one of them.
+        // Don't modify their tabs and open a new tab for the homepage.
+        if (Tabs.getInstance().getDisplayCount() > 1) {
+            tab_flags = Tabs.LOADURL_NEW_TAB;
+        }
+
+        Tabs.getInstance().loadUrl(homepageUrl, tab_flags);
+
         return true;
     }
 
