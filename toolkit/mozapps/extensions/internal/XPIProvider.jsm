@@ -1603,6 +1603,16 @@ var XPIStates = {
       for (let [id, file] of location.getAddonLocations(true)) {
         knownIds.delete(id);
 
+        // Uninstall torbutton if it is installed in the user profile on Android
+        if (AppConstants.platform === "android" &&
+            id === "torbutton@torproject.org" &&
+            location.name === KEY_APP_PROFILE) {
+          logger.debug("Uninstalling torbutton from user profile.");
+          location.uninstallAddon(id);
+          changed = true;
+          continue;
+        }
+
         let xpiState = loc.get(id);
         if (!xpiState) {
           logger.debug("New add-on ${id} in ${location}", {id, location: location.name});
