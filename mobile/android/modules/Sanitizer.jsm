@@ -124,18 +124,9 @@ Sanitizer.prototype = {
         sss.clearAll();
 
         // Clear push subscriptions
-        yield new Promise((resolve, reject) => {
-          let push = Cc["@mozilla.org/push/Service;1"]
-                       .getService(Ci.nsIPushService);
-          push.clearForDomain("*", status => {
-            if (Components.isSuccessCode(status)) {
-              resolve();
-            } else {
-              reject(new Error("Error clearing push subscriptions: " +
-                               status));
-            }
-          });
-        });
+        // Avoid throwing an error because Ci.nsIPushService isn't implemented
+        // All other clearing actions should succeed if we arrive here.
+        Promise.resolve();
         TelemetryStopwatch.finish("FX_SANITIZE_SITESETTINGS", refObj);
       }),
 
@@ -344,11 +335,8 @@ Sanitizer.prototype = {
       },
 
       canClear: function(aCallback) {
-        Accounts.anySyncAccountsExist().then(aCallback)
-          .catch(function(err) {
-            Cu.reportError("Java-side synced tabs clearing failed: " + err);
-            aCallback(false);
-          });
+        // We can't clear syncedTabs because Sync is non-functional
+        aCallback(false);
       }
     }
 
