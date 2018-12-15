@@ -242,7 +242,7 @@
 @RESPATH@/components/jsdebugger.xpt
 @RESPATH@/browser/components/jsinspector.xpt
 @RESPATH@/components/layout_base.xpt
-#ifdef MOZ_DEBUG
+#if defined(ENABLE_TESTS) && defined(MOZ_DEBUG)
 @RESPATH@/components/layout_debug.xpt
 #endif
 #ifdef NS_PRINTING
