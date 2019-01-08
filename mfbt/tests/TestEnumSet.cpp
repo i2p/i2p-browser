@@ -33,6 +33,65 @@ enum SeaBird
   AUK
 };
 
+enum DeepSeaFish
+{
+  FLATFISH,
+  HAGFISH,
+  EELPOUT,
+  GREENEYE_EEL,
+  STRINGRAY,
+  LUMPFISH,
+  BATFISH,
+  RATTAIL,
+  BROTULA,
+  BRISTLEMOUTH,
+  ANGLERFISH,
+  FANGTOOTH,
+  VIPERFISH,
+  BLACK_SWALLOWER,
+  TELESCOPEFISH,
+  HAMMERJAW,
+  DAGGERTOOTH,
+  BARRACUDINA,
+  SCABBARDFISH,
+  BOBTAIL_SNIPE_EEL,
+  UNICORN_CRESTFISH,
+  PELICAN_EEL,
+  FLABBY_WHALEFISH,
+  LANTERNFISH,
+  OPAH,
+  LANCEFISH,
+  BARRELEYE,
+  RIDGEHEAD,
+  SABRETOOTH,
+  STOPLIGHT_LOOSEJAW,
+  HATCHETFISH,
+  DOLPHINFISH,
+  POMFRET,
+  BARRACUDA,
+  SNAGGLETOOTH,
+  BLACKSMELT,
+  TAPIRFISH,
+  GRENADIER,
+  SLICKHEAD,
+  OREODORY,
+  SPIDERFISH,
+};
+
+enum Mollusc
+{
+  SNAIL,
+  SLUG,
+  CLAM,
+  OYSTER,
+  SCALLOP,
+  GEODUCK,
+  MUSSEL,
+  SQUID,
+  OCTOPUS,
+  CUTTLEFISH
+};
+
 class EnumSetSuite
 {
 public:
@@ -62,6 +121,8 @@ public:
     testDuplicates();
     testIteration();
     testInitializerListConstuctor();
+    testLargeEnum();
+    testSmallEnum();
   }
 
 private:
@@ -271,6 +332,66 @@ private:
     MOZ_RELEASE_ASSERT(someBirds.contains(SKIMMER));
     MOZ_RELEASE_ASSERT(someBirds.contains(GULL));
     MOZ_RELEASE_ASSERT(someBirds.contains(BOOBY));
+  }
+
+  void testLargeEnum()
+  {
+    typedef EnumSet<DeepSeaFish, uint64_t> FishSet;
+    FishSet fishes {};
+    MOZ_RELEASE_ASSERT(fishes.size() == 0);
+    MOZ_RELEASE_ASSERT(fishes.isEmpty());
+
+    fishes += ANGLERFISH;
+    fishes += SPIDERFISH;
+    fishes += GRENADIER;
+    fishes += FLATFISH;
+
+    MOZ_RELEASE_ASSERT(fishes.size() == 4);
+    MOZ_RELEASE_ASSERT(fishes.contains(ANGLERFISH));
+    MOZ_RELEASE_ASSERT(fishes.contains(SPIDERFISH));
+    MOZ_RELEASE_ASSERT(fishes.contains(GRENADIER));
+    MOZ_RELEASE_ASSERT(fishes.contains(FLATFISH));
+
+    Vector<DeepSeaFish> vec;
+    for (auto fish : fishes) {
+      MOZ_RELEASE_ASSERT(vec.append(fish));
+    }
+
+    MOZ_RELEASE_ASSERT(vec.length() == 4);
+    MOZ_RELEASE_ASSERT(vec[0] == FLATFISH);
+    MOZ_RELEASE_ASSERT(vec[1] == ANGLERFISH);
+    MOZ_RELEASE_ASSERT(vec[2] == GRENADIER);
+    MOZ_RELEASE_ASSERT(vec[3] == SPIDERFISH);
+  }
+
+  void testSmallEnum()
+  {
+    typedef EnumSet<Mollusc, uint16_t> MolluscSet;
+    MolluscSet molluscs {};
+    MOZ_RELEASE_ASSERT(molluscs.size() == 0);
+    MOZ_RELEASE_ASSERT(molluscs.isEmpty());
+
+    molluscs += OYSTER;
+    molluscs += SQUID;
+    molluscs += SNAIL;
+    molluscs += CUTTLEFISH;
+
+    MOZ_RELEASE_ASSERT(molluscs.size() == 4);
+    MOZ_RELEASE_ASSERT(molluscs.contains(OYSTER));
+    MOZ_RELEASE_ASSERT(molluscs.contains(SQUID));
+    MOZ_RELEASE_ASSERT(molluscs.contains(SNAIL));
+    MOZ_RELEASE_ASSERT(molluscs.contains(CUTTLEFISH));
+
+    Vector<Mollusc> vec;
+    for (auto mollusc : molluscs) {
+      MOZ_RELEASE_ASSERT(vec.append(mollusc));
+    }
+
+    MOZ_RELEASE_ASSERT(vec.length() == 4);
+    MOZ_RELEASE_ASSERT(vec[0] == SNAIL);
+    MOZ_RELEASE_ASSERT(vec[1] == OYSTER);
+    MOZ_RELEASE_ASSERT(vec[2] == SQUID);
+    MOZ_RELEASE_ASSERT(vec[3] == CUTTLEFISH);
   }
 
   EnumSet<SeaBird> mAlcidae;
