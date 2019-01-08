@@ -107,15 +107,19 @@ static inline size_t GetGCKindSlots(AllocKind thingKind) {
     case AllocKind::OBJECT2:
     case AllocKind::OBJECT2_BACKGROUND:
       return 2;
+    case AllocKind::ARRAYBUFFER4:
     case AllocKind::OBJECT4:
     case AllocKind::OBJECT4_BACKGROUND:
       return 4;
+    case AllocKind::ARRAYBUFFER8:
     case AllocKind::OBJECT8:
     case AllocKind::OBJECT8_BACKGROUND:
       return 8;
+    case AllocKind::ARRAYBUFFER12:
     case AllocKind::OBJECT12:
     case AllocKind::OBJECT12_BACKGROUND:
       return 12;
+    case AllocKind::ARRAYBUFFER16:
     case AllocKind::OBJECT16:
     case AllocKind::OBJECT16_BACKGROUND:
       return 16;

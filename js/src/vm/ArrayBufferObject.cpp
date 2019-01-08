@@ -1044,6 +1044,19 @@ void ArrayBufferObject::setFlags(uint32_t flags) {
   setSlot(FLAGS_SLOT, Int32Value(flags));
 }
 
+static inline AllocKind GetArrayBufferGCObjectKind(size_t numSlots) {
+  if (numSlots <= 4) {
+    return AllocKind::ARRAYBUFFER4;
+  }
+  if (numSlots <= 8) {
+    return AllocKind::ARRAYBUFFER8;
+  }
+  if (numSlots <= 12) {
+    return AllocKind::ARRAYBUFFER12;
+  }
+  return AllocKind::ARRAYBUFFER16;
+}
+
 ArrayBufferObject* ArrayBufferObject::create(
     JSContext* cx, uint32_t nbytes, BufferContents contents,
     OwnsState ownsState /* = OwnsData */, HandleObject proto /* = nullptr */,
@@ -1104,7 +1117,7 @@ ArrayBufferObject* ArrayBufferObject::create(
   }
 
   MOZ_ASSERT(!(class_.flags & JSCLASS_HAS_PRIVATE));
-  gc::AllocKind allocKind = GetGCObjectKind(nslots);
+  gc::AllocKind allocKind = GetArrayBufferGCObjectKind(nslots);
 
   AutoSetNewObjectMetadata metadata(cx);
   Rooted<ArrayBufferObject*> obj(cx, NewObjectWithClassProto<ArrayBufferObject>(

@@ -461,8 +461,10 @@ static const FinalizePhase BackgroundFinalizePhases[] = {
     {gcstats::PhaseKind::SWEEP_OBJECT,
      {AllocKind::FUNCTION, AllocKind::FUNCTION_EXTENDED,
       AllocKind::OBJECT0_BACKGROUND, AllocKind::OBJECT2_BACKGROUND,
-      AllocKind::OBJECT4_BACKGROUND, AllocKind::OBJECT8_BACKGROUND,
-      AllocKind::OBJECT12_BACKGROUND, AllocKind::OBJECT16_BACKGROUND}},
+      AllocKind::ARRAYBUFFER4, AllocKind::OBJECT4_BACKGROUND,
+      AllocKind::ARRAYBUFFER8, AllocKind::OBJECT8_BACKGROUND,
+      AllocKind::ARRAYBUFFER12, AllocKind::OBJECT12_BACKGROUND,
+      AllocKind::ARRAYBUFFER16, AllocKind::OBJECT16_BACKGROUND}},
     {gcstats::PhaseKind::SWEEP_SCOPE,
      {
          AllocKind::SCOPE,
@@ -692,7 +694,7 @@ bool ChunkPool::contains(Chunk* chunk) const {
 bool ChunkPool::verify() const {
   MOZ_ASSERT(bool(head_) == bool(count_));
   uint32_t count = 0;
-  for (Chunk *cursor = head_; cursor; cursor = cursor->info.next, ++count) {
+  for (Chunk* cursor = head_; cursor; cursor = cursor->info.next, ++count) {
     MOZ_ASSERT_IF(cursor->info.prev, cursor->info.prev->info.next == cursor);
     MOZ_ASSERT_IF(cursor->info.next, cursor->info.next->info.prev == cursor);
   }
@@ -1870,20 +1872,36 @@ static bool CanRelocateZone(Zone* zone) {
   return !zone->isAtomsZone() && !zone->isSelfHostingZone();
 }
 
-static const AllocKind AllocKindsToRelocate[] = {
-    AllocKind::FUNCTION,        AllocKind::FUNCTION_EXTENDED,
-    AllocKind::OBJECT0,         AllocKind::OBJECT0_BACKGROUND,
-    AllocKind::OBJECT2,         AllocKind::OBJECT2_BACKGROUND,
-    AllocKind::OBJECT4,         AllocKind::OBJECT4_BACKGROUND,
-    AllocKind::OBJECT8,         AllocKind::OBJECT8_BACKGROUND,
-    AllocKind::OBJECT12,        AllocKind::OBJECT12_BACKGROUND,
-    AllocKind::OBJECT16,        AllocKind::OBJECT16_BACKGROUND,
-    AllocKind::SCRIPT,          AllocKind::LAZY_SCRIPT,
-    AllocKind::SHAPE,           AllocKind::ACCESSOR_SHAPE,
-    AllocKind::BASE_SHAPE,      AllocKind::FAT_INLINE_STRING,
-    AllocKind::STRING,          AllocKind::EXTERNAL_STRING,
-    AllocKind::FAT_INLINE_ATOM, AllocKind::ATOM,
-    AllocKind::SCOPE,           AllocKind::REGEXP_SHARED};
+static const AllocKind AllocKindsToRelocate[] = {AllocKind::FUNCTION,
+                                                 AllocKind::FUNCTION_EXTENDED,
+                                                 AllocKind::OBJECT0,
+                                                 AllocKind::OBJECT0_BACKGROUND,
+                                                 AllocKind::OBJECT2,
+                                                 AllocKind::OBJECT2_BACKGROUND,
+                                                 AllocKind::ARRAYBUFFER4,
+                                                 AllocKind::OBJECT4,
+                                                 AllocKind::OBJECT4_BACKGROUND,
+                                                 AllocKind::ARRAYBUFFER8,
+                                                 AllocKind::OBJECT8,
+                                                 AllocKind::OBJECT8_BACKGROUND,
+                                                 AllocKind::ARRAYBUFFER12,
+                                                 AllocKind::OBJECT12,
+                                                 AllocKind::OBJECT12_BACKGROUND,
+                                                 AllocKind::ARRAYBUFFER16,
+                                                 AllocKind::OBJECT16,
+                                                 AllocKind::OBJECT16_BACKGROUND,
+                                                 AllocKind::SCRIPT,
+                                                 AllocKind::LAZY_SCRIPT,
+                                                 AllocKind::SHAPE,
+                                                 AllocKind::ACCESSOR_SHAPE,
+                                                 AllocKind::BASE_SHAPE,
+                                                 AllocKind::FAT_INLINE_STRING,
+                                                 AllocKind::STRING,
+                                                 AllocKind::EXTERNAL_STRING,
+                                                 AllocKind::FAT_INLINE_ATOM,
+                                                 AllocKind::ATOM,
+                                                 AllocKind::SCOPE,
+                                                 AllocKind::REGEXP_SHARED};
 
 Arena* ArenaList::removeRemainingArenas(Arena** arenap) {
 // This is only ever called to remove arenas that are after the cursor, so
@@ -2516,14 +2534,24 @@ static const AllocKinds UpdatePhaseMisc{
     AllocKind::SHAPE,  AllocKind::ACCESSOR_SHAPE, AllocKind::OBJECT_GROUP,
     AllocKind::STRING, AllocKind::JITCODE,        AllocKind::SCOPE};
 
-static const AllocKinds UpdatePhaseObjects{
-    AllocKind::FUNCTION, AllocKind::FUNCTION_EXTENDED,
-    AllocKind::OBJECT0,  AllocKind::OBJECT0_BACKGROUND,
-    AllocKind::OBJECT2,  AllocKind::OBJECT2_BACKGROUND,
-    AllocKind::OBJECT4,  AllocKind::OBJECT4_BACKGROUND,
-    AllocKind::OBJECT8,  AllocKind::OBJECT8_BACKGROUND,
-    AllocKind::OBJECT12, AllocKind::OBJECT12_BACKGROUND,
-    AllocKind::OBJECT16, AllocKind::OBJECT16_BACKGROUND};
+static const AllocKinds UpdatePhaseObjects{AllocKind::FUNCTION,
+                                           AllocKind::FUNCTION_EXTENDED,
+                                           AllocKind::OBJECT0,
+                                           AllocKind::OBJECT0_BACKGROUND,
+                                           AllocKind::OBJECT2,
+                                           AllocKind::OBJECT2_BACKGROUND,
+                                           AllocKind::ARRAYBUFFER4,
+                                           AllocKind::OBJECT4,
+                                           AllocKind::OBJECT4_BACKGROUND,
+                                           AllocKind::ARRAYBUFFER8,
+                                           AllocKind::OBJECT8,
+                                           AllocKind::OBJECT8_BACKGROUND,
+                                           AllocKind::ARRAYBUFFER12,
+                                           AllocKind::OBJECT12,
+                                           AllocKind::OBJECT12_BACKGROUND,
+                                           AllocKind::ARRAYBUFFER16,
+                                           AllocKind::OBJECT16,
+                                           AllocKind::OBJECT16_BACKGROUND};
 
 void GCRuntime::updateAllCellPointers(MovingTracer* trc, Zone* zone) {
   size_t bgTaskCount = CellUpdateBackgroundTaskCount();
