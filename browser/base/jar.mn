@@ -48,7 +48,6 @@ browser.jar:
         content/browser/abouttbupdate/aboutTBUpdate.xhtml    (content/abouttbupdate/aboutTBUpdate.xhtml)
         content/browser/abouttbupdate/aboutTBUpdate.js       (content/abouttbupdate/aboutTBUpdate.js)
         content/browser/abouttbupdate/aboutTBUpdate.css      (content/abouttbupdate/aboutTBUpdate.css)
-        content/browser/abouttbupdate/aboutTBUpdateLogo.png  (content/abouttbupdate/aboutTBUpdateLogo.png)
 #endif
 *       content/browser/browser.css                   (content/browser.css)
         content/browser/browser.js                    (content/browser.js)
