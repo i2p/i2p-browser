@@ -20,6 +20,7 @@ pref("startup.homepage_override_url", "https://blog.torproject.org/category/tags
 // Try to nag a bit more about updates: Pop up a restart dialog an hour after the initial dialog
 pref("app.update.promptWaitTime", 3600);
 pref("app.update.badge", true);
+pref("app.update.notifyDuringDownload", true);
 pref("extensions.hotfix.id", ""); // Bug 16837: Disable hotfix updates as they may cause compat issues
 
 #ifdef XP_WIN
