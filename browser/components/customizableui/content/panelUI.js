@@ -53,12 +53,14 @@ const PanelUI = {
 
   init() {
     this._initElements();
+    this._initUpdaterStrings();
 
     this.menuButton.addEventListener("mousedown", this);
     this.menuButton.addEventListener("keypress", this);
 
     Services.obs.addObserver(this, "fullscreen-nav-toolbox");
     Services.obs.addObserver(this, "appMenu-notifications");
+    Services.obs.addObserver(this, "show-update-progress");
 
     XPCOMUtils.defineLazyPreferenceGetter(
       this,
@@ -144,6 +146,28 @@ const PanelUI = {
     }
   },
 
+  _initUpdaterStrings() {
+    // If Torbutton is installed and enabled, replace the "Downloading update"
+    // string with one from torbutton.properties (to facilitate localization).
+    try {
+      let brands = Services.strings.createBundle(
+                                 "chrome://branding/locale/brand.properties");
+      let stringArgs = [brands.GetStringFromName("brandShortName")];
+      let torbuttonBundle = Services.strings.createBundle(
+                            "chrome://torbutton/locale/torbutton.properties");
+      let label = torbuttonBundle.formatStringFromName(
+                              "updateDownloadingPanelUILabel", stringArgs, 1);
+      let attrName = "label-update-downloading";
+      let elements = document.getElementsByClassName("panel-banner-item");
+      for (let i = 0; i < elements.length; ++i) {
+        let elem = elements.item(i);
+        if (elem.hasAttribute(attrName)) {
+          elem.setAttribute(attrName, label);
+        }
+      }
+    } catch (e) {}
+  },
+
   _eventListenersAdded: false,
   _ensureEventListenersAdded() {
     if (this._eventListenersAdded) {
@@ -177,6 +201,7 @@ const PanelUI = {
 
     Services.obs.removeObserver(this, "fullscreen-nav-toolbox");
     Services.obs.removeObserver(this, "appMenu-notifications");
+    Services.obs.removeObserver(this, "show-update-progress");
 
     window.removeEventListener("MozDOMFullscreen:Entered", this);
     window.removeEventListener("MozDOMFullscreen:Exited", this);
@@ -264,6 +289,9 @@ const PanelUI = {
         }
         this._notifications = AppMenuNotifications.notifications;
         this._updateNotifications(true);
+        break;
+      case "show-update-progress":
+        openAboutDialog();
         break;
     }
   },

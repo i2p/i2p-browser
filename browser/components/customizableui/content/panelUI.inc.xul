@@ -231,6 +231,7 @@
         <vbox id="appMenu-addon-banners"/>
         <toolbarbutton class="panel-banner-item"
                        label-update-available="&updateAvailable.panelUI.label;"
+                       label-update-downloading="Downloading update"
                        label-update-manual="&updateManual.panelUI.label;"
                        label-update-unsupported="&updateUnsupported.panelUI.label;"
                        label-update-restart="&updateRestart.panelUI.label2;"

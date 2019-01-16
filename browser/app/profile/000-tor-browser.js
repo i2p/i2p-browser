@@ -20,6 +20,7 @@ pref("startup.homepage_override_url", "https://blog.torproject.org/category/tags
 // Try to nag a bit more about updates: Pop up a restart dialog an hour after the initial dialog
 pref("app.update.promptWaitTime", 3600);
 pref("app.update.badge", true);
+pref("app.update.notifyDuringDownload", true);
 
 #ifndef XP_MACOSX
 // Disable staged updates on platforms other than macOS.

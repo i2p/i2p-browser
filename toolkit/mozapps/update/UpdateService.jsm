@@ -66,6 +66,7 @@ const PREF_APP_UPDATE_IDLETIME = "app.update.idletime";
 const PREF_APP_UPDATE_LOG = "app.update.log";
 const PREF_APP_UPDATE_LOG_FILE = "app.update.log.file";
 const PREF_APP_UPDATE_NOTIFIEDUNSUPPORTED = "app.update.notifiedUnsupported";
+const PREF_APP_UPDATE_NOTIFYDURINGDOWNLOAD = "app.update.notifyDuringDownload";
 const PREF_APP_UPDATE_POSTUPDATE = "app.update.postupdate";
 const PREF_APP_UPDATE_PROMPTWAITTIME = "app.update.promptWaitTime";
 const PREF_APP_UPDATE_SERVICE_ENABLED = "app.update.service.enabled";
@@ -4458,11 +4459,13 @@ Downloader.prototype = {
         // retrying after a failed cancel is not an error, so we will set the
         // cancel promise to null in the failure case.
         this._cancelPromise = null;
+        this._notifyDownloadStatusObservers();
         throw e;
       }
     } else if (this._request && this._request instanceof Ci.nsIRequest) {
       this._request.cancel(cancelError);
     }
+    this._notifyDownloadStatusObservers();
   },
 
   /**
@@ -4675,6 +4678,13 @@ Downloader.prototype = {
     um.activeUpdate = update;
 
     return selectedPatch;
+  },
+
+  _notifyDownloadStatusObservers: function Downloader_notifyDownloadStatusObservers() {
+    if (Services.prefs.getBoolPref(PREF_APP_UPDATE_NOTIFYDURINGDOWNLOAD, false)) {
+      let status = this.updateService.isDownloading ? "downloading" : "idle";
+      Services.obs.notifyObservers(this._update, "update-downloading", status);
+    }
   },
 
   /**
@@ -4929,6 +4939,9 @@ Downloader.prototype = {
         .getService(Ci.nsIUpdateManager)
         .saveUpdates();
     }
+
+    this._notifyDownloadStatusObservers();
+
     return STATE_DOWNLOADING;
   },
 
@@ -5301,9 +5314,16 @@ Downloader.prototype = {
         } else {
           state = STATE_PENDING;
         }
+#if defined(TOR_BROWSER_UPDATE)
+        // In Tor Browser, show update-related messages in the hamburger menu
+        // even if the update was started in the foreground, e.g., from the
+        // about box.
+        shouldShowPrompt = !getCanStageUpdates();
+#else
         if (this.background) {
           shouldShowPrompt = !getCanStageUpdates();
         }
+#endif
         AUSTLMY.pingDownloadCode(this.isCompleteUpdate, AUSTLMY.DWNLD_SUCCESS);
 
         // Tell the updater.exe we're ready to apply.
@@ -5471,6 +5491,7 @@ Downloader.prototype = {
     }
 
     this._request = null;
+    this._notifyDownloadStatusObservers();
 
     if (state == STATE_DOWNLOAD_FAILED) {
       var allFailed = true;
@@ -5600,9 +5621,16 @@ Downloader.prototype = {
           LOG(
             "Downloader:onStopRequest - failed to stage update. Exception: " + e
           );
+#if defined(TOR_BROWSER_UPDATE)
+          // In Tor Browser, show update-related messages in the hamburger menu
+          // even if the update was started in the foreground, e.g., from the
+          // about box.
+          shouldShowPrompt = true;
+#else
           if (this.background) {
             shouldShowPrompt = true;
           }
+#endif
         }
       } else {
         this._patch.setProperty("applyStart", Math.floor(Date.now() / 1000));
