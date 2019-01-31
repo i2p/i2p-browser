@@ -318,11 +318,18 @@ appUpdater.prototype =
     this.update.QueryInterface(Ci.nsIWritablePropertyBag);
     this.update.setProperty("foregroundDownload", "true");
 
-    this.aus.pauseDownload();
-    let state = this.aus.downloadUpdate(this.update, false);
-    if (state == "failed") {
-      this.selectPanel("downloadFailed");
-      return;
+    // If one is not already in progress, start a download. Previously,
+    // we would pause and restart an existing download in case there was
+    // a need to transition from a background download to a foreground one,
+    // but that caused Tor bug 29180. There is no difference between a
+    // foreground and background download unless the update manifest
+    // includes a backgroundInterval attribute.
+    if (!this.isDownloading) {
+      let state = this.aus.downloadUpdate(this.update, false);
+      if (state == "failed") {
+        this.selectPanel("downloadFailed");
+        return;
+      }
     }
 
     this.setupDownloadingUI();

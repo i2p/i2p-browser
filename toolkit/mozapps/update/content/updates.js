@@ -751,19 +751,22 @@ var gDownloadingPage = {
       gUpdates.update.QueryInterface(Ci.nsIWritablePropertyBag);
       gUpdates.update.setProperty("foregroundDownload", "true");
 
-      // Pause any active background download and restart it as a foreground
-      // download.
-      aus.pauseDownload();
-      var state = aus.downloadUpdate(gUpdates.update, false);
-      if (state == "failed") {
-        // We've tried as hard as we could to download a valid update -
-        // we fell back from a partial patch to a complete patch and even
-        // then we couldn't validate. Show a validation error with instructions
-        // on how to manually update.
-        this.cleanUp();
-        gUpdates.wiz.goTo("errors");
-        return;
+      // If it is not already in progress, start the download. See
+      // Tor bug 29180 as well as the longer comment in the startDownload()
+      // function within browser/base/content/aboutDialog-appUpdater.js.
+      if (!aus.isDownloading) {
+        var state = aus.downloadUpdate(gUpdates.update, false);
+        if (state == "failed") {
+          // We've tried as hard as we could to download a valid update -
+          // we fell back from a partial patch to a complete patch and even
+          // then we couldn't validate. Show a validation error with
+          // instructions on how to manually update.
+          this.cleanUp();
+          gUpdates.wiz.goTo("errors");
+          return;
+        }
       }
+
       // Add this UI as a listener for active downloads
       aus.addDownloadListener(this);
 
