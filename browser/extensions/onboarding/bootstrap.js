@@ -91,16 +91,17 @@ function setPrefs(prefs) {
   });
 }
 
-function openTorCircuitDisplayPage() {
-  let kFrameScript = "resource://onboarding/onboarding-tor-circuit-display.js";
-  const kOnionURL = "https://3g2upl4pq6kufc4m.onion/";	// DuckDuckGo
+function openTorTab(aURL, aFrameScript) {
   let win = Services.wm.getMostRecentWindow('navigator:browser');
   if (win) {
     let tabBrowser = win.gBrowser;
-    let tab = tabBrowser.addTab(kOnionURL);
+    let tab = tabBrowser.addTab(aURL);
     tabBrowser.selectedTab = tab;
-    let b = tabBrowser.getBrowserForTab(tab);
-    b.messageManager.loadFrameScript(kFrameScript, true);
+
+    if (aFrameScript) {
+      let b = tabBrowser.getBrowserForTab(tab);
+      b.messageManager.loadFrameScript(aFrameScript, true);
+    }
   }
 }
 
@@ -177,8 +178,8 @@ function initContentMessageListener() {
           isLoggedIn: syncTourChecker.isLoggedIn()
         });
         break;
-      case "tor-open-circuit-display-page":
-        openTorCircuitDisplayPage();
+      case "tor-open-tab":
+        openTorTab(msg.data.params.url, msg.data.params.frameScriptURL);
         break;
 #if 0
 // No telemetry in Tor Browser.
