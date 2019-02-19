@@ -1,0 +1,12 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+
+<vector android:height="24dp" android:viewportHeight="289"
+    android:viewportWidth="249" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M100.02,44.97C96.2,31.15 83.92,21.59 69.91,21.51V0c16.52,0 32.07,7.97 41.98,21.51V0h20.99v21.51C142.78,7.97 158.33,0 174.85,0v21.51c-14.01,0.08 -26.29,9.63 -30.12,23.45C203.49,54.97 41.26,54.97 100.02,44.97z"/>
+    <path android:fillColor="#FF000000" android:pathData="M123.92,52.47c-62.22,0 -112.65,50.44 -112.65,112.65c0,62.22 50.44,112.65 112.65,112.65V52.47z"/>
+    <path android:fillColor="#FF000000" android:pathData="M123.92,266.51c56,0 101.39,-45.39 101.39,-101.39c0,-56 -45.39,-101.39 -101.39,-101.39S22.53,109.13 22.53,165.12C22.53,221.12 67.92,266.51 123.92,266.51zM123.92,289.04C55.48,289.04 0,233.56 0,165.12S55.48,41.2 123.92,41.2s123.92,55.48 123.92,123.92S192.36,289.04 123.92,289.04z"/>
+    <path android:fillColor="#FF000000" android:pathData="M124.92,78.78v22.53c34.79,0.54 62.84,28.89 62.84,63.81c0,34.92 -28.04,63.28 -62.84,63.81v22.53c47.24,-0.54 85.37,-38.98 85.37,-86.34C210.29,117.76 172.16,79.32 124.92,78.78z"/>
+    <path android:fillColor="#FF000000" android:pathData="M123.92,116.31v22.53c14.52,0 26.29,11.77 26.29,26.29s-11.77,26.29 -26.29,26.29v22.53c26.96,0 48.82,-21.86 48.82,-48.82C172.74,138.16 150.88,116.31 123.92,116.31z"/>
+</vector>

@@ -87,6 +87,35 @@
   <string name="firstrun_onionservices_message">&firstrun_onionservices_message;</string>
   <string name="firstrun_onionservices_next">&firstrun_onionservices_next;</string>
 
+  <string name="pref_tor_network_title">&pref_tor_network_title;</string>
+  <string name="pref_tor_select_a_bridge_title">&pref_tor_select_a_bridge_title;</string>
+  <string name="pref_tor_provide_a_bridge_title">&pref_tor_provide_a_bridge_title;</string>
+  <string name="pref_category_tor_network_summary">&pref_category_tor_network_summary;</string>
+  <string name="pref_category_tor_bridge_summary">&pref_category_tor_bridge_summary;</string>
+  <string name="tor_notify_user_about_error">&tor_notify_user_about_error;</string>
+
+  <string name="tor_bootstrap_swipe_for_logs">&tor_bootstrap_swipe_for_logs;</string>
+  <string name="tor_bootstrap_connect">&tor_bootstrap_connect;</string>
+  <string name="tor_bootstrap_starting_status">&tor_bootstrap_starting_status;</string>
+
+  <string name="pref_choice_tor_bridges_enabled_title">&pref_choice_tor_bridges_enabled_title;</string>
+  <string name="pref_choice_tor_bridges_enabled_summary">&pref_choice_tor_bridges_enabled_summary;</string>
+  <string name="pref_bridges_type_obfs4">&pref_bridges_type_obfs4;</string>
+  <string name="pref_bridges_type_meek_azure">&pref_bridges_type_meek_azure;</string>
+  <string name="pref_bridges_type_obfs3">&pref_bridges_type_obfs3;</string>
+
+  <string name="pref_tor_bridges_provide_manual_button_title">&pref_tor_bridges_provide_manual_button_title;</string>
+  <string name="pref_tor_bridges_provide_select_text_title">&pref_tor_bridges_provide_select_text_title;</string>
+  <string name="pref_tor_bridges_provide_manual_text_title">&pref_tor_bridges_provide_manual_text_title;</string>
+  <string name="pref_tor_bridges_provide_manual_summary">&pref_tor_bridges_provide_manual_summary;</string>
+
+  <string name="pref_tor_bridges_provide_manual_address_port_placeholder">&pref_tor_bridges_provide_manual_address_port_placeholder;</string>
+  <string name="pref_tor_hint_type_one_per_line">&pref_tor_hint_type_one_per_line;</string>
+  <string name="pref_tor_network_bridges_enabled_change_custom">&pref_tor_network_bridges_enabled_change_custom;</string>
+  <string name="pref_tor_network_bridges_enabled_change_builtin">&pref_tor_network_bridges_enabled_change_builtin;</string>
+  <string name="pref_tor_network_using_multiple_provided_bridges">&pref_tor_network_using_multiple_provided_bridges;</string>
+  <string name="pref_tor_network_using_a_provided_bridge">&pref_tor_network_using_a_provided_bridge;</string>
+
   <string name="bookmarks_title">&bookmarks_title;</string>
   <string name="history_title">&history_title;</string>
 

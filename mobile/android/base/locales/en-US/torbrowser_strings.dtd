@@ -30,4 +30,36 @@
 <!ENTITY firstrun_onionservices_message "Onion services are sites that end with a .onion that provide extra protections to publishers and visitors, including added safeguards against censorship. Onion services allow anyone to provide content and services anonymously.">
 <!ENTITY firstrun_onionservices_next "Go to explore">
 
+<!ENTITY tor_bootstrap_swipe_for_logs "Swipe to the left to see Tor logs">
+<!ENTITY tor_bootstrap_connect "Connect">
+<!ENTITY tor_bootstrap_starting_status "We are connecting to the Tor network...">
+
+<!ENTITY pref_tor_network_title "Network">
+<!ENTITY pref_tor_select_a_bridge_title "Select a Bridge">
+<!ENTITY pref_tor_provide_a_bridge_title "Provide a Bridge">
+
+<!ENTITY pref_category_tor_network_summary "Tor Browser connects you to the Tor Network run by thousands of volunteers around the world! Can these options help you?">
+<!ENTITY pref_category_tor_bridge_summary "Bridges are unlisted Tor relays that make it more difficult to block connections into the Tor network. Because of how some countries try to block Tor, certain bridges work in some countries but not others.">
+
+<!ENTITY pref_choice_tor_bridges_enabled_title "Internet is censored here">
+<!ENTITY pref_choice_tor_bridges_enabled_summary "Tap to configure a bridge to connect to Tor">
+
+<!ENTITY pref_tor_bridges_provide_manual_button_title "Provide a Bridge I know">
+<!ENTITY pref_tor_bridges_provide_select_text_title "Select a Bridge">
+<!ENTITY pref_tor_bridges_provide_manual_text_title "Enter Bridge">
+<!ENTITY pref_tor_bridges_provide_manual_summary "Enter the bridge information you received from a trusted source">
+<!ENTITY pref_tor_bridges_provide_manual_address_port_placeholder "address:port">
+<!ENTITY pref_tor_hint_type_one_per_line "Type one per line">
+
+<!-- When another PT is recommended, change TorNetworkBridgeSelectPreference::saveCurrentCheckedRadioButton(), too -->
+<!ENTITY pref_bridges_type_obfs4 "obfs4 (recommended)">
+<!ENTITY pref_bridges_type_meek_azure "meek-azure">
+<!ENTITY pref_bridges_type_obfs3 "obfs3">
+<!ENTITY pref_tor_network_bridges_enabled_change_builtin "You\'re using a built-in bridge to connect to Tor. Change">
+<!ENTITY pref_tor_network_bridges_enabled_change_custom "You\'re using a custom bridge to connect to Tor. Change">
+<!ENTITY pref_tor_network_using_multiple_provided_bridges "You\'re using multiple custom bridges.">
+<!ENTITY pref_tor_network_using_a_provided_bridge "You\'re using &formatS; bridge.">
+
+<!ENTITY tor_notify_user_about_error "An error occurred, please swipe for more information.">
+
 <!ENTITY sync_not_supported "Sync is not currently supported in Tor Browser on Android">
