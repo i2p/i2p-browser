@@ -51,6 +51,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.text.TextUtils;
@@ -182,6 +183,7 @@ import org.mozilla.gecko.widget.SplashScreen;
 import org.mozilla.geckoview.GeckoSession;
 
 import org.torproject.android.OrbotMainActivity;
+import org.torproject.android.service.TorService;
 import org.torproject.android.service.TorServiceConstants;
 
 import java.io.File;
@@ -270,6 +272,7 @@ public class BrowserApp extends GeckoApp
     private TabsPanel mTabsPanel;
 
     private boolean mOrbotNeedsStart = true;
+    private boolean mTorNeedsStart = true;
 
     private boolean showSplashScreen = false;
     private SplashScreen splashScreen;
@@ -1079,6 +1082,131 @@ public class BrowserApp extends GeckoApp
     }
 
     /**
+     * Send the service a request for the current status.
+     * The response is sent as a broadcast. Capture that in
+     * receiveTorIsStartedAsync().
+     */
+    private void requestTorIsStartedAsync() {
+        Intent torServiceStatus = new Intent(this, TorService.class);
+        torServiceStatus.setAction(TorServiceConstants.ACTION_STATUS);
+        startService(torServiceStatus);
+    }
+
+    private BroadcastReceiver mLocalBroadcastReceiver;
+    private Boolean mTorStatus;
+
+    /**
+     * Setup the status receiver for broadcasts from the service.
+     * The response is sent as a broadcast. Create a background thread
+     * for receiving/handling the broadcast.
+     *
+     * This method is coupled with receiveTorIsStartedAsync(). They should
+     * be used together.
+     */
+    private BroadcastReceiver setupReceiveTorIsStartedAsync() {
+
+        // Create a thread specifically for defining the BroadcastReceiver
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                mLocalBroadcastReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String action = intent.getAction();
+                        if (action == null) {
+                            return;
+                        }
+
+                        // We only want ACTION_STATUS messages
+                        if (!action.equals(TorServiceConstants.ACTION_STATUS)) {
+                            return;
+                        }
+
+                        // The current status has the EXTRA_STATUS key
+                        String currentStatus =
+                            intent.getStringExtra(TorServiceConstants.EXTRA_STATUS);
+
+                        try {
+                            synchronized (mTorStatus) {
+                                mTorStatus = (currentStatus == TorServiceConstants.STATUS_ON);
+                                mTorStatus.notify();
+                            }
+                        } catch (IllegalMonitorStateException e) {
+                            // |synchronized| should prevent this
+                        }
+                    }
+                };
+
+                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(BrowserApp.this);
+                lbm.registerReceiver(mLocalBroadcastReceiver,
+                        new IntentFilter(TorServiceConstants.ACTION_STATUS));
+
+            }
+        }).start();
+
+        return mLocalBroadcastReceiver;
+    }
+
+    /**
+     * Receive the current status from the service.
+     * The response is sent as a broadcast. If it is not received within
+     * 1 second, then return false.
+     *
+     * This method is coupled with setupReceiveTorIsStartedAsync(). They
+     * should be used together.
+     */
+    private boolean receiveTorIsStartedAsync(BroadcastReceiver mLocalBroadcastReceiver, Boolean torStatus) {
+        // Wait until we're notified from the above thread, or we're
+        // interrupted by the timeout.
+        try {
+            // One thousand milliseconds = one second
+            final long oneSecTimeout = Math.round(Math.pow(10, 3));
+            synchronized (torStatus) {
+                // We wake from wait() because we reached the one second
+                // timeout, the BroadcastReceiver notified us, or we received
+                // a spurious wakeup. For all three cases, we can accept the
+                // current value of torStatus.
+                torStatus.wait(oneSecTimeout);
+            }
+        } catch (InterruptedException e) {
+            // ignore.
+        } catch (IllegalArgumentException e) {
+            // oneSecTimeout should never be negative
+        } catch (IllegalMonitorStateException e) {
+            // |synchronized| should take care of this
+        }
+
+        // Unregister the receiver
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalBroadcastReceiver);
+
+        return torStatus;
+    }
+
+    /**
+     * Receive the current Tor status.
+     *
+     * Send a request for the current status and receive the response.
+     * Returns true if Tor is running, false otherwise.
+     *
+     * mTorStatus provides synchronization across threads.
+     */
+    private boolean checkTorIsStarted() {
+        // When tor is started, true. Otherwise, false
+        mTorStatus = false;
+        BroadcastReceiver br = setupReceiveTorIsStartedAsync();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                requestTorIsStartedAsync();
+            }
+        }).start();
+
+        return receiveTorIsStartedAsync(br, mTorStatus);
+    }
+
+
+    /**
      * Code to actually show the first run pager, separated
      * for distribution purposes.
      */
@@ -1309,6 +1437,7 @@ public class BrowserApp extends GeckoApp
         final SafeIntent intent = new SafeIntent(getIntent());
         if (!IntentUtils.getIsInAutomationFromEnvironment(intent)) {
             checkStartOrbot();
+            mTorNeedsStart = !checkTorIsStarted();
         }
     }
 
@@ -1763,6 +1892,7 @@ public class BrowserApp extends GeckoApp
         GeckoNetworkManager.destroy();
 
         mOrbotNeedsStart = true;
+        mTorNeedsStart = true;
 
         super.onDestroy();
     }
