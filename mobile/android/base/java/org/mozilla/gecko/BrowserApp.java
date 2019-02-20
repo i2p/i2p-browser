@@ -182,7 +182,6 @@ import org.mozilla.gecko.widget.GeckoActionProvider;
 import org.mozilla.gecko.widget.SplashScreen;
 import org.mozilla.geckoview.GeckoSession;
 
-import org.torproject.android.OrbotMainActivity;
 import org.torproject.android.service.TorService;
 import org.torproject.android.service.TorServiceConstants;
 
@@ -242,7 +241,6 @@ public class BrowserApp extends GeckoApp
     public static final int ACTIVITY_REQUEST_TRIPLE_READERVIEW = 4001;
     public static final int ACTIVITY_RESULT_TRIPLE_READERVIEW_ADD_BOOKMARK = 4002;
     public static final int ACTIVITY_RESULT_TRIPLE_READERVIEW_IGNORE = 4003;
-    public static final int ACTIVITY_RESULT_ORBOT_LAUNCH = 5001;
 
     public static final String ACTION_VIEW_MULTIPLE = AppConstants.ANDROID_PACKAGE_NAME + ".action.VIEW_MULTIPLE";
 
@@ -271,7 +269,6 @@ public class BrowserApp extends GeckoApp
     private HomeScreen mHomeScreen;
     private TabsPanel mTabsPanel;
 
-    private boolean mOrbotNeedsStart = true;
     private boolean mTorNeedsStart = true;
 
     private boolean showSplashScreen = false;
@@ -1410,14 +1407,6 @@ public class BrowserApp extends GeckoApp
         }
     }
 
-    public void checkStartOrbot() {
-        if (mOrbotNeedsStart) {
-            final String orbotStartAction = "android.intent.action.MAIN";
-            final Intent launchOrbot = new Intent(orbotStartAction, null, this, OrbotMainActivity.class);
-            startActivityForResult(launchOrbot, ACTIVITY_RESULT_ORBOT_LAUNCH, null);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -1436,7 +1425,6 @@ public class BrowserApp extends GeckoApp
         // need to know if we are in automation.
         final SafeIntent intent = new SafeIntent(getIntent());
         if (!IntentUtils.getIsInAutomationFromEnvironment(intent)) {
-            checkStartOrbot();
             mTorNeedsStart = !checkTorIsStarted();
         }
     }
@@ -1891,7 +1879,6 @@ public class BrowserApp extends GeckoApp
         NotificationHelper.destroy();
         GeckoNetworkManager.destroy();
 
-        mOrbotNeedsStart = true;
         mTorNeedsStart = true;
 
         super.onDestroy();
@@ -3109,11 +3096,6 @@ public class BrowserApp extends GeckoApp
 
             case ACTIVITY_REQUEST_TAB_QUEUE:
                 TabQueueHelper.processTabQueuePromptResponse(resultCode, this);
-                break;
-
-            case ACTIVITY_RESULT_ORBOT_LAUNCH:
-                Log.d(LOGTAG, "onActivityResult: ACTIVITY_RESULT_ORBOT_LAUNCH");
-                mOrbotNeedsStart = false;
                 break;
 
             default:
