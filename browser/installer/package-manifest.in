@@ -244,6 +244,11 @@
 @RESPATH@/browser/chrome/browser.manifest
 @RESPATH@/browser/chrome/pdfjs.manifest
 @RESPATH@/browser/chrome/pdfjs/*
+#ifndef TOR_BROWSER_DISABLE_TOR_LAUNCHER
+@RESPATH@/browser/chrome/torlauncher.manifest
+@RESPATH@/browser/chrome/torlauncher/*
+@RESPATH@/browser/@PREF_DIR@/torlauncher-prefs.js
+#endif
 @RESPATH@/chrome/toolkit@JAREXT@
 @RESPATH@/chrome/toolkit.manifest
 @RESPATH@/chrome/recording.manifest

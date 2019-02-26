@@ -1460,6 +1460,16 @@ var XPIStates = {
       for (let [id, file] of loc.readAddons()) {
         knownIds.delete(id);
 
+        // Since it is now part of the browser, uninstall the Tor Launcher
+        // extension. This will remove the Tor Launcher .xpi from user
+        // profiles on macOS.
+        if (id === "tor-launcher@torproject.org") {
+          logger.debug("Uninstalling the Tor Launcher extension.");
+          loc.installer.uninstallAddon(id);
+          changed = true;
+          continue;
+        }
+
         let xpiState = loc.get(id);
         if (!xpiState) {
           logger.debug("New add-on ${id} in ${loc}", { id, loc: loc.name });

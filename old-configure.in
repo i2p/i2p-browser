@@ -2191,6 +2191,21 @@ if test -n "$MOZ_UPDATER"; then
 fi
 
 dnl ========================================================
+dnl Tor additions
+dnl ========================================================
+MOZ_ARG_DISABLE_BOOL(tor-launcher,
+[  --disable-tor-launcher
+                          Do not include Tor Launcher],
+   TOR_BROWSER_DISABLE_TOR_LAUNCHER=1,
+   TOR_BROWSER_DISABLE_TOR_LAUNCHER=)
+
+if test -n "$TOR_BROWSER_DISABLE_TOR_LAUNCHER"; then
+    AC_DEFINE(TOR_BROWSER_DISABLE_TOR_LAUNCHER)
+fi
+
+AC_SUBST(TOR_BROWSER_DISABLE_TOR_LAUNCHER)
+
+dnl ========================================================
 dnl parental controls (for Windows Vista)
 dnl ========================================================
 MOZ_ARG_DISABLE_BOOL(parental-controls,

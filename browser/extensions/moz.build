@@ -12,3 +12,8 @@ DIRS += [
     'webcompat',
     'report-site-issue'
 ]
+
+if not CONFIG['TOR_BROWSER_DISABLE_TOR_LAUNCHER']:
+    DIRS += [
+        'tor-launcher',
+    ]
