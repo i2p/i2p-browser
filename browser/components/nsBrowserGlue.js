@@ -1100,7 +1100,6 @@ BrowserGlue.prototype = {
           // nevertheless.
           if ((addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) &&
               !(addon.id == "torbutton@torproject.org" ||
-                addon.id == "tor-launcher@torproject.org" ||
                 addon.id == "https-everywhere-eff@eff.org")) {
             this._notifyUnsignedAddonsDisabled();
             break;

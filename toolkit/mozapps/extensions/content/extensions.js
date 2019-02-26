@@ -234,7 +234,6 @@ function isCorrectlySigned(aAddon) {
   // Add-ons without an "isCorrectlySigned" property are correctly signed as
   // they aren't the correct type for signing.
   if (aAddon.id == "torbutton@torproject.org" ||
-      aAddon.id == "tor-launcher@torproject.org" ||
       aAddon.id == "https-everywhere-eff@eff.org") {
     return true;
   }

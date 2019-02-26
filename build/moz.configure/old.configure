@@ -286,6 +286,7 @@ def old_configure_options(*options):
     '--with-tor-browser-version',
     '--enable-tor-browser-update',
     '--enable-tor-browser-data-outside-app-dir',
+    '--enable-tor-launcher',
 )
 @imports(_from='__builtin__', _import='compile')
 @imports(_from='__builtin__', _import='open')
