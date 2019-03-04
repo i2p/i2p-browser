@@ -154,7 +154,9 @@ class MediaCache {
   // If the length is known and considered small enough, a discrete MediaCache
   // with memory backing will be given. Otherwise the one MediaCache with
   // file backing will be provided.
-  static RefPtr<MediaCache> GetMediaCache(int64_t aContentLength);
+  // If aIsPrivateBrowsing is true, only initialization of a memory backed
+  // MediaCache will be attempted, returning nullptr if that fails.
+  static RefPtr<MediaCache> GetMediaCache(int64_t aContentLength, bool aIsPrivateBrowsing);
 
   nsIEventTarget* OwnerThread() const { return sThread; }
 
@@ -706,7 +708,7 @@ void MediaCache::CloseStreamsForPrivateBrowsing() {
 }
 
 /* static */ RefPtr<MediaCache> MediaCache::GetMediaCache(
-    int64_t aContentLength) {
+    int64_t aContentLength, bool aIsPrivateBrowsing) {
   NS_ASSERTION(NS_IsMainThread(), "Only call on main thread");
 
   if (!sThreadInit) {
@@ -734,10 +736,30 @@ void MediaCache::CloseStreamsForPrivateBrowsing() {
     return nullptr;
   }
 
-  if (aContentLength > 0 &&
-      aContentLength <= int64_t(MediaPrefs::MediaMemoryCacheMaxSize()) * 1024) {
-    // Small-enough resource, use a new memory-backed MediaCache.
-    RefPtr<MediaBlockCacheBase> bc = new MemoryBlockCache(aContentLength);
+  if (aIsPrivateBrowsing ||
+      (aContentLength > 0 &&
+       aContentLength <= int64_t(MediaPrefs::MediaMemoryCacheMaxSize()) * 1024)) {
+    // We're either in private browsing mode or we have a
+    // small-enough resource, use a new memory-backed MediaCache.
+
+    int64_t cacheSize = 0;
+    if (!aIsPrivateBrowsing) {
+      cacheSize = aContentLength;
+    } else {
+      // We're in private browsing mode, we'll have to figure out a
+      // cache size since we can't fallback to a file backed MediaCache.
+      if (aContentLength < 0) {
+        // Unknown content length, we'll give the maximum allowed
+        // cache size just to be sure.
+        cacheSize = int64_t(MediaPrefs::MediaMemoryCacheMaxSize()) * 1024;
+      } else {
+        // If the content length is less than the maximum allowed cache size,
+        // use that, otherwise we cap it.
+        cacheSize = std::min(aContentLength, int64_t(MediaPrefs::MediaMemoryCacheMaxSize()) * 1024);
+      }
+    }
+
+    RefPtr<MediaBlockCacheBase> bc = new MemoryBlockCache(cacheSize);
     nsresult rv = bc->Init();
     if (NS_SUCCEEDED(rv)) {
       RefPtr<MediaCache> mc = new MediaCache(bc);
@@ -745,8 +767,13 @@ void MediaCache::CloseStreamsForPrivateBrowsing() {
           mc.get());
       return mc;
     }
-    // MemoryBlockCache initialization failed, clean up and try for a
-    // file-backed MediaCache below.
+
+    // MemoryBlockCache initialization failed.
+    // If we're in private browsing mode, we will bail here.
+    // Otherwise, clean up and try for a file-backed MediaCache below.
+    if (aIsPrivateBrowsing) {
+      return nullptr;
+    }
   }
 
   if (gMediaCache) {
@@ -2600,7 +2627,7 @@ nsresult MediaCacheStream::Init(int64_t aContentLength) {
     mStreamLength = aContentLength;
   }
 
-  mMediaCache = MediaCache::GetMediaCache(aContentLength);
+  mMediaCache = MediaCache::GetMediaCache(aContentLength, mIsPrivateBrowsing);
   if (!mMediaCache) {
     return NS_ERROR_FAILURE;
   }
