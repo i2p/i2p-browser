@@ -126,7 +126,7 @@ EnterprisePoliciesManager.prototype = {
       }
 
       if (policySchema.enterprise_only && !areEnterpriseOnlyPoliciesAllowed()) {
-        log.error(`Policy ${policyName} is only allowed on ESR`);
+        log.error(`Enterprise policy ${policyName} is not allowed`);
         continue;
       }
 
@@ -323,10 +323,6 @@ let SupportMenu = null;
  * Checks whether the policies marked as enterprise_only in the
  * schema are allowed to run on this browser.
  *
- * This is meant to only allow policies to run on ESR, but in practice
- * we allow it to run on channels different than release, to allow
- * these policies to be tested on pre-release channels.
- *
  * @returns {Bool} Whether the policy can run.
  */
 function areEnterpriseOnlyPoliciesAllowed() {
@@ -337,12 +333,7 @@ function areEnterpriseOnlyPoliciesAllowed() {
     return false;
   }
 
-  if (AppConstants.MOZ_UPDATE_CHANNEL != "release" ||
-      Cu.isInAutomation) {
-    return true;
-  }
-
-  return false;
+  return true;
 }
 
 /*
