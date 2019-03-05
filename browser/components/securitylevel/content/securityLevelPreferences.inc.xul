@@ -1,0 +1,66 @@
+<groupbox id="securityLevel-groupbox" data-category="panePrivacy" hidden="true">
+  <caption><label id="securityLevel-header"/></caption>
+  <vbox data-subcategory="securitylevel" flex="1">
+    <description flex="1">
+      <html:span id="securityLevel-overview" class="tail-with-learn-more"/>
+      <label id="securityLevel-learnMore" class="learnMore text-link"/>
+    </description>
+    <radiogroup id="securityLevel-radiogroup"
+                oncommand="SecurityLevelPreferences.selectSecurityLevel();">
+      <vbox id="securityLevel-vbox-standard">
+        <hbox>
+          <radio value="standard"/>
+          <vbox>
+            <spacer flex="1"/>
+            <label id="securityLevel-customWarning"/>
+            <spacer flex="1"/>
+          </vbox>
+        </hbox>
+        <description flex="1">
+          <html:span id="securityLevel-summary" class="tail-with-learn-more"/>
+          <label id="securityLevel-restoreDefaults"
+                 class="learnMore text-link"
+                 onclick="SecurityLevelPreferences.restoreDefaults();"/>
+        </description>
+      </vbox>
+      <vbox id="securityLevel-vbox-safer">
+        <hbox>
+          <radio value="safer"/>
+          <vbox>
+            <spacer flex="1"/>
+            <label id="securityLevel-customWarning"/>
+            <spacer flex="1"/>
+          </vbox>
+        </hbox>
+        <description flex="1">
+          <html:span id="securityLevel-summary" class="tail-with-learn-more"/>
+          <label id="securityLevel-restoreDefaults"
+                 class="learnMore text-link"
+                 onclick="SecurityLevelPreferences.restoreDefaults();"/>
+        </description>
+        <description id="securityLevel-description1" class="indent tip-caption"/>
+        <description id="securityLevel-description2" class="indent tip-caption"/>
+        <description id="securityLevel-description3" class="indent tip-caption"/>
+      </vbox>
+      <vbox id="securityLevel-vbox-safest">
+        <hbox>
+          <radio value="safest"/>
+          <vbox>
+            <spacer flex="1"/>
+            <label id="securityLevel-customWarning"/>
+            <spacer flex="1"/>
+          </vbox>
+        </hbox>
+        <description flex="1">
+          <html:span id="securityLevel-summary" class="tail-with-learn-more"/>
+          <label id="securityLevel-restoreDefaults"
+                 class="learnMore text-link"
+                 onclick="SecurityLevelPreferences.restoreDefaults();"/>
+        </description>
+        <description id="securityLevel-description1" class="indent tip-caption"/>
+        <description id="securityLevel-description2" class="indent tip-caption"/>
+        <description id="securityLevel-description3" class="indent tip-caption"/>
+      </vbox>
+    </radiogroup>
+  </vbox>
+</groupbox>

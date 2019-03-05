@@ -15,6 +15,7 @@
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/search.css"?>
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/containers.css"?>
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/privacy.css"?>
+<?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelPreferences.css"?>
 
 <!DOCTYPE page [
 <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">

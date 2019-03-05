@@ -8,6 +8,8 @@
 
 <?xml-stylesheet href="chrome://browser/content/browser.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/content/downloads/downloads.css"?>
+<?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelPanel.css"?>
+<?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelButton.css"?>
 <?xml-stylesheet href="chrome://browser/content/places/places.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/content/usercontext/usercontext.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/skin/controlcenter/panel.css" type="text/css"?>
@@ -500,6 +502,7 @@
 #include ../../components/customizableui/content/panelUI.inc.xul
 #include ../../components/controlcenter/content/panel.inc.xul
 #include ../../components/downloads/content/downloadsPanel.inc.xul
+#include ../../components/securitylevel/content/securityLevelPanel.inc.xul
 
     <hbox id="downloads-animation-container" mousethrough="always">
       <vbox id="downloads-notification-anchor" hidden="true">
@@ -953,6 +956,8 @@
               </stack>
             </stack>
           </toolbarbutton>
+
+#include ../../components/securitylevel/content/securityLevelButton.inc.xul
 
         <toolbarbutton id="library-button" class="toolbarbutton-1 chromeclass-toolbar-additional subviewbutton-nav"
                        removable="true"

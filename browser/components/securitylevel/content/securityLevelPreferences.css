@@ -1,0 +1,26 @@
+label#securityLevel-customWarning {
+  border-radius: 2px;
+  background-color: #ffe845;
+  text-transform: uppercase;
+  font-weight: bolder;
+  font-size: 0.7em;
+  height: 1em;
+  line-height: 1em;
+  padding: 0.35em;
+}
+
+radiogroup#securityLevel-radiogroup radio {
+  font-weight: bold;
+}
+
+vbox#securityLevel-vbox-standard,
+vbox#securityLevel-vbox-safer,
+vbox#securityLevel-vbox-safest {
+  margin-top: 0.4em;
+}
+
+vbox#securityLevel-vbox-standard description.indent,
+vbox#securityLevel-vbox-safer description.indent,
+vbox#securityLevel-vbox-safest description.indent {
+  margin-inline-start: 0 !important;
+}

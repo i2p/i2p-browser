@@ -49,6 +49,7 @@ DIRS += [
     'privatebrowsing',
     'resistfingerprinting',
     'search',
+    'securitylevel',
     'sessionstore',
     'shell',
     'syncedtabs',

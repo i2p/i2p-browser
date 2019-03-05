@@ -1,0 +1,9 @@
+toolbarbutton#security-level-button.standard {
+  list-style-image: url("chrome://browser/content/securitylevel/securityLevelButton.svg#standard");
+}
+toolbarbutton#security-level-button.safer {
+  list-style-image: url("chrome://browser/content/securitylevel/securityLevelButton.svg#safer");
+}
+toolbarbutton#security-level-button.safest {
+  list-style-image: url("chrome://browser/content/securitylevel/securityLevelButton.svg#safest");
+}

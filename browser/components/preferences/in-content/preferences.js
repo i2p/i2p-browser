@@ -224,10 +224,20 @@ async function spotlight(subcategory) {
   }
   if (subcategory) {
     if (!gSearchResultsPane.categoriesInitialized) {
-      await waitForSystemAddonInjectionsFinished([{
-        isGoingToInject: formAutofillParent.initialized,
-        elementId: "formAutofillGroup",
-      }]);
+      // fix for tor #29554
+      // for some reason this code throws an exception when called and
+      // prevents the scrollAndHighlight code from running so we
+      // swallow the exception here
+      //
+      // This entire block has been removed and/or refactored as part of
+      // mozilla #1520350 (commit d524c53377c22913cac387ad77b803aaf4fb754e)
+      // on 2019/01/28
+      try {
+        await waitForSystemAddonInjectionsFinished([{
+          isGoingToInject: formAutofillParent.initialized,
+          elementId: "formAutofillGroup",
+        }]);
+      } catch (e) { }
     }
     scrollAndHighlight(subcategory);
   }

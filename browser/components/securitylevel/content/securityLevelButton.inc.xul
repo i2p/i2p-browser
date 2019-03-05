@@ -1,0 +1,5 @@
+<toolbarbutton id="security-level-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
+               removable="true"
+               oncommand="SecurityLevelButton.onCommand(this, event);"
+               closemenu="none"
+               cui-areatype="toolbar"/>

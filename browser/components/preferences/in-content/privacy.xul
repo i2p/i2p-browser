@@ -583,6 +583,8 @@
   <label class="header-name" flex="1">&security.label;</label>
 </hbox>
 
+#include ../../securitylevel/content/securityLevelPreferences.inc.xul
+
 <!-- addons, forgery (phishing) UI Security -->
 <groupbox id="browsingProtectionGroup" data-category="panePrivacy" hidden="true">
   <caption><label>&browsingProtection.label;</label></caption>

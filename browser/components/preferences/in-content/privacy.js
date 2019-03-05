@@ -21,6 +21,9 @@ ChromeUtils.defineModuleGetter(this, "SiteDataManager",
 XPCOMUtils.defineLazyPreferenceGetter(this, "trackingprotectionUiEnabled",
                                       "privacy.trackingprotection.ui.enabled");
 
+XPCOMUtils.defineLazyScriptGetter(this, ["SecurityLevelPreferences"],
+                                  "chrome://browser/content/securitylevel/securityLevel.js");
+
 ChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 const PREF_UPLOAD_ENABLED = "datareporting.healthreport.uploadEnabled";
@@ -150,6 +153,17 @@ var gPrivacyPane = {
   },
 
   /**
+   * Show the Security Level UI
+   */
+  _initSecurityLevel() {
+    SecurityLevelPreferences.init();
+    let unload = () => {
+      window.removeEventListener("unload", unload);
+      SecurityLevelPreferences.uninit();
+    };
+  },
+
+  /**
    * Linkify the Learn More link of the Private Browsing Mode Tracking
    * Protection UI.
    */
@@ -245,6 +259,7 @@ var gPrivacyPane = {
     this.updatePrivacyMicroControls();
     this.initAutoStartPrivateBrowsingReverter();
     this._initTrackingProtection();
+    this._initSecurityLevel();
     this._initTrackingProtectionPBM();
     this._initTrackingProtectionExtensionControl();
     this._initAutocomplete();
