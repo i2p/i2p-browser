@@ -1,0 +1,33 @@
+<panel id="securityLevel-panel"
+   role="group"
+   type="arrow"
+   orient="vertical"
+   level="top"
+   hidden="true">
+  <panelmultiview mainViewId="securityLevel-panelview">
+    <panelview id="securityLevel-panelview" descriptionheightworkaround="true">
+      <vbox class="panel-subview-body">
+        <label id="securityLevel-header"/>
+        <hbox id="securityLevel-levelHbox">
+          <label id="securityLevel-level"/>
+          <vbox>
+            <spacer flex="1"/>
+              <label id="securityLevel-customWarning"/>
+            <spacer flex="1"/>
+          </vbox>
+        </hbox>
+        <description id="securityLevel-summary"/>
+        <label
+          id="securityLevel-learnMore"
+          class="learnMore text-link"
+          onclick="SecurityLevelPanel.hide();"/>
+        <button
+          id="securityLevel-restoreDefaults"
+          oncommand="SecurityLevelPanel.restoreDefaults();"/>
+        <button
+          id="securityLevel-advancedSecuritySettings"
+          oncommand="SecurityLevelPanel.openAdvancedSecuritySettings();"/>
+      </vbox>
+    </panelview>
+  </panelmultiview>
+</panel>

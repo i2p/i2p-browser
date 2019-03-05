@@ -1,0 +1,82 @@
+/* Security Level CSS */
+
+panel#securityLevel-panel > .panel-arrowcontainer > .panel-arrowcontent {
+  padding: 0;
+}
+
+panelview#securityLevel-panelview {
+  width: 20em;
+}
+
+panelview#securityLevel-panelview>vbox.panel-subview-body {
+  padding: 1em;
+}
+
+label#securityLevel-header {
+  text-transform: uppercase;
+  color: GrayText;
+  font-size: 0.85em;
+  margin: 0 0 0.4em 0;
+  padding: 0;
+}
+
+hbox#securityLevel-levelHbox {
+  margin-bottom: 1em;
+}
+
+label#securityLevel-level {
+  font-size: 1.5em;
+  margin: 0 0.5em 0 0;
+  padding: 0;
+}
+
+label#securityLevel-customWarning {
+  border-radius: 2px;
+  background-color: #ffe845;
+  text-transform: uppercase;
+  font-weight: bolder;
+  font-size: 0.8em;
+  height: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  margin: auto;
+  padding: 0.4em;
+}
+
+panelview#securityLevel-panelview description {
+  margin: 0 -0.5em 0.5em 0;
+  padding: 0 !important;
+}
+
+label#securityLevel-learnMore {
+  margin: 0 0 1.0em 0;
+  padding: 0;
+}
+
+panelview#securityLevel-panelview button {
+  -moz-appearance: none;
+  background-color: var(--arrowpanel-dimmed);
+}
+
+panelview#securityLevel-panelview button:hover {
+  background-color: var(--arrowpanel-dimmed-further);
+}
+
+panelview#securityLevel-panelview button:active {
+  background-color: var(--arrowpanel-dimmed-even-further);
+}
+
+button#securityLevel-restoreDefaults {
+  margin: 0 0 1.0em 0;
+  padding: 0.45em;
+  color: inherit !important;
+}
+
+button#securityLevel-advancedSecuritySettings {
+  margin: 0 -1.0em -1.0em -1.0em;
+  border-radius: 0;
+  border-top: 1px solid var(--panel-separator-color);
+  padding: 0;
+  height: 3.0em;
+  color: inherit !important;
+}
