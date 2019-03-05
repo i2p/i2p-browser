@@ -8,11 +8,11 @@
 
 # BrandFullNameInternal is used for some registry and file system values
 # instead of BrandFullName and typically should not be modified.
-!define BrandFullNameInternal "Nightly"
-!define BrandFullName         "Firefox Nightly"
-!define CompanyName           "mozilla.org"
-!define URLInfoAbout          "https://www.mozilla.org"
-!define HelpLink              "https://support.mozilla.org"
+!define BrandFullNameInternal "Alpha"
+!define BrandFullName         "I2P Browser"
+!define CompanyName           "geti2p.net"
+!define URLInfoAbout          "https://geti2p.net"
+!define HelpLink              "https://geti2p.net"
 
 !define URLStubDownload32 "https://download.mozilla.org/?os=win&lang=${AB_CD}&product=firefox-nightly-latest"
 !define URLStubDownload64 "https://download.mozilla.org/?os=win64&lang=${AB_CD}&product=firefox-nightly-latest"
