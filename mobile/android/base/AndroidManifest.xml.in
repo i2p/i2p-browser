@@ -580,5 +580,10 @@
             android:stopWithTask="true">
         </service>
 
+        <activity android:name="org.mozilla.gecko.torbootstrap.TorPreferences"
+                  android:theme="@style/Gecko.Preferences"
+                  android:configChanges="orientation|screenSize|locale|layoutDirection"
+                  android:excludeFromRecents="true"/>
+
     </application>
 </manifest>

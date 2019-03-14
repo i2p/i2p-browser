@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+
+<org.mozilla.gecko.torbootstrap.TorBootstrapAnimationContainer xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:gecko="http://schemas.android.com/apk/res-auto"
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:background="@color/tor_bootstrap_background">
+
+    <org.mozilla.gecko.torbootstrap.TorBootstrapPager
+                    android:id="@+id/tor_bootstrap_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/tor_bootstrap_background">
+
+    </org.mozilla.gecko.torbootstrap.TorBootstrapPager>
+</org.mozilla.gecko.torbootstrap.TorBootstrapAnimationContainer>

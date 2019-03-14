@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="?android:attr/listPreferredItemHeight"
+              android:orientation="vertical"
+              android:paddingEnd="?android:attr/scrollbarSize"
+              android:gravity="center_vertical"
+              android:background="?android:attr/selectableItemBackground" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16sp"
+        android:paddingRight="16sp"
+        android:orientation="vertical" >
+        <TextView android:id="@+android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="Roboto-Regular"
+            android:textSize="20sp"
+            android:textColor="#DE000000"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal" />
+        <TextView android:id="@+android:id/summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30sp"
+            android:fontFamily="Roboto-Regular"
+            android:textSize="16sp"
+            android:maxLines="4" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:minHeight="?android:attr/listPreferredItemHeight"
+                      android:gravity="center_vertical"
+                      android:orientation="vertical" >
+            <EditText
+                android:id="@+id/tor_network_provide_bridge1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:inputType="text"
+                android:textSize="20sp"
+                android:fontFamily="Roboto-Regular"
+                android:paddingTop="22sp"
+                android:paddingLeft="16sp"
+                android:paddingBottom="22sp"
+                android:background="#DCDCDC"
+                android:hint="@string/pref_tor_bridges_provide_manual_address_port_placeholder" />
+            <EditText
+                android:id="@+id/tor_network_provide_bridge2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:inputType="text"
+                android:textSize="20sp"
+                android:fontFamily="Roboto-Regular"
+                android:paddingTop="22sp"
+                android:paddingLeft="16sp"
+                android:paddingBottom="22sp"
+                android:background="#DCDCDC"
+                android:hint="@string/pref_tor_bridges_provide_manual_address_port_placeholder" />
+            <EditText
+                android:id="@+id/tor_network_provide_bridge3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="20sp"
+                android:fontFamily="Roboto-Regular"
+                android:paddingTop="22sp"
+                android:paddingLeft="16sp"
+                android:paddingBottom="22sp"
+                android:background="#DCDCDC"
+                android:hint="@string/pref_tor_bridges_provide_manual_address_port_placeholder" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@+android:id/widget_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+    </LinearLayout>
+</LinearLayout>

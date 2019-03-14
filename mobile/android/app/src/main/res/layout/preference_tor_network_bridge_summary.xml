@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="?android:attr/listPreferredItemHeight"
+              android:gravity="center_vertical" >
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tor_network_bridge_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30sp"
+        android:paddingBottom="30sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:textSize="16sp"
+        android:fontFamily="Roboto-Regular"
+        android:textColor="#DE000000"
+        android:lineSpacingMultiplier="1.43"
+        android:text="@string/pref_category_tor_bridge_summary" />
+</LinearLayout>
