@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/tor_bootstrap_background">
+
+        <ImageView android:id="@+id/tor_bootstrap_settings_gear"
+                   app:srcCompat="@drawable/ic_settings_24px"
+                   android:tint="#ffffffff"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="25dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_alignParentRight="true" />
+
+        <!-- These three elements are rendered in reverse order -->
+        <TextView android:id="@+id/tor_bootstrap_swipe_log"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:width="301dp"
+                  android:height="24dp"
+                  android:layout_marginBottom="20dp"
+                  android:layout_centerHorizontal="true"
+                  android:layout_alignParentBottom="true"
+                  android:gravity="center"
+                  android:visibility="invisible"
+                  android:textSize="14sp"
+                  android:fontFamily="Roboto-Regular"
+                  android:textColor="#FFFFFFFF"
+                  android:lineSpacingMultiplier="1.71"
+                  android:text="@string/tor_bootstrap_swipe_for_logs"/>
+
+        <Button android:id="@+id/tor_bootstrap_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:width="144dp"
+                android:height="48dp"
+                android:textSize="14sp"
+                android:layout_above="@id/tor_bootstrap_swipe_log"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rounded_corners"
+                android:fontFamily="Roboto-Medium"
+                android:textColor="@color/tor_bootstrap_background"
+                android:lineSpacingMultiplier="1.14"
+                android:text="@string/tor_bootstrap_connect" />
+
+        <TextView android:id="@+id/tor_bootstrap_last_status_message"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:width="301dp"
+                  android:height="24dp"
+                  android:layout_marginBottom="40dp"
+                  android:layout_above="@id/tor_bootstrap_connect"
+                  android:layout_centerHorizontal="true"
+                  android:gravity="center"
+                  android:singleLine="true"
+                  android:textSize="14sp"
+                  android:fontFamily="RobotoMono-Regular"
+                  android:textColor="@android:color/white"
+                  android:lineSpacingMultiplier="2"
+                  android:visibility="invisible" />
+
+        <!-- Keep the src synchronized with TorBootstrapPanel::stopBootstrapping() -->
+        <ImageView android:id="@+id/tor_bootstrap_onion"
+                   app:srcCompat="@drawable/tor_spinning_onion"
+                   android:scaleType="fitCenter"
+                   android:tint="#ffffffff"
+                   android:layout_height="wrap_content"
+                   android:layout_width="match_parent"
+                   android:layout_marginBottom="37dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginLeft="10dp"
+                   android:layout_centerHorizontal="true"
+                   android:layout_below="@id/tor_bootstrap_settings_gear"
+                   android:layout_above="@id/tor_bootstrap_last_status_message" />
+</RelativeLayout>

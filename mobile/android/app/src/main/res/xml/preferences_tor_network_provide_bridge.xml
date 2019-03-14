@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:gecko="http://schemas.android.com/apk/res-auto"
+                  android:enabled="true">
+
+
+    <!-- Ideally, this preference would not be needed. We would move the
+        summary into the tor.bridges.provide preference. However, there is
+        a bug in the layout where typing in the text field isn't shown until
+        the user presses the back button. This only occurs when the EditText
+        View is under the first ViewGroup under the ListView. -->
+    <Preference
+            android:layout="@layout/preference_tor_network_bridge_summary"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            android:enabled="false"/>
+
+    <Preference
+            android:key="android.not_a_preference.tor.bridges.provide"
+            android:layout="@layout/preference_tor_network_provide_bridge"
+            android:title="@string/pref_tor_bridges_provide_manual_text_title"
+            android:summary="@string/pref_tor_bridges_provide_manual_summary" />
+</PreferenceScreen>

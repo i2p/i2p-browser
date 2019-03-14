@@ -158,6 +158,7 @@ import org.mozilla.gecko.toolbar.AutocompleteHandler;
 import org.mozilla.gecko.toolbar.BrowserToolbar;
 import org.mozilla.gecko.toolbar.BrowserToolbar.TabEditingState;
 import org.mozilla.gecko.toolbar.PwaConfirm;
+import org.mozilla.gecko.torbootstrap.TorBootstrapAnimationContainer;
 import org.mozilla.gecko.trackingprotection.TrackingProtectionPrompt;
 import org.mozilla.gecko.updater.PostUpdateHandler;
 import org.mozilla.gecko.updater.UpdateServiceHelper;
@@ -266,6 +267,7 @@ public class BrowserApp extends GeckoApp
     private TabStripInterface mTabStrip;
     private AnimatedProgressBar mProgressView;
     private FirstrunAnimationContainer mFirstrunAnimationContainer;
+    private TorBootstrapAnimationContainer mTorBootstrapAnimationContainer;
     private HomeScreen mHomeScreen;
     private TabsPanel mTabsPanel;
 
@@ -486,7 +488,7 @@ public class BrowserApp extends GeckoApp
                     mVideoPlayer.stop();
                 }
 
-                if (Tabs.getInstance().isSelectedTab(tab) && mDynamicToolbar.isEnabled()) {
+                if (Tabs.getInstance().isSelectedTab(tab) && mDynamicToolbar.isEnabled() && !isTorBootstrapVisible()) {
                     final VisibilityTransition transition = (tab.getShouldShowToolbarWithoutAnimationOnFirstSelection()) ?
                             VisibilityTransition.IMMEDIATE : VisibilityTransition.ANIMATE;
                     mDynamicToolbar.setVisible(true, transition);
@@ -496,7 +498,7 @@ public class BrowserApp extends GeckoApp
                 }
                 // fall through
             case LOCATION_CHANGE:
-                if (Tabs.getInstance().isSelectedTab(tab)) {
+                if (Tabs.getInstance().isSelectedTab(tab) && !isTorBootstrapVisible()) {
                     updateHomePagerForTab(tab);
                 }
 
@@ -509,7 +511,7 @@ public class BrowserApp extends GeckoApp
                 if (Tabs.getInstance().isSelectedTab(tab)) {
                     invalidateOptionsMenu();
 
-                    if (mDynamicToolbar.isEnabled()) {
+                    if (mDynamicToolbar.isEnabled() && !isTorBootstrapVisible()) {
                         mDynamicToolbar.setVisible(true, VisibilityTransition.ANIMATE);
                     }
                 }
@@ -1359,8 +1361,12 @@ public class BrowserApp extends GeckoApp
         final SafeIntent intent = new SafeIntent(getIntent());
 
         if (!IntentUtils.getIsInAutomationFromEnvironment(intent)) {
-            // We can't show the first run experience until Gecko has finished initialization (bug 1077583).
-            checkFirstrun(this, intent);
+            if (mTorNeedsStart) {
+                showTorBootstrapPager();
+            } else {
+                // We can't show the first run experience until Gecko has finished initialization (bug 1077583).
+                checkFirstrun(this, intent);
+            }
         }
     }
 
@@ -2756,6 +2762,11 @@ public class BrowserApp extends GeckoApp
                 && mHomeScreenContainer != null && mHomeScreenContainer.getVisibility() == View.VISIBLE);
     }
 
+    private boolean isTorBootstrapVisible() {
+        return (mTorBootstrapAnimationContainer != null && mTorBootstrapAnimationContainer.isVisible()
+                && mHomeScreenContainer != null && mHomeScreenContainer.getVisibility() == View.VISIBLE);
+    }
+
     /**
      * Enters editing mode with the current tab's URL. There might be no
      * tabs loaded by the time the user enters editing mode e.g. just after
@@ -3105,6 +3116,38 @@ public class BrowserApp extends GeckoApp
 
                 super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void showTorBootstrapPager() {
+
+        if (mTorBootstrapAnimationContainer == null) {
+            // We can't use toggleToolbarChrome() because that uses INVISIBLE, but we need GONE
+            mBrowserChrome.setVisibility(View.GONE);
+            final ViewStub torBootstrapPagerStub = (ViewStub) findViewById(R.id.tor_bootstrap_pager_stub);
+            mTorBootstrapAnimationContainer = (TorBootstrapAnimationContainer) torBootstrapPagerStub.inflate();
+            mTorBootstrapAnimationContainer.load(this, getSupportFragmentManager());
+            mTorBootstrapAnimationContainer.registerOnFinishListener(new TorBootstrapAnimationContainer.OnFinishListener() {
+                @Override
+                public void onFinish() {
+                    // Show the chrome again
+                    toggleToolbarChrome(true);
+                    // When the content loaded in the background (such as about:tor),
+                    // it was loaded while mBrowserChrome was GONE. We should refresh the
+                    // height now so the page is rendered correctly.
+                    Tabs.getInstance().getSelectedTab().doReload(true);
+
+                    // If we finished, then Tor bootstrapped 100%
+                    mTorNeedsStart = false;
+
+                    // When bootstrapping completes, check if the Firstrun (onboarding) screens
+                    // should be shown.
+                    final SafeIntent intent = new SafeIntent(getIntent());
+                    checkFirstrun(BrowserApp.this, intent);
+                }
+            });
+        }
+
+        mHomeScreenContainer.setVisibility(View.VISIBLE);
     }
 
     private void showFirstrunPager() {
