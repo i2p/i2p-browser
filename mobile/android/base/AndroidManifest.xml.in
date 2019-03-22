@@ -492,14 +492,6 @@
             android:permission="android.permission.BIND_JOB_SERVICE" >
         </service>
 
-        <receiver
-            android:name="org.mozilla.gecko.PackageReplacedReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"></action>
-            </intent-filter>
-        </receiver>
-
         <service
           android:name="org.mozilla.gecko.telemetry.TelemetryUploadService"
           android:permission="android.permission.BIND_JOB_SERVICE"
