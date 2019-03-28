@@ -2,5 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-brandShortName=Tor Browser
-brandFullName=Tor Browser for Android
+MOZ_APP_DISPLAYNAME="Tor Browser for Android (Alpha)"
+ANDROID_PACKAGE_NAME=org.torproject.torbrowser_alpha
+MOZ_UPDATER=
+MOZ_ANDROID_ANR_REPORTER=
