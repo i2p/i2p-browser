@@ -327,8 +327,9 @@ pref("browser.download.panel.shown", true);
 pref("dom.securecontext.whitelist_onions", true);
 
 // Onboarding.
+pref("browser.onboarding.tourset-version", 3);
 pref("browser.onboarding.newtour", "welcome,privacy,tor-network,circuit-display,security,expect-differences,onion-services");
-pref("browser.onboarding.updatetour", "welcome,privacy,tor-network,circuit-display,security,expect-differences,onion-services");
+pref("browser.onboarding.updatetour", "toolbar-update-8.5,security-update-8.5");
 pref("browser.onboarding.skip-tour-button.hide", true);
 
 // prefs to disable jump-list entries in the taskbar on Windows (see bug #12885)
