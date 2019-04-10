@@ -1556,23 +1556,7 @@ var TelemetrySendImpl = {
     };
   },
 
-  runPingSender(url, pingPath, observer) {
-    if (AppConstants.platform === "android") {
-      throw Cr.NS_ERROR_NOT_IMPLEMENTED;
-    }
-
-    const exeName =
-      AppConstants.platform === "win" ? "pingsender.exe" : "pingsender";
-
-    let exe = Services.dirsvc.get("GreBinD", Ci.nsIFile);
-    exe.append(exeName);
-
-    let process = Cc["@mozilla.org/process/util;1"].createInstance(
-      Ci.nsIProcess
-    );
-    process.init(exe);
-    process.startHidden = true;
-    process.noShell = true;
-    process.runAsync([url, pingPath], 2, observer);
+  runPingSender(url, pingPath) {
+    throw Cr.NS_ERROR_NOT_IMPLEMENTED;
   },
 };
