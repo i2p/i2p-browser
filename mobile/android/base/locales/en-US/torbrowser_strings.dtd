@@ -55,3 +55,5 @@
 <!ENTITY pref_tor_network_using_a_provided_bridge "You\'re using &formatS; bridge.">
 
 <!ENTITY tor_notify_user_about_error "An error occurred, please swipe for more information.">
+
+<!ENTITY sync_not_supported "Sync is not currently supported in Tor Browser on Android">

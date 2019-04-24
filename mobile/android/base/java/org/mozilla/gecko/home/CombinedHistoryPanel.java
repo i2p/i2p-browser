@@ -234,10 +234,16 @@ public class CombinedHistoryPanel extends HomeFragment implements RemoteClientsD
         syncSetupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Telemetry.sendUIEvent(TelemetryContract.Event.ACTION, TelemetryContract.Method.BUTTON, "history_syncsetup");
-                // This Activity will redirect to the correct Activity as needed.
-                final Intent intent = new Intent(FxAccountConstants.ACTION_FXA_GET_STARTED);
-                startActivity(intent);
+                // Tell the user this action is not supported
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                dialogBuilder.setMessage(R.string.sync_not_supported);
+                dialogBuilder.setNegativeButton(R.string.button_cancel, new AlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialogBuilder.show();
             }
         });
 
