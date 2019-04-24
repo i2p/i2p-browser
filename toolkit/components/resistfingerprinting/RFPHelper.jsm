@@ -99,7 +99,6 @@ class _RFPHelper {
       this._addRFPObservers();
     } else {
       this._removeRFPObservers();
-      Services.prefs.setIntPref(kPrefSpoofEnglish, 0);
     }
   }
 
