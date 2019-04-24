@@ -40,6 +40,10 @@ var contextMenu = this.contextMenu = new ContextMenu(global);
 // Load the form validation popup handler
 var formSubmitObserver = new FormSubmitObserver(content, this);
 
+addEventListener("resize", function() {
+  sendAsyncMessage("Letterboxing:ContentSizeUpdated");
+});
+
 addMessageListener("RemoteLogins:fillForm", function(message) {
   // intercept if ContextMenu.jsm had sent a plain object for remote targets
   message.objects.inputElement = contextMenu.getTarget(message, "inputElement");
