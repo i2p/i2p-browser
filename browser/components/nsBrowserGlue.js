@@ -104,7 +104,6 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   HybridContentTelemetry: "resource://gre/modules/HybridContentTelemetry.jsm",
   Integration: "resource://gre/modules/Integration.jsm",
   L10nRegistry: "resource://gre/modules/L10nRegistry.jsm",
-  LanguagePrompt: "resource://gre/modules/LanguagePrompt.jsm",
   LightweightThemeManager: "resource://gre/modules/LightweightThemeManager.jsm",
   LoginHelper: "resource://gre/modules/LoginHelper.jsm",
   LoginManagerParent: "resource://gre/modules/LoginManagerParent.jsm",
@@ -126,6 +125,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   ReaderParent: "resource:///modules/ReaderParent.jsm",
   RecentWindow: "resource:///modules/RecentWindow.jsm",
   RemotePrompt: "resource:///modules/RemotePrompt.jsm",
+  RFPHelper: "resource://gre/modules/RFPHelper.jsm",
   SafeBrowsing: "resource://gre/modules/SafeBrowsing.jsm",
   Sanitizer: "resource:///modules/Sanitizer.jsm",
   SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
@@ -1058,6 +1058,7 @@ BrowserGlue.prototype = {
     }
 
     Normandy.uninit();
+    RFPHelper.uninit();
   },
 
   // All initial windows have opened.
@@ -1220,7 +1221,7 @@ BrowserGlue.prototype = {
     }
 
     Services.tm.idleDispatchToMainThread(() => {
-      LanguagePrompt.init();
+      RFPHelper.init();
     });
 
     Services.tm.idleDispatchToMainThread(() => {

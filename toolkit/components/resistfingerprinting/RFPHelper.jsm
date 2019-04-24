@@ -4,7 +4,7 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 "use strict";
 
-var EXPORTED_SYMBOLS = ["LanguagePrompt"];
+var EXPORTED_SYMBOLS = ["RFPHelper"];
 
 ChromeUtils.import("resource://gre/modules/Services.jsm");
 ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -13,7 +13,7 @@ const kPrefResistFingerprinting = "privacy.resistFingerprinting";
 const kPrefSpoofEnglish = "privacy.spoof_english";
 const kTopicHttpOnModifyRequest = "http-on-modify-request";
 
-class _LanguagePrompt {
+class _RFPHelper {
   constructor() {
     this._initialized = false;
   }
@@ -200,4 +200,4 @@ class _LanguagePrompt {
   }
 }
 
-let LanguagePrompt = new _LanguagePrompt();
+let RFPHelper = new _RFPHelper();

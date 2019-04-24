@@ -29,7 +29,6 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   ExtensionsUI: "resource:///modules/ExtensionsUI.jsm",
   FormValidationHandler: "resource:///modules/FormValidationHandler.jsm",
-  LanguagePrompt: "resource://gre/modules/LanguagePrompt.jsm",
   LightweightThemeConsumer: "resource://gre/modules/LightweightThemeConsumer.jsm",
   LightweightThemeManager: "resource://gre/modules/LightweightThemeManager.jsm",
   Log: "resource://gre/modules/Log.jsm",
@@ -47,6 +46,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   PromiseUtils: "resource://gre/modules/PromiseUtils.jsm",
   ReaderMode: "resource://gre/modules/ReaderMode.jsm",
   ReaderParent: "resource:///modules/ReaderParent.jsm",
+  RFPHelper: "resource://gre/modules/RFPHelper.jsm",
   RecentWindow: "resource:///modules/RecentWindow.jsm",
   SafeBrowsing: "resource://gre/modules/SafeBrowsing.jsm",
   Sanitizer: "resource:///modules/Sanitizer.jsm",
@@ -1907,8 +1907,6 @@ var gBrowserInit = {
     SecurityLevelButton.uninit();
 
     gAccessibilityServiceIndicator.uninit();
-
-    LanguagePrompt.uninit();
 
     BrowserSearch.uninit();
 
