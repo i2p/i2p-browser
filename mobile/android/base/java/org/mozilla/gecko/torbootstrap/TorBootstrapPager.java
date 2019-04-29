@@ -52,7 +52,6 @@ public class TorBootstrapPager extends FirstrunPager {
         mActivity = activity;
         final List<TorBootstrapPagerConfig.TorBootstrapPanelConfig> panels = TorBootstrapPagerConfig.getDefaultBootstrapPanel();
 
-        setAdapter(new ViewPagerAdapter(fm, panels));
         this.pagerNavigation = new TorBootstrapPanel.PagerNavigation() {
             @Override
             public void next() {
@@ -66,6 +65,38 @@ public class TorBootstrapPager extends FirstrunPager {
                 }
             }
         };
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fm, panels);
+        setAdapter(viewPagerAdapter);
+
+        // The Fragments (Panels) should be attached to a parent View at this point (and
+        // the parent View should be |this|). If the Fragment's getParent() method returns
+        // |null|, then the Fragment was probably instantiated earlier by the FragmentManager
+        // (most likely because the app's state is being restored after it was killed by the
+        // system). If the parent View is not null, then the Fragment was instantiated below
+        // in the ViewPagerAdapter constructor.
+        //
+        // In the case where the Fragment's getParent() is null, then the Fragment was
+        // instantiated before TorBootstrapPager (|this|) was created. As a result, the
+        // fragment wasn't automatically added as a child View of the Pager (|this|) when it
+        // was created. Add the Fragments as children now.
+        //
+        // There may be a more Androidy-way of handling this.
+        for (int i = 0; i < viewPagerAdapter.getCount(); i++) {
+            Fragment fragment = viewPagerAdapter.getItem(i);
+            if (fragment == null) {
+                continue;
+            }
+
+            View fragmentView = fragment.getView();
+            if (fragmentView == null) {
+                continue;
+            }
+
+            if (fragmentView.getParent() == null) {
+              addView(fragmentView);
+            }
+        }
 
         animateLoad();
     }
@@ -105,15 +136,29 @@ public class TorBootstrapPager extends FirstrunPager {
         public ViewPagerAdapter(FragmentManager fm, List<TorBootstrapPagerConfig.TorBootstrapPanelConfig> panels) {
             super(fm);
             this.panels = panels;
-            this.fragments = getPagerPanels();
+            this.fragments = getPagerPanels(fm);
         }
 
-        private Fragment[] getPagerPanels() {
+        private Fragment[] getPagerPanels(FragmentManager fm) {
             Fragment[] fragments = new Fragment[panels.size()];
             for (int i = 0; i < fragments.length; i++) {
                 TorBootstrapPagerConfig.TorBootstrapPanelConfig panelConfig = panels.get(i);
-                // We know the class is within the "org.mozilla.gecko.torbootstrap" package namespace
-                fragments[i] = Fragment.instantiate(mActivity.getApplicationContext(), panelConfig.getClassname());
+
+                // Fragment tag is created as "android:switcher:" + viewId + ":" + id
+                // where |viewId| is the ID of the parent View container (in this case
+                // TorBootstrapPager is the parent View of the panels), and |id| is the
+                // position within the pager (in this case, it is |i| here)
+                // https://android.googlesource.com/platform/frameworks/support/+/refs/heads/marshmallow-release/v4/java/android/support/v4/app/FragmentPagerAdapter.java#172
+                String fragmentTag = "android:switcher:" + TorBootstrapPager.this.getId() + ":" + i;
+
+                // If the Activity is being restored, then find the existing fragment. If the
+                // fragment doesn't exist, then instantiate it.
+                fragments[i] = fm.findFragmentByTag(fragmentTag);
+                if (fragments[i] == null) {
+                    // We know the class is within the "org.mozilla.gecko.torbootstrap" package namespace
+                    fragments[i] = Fragment.instantiate(mActivity.getApplicationContext(), panelConfig.getClassname());
+                }
+
                 ((TorBootstrapPanel) fragments[i]).setPagerNavigation(pagerNavigation);
                 ((TorBootstrapPanel) fragments[i]).setContext(mActivity);
                 ((TorBootstrapPanel) fragments[i]).setBootstrapController(this);
