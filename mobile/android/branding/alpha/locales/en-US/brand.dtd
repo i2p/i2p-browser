@@ -3,7 +3,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <!ENTITY  brandShortName  "Tor Browser">
-<!ENTITY  brandFullName   "Tor Browser for Android">
+<!ENTITY  brandFullName   "Tor Browser">
 <!ENTITY  vendorShortName "The Tor Project">
 
 <!ENTITY  brandPocket     "">
