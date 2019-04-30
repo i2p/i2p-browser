@@ -63,7 +63,10 @@ public class TorBootstrapPanel extends FirstrunPanel implements TorBootstrapLogg
         public void run() {
             while (true) {
                  synchronized(mOnionAlphaChangerLock) {
-                     if (!mOnionAlphaChangerRunning) {
+                     // Stop the animation and terminate this thread if the main thread
+                     // set |mOnionAlphaChangerRunning| to |false| or if
+                     // getActivity() returns |null|.
+                     if (!mOnionAlphaChangerRunning || getActivity() == null) {
                          // Null the reference for this thread when we exit
                          mChangeOnionAlphaThread = null;
                          return;
@@ -279,6 +282,16 @@ public class TorBootstrapPanel extends FirstrunPanel implements TorBootstrapLogg
         mRoot.getViewTreeObserver().addOnGlobalLayoutListener(mViewTreeLayoutListener);
 
         return mRoot;
+    }
+
+    @Override
+    public void onDestroyView() {
+        // Inform the background AlphaChanging thread it should terminate.
+        synchronized(mOnionAlphaChangerLock) {
+            mOnionAlphaChangerRunning = false;
+        }
+
+        super.onDestroyView();
     }
 
     private void setOnionAlphaValue(int newAlpha) {
