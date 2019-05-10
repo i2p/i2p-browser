@@ -56,6 +56,20 @@
                 oncommand="gIdentityHandler.showSecuritySubView(); gIdentityHandler.recordClick('security_subview_btn');"/>
       </hbox>
 
+      <!-- Circuit display section -->
+      <hbox id="circuit-display-container" class="identity-popup-section">
+        <vbox id="circuit-display-content" flex="1">
+          <label id="circuit-display-headline"
+                 class="identity-popup-headline">&torbutton.circuit_display.title;</label>
+          <html:ul id="circuit-display-nodes" dir="auto"/>
+        </vbox>
+        <vbox id="circuit-reload-content" flex="1">
+          <html:button id="circuit-reload-button"
+                       onclick="torbutton_new_circuit()">&torbutton.circuit_display.new_circuit;</html:button>
+          <hbox id="circuit-guard-note-container"/>
+        </vbox>
+      </hbox>
+
       <!-- Tracking Protection Section -->
       <hbox id="tracking-protection-container"
             class="identity-popup-section"

@@ -34,6 +34,18 @@
                           accesskey="&newPrivateWindow.accesskey;"
                           command="Tools:PrivateBrowsing"
                           key="key_privatebrowsing"/>
+                <menuseparator/>
+                <menuitem id="menu_newIdentity"
+                          accesskey="&torbutton.context_menu.new_identity_key;"
+                          key="torbutton-new-identity-key"
+                          label="&torbutton.context_menu.new_identity;"
+                          oncommand="torbutton_new_identity();"/>
+                <menuitem id="menu_newCircuit"
+                          accesskey="&torbutton.context_menu.new_circuit_key;"
+                          key="torbutton-new-circuit-key"
+                          label="&torbutton.context_menu.new_circuit;"
+                          oncommand="torbutton_new_circuit();"/>
+                <menuseparator/>
                 <menuitem id="menu_openLocation"
                           hidden="true"
                           label="&openLocationCmd.label;"
@@ -563,20 +575,31 @@
 #endif
                   >
               <menupopup id="menu_HelpPopup" onpopupshowing="buildHelpMenu();">
-                <menuitem id="menu_openHelp"
+                <!-- dummy elements to avoid 'getElementById' errors -->
+                <box id="feedbackPage"/>
+                <box id="helpSafeMode"/>
+                <box id="menu_HelpPopup_reportPhishingtoolmenu"/>
+                <box id="menu_HelpPopup_reportPhishingErrortoolmenu"/>
+                <!-- Add Tor Browser manual link -->
+                <menuitem id="torBrowserUserManual"
+                          oncommand="gBrowser.selectedTab = gBrowser.addTab('https://tb-manual.torproject.org/' + Services.locale.requestedLocale, {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});"
+                          label="&aboutTor.torbrowser_user_manual.label;"
+                          accesskey="&aboutTor.torbrowser_user_manual.accesskey;"/>
+                <!-- Bug 18905: Hide unused help menu items -->
+                <!-- <menuitem id="menu_openHelp"
                           oncommand="openHelpLink('firefox-help')"
                           onclick="checkForMiddleClick(this, event);"
                           label="&productHelp2.label;"
                           accesskey="&productHelp2.accesskey;"
 #ifdef XP_MACOSX
-                          key="key_openHelpMac"/>
+                          key="key_openHelpMac"/> -->
 #else
-                          />
+                          /> -->
 #endif
-                <menuitem id="menu_openTour"
+                <!-- <menuitem id="menu_openTour"
                           oncommand="openTourPage();"
                           label="&helpShowTour2.label;"
-                          accesskey="&helpShowTour2.accesskey;"/>
+                          accesskey="&helpShowTour2.accesskey;"/> -->
                 <menuitem id="menu_keyboardShortcuts"
                           oncommand="openHelpLink('keyboard-shortcuts')"
                           onclick="checkForMiddleClick(this, event);"
@@ -587,29 +610,29 @@
                           label="&helpTroubleshootingInfo.label;"
                           oncommand="openTroubleshootingPage()"
                           onclick="checkForMiddleClick(this, event);"/>
-                <menuitem id="feedbackPage"
+                <!-- <menuitem id="feedbackPage"
                           accesskey="&helpFeedbackPage.accesskey;"
                           label="&helpFeedbackPage.label;"
                           oncommand="openFeedbackPage()"
-                          onclick="checkForMiddleClick(this, event);"/>
-                <menuitem id="helpSafeMode"
+                          onclick="checkForMiddleClick(this, event);"/> -->
+                <!-- <menuitem id="helpSafeMode"
                           accesskey="&helpSafeMode.accesskey;"
                           label="&helpSafeMode.label;"
                           stopaccesskey="&helpSafeMode.stop.accesskey;"
                           stoplabel="&helpSafeMode.stop.label;"
-                          oncommand="safeModeRestart();"/>
-                <menuitem id="menu_HelpPopup_reportPhishingtoolmenu"
+                          oncommand="safeModeRestart();"/> -->
+                <!-- <menuitem id="menu_HelpPopup_reportPhishingtoolmenu"
                           label="&reportDeceptiveSiteMenu.title;"
                           accesskey="&reportDeceptiveSiteMenu.accesskey;"
                           disabled="true"
                           oncommand="openUILink(gSafeBrowsing.getReportURL('Phish'), event, {triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal({})});"
                           onclick="checkForMiddleClick(this, event);"
-                          hidden="true"/>
-                <menuitem id="menu_HelpPopup_reportPhishingErrortoolmenu"
+                          hidden="true"/> -->
+                <!-- <menuitem id="menu_HelpPopup_reportPhishingErrortoolmenu"
                           disabled="true"
                           oncommand="ReportFalseDeceptiveSite();"
                           onclick="checkForMiddleClick(this, event);"
-                          hidden="true"/>
+                          hidden="true"/> -->
                 <menuseparator id="helpPolicySeparator"
                           hidden="true"/>
                 <menuitem id="helpPolicySupport"

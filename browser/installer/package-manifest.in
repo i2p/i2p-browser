@@ -249,6 +249,8 @@
 @RESPATH@/browser/chrome/torlauncher/*
 @RESPATH@/browser/@PREF_DIR@/torlauncher-prefs.js
 #endif
+@RESPATH@/chrome/torbutton.manifest
+@RESPATH@/chrome/torbutton/*
 @RESPATH@/chrome/toolkit@JAREXT@
 @RESPATH@/chrome/toolkit.manifest
 @RESPATH@/chrome/recording.manifest

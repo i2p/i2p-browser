@@ -1460,6 +1460,15 @@ var XPIStates = {
       for (let [id, file] of loc.readAddons()) {
         knownIds.delete(id);
 
+        // Uninstall torbutton if it is installed in the user profile
+        if (id === "torbutton@torproject.org" &&
+            loc.name === KEY_APP_PROFILE) {
+          logger.debug("Uninstalling torbutton from user profile.");
+          loc.installer.uninstallAddon(id);
+          changed = true;
+          continue;
+        }
+
         // Since it is now part of the browser, uninstall the Tor Launcher
         // extension. This will remove the Tor Launcher .xpi from user
         // profiles on macOS.
