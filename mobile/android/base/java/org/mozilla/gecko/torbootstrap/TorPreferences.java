@@ -131,6 +131,7 @@ public class TorPreferences extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Begin with the first (Enable Bridges) fragment
         getIntent().putExtra(EXTRA_SHOW_FRAGMENT, sTorNetworkBridgesEnabledPreferenceName);
+        getIntent().putExtra(EXTRA_NO_HEADERS, true);
         super.onCreate(savedInstanceState);
 
         mFrag = null;
