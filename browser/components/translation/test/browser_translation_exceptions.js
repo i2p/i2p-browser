@@ -131,9 +131,9 @@ var gTests = [
       let notif = await getInfoBar();
       ok(notif, "the infobar is visible");
       let ui = gBrowser.selectedBrowser.translationUI;
-      let uri = gBrowser.selectedBrowser.currentURI;
+      let principal = gBrowser.selectedBrowser.contentPrincipal;
       ok(
-        ui.shouldShowInfoBar(uri, "fr"),
+        ui.shouldShowInfoBar(principal, "fr"),
         "check shouldShowInfoBar initially returns true"
       );
 
@@ -160,7 +160,7 @@ var gTests = [
       is(langs.length, 1, "one language in the exception list");
       is(langs[0], "fr", "correct language in the exception list");
       ok(
-        !ui.shouldShowInfoBar(uri, "fr"),
+        !ui.shouldShowInfoBar(principal, "fr"),
         "the infobar wouldn't be shown anymore"
       );
 
@@ -192,9 +192,9 @@ var gTests = [
       let notif = await getInfoBar();
       ok(notif, "the infobar is visible");
       let ui = gBrowser.selectedBrowser.translationUI;
-      let uri = gBrowser.selectedBrowser.currentURI;
+      let principal = gBrowser.selectedBrowser.contentPrincipal;
       ok(
-        ui.shouldShowInfoBar(uri, "fr"),
+        ui.shouldShowInfoBar(principal, "fr"),
         "check shouldShowInfoBar initially returns true"
       );
 
@@ -225,7 +225,7 @@ var gTests = [
         "correct site in the exception list"
       );
       ok(
-        !ui.shouldShowInfoBar(uri, "fr"),
+        !ui.shouldShowInfoBar(principal, "fr"),
         "the infobar wouldn't be shown anymore"
       );
 
