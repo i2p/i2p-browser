@@ -390,8 +390,8 @@ var PermissionPromptPrototype = {
       // If we're reading and setting permissions, then we need
       // to check to see if we already have a permission setting
       // for this particular principal.
-      let { state } = SitePermissions.get(
-        requestingURI,
+      let { state } = SitePermissions.getForPrincipal(
+        this.principal,
         this.permissionKey,
         this.browser
       );
@@ -474,8 +474,8 @@ var PermissionPromptPrototype = {
               if (PrivateBrowsingUtils.isBrowserPrivate(this.browser)) {
                 scope = SitePermissions.SCOPE_SESSION;
               }
-              SitePermissions.set(
-                this.principal.URI,
+              SitePermissions.setForPrincipal(
+                this.principal,
                 this.permissionKey,
                 promptAction.action,
                 scope
@@ -484,8 +484,8 @@ var PermissionPromptPrototype = {
               // Temporarily store BLOCK permissions only
               // SitePermissions does not consider subframes when storing temporary
               // permissions on a tab, thus storing ALLOW could be exploited.
-              SitePermissions.set(
-                this.principal.URI,
+              SitePermissions.setForPrincipal(
+                this.principal,
                 this.permissionKey,
                 promptAction.action,
                 SitePermissions.SCOPE_TEMPORARY,
