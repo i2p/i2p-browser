@@ -8508,7 +8508,7 @@ var CanvasPermissionPromptHelper = {
   },
 
   // aSubject is an nsIBrowser (e10s) or an nsIDOMWindow (non-e10s).
-  // aData is an URL string.
+  // aData is an Origin string.
   observe(aSubject, aTopic, aData) {
     if (
       aTopic != this._permissionsPrompt &&
@@ -8525,7 +8525,6 @@ var CanvasPermissionPromptHelper = {
       browser = aSubject;
     }
 
-    let uri = Services.io.newURI(aData);
     if (gBrowser.selectedBrowser !== browser) {
       // Must belong to some other window.
       return;
@@ -8537,9 +8536,12 @@ var CanvasPermissionPromptHelper = {
       1
     );
 
-    function setCanvasPermission(aURI, aPerm, aPersistent) {
-      Services.perms.add(
-        aURI,
+    let principal = Services.scriptSecurityManager
+                            .createCodebasePrincipalFromOrigin(aData);
+
+    function setCanvasPermission(aPerm, aPersistent) {
+      Services.perms.addFromPrincipal(
+        principal,
         "canvas",
         aPerm,
         aPersistent
@@ -8553,7 +8555,6 @@ var CanvasPermissionPromptHelper = {
       accessKey: gNavigatorBundle.getString("canvas.allow.accesskey"),
       callback(state) {
         setCanvasPermission(
-          uri,
           Ci.nsIPermissionManager.ALLOW_ACTION,
           state && state.checkboxChecked
         );
@@ -8566,7 +8567,6 @@ var CanvasPermissionPromptHelper = {
         accessKey: gNavigatorBundle.getString("canvas.notAllow.accesskey"),
         callback(state) {
           setCanvasPermission(
-            uri,
             Ci.nsIPermissionManager.DENY_ACTION,
             state && state.checkboxChecked
           );
@@ -8585,7 +8585,7 @@ var CanvasPermissionPromptHelper = {
 
     let options = {
       checkbox,
-      name: uri.asciiHost,
+      name: principal.URI.host,
       learnMoreURL:
         Services.urlFormatter.formatURLPref("app.support.baseURL") +
         "fingerprint-permission",
