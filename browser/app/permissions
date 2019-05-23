@@ -11,7 +11,7 @@
 origin	uitour	1	https://3g2upl4pq6kufc4m.onion
 origin	uitour	1	about:home
 origin	uitour	1	about:newtab
-origin	uitour	1	about:tor
+origin	uitour	1	about:i2p
 
 # XPInstall
 origin	install	1	https://addons.mozilla.org

@@ -298,7 +298,7 @@ Object.defineProperty(this, "AddonManager", {
 
 
 var gInitialPages = [
-  "about:tor",
+  "about:i2p",
   "about:blank",
   "about:newtab",
   "about:home",
@@ -307,7 +307,7 @@ var gInitialPages = [
   "about:sessionrestore"
 ];
 if (AppConstants.TOR_BROWSER_UPDATE) {
-  gInitialPages.push("about:tbupdate");
+  gInitialPages.push("about:i2bbupdate");
 }
 
 function isInitialPage(url) {
@@ -7482,7 +7482,7 @@ var gIdentityHandler = {
    * RegExp used to decide if an about url should be shown as being part of
    * the browser UI.
    */
-  _secureInternalUIWhitelist: (AppConstants.TOR_BROWSER_UPDATE ? /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|newaddon|permissions|preferences|rights|searchreset|sessionrestore|support|welcomeback|tor|tbupdate)(?:[?#]|$)/i : /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|newaddon|permissions|preferences|rights|searchreset|sessionrestore|support|welcomeback|tor)(?:[?#]|$)/i),
+  _secureInternalUIWhitelist: (AppConstants.TOR_BROWSER_UPDATE ? /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|newaddon|permissions|preferences|rights|searchreset|sessionrestore|support|welcomeback|i2p|i2bbupdate)(?:[?#]|$)/i : /^(?:accounts|addons|cache|config|crashes|customizing|downloads|healthreport|license|newaddon|permissions|preferences|rights|searchreset|sessionrestore|support|welcomeback|tor)(?:[?#]|$)/i),
 
   get _isBroken() {
     return this._state & Ci.nsIWebProgressListener.STATE_IS_BROKEN;
@@ -7533,6 +7533,9 @@ var gIdentityHandler = {
 
   get _uriIsOnionHost() {
     return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".onion") : false;
+  },
+  get _uriIsI2PHost() {
+    return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".i2p") : false;
   },
 
   // smart getters

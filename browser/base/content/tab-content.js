@@ -362,7 +362,7 @@ let AboutTBUpdateListener = {
   },
 
   get isAboutTBUpdate() {
-    return content.document.documentURI.toLowerCase() == "about:tbupdate";
+    return content.document.documentURI.toLowerCase() == "about:i2bbupdate";
   },
 
   handleEvent: function(aEvent) {

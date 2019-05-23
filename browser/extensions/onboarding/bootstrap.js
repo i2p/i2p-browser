@@ -17,7 +17,7 @@ const {PREF_STRING, PREF_BOOL, PREF_INT} = Ci.nsIPrefBranch;
 // In Tor Browser we initialize onboarding upon "final-ui-startup" instead
 // of waiting for "browser-delayed-startup-finished"; otherwise, on first
 // run the onboarding frame script's "onload" listener is installed too
-// late to detect that about:tor is loaded.
+// late to detect that about:i2p is loaded.
 const BROWSER_READY_NOTIFICATION = "final-ui-startup";
 const BROWSER_SESSION_STORE_NOTIFICATION = "sessionstore-windows-restored";
 const PREF_WHITELIST = [

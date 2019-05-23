@@ -11,7 +11,7 @@ ChromeUtils.import("resource://gre/modules/Services.jsm");
 const ONBOARDING_CSS_URL = "resource://onboarding/onboarding.css";
 const ABOUT_HOME_URL = "about:home";
 const ABOUT_NEWTAB_URL = "about:newtab";
-const ABOUT_TOR_URL = "about:tor";
+const ABOUT_TOR_URL = "about:i2p";
 const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
 const TORBROWSER_WELCOME_TOUR_NAME_KEY = "onboarding.tour-tor-welcome";
 const BUNDLE_URI = "chrome://onboarding/locale/onboarding.properties";
@@ -696,7 +696,7 @@ class Onboarding {
 
   _resizeUI() {
     // In Tor Browser we check against innerWidth instead of against the
-    // body's bounding rect because about:tor keeps its body hidden until
+    // body's bounding rect because about:i2p keeps its body hidden until
     // the Tor status is known, and the bounding rect is zero while the
     // body is hidden.
     this._windowWidth = this._window.innerWidth;

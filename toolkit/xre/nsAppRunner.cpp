@@ -2463,7 +2463,7 @@ static nsresult migrateInAppTorBrowserProfile(nsIToolkitProfile* aProfile,
   rv = appRootDir->Clone(getter_AddRefs(oldTorBrowserDir));
   NS_ENSURE_SUCCESS(rv, rv);
   rv = oldTorBrowserDir->AppendRelativeNativePath(
-      NS_LITERAL_CSTRING("TorBrowser"));
+      NS_LITERAL_CSTRING("I2PBrowser"));
   NS_ENSURE_SUCCESS(rv, rv);
 
   // Get an nsIFile for the TorBrowser-Data directory.
@@ -2609,7 +2609,7 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
     nsresult rv = GetAppRootDir(aAppDir, getter_AddRefs(oldTorProfileDir));
     NS_ENSURE_SUCCESS(rv, rv);
     rv = oldTorProfileDir->AppendRelativeNativePath(NS_LITERAL_CSTRING(
-        "TorBrowser" XPCOM_FILE_PATH_SEPARATOR "Data" XPCOM_FILE_PATH_SEPARATOR
+        "I2PBrowser" XPCOM_FILE_PATH_SEPARATOR "Data" XPCOM_FILE_PATH_SEPARATOR
         "Browser" XPCOM_FILE_PATH_SEPARATOR "profile.default"));
     NS_ENSURE_SUCCESS(rv, rv);
     bool isOldProfile = false;
@@ -3029,7 +3029,7 @@ static bool CheckCompatibility(nsIFile* aProfileDir, const nsCString& aVersion,
 
 #ifdef TOR_BROWSER_VERSION
   nsAutoCString tbVersion(TOR_BROWSER_VERSION);
-  rv = parser.GetString("Compatibility", "LastTorBrowserVersion", buf);
+  rv = parser.GetString("Compatibility", "LastI2PBrowserVersion", buf);
   if (NS_FAILED(rv) || !tbVersion.Equals(buf)) return false;
 #endif
 
@@ -3115,7 +3115,7 @@ static void WriteVersion(nsIFile* aProfileDir, const nsCString& aVersion,
 #ifdef TOR_BROWSER_VERSION
   nsAutoCString tbVersion(TOR_BROWSER_VERSION);
   static const char kTorBrowserVersionHeader[] =
-      NS_LINEBREAK "LastTorBrowserVersion=";
+      NS_LINEBREAK "LastI2PBrowserVersion=";
   PR_Write(fd, kTorBrowserVersionHeader, sizeof(kTorBrowserVersionHeader) - 1);
   PR_Write(fd, tbVersion.get(), tbVersion.Length());
 #endif

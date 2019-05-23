@@ -541,7 +541,7 @@ nsBrowserContentHandler.prototype = {
       }
     }
 
-    // Retrieve the home page early so we can compare it against about:tor
+    // Retrieve the home page early so we can compare it against about:i2p
     // to decide whether or not we need an override page (second tab) after
     // an update was applied.
     var startPage = "";
@@ -595,11 +595,11 @@ nsBrowserContentHandler.prototype = {
             // we may open the startPage in addition to restoring the session.
             //
             // Tor Browser: Instead of opening the post-update "override page"
-            // directly, we ensure that about:tor will be opened in a special
+            // directly, we ensure that about:i2p will be opened in a special
             // mode that notifies the user that their browser was updated.
-            // The about:tor page will provide a link to the override page
+            // The about:i2p page will provide a link to the override page
             // where the user can learn more about the update, as well as a
-            // link to the Tor Browser changelog page (about:tbupdate). The
+            // link to the Tor Browser changelog page (about:i2bbupdate). The
             // override page URL comes from the openURL attribute within the
             // updates.xml file or, if no showURL action is present, from the
             // startup.homepage_override_url pref.
@@ -625,13 +625,13 @@ nsBrowserContentHandler.prototype = {
             {
               prefb.setCharPref("torbrowser.post_update.url", overridePage);
               prefb.setBoolPref("torbrowser.post_update.shouldNotify", true);
-              // If the user's homepage is about:tor, we will inform them
+              // If the user's homepage is about:i2p, we will inform them
               // about the update on that page; otherwise, we arrange to
-              // open about:tor in a secondary tab.
-              if (startPage === "about:tor")
+              // open about:i2p in a secondary tab.
+              if (startPage === "about:i2p")
                 overridePage = "";
               else
-                overridePage = "about:tor";
+                overridePage = "about:i2p";
             }
 #endif
             break;

@@ -3,7 +3,7 @@
     "newtab.load_homepage": true
   },
   "AndroidPreferences": {
-    "homepage": "about:tor",
+    "homepage": "about:i2p",
     "startpane_enabled_after_57": true,
     "startpane_enabled": true,
     "history.clear_on_exit":  [

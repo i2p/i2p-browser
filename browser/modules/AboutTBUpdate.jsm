@@ -22,8 +22,8 @@ const kSendUpdateMessageName    = "AboutTBUpdate:Update";
 #endif
 
 /**
- * This code provides services to the about:tbupdate page. Whenever
- * about:tbupdate needs to do something chrome-privileged, it sends a
+ * This code provides services to the about:i2bbupdate page. Whenever
+ * about:i2bbupdate needs to do something chrome-privileged, it sends a
  * message that's handled here. It is modeled after Mozilla's about:home
  * implementation.
  */
@@ -85,7 +85,7 @@ var AboutTBUpdate = {
       f = f.parent;
       f.append("Resources");
 #endif
-      f.append("TorBrowser");
+      f.append("I2PBrowser");
 #else
       // "DefProfRt" is .../TorBrowser/Data/Browser
       let f = Cc["@mozilla.org/file/directory_service;1"]

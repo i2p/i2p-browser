@@ -98,7 +98,7 @@ TorBrowser_GetUserDataDir(nsIFile *aExeFile, nsIFile** aFile)
   // TOR_BROWSER_DATA_OUTSIDE_APP_DIR is not defined).
   nsresult rv = GetAppRootDir(aExeFile, getter_AddRefs(tbDataDir));
   NS_ENSURE_SUCCESS(rv, rv);
-  rv = tbDataDir->AppendNative(NS_LITERAL_CSTRING("TorBrowser"));
+  rv = tbDataDir->AppendNative(NS_LITERAL_CSTRING("I2PBrowser"));
   NS_ENSURE_SUCCESS(rv, rv);
 #endif
 

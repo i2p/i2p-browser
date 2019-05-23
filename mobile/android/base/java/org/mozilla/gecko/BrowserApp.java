@@ -3131,7 +3131,7 @@ public class BrowserApp extends GeckoApp
                 public void onFinish() {
                     // Show the chrome again
                     toggleToolbarChrome(true);
-                    // When the content loaded in the background (such as about:tor),
+                    // When the content loaded in the background (such as about:i2p),
                     // it was loaded while mBrowserChrome was GONE. We should refresh the
                     // height now so the page is rendered correctly.
                     Tabs.getInstance().getSelectedTab().doReload(true);
@@ -3311,7 +3311,7 @@ public class BrowserApp extends GeckoApp
         mFirstrunAnimationContainer.registerOnFinishListener(null);
         mFirstrunAnimationContainer.hide();
 
-        // This is a little hacky, but this ensures about:tor (or whichever homepage
+        // This is a little hacky, but this ensures about:i2p (or whichever homepage
         // is configured) shows when the user closes the FirstRun panels.
         String homepageUrl = Tabs.getHomepage(BrowserApp.this);
 
