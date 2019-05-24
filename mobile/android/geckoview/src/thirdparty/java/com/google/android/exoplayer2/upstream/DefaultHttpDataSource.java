@@ -396,7 +396,7 @@ public class DefaultHttpDataSource implements HttpDataSource {
   private HttpURLConnection makeConnection(URL url, byte[] postBody, long position,
       long length, boolean allowGzip, boolean followRedirects) throws IOException, URISyntaxException {
     // AppConstants.isTorBrowser() is in base/, so it's not available in geckoview/
-    Log.i(TAG, "This is Tor Browser. Skipping.");
+    Log.i(TAG, "This is I2P Browser. Skipping.");
     throw new IOException();
 
     /**

@@ -2464,7 +2464,7 @@ static int ProcessReplaceRequest() {
 #if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
   NS_tsnprintf(updatedAppDir, sizeof(updatedAppDir) / sizeof(updatedAppDir[0]),
                NS_T("%s/Updated.app"), gInstallDirPath);
-  // For Tor Browser on OS X, we also need to copy everything else that is
+  // For I2P Browser on OS X, we also need to copy everything else that is
   // inside Updated.app.
   NS_tDIR *dir = NS_topendir(updatedAppDir);
   if (dir) {
@@ -3335,14 +3335,14 @@ int NS_main(int argc, NS_tchar **argv) {
 #ifdef TOR_BROWSER_UPDATE
 #ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
         // Because the TorBrowser-Data directory that contains the user's
-        // profile is a sibling of the Tor Browser installation directory,
+        // profile is a sibling of the I2P Browser installation directory,
         // the user probably has permission to apply updates. Therefore, to
         // avoid potential security issues such as CVE-2015-0833, do not
         // attempt to elevate privileges. Instead, write a "failed" message
         // to the update status file (this function will return immediately
         // after the CloseHandle(elevatedFileHandle) call below).
 #else
-        // Because the user profile is contained within the Tor Browser
+        // Because the user profile is contained within the I2P Browser
         // installation directory, the user almost certainly has permission to
         // apply updates. Therefore, to avoid potential security issues such
         // as CVE-2015-0833, do not attempt to elevate privileges. Instead,

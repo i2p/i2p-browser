@@ -2394,10 +2394,10 @@ static nsresult migrateOneTorBrowserDataDir(
   nsCOMPtr<nsIFile> tmpDir;
   if (destDirExists) {
     // The destination directory exists. When we are migrating an old
-    // Tor Browser profile, we expect this to be the case because we first
+    // I2P Browser profile, we expect this to be the case because we first
     // allow the standard Mozilla startup code to create a new profile as
     // usual, and then later (here) we set aside that profile directory and
-    // replace it with the old Tor Browser profile that we need to migrate.
+    // replace it with the old I2P Browser profile that we need to migrate.
     // For now, move the Mozilla profile directory aside and set tmpDir to
     // point to its new, temporary location in case migration fails and we
     // need to restore the profile that was created by the Mozilla code.
@@ -2892,7 +2892,7 @@ static nsresult SelectProfile(nsIProfileLock** aResult,
 #endif
       aProfileSvc->Flush();
 #ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
-      // Handle migration from an older version of Tor Browser in which the
+      // Handle migration from an older version of I2P Browser in which the
       // user data was stored inside the application directory.
       rv = migrateInAppTorBrowserProfile(profile, aAppDir);
       if (!NS_SUCCEEDED(rv)) {
@@ -3961,7 +3961,7 @@ int XREMain::XRE_mainInit(bool* aExitFlag) {
       NS_LITERAL_CSTRING("SafeMode"),
       gSafeMode ? NS_LITERAL_CSTRING("1") : NS_LITERAL_CSTRING("0"));
 
-  // In Tor Browser, remoting is disabled by default unless -osint is used.
+  // In I2P Browser, remoting is disabled by default unless -osint is used.
   bool allowRemote = (CheckArg("allow-remote") == ARG_FOUND);
   if (!allowRemote && (CheckArg("osint", false, nullptr, false) != ARG_FOUND)) {
     SaveToEnv("MOZ_NO_REMOTE=1");

@@ -38,8 +38,6 @@
                 <!-- To be modified by torbutton 26321 -->
                 <menuitem id="menu_newIdentity"
                           label="New Identity"/>
-                <menuitem id="menu_newCircuit"
-                          label="New Tor Circuit for this Site"/>
                 <menuseparator/>
 #ifdef MAC_NON_BROWSER_WINDOW
                 <menuitem id="menu_openLocation"

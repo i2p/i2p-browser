@@ -98,7 +98,7 @@ const OVERRIDE_NEW_BUILD_ID = 3;
  * Returns:
  *  OVERRIDE_NEW_PROFILE if this is the first run with a new profile.
  *  OVERRIDE_NEW_MSTONE if this is the first run with a build with a different
- *                      Gecko milestone or Tor Browser version (i.e. right
+ *                      Gecko milestone or I2P Browser version (i.e. right
  *                      after an upgrade).
  *  OVERRIDE_NEW_BUILD_ID if this is the first run with a new build ID of the
  *                        same Gecko milestone (i.e. after a nightly upgrade).
@@ -138,7 +138,7 @@ function needHomepageOverride(prefb) {
 #ifdef TOR_BROWSER_VERSION
     prefb.setCharPref(kTBSavedVersionPref, TOR_BROWSER_VERSION);
 
-    // After an upgrade from an older release of Tor Browser (<= 5.5a1), the
+    // After an upgrade from an older release of I2P Browser (<= 5.5a1), the
     // savedmstone will be undefined because those releases included the
     // value "ignore" for the browser.startup.homepage_override.mstone pref.
     // To correctly detect an upgrade vs. a new profile, we check for the
@@ -570,7 +570,7 @@ nsBrowserContentHandler.prototype = {
       let old_buildId = Services.prefs.getCharPref("browser.startup.homepage_override.buildID", "unknown");
 
 #ifdef TOR_BROWSER_VERSION
-      // We do the same for the Tor Browser version.
+      // We do the same for the I2P Browser version.
       var old_tbversion = null;
       try {
         old_tbversion = prefb.getCharPref(kTBSavedVersionPref);
@@ -594,12 +594,12 @@ nsBrowserContentHandler.prototype = {
             // to be read. If a crash occurs after updating, before restarting,
             // we may open the startPage in addition to restoring the session.
             //
-            // Tor Browser: Instead of opening the post-update "override page"
+            // I2P Browser: Instead of opening the post-update "override page"
             // directly, we ensure that about:i2p will be opened in a special
             // mode that notifies the user that their browser was updated.
             // The about:i2p page will provide a link to the override page
             // where the user can learn more about the update, as well as a
-            // link to the Tor Browser changelog page (about:i2bbupdate). The
+            // link to the I2P Browser changelog page (about:i2bbupdate). The
             // override page URL comes from the openURL attribute within the
             // updates.xml file or, if no showURL action is present, from the
             // startup.homepage_override_url pref.

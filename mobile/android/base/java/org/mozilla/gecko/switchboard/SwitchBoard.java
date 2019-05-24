@@ -411,7 +411,7 @@ public class SwitchBoard {
         BufferedReader bufferReader = null;
 
         if (AppConstants.isTorBrowser()) {
-            Log.i(TAG, "This is Tor Browser. Skipping.");
+            Log.i(TAG, "This is I2P Browser. Skipping.");
             return null;
         }
 

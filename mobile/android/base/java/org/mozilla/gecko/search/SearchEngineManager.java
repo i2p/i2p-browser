@@ -380,7 +380,7 @@ public class SearchEngineManager implements SharedPreferences.OnSharedPreference
      */
     private String fetchCountryCode() {
         if (AppConstants.isTorBrowser()) {
-            Log.i(LOG_TAG, "This is Tor Browser. Skipping.");
+            Log.i(LOG_TAG, "This is I2P Browser. Skipping.");
             return null;
         }
 

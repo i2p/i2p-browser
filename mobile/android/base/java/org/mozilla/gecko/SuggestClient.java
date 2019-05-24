@@ -73,7 +73,7 @@ public class SuggestClient {
 
         ArrayList<String> suggestions = new ArrayList<String>();
         if (AppConstants.isTorBrowser()) {
-            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            Log.i(LOGTAG, "This is I2P Browser. Skipping.");
             return suggestions;
         }
 

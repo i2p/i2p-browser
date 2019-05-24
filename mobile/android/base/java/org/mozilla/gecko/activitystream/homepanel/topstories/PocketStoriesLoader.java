@@ -125,7 +125,7 @@ public class PocketStoriesLoader extends AsyncTaskLoader<List<TopStory>> {
 
     protected String makeAPIRequestWithKey(final String apiKey) {
         if (AppConstants.isTorBrowser()) {
-            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            Log.i(LOGTAG, "This is I2P Browser. Skipping.");
             return null;
         }
 

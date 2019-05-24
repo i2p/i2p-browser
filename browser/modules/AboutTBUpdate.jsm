@@ -63,7 +63,7 @@ var AboutTBUpdate = {
   // Read the text from the beginning of the changelog file that is located
   // at TorBrowser/Docs/ChangeLog.txt and return an object that contains
   // the following properties:
-  //   version        e.g., Tor Browser 8.5
+  //   version        e.g., I2P Browser 8.5
   //   releaseDate    e.g., March 31 2019
   //   releaseNotes   details of changes (lines 2 - end of ChangeLog.txt)
   // We attempt to parse the first line of ChangeLog.txt to extract the
@@ -117,7 +117,7 @@ var AboutTBUpdate = {
         info.releaseNotes = matchArray[2];
         let line1 = matchArray[1];
         // Extract the version and releaseDate. The first line looks like:
-        //   Tor Browser 8.5 -- May 1 2019
+        //   I2P Browser 8.5 -- May 1 2019
         // The regex uses two capture groups:
         //   text that does not include a hyphen: (^[^-]*)
         //   remaining text: (.*$)

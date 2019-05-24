@@ -473,7 +473,7 @@ public class CrashReporter extends AppCompatActivity
 
     private void sendReport(File minidumpFile, Map<String, String> extras, File extrasFile) {
         if (AppConstants.isTorBrowser()) {
-            Log.i(LOGTAG, "sendReport: This is Tor Browser. Skipping.");
+            Log.i(LOGTAG, "sendReport: This is I2P Browser. Skipping.");
             return;
         }
 

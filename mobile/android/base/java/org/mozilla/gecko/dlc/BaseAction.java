@@ -152,8 +152,8 @@ public abstract class BaseAction {
             throws UnrecoverableDownloadContentException, IOException {
         try {
             if (AppConstants.isTorBrowser()) {
-                String erdcl = "This is Tor Browser. Downloading is disabled for: " + url;
-                Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+                String erdcl = "This is I2P Browser. Downloading is disabled for: " + url;
+                Log.i(LOGTAG, "This is I2P Browser. Skipping.");
                 throw new UnrecoverableDownloadContentException(erdcl);
             }
 

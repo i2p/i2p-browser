@@ -375,7 +375,7 @@ function areDirectoryEntriesWriteable(aDir) {
 function getElevationRequired() {
 #if defined(TOR_BROWSER_UPDATE)
   // To avoid potential security holes associated with running the updater
-  // process with elevated privileges, Tor Browser does not support elevation.
+  // process with elevated privileges, I2P Browser does not support elevation.
   return false;
 #else
   if (AppConstants.platform != "macosx") {
@@ -1917,7 +1917,7 @@ UpdateService.prototype = {
 
 #if defined(TOR_BROWSER_UPDATE) && !defined(XP_MACOSX)
   /**
-   * When updating from an earlier version to Tor Browser 6.0 or later, old
+   * When updating from an earlier version to I2P Browser 6.0 or later, old
    * update info files are left behind on Linux and Windows. Remove them.
    */
   _removeOrphanedTorBrowserFiles: function AUS__removeOrphanedTorBrowserFiles() {
@@ -2520,8 +2520,8 @@ UpdateService.prototype = {
       LOG("UpdateService:downloadUpdate - canceling download of update since " +
           "it is for an earlier or same application version and build ID.\n" +
 #ifdef TOR_BROWSER_UPDATE
-          "current Tor Browser version: " + compatVersion + "\n" +
-          "update Tor Browser version : " + update.appVersion + "\n" +
+          "current I2P Browser version: " + compatVersion + "\n" +
+          "update I2P Browser version : " + update.appVersion + "\n" +
 #else
           "current application version: " + compatVersion + "\n" +
           "update application version : " + update.appVersion + "\n" +
@@ -3742,7 +3742,7 @@ Downloader.prototype = {
           state = STATE_PENDING;
         }
 #if defined(TOR_BROWSER_UPDATE)
-        // In Tor Browser, show update-related messages in the hamburger menu
+        // In I2P Browser, show update-related messages in the hamburger menu
         // even if the update was started in the foreground, e.g., from the
         // about box.
         shouldShowPrompt = !getCanStageUpdates();
@@ -3929,7 +3929,7 @@ Downloader.prototype = {
           LOG("Downloader:onStopRequest - failed to stage update. Exception: " +
               e);
 #if defined(TOR_BROWSER_UPDATE)
-          // In Tor Browser, show update-related messages in the hamburger menu
+          // In I2P Browser, show update-related messages in the hamburger menu
           // even if the update was started in the foreground, e.g., from the
           // about box.
           shouldShowPrompt = true;
@@ -4041,10 +4041,10 @@ UpdatePrompt.prototype = {
 
     if (background && Services.prefs.getBoolPref(PREF_APP_UPDATE_DOORHANGER, false)) {
       // To fix https://trac.torproject.org/projects/tor/ticket/27828
-      // ("Check for Tor Browser update" doesn't seem to do anything), in
-      // Tor Browser we only return here when the background parameter is
+      // ("Check for I2P Browser update" doesn't seem to do anything), in
+      // I2P Browser we only return here when the background parameter is
       // true. This causes the update wizard XUL window to (correctly) be
-      // opened in response to "Check for Tor Browser Update."
+      // opened in response to "Check for I2P Browser Update."
       // This change does not alter the behavior of any existing
       // update-related UI because all callers of showUpdateDownloaded()
       // other than Torbutton pass true for the background parameter.

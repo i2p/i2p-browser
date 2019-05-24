@@ -381,7 +381,7 @@ public class UpdateService extends IntentService {
             URI uri = getUpdateURI(force);
 
             if (AppConstants.isTorBrowser()) {
-              Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+              Log.i(LOGTAG, "This is I2P Browser. Skipping.");
               return null;
             }
 
@@ -535,7 +535,7 @@ public class UpdateService extends IntentService {
         URL url = null;
 
         if (AppConstants.isTorBrowser()) {
-          Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+          Log.i(LOGTAG, "This is I2P Browser. Skipping.");
           return null;
         }
 

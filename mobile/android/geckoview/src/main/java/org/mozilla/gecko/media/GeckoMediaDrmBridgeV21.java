@@ -474,7 +474,7 @@ public class GeckoMediaDrmBridgeV21 implements GeckoMediaDrm {
         @Override
         protected Void doInBackground(Void... params) {
             // AppConstants.isTorBrowser() is in base/, so it's not available in geckoview/
-            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            Log.i(LOGTAG, "This is I2P Browser. Skipping.");
             return null;
 
             /* Dead code */

@@ -556,7 +556,7 @@ public class Distribution {
         }
 
         if (AppConstants.isTorBrowser()) {
-            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            Log.i(LOGTAG, "This is I2P Browser. Skipping.");
             return false;
         }
 

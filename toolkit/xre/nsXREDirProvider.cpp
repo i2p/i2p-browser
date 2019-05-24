@@ -1117,7 +1117,7 @@ static bool GetCachedHash(HKEY rootKey, const nsAString& regPath,
 nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult) {
   nsCOMPtr<nsIFile> updRoot;
 #if defined(TOR_BROWSER_UPDATE)
-  // For Tor Browser, we store update history, etc. within the UpdateInfo
+  // For I2P Browser, we store update history, etc. within the UpdateInfo
   // directory under the user data directory.
   nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(updRoot));
   NS_ENSURE_SUCCESS(rv, rv);
@@ -1127,7 +1127,7 @@ nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult) {
   // Since the TorBrowser-Data directory may be shared among different
   // installations of the application, embed the app path in the update dir
   // so that the update history is partitioned. This is much less likely to
-  // be an issue on Linux or Windows because the Tor Browser packages for
+  // be an issue on Linux or Windows because the I2P Browser packages for
   // those platforms include a "container" folder that provides partitioning
   // by default, and we do not support use of a shared, OS-recommended area
   // for user data on those platforms.

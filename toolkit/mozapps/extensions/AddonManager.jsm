@@ -811,7 +811,7 @@ var AddonManagerInternal = {
 #ifdef TOR_BROWSER_VERSION
       // To ensure that extension override prefs are reinstalled into the
       // user's profile after each update, set appChanged = true if the
-      // Mozilla app version has not changed but the Tor Browser version
+      // Mozilla app version has not changed but the I2P Browser version
       // has changed.
       let tbChanged = undefined;
       try {
@@ -821,7 +821,7 @@ var AddonManagerInternal = {
       catch (e) { }
       if (tbChanged !== false) {
         // Because PREF_EM_LAST_TORBROWSER_VERSION was not present in older
-        // versions of Tor Browser, an app change is indicated when tbChanged
+        // versions of I2P Browser, an app change is indicated when tbChanged
         // is undefined or true.
         if (appChanged === false) {
           appChanged = true;

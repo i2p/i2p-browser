@@ -41,7 +41,7 @@ XPCOMUtils.defineLazyGetter(this, "SecurityLevelStrings", function() {
     standard : {
       level : getString("securityLevel.standard.level", "Standard"),
       tooltip : getString("securityLevel.standard.tooltip", "Security Level : Standard"),
-      summary : getString("securityLevel.standard.summary", "All Tor Browser and website features are enabled."),
+      summary : getString("securityLevel.standard.summary", "All I2P Browser and website features are enabled."),
     },
     safer : {
       level : getString("securityLevel.safer.level", "Safer"),

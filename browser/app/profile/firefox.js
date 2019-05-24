@@ -52,7 +52,7 @@ pref("extensions.getAddons.themes.browseURL", "https://addons.mozilla.org/%LOCAL
 
 pref("extensions.update.autoUpdateDefault", true);
 
-// No AUS check for system add-on updates for Tor Browser users.
+// No AUS check for system add-on updates for I2P Browser users.
 pref("extensions.systemAddon.update.url", "");
 
 // Disable add-ons that are not installed by the user in all scopes by default.

@@ -165,7 +165,7 @@ public class SendTab extends ShareMethod {
         }
 
         // Have registered UIs offer to set up a Firefox Account.
-        // Comment for Tor Browser
+        // Comment for I2P Browser
         //setOverrideIntentAction(FxAccountConstants.ACTION_FXA_GET_STARTED);
     }
 
@@ -188,7 +188,7 @@ public class SendTab extends ShareMethod {
         if (validGUIDs.isEmpty()) {
             // Guess we'd better override. We have no clients.
             // This does the broadcast for us.
-            // Comment for Tor Browser
+            // Comment for I2P Browser
             //setOverrideIntentAction(FxAccountConstants.ACTION_FXA_GET_STARTED);
             return;
         }

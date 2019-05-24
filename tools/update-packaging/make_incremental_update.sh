@@ -90,7 +90,7 @@ if [ $# = 0 ]; then
 fi
 
 # Firefox uses requested_forced_updates='Contents/MacOS/firefox' due to
-# 770996 but in Tor Browser we do not need that fix.
+# 770996 but in I2P Browser we do not need that fix.
 requested_forced_updates=""
 directories_to_remove=""
 extra_files_to_remove=""

@@ -106,7 +106,7 @@ function createOnboardingTourButton(div, buttonId, l10nId, buttonElementTagName 
  *   getPage() {},
  * },
  **/
-// Tor Browser tours:
+// I2P Browser tours:
 var onboardingTourset = {
   // Tour items for new users:
   "welcome": {
@@ -236,7 +236,7 @@ var onboardingTourset = {
       return div;
     },
   },
-  // Tour items for users who have updated their Tor Browser:
+  // Tour items for users who have updated their I2P Browser:
   "toolbar-update-8.5": {
     id: "onboarding-tour-tor-toolbar-update-8-5",
     tourNameId: "onboarding.tour-tor-toolbar",
@@ -695,7 +695,7 @@ class Onboarding {
   }
 
   _resizeUI() {
-    // In Tor Browser we check against innerWidth instead of against the
+    // In I2P Browser we check against innerWidth instead of against the
     // body's bounding rect because about:i2p keeps its body hidden until
     // the Tor status is known, and the bounding rect is zero while the
     // body is hidden.
@@ -707,7 +707,7 @@ class Onboarding {
     }
 
     this._initUI();
-    // For Tor Browser, show the "Let's get started" speech bubble until each
+    // For I2P Browser, show the "Let's get started" speech bubble until each
     // tour item has been completed.
     let isTourComplete = (ICON_STATE_WATERMARK ==
                       Services.prefs.getStringPref("browser.onboarding.state",
@@ -750,7 +750,7 @@ class Onboarding {
     this._onIconStateChange(Services.prefs.getStringPref("browser.onboarding.state", ICON_STATE_DEFAULT));
 
     // Doing tour notification takes some effort. Let's do it on idle.
-// For now, onboarding notifications are disabled in Tor Browser.
+// For now, onboarding notifications are disabled in I2P Browser.
 //    this._window.requestIdleCallback(() => this.showNotification());
   }
 
@@ -1672,7 +1672,7 @@ class Onboarding {
 
     let header = this._window.document.createElement("header");
     header.id = "onboarding-header";
-// In Tor Browser, we do not want header text.
+// In I2P Browser, we do not want header text.
 //    header.textContent = this._bundle.GetStringFromName("onboarding.overlay-title2");
     this._dialog.appendChild(header);
 
@@ -1850,7 +1850,7 @@ class _TorOnboardingStringBundle {
     this._mFirefoxBundle = Services.strings.createBundle(BUNDLE_URI);
     this._mTorButtonBundle = Services.strings.createBundle(TORBUTTON_BUNDLE_URI);
 
-    // If the Tor Browser onboarding strings which ship inside Torbutton are
+    // If the I2P Browser onboarding strings which ship inside Torbutton are
     // not available, fail initialization so that no tours are shown.
     try {
       let result = this._mTorButtonBundle.GetStringFromName(

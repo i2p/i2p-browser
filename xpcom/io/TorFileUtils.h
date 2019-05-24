@@ -12,7 +12,7 @@
 /**
  * TorBrowser_GetUserDataDir
  *
- * Retrieve the Tor Browser user data directory.
+ * Retrieve the I2P Browser user data directory.
  * When built with --enable-tor-browser-data-outside-app-dir, the directory
  * is next to the application directory, except on Mac OS where it may be
  * there or it may be at ~/Library/Application Support/TorBrowser-Data (the
@@ -23,7 +23,7 @@
  * directory is TorBrowser.app/TorBrowser.
  *
  * @param aExeFile  The firefox executable.
- * @param aFile     Out parameter that is set to the Tor Browser user data
+ * @param aFile     Out parameter that is set to the I2P Browser user data
  *                  directory.
  * @return NS_OK on success.  Error otherwise.
  */

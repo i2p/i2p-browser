@@ -321,7 +321,7 @@ static bool IsOlderVersion(nsIFile *versionFile, const char *appVersion) {
 #if defined(TOR_BROWSER_UPDATE) && defined(XP_MACOSX)
 static nsresult GetUpdateDirFromAppDir(nsIFile *aAppDir, nsIFile **aResult) {
   // On Mac OSX, we stage the update to an Updated.app directory that is
-  // directly below the main Tor Browser.app directory (two levels up from
+  // directly below the main I2P Browser.app directory (two levels up from
   // the appDir).
   NS_ENSURE_ARG_POINTER(aAppDir);
   NS_ENSURE_ARG_POINTER(aResult);

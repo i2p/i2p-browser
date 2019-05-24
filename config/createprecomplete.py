@@ -17,7 +17,7 @@ import os
 def get_build_entries(root_path):
     """ Iterates through the root_path, creating a list for each file and
         directory. Excludes any file paths ending with channel-prefs.js.
-        To support Tor Browser updates, excludes:
+        To support I2P Browser updates, excludes:
           TorBrowser/Data/Browser/profiles.ini
           TorBrowser/Data/Browser/profile.default/bookmarks.html
           TorBrowser/Data/Tor/torrc
