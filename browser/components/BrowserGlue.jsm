@@ -268,6 +268,10 @@ let LEGACY_ACTORS = {
       events: {
         resize: {},
       },
+      messages: [
+        "Finder:FindbarOpen",
+        "Finder:FindbarClose",
+      ],
     },
   },
 

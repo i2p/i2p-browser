@@ -27,4 +27,9 @@ class RFPHelperChild extends ActorChild {
       this.mm.sendAsyncMessage("Letterboxing:ContentSizeUpdated");
     }
   }
+  receiveMessage(aMessage) {
+    if (isLetterboxingEnabled) {
+      this.mm.sendAsyncMessage("Letterboxing:ContentSizeUpdated");
+    }
+  }
 }
