@@ -475,22 +475,17 @@ function prompt(aBrowser, aRequest) {
     requestTypes,
   } = aRequest;
 
-  let uri;
-  try {
-    // This fails for principals that serialize to "null", e.g. file URIs.
-    uri = Services.io.newURI(aRequest.origin);
-  } catch (e) {
-    uri = Services.io.newURI(aRequest.documentURI);
-  }
+  let principal = Services.scriptSecurityManager
+                          .createCodebasePrincipalFromOrigin(aRequest.origin);
 
   // If the user has already denied access once in this tab,
   // deny again without even showing the notification icon.
   if (
     (audioDevices.length &&
-      SitePermissions.get(uri, "microphone", aBrowser).state ==
+      SitePermissions.getForPrincipal(principal, "microphone", aBrowser).state ==
         SitePermissions.BLOCK) ||
     (videoDevices.length &&
-      SitePermissions.get(uri, sharingScreen ? "screen" : "camera", aBrowser)
+      SitePermissions.getForPrincipal(principal, sharingScreen ? "screen" : "camera", aBrowser)
         .state == SitePermissions.BLOCK)
   ) {
     denyRequest(aBrowser, aRequest);
@@ -546,8 +541,8 @@ function prompt(aBrowser, aRequest) {
           scope = SitePermissions.SCOPE_PERSISTENT;
         }
         if (audioDevices.length) {
-          SitePermissions.set(
-            uri,
+          SitePermissions.setForPrincipal(
+            principal,
             "microphone",
             SitePermissions.BLOCK,
             scope,
@@ -555,8 +550,8 @@ function prompt(aBrowser, aRequest) {
           );
         }
         if (videoDevices.length) {
-          SitePermissions.set(
-            uri,
+          SitePermissions.setForPrincipal(
+            principal,
             sharingScreen ? "screen" : "camera",
             SitePermissions.BLOCK,
             scope,
@@ -570,7 +565,7 @@ function prompt(aBrowser, aRequest) {
   let productName = gBrandBundle.GetStringFromName("brandShortName");
 
   let options = {
-    name: getHostOrExtensionName(uri),
+    name: getHostOrExtensionName(principal.URI),
     persistent: true,
     hideClose: true,
     eventCallback(aTopic, aNewBrowser) {
@@ -614,17 +609,17 @@ function prompt(aBrowser, aRequest) {
       // to avoid granting permissions automatically to background tabs.
       if (aRequest.secure) {
         let micAllowed =
-          SitePermissions.get(uri, "microphone").state == SitePermissions.ALLOW;
+          SitePermissions.getForPrincipal(principal, "microphone").state == SitePermissions.ALLOW;
         let camAllowed =
-          SitePermissions.get(uri, "camera").state == SitePermissions.ALLOW;
+          SitePermissions.getForPrincipal(principal, "camera").state == SitePermissions.ALLOW;
 
         let perms = Services.perms;
-        let mediaManagerPerm = perms.testExactPermission(
-          uri,
+        let mediaManagerPerm = perms.testExactPermissionFromPrincipal(
+          principal,
           "MediaManagerVideo"
         );
         if (mediaManagerPerm) {
-          perms.remove(uri, "MediaManagerVideo");
+          perms.removeFromPrincipal(principal, "MediaManagerVideo");
         }
 
         // Screen sharing shouldn't follow the camera permissions.
@@ -671,8 +666,8 @@ function prompt(aBrowser, aRequest) {
           let allowedDevices = [];
           if (videoDevices.length) {
             allowedDevices.push((activeCamera || videoDevices[0]).deviceIndex);
-            Services.perms.add(
-              uri,
+            Services.perms.addFromPrincipal(
+              principal,
               "MediaManagerVideo",
               Services.perms.ALLOW_ACTION,
               Services.perms.EXPIRE_SESSION
@@ -687,8 +682,8 @@ function prompt(aBrowser, aRequest) {
           // other way for the stop sharing code to know the hostnames of frames
           // using devices until bug 1066082 is fixed.
           let browser = this.browser;
-          browser._devicePermissionURIs = browser._devicePermissionURIs || [];
-          browser._devicePermissionURIs.push(uri);
+          browser._devicePermissionPrincipals = browser._devicePermissionPrincipals || [];
+          browser._devicePermissionPrincipals.push(principal);
 
           let camNeeded = videoDevices.length > 0;
           let micNeeded = audioDevices.length > 0;
@@ -881,9 +876,9 @@ function prompt(aBrowser, aRequest) {
           }
 
           let perms = Services.perms;
-          let chromeUri = Services.io.newURI(doc.documentURI);
-          perms.add(
-            chromeUri,
+          let chromePrincipal = Services.scriptSecurityManager.getSystemPrincipal();
+          perms.addFromPrincipal(
+            chromePrincipal,
             "MediaManagerVideo",
             perms.ALLOW_ACTION,
             perms.EXPIRE_SESSION
@@ -984,8 +979,8 @@ function prompt(aBrowser, aRequest) {
             allowedDevices.push(videoDeviceIndex);
             // Session permission will be removed after use
             // (it's really one-shot, not for the entire session)
-            perms.add(
-              uri,
+            perms.addFromPrincipal(
+              principal,
               "MediaManagerVideo",
               perms.ALLOW_ACTION,
               perms.EXPIRE_SESSION
@@ -1003,7 +998,7 @@ function prompt(aBrowser, aRequest) {
               }
             }
             if (remember) {
-              SitePermissions.set(uri, "camera", SitePermissions.ALLOW);
+              SitePermissions.setForPrincipal(principal, "camera", SitePermissions.ALLOW);
             }
           }
         }
@@ -1028,7 +1023,7 @@ function prompt(aBrowser, aRequest) {
                 }
               }
               if (remember) {
-                SitePermissions.set(uri, "microphone", SitePermissions.ALLOW);
+                SitePermissions.setForPrincipal(principal, "microphone", SitePermissions.ALLOW);
               }
             }
           } else {
@@ -1045,8 +1040,8 @@ function prompt(aBrowser, aRequest) {
         if (remember) {
           // Remember on which URIs we set persistent permissions so that we
           // can remove them if the user clicks 'Stop Sharing'.
-          aBrowser._devicePermissionURIs = aBrowser._devicePermissionURIs || [];
-          aBrowser._devicePermissionURIs.push(uri);
+          aBrowser._devicePermissionPrincipals = aBrowser._devicePermissionPrincipals || [];
+          aBrowser._devicePermissionPrincipals.push(principal);
         }
 
         let camNeeded = videoDevices.length > 0;
