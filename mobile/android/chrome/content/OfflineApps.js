@@ -10,11 +10,12 @@ var OfflineApps = {
     }
 
     let tab = BrowserApp.getTabForWindow(aContentWindow);
+    let principal = aContentWindow.document.nodePrincipal;
     let currentURI = aContentWindow.document.documentURIObject;
 
     // Don't bother showing UI if the user has already made a decision
     if (
-      Services.perms.testExactPermission(currentURI, "offline-app") !=
+      Services.perms.testExactPermissionFromPrincipal(principal, "offline-app") !=
       Services.perms.UNKNOWN_ACTION
     ) {
       return;
@@ -72,8 +73,8 @@ var OfflineApps = {
   },
 
   allowSite: function(aDocument) {
-    Services.perms.add(
-      aDocument.documentURIObject,
+    Services.perms.addFromPrincipal(
+      aDocument.nodePrincipal,
       "offline-app",
       Services.perms.ALLOW_ACTION
     );
@@ -85,8 +86,8 @@ var OfflineApps = {
   },
 
   disallowSite: function(aDocument) {
-    Services.perms.add(
-      aDocument.documentURIObject,
+    Services.perms.addFromPrincipal(
+      aDocument.nodePrincipal,
       "offline-app",
       Services.perms.DENY_ACTION
     );

@@ -204,7 +204,7 @@ var WebrtcUI = {
     );
   },
 
-  getDeviceButtons: function(audioDevices, videoDevices, aCallID, aUri) {
+  getDeviceButtons: function(audioDevices, videoDevices, aCallID, aPrincipal) {
     return [
       {
         label: Strings.browser.GetStringFromName(
@@ -244,8 +244,8 @@ var WebrtcUI = {
             let perms = Services.perms;
             // Although the lifetime is "session" it will be removed upon
             // use so it's more of a one-shot.
-            perms.add(
-              aUri,
+            perms.addFromPrincipal(
+              aPrincipal,
               "MediaManagerVideo",
               perms.ALLOW_ACTION,
               perms.EXPIRE_SESSION
@@ -409,8 +409,8 @@ var WebrtcUI = {
     }
 
     let chromeWin = this.getChromeWindow(aContentWindow);
-    let uri = aContentWindow.document.documentURIObject;
-    let host = uri.host;
+    let principal = aContentWindow.document.nodePrincipal;
+    let host = principal.URI.host;
     let requestor =
       chromeWin.BrowserApp && chromeWin.BrowserApp.manifest
         ? "'" + chromeWin.BrowserApp.manifest.name + "'"
@@ -435,7 +435,7 @@ var WebrtcUI = {
       audioDevices,
       videoDevices,
       aCallID,
-      uri
+      principal
     );
 
     DoorHanger.show(
