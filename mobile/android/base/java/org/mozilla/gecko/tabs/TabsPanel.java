@@ -167,6 +167,10 @@ public class TabsPanel extends LinearLayout
         final View tabNormal = mTabWidget.addTab(R.drawable.tabs_normal, R.string.tabs_normal);
         mNormalTabsPanel = tabNormal instanceof ThemedImageButton ? ((ThemedImageButton) tabNormal) : null;
 
+        if (mActivity.isOnlyPrivateTabs()) {
+            tabNormal.setVisibility(View.GONE);
+        }
+
         final View tabPrivate = mTabWidget.addTab(R.drawable.tabs_private, R.string.tabs_private);
         mPrivateTabsPanel = tabPrivate instanceof ThemedImageButton ? ((ThemedImageButton) tabPrivate) : null;
         if (mPrivateTabsPanel != null) {

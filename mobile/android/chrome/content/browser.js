@@ -4410,7 +4410,12 @@ Tab.prototype = {
     // Must be called after appendChild so the docShell has been created.
     this.setActive(false);
 
-    let isPrivate = "isPrivate" in aParams && aParams.isPrivate;
+    // Create a Private tab if it was explicitly requested or if the pref
+    // |browser.privatebrowsing.autostart| is true. If the pref is true, then all tabs are created
+    // as private tabs. The first clause covers new tabs requested by a user. The preference check
+    // is important because extensions directly open tabs (usually not private tabs) and bypass the
+    // private tab checks.
+    let isPrivate = (("isPrivate" in aParams) && aParams.isPrivate) || Services.prefs.getBoolPref("browser.privatebrowsing.autostart");
     if (isPrivate) {
       attrs.privateBrowsingId = 1;
     }

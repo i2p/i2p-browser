@@ -168,6 +168,8 @@ public abstract class GeckoApp extends GeckoActivity
      */
     public static final String PREFS_IS_FIRST_RUN = "telemetry-isFirstRun";
 
+    public static final String PREFS_PRIVATEBROWSING_AUTOSTART = "browser.privatebrowsing.autostart";
+
     public static final String SAVED_STATE_IN_BACKGROUND   = "inBackground";
     public static final String SAVED_STATE_PRIVATE_SESSION = "privateSession";
     /**
@@ -354,6 +356,8 @@ public abstract class GeckoApp extends GeckoActivity
     private String mPrivateBrowsingSession;
     private boolean mPrivateBrowsingSessionOutdated;
     private static final int MAX_PRIVATE_TABS_UPDATE_WAIT_MSEC = 500;
+
+    protected boolean mOnlyPrivateTabs = false;
 
     private volatile HealthRecorder mHealthRecorder;
     private volatile Locale mLastLocale;
@@ -1167,6 +1171,28 @@ public abstract class GeckoApp extends GeckoActivity
             "ToggleChrome:Show",
             null);
 
+        PrefsHelper.getPref(PREFS_PRIVATEBROWSING_AUTOSTART,
+                            new PrefsHelper.PrefHandlerBase() {
+            @Override public void prefValue(String pref, boolean value) {
+                if (pref != PREFS_PRIVATEBROWSING_AUTOSTART) {
+                    return;
+                }
+
+                mOnlyPrivateTabs = value;
+
+                // Change visibility here in case mMenu is initialized. If it is not initialized,
+                // then the visibility is set in BrowserApp::onCreateOptionsMenu().
+                if (mMenu != null) {
+                    MenuItem newTabMenuItem = mMenu.findItem(R.id.new_tab);
+                    if (newTabMenuItem != null) {
+                        newTabMenuItem.setVisible(mOnlyPrivateTabs == false);
+                    }
+                }
+
+                Tabs.getInstance().setOnlyPrivateTabs(mOnlyPrivateTabs);
+            }
+        });
+
         Tabs.getInstance().attachToContext(this, mLayerView, getAppEventDispatcher());
         Tabs.registerOnTabsChangedListener(this);
 
@@ -1205,6 +1231,7 @@ public abstract class GeckoApp extends GeckoActivity
                 }
 
                 // If we are doing a restore, read the session data so we can send it to Gecko later.
+
                 GeckoBundle restoreMessage = null;
                 if (!mIsRestoringActivity && mShouldRestore) {
                     final boolean isExternalURL = invokedWithExternalURL(getIntentURI(new SafeIntent(getIntent())));
@@ -2307,6 +2334,10 @@ public abstract class GeckoApp extends GeckoActivity
                             + entry.getValue());
             c++;
         }
+    }
+
+    public boolean isOnlyPrivateTabs() {
+        return mOnlyPrivateTabs;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)

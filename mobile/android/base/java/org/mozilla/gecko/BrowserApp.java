@@ -3374,6 +3374,15 @@ public class BrowserApp extends GeckoApp
 
         share.setActionProvider(provider);
 
+        // Change visibility of new_tab. This may be called before
+        // mOnlyPrivateTabs is set in GeckoApp::onCreate(). If the PrefHelper
+        // callback was not already called, then the visibility will be correctly set
+        // in the callback.
+        MenuItem newTabMenuItem = mMenu.findItem(R.id.new_tab);
+        if (newTabMenuItem != null) {
+            newTabMenuItem.setVisible(mOnlyPrivateTabs == false);
+        }
+
         return true;
     }
 

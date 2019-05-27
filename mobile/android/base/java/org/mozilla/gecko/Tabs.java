@@ -106,6 +106,7 @@ public class Tabs implements BundleEventListener {
     private ContentObserver mBookmarksContentObserver;
     private PersistTabsRunnable mPersistTabsRunnable;
     private int mPrivateClearColor;
+    private boolean mOnlyPrivateTabs = true;
 
     // Close all tabs including normal and private tabs.
     @RobocopTarget
@@ -209,6 +210,10 @@ public class Tabs implements BundleEventListener {
             final GeckoProfile profile = GeckoProfile.get(context);
             BrowserDB.from(profile).registerBookmarkObserver(getContentResolver(), mBookmarksContentObserver);
         }
+    }
+
+    public synchronized void setOnlyPrivateTabs(boolean onlyPrivateTabs) {
+        mOnlyPrivateTabs = onlyPrivateTabs;
     }
 
     public void detachFromContext() {
@@ -1026,7 +1031,7 @@ public class Tabs implements BundleEventListener {
         // delayLoad implies background tab
         boolean background = delayLoad || (flags & LOADURL_BACKGROUND) != 0;
 
-        boolean isPrivate = (flags & LOADURL_PRIVATE) != 0 || (intent != null && intent.getBooleanExtra(PRIVATE_TAB_INTENT_EXTRA, false));
+        boolean isPrivate = (flags & LOADURL_PRIVATE) != 0 || (intent != null && intent.getBooleanExtra(PRIVATE_TAB_INTENT_EXTRA, false)) || mOnlyPrivateTabs;
         boolean userEntered = (flags & LOADURL_USER_ENTERED) != 0;
         boolean desktopMode = (flags & LOADURL_DESKTOP) != 0;
         boolean external = (flags & LOADURL_EXTERNAL) != 0;
