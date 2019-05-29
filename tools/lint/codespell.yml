@@ -7,6 +7,7 @@ codespell:
         - browser/components/newtab/docs/
         - browser/components/newtab/prerendered/locales/en-US/
         - browser/extensions/formautofill/locales/en-US/
+        - browser/extensions/onboarding/locales/en-US/
         - browser/extensions/report-site-issue/locales/en-US/
         - browser/installer/windows/docs/
         - browser/locales/en-US/
