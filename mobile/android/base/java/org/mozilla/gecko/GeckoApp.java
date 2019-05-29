@@ -196,6 +196,10 @@ public abstract class GeckoApp extends GeckoActivity
     protected Menu mMenu;
     protected boolean mIsRestoringActivity;
 
+    protected boolean mIsSanitizeTabsEnabled = false;
+    protected boolean mIsSanitizeCompleted = false;
+    protected Object mIsSanitizeCompletedLock = new Object();
+
     /** Tells if we're aborting app launch, e.g. if this is an unsupported device configuration. */
     protected boolean mIsAbortingAppLaunch;
 
@@ -607,6 +611,12 @@ public abstract class GeckoApp extends GeckoActivity
         for (final String clear : clearSet) {
             clearObj.putBoolean(clear, true);
         }
+
+        synchronized (mIsSanitizeCompletedLock) {
+            mIsSanitizeTabsEnabled = clearSet.contains("private.data.openTabs");
+            mIsSanitizeCompleted = false;
+        }
+
         return clearObj;
     }
 
@@ -789,6 +799,11 @@ public abstract class GeckoApp extends GeckoActivity
                 }
                 mPrivateBrowsingSessionOutdated = false;
                 notifyAll();
+            }
+
+        } else if ("Sanitize:Finished".equals(event)) {
+            synchronized (mIsSanitizeCompletedLock) {
+                mIsSanitizeCompleted = true;
             }
 
         } else if ("SystemUI:Visibility".equals(event)) {
@@ -1631,7 +1646,45 @@ public abstract class GeckoApp extends GeckoActivity
                         loadStartupTab(Tabs.LOADURL_NEW_TAB, action);
                     } else {
                         final int flags = getNewTabFlags();
-                        loadStartupTab(passedUri, intent, flags);
+                        final BrowserApp browserApp = (BrowserApp) GeckoApp.this;
+
+                        synchronized (mIsSanitizeCompletedLock) {
+                            // If OpenTabs will be sanitized, then load the tab after Sanitize:Finished
+                            // is received. If Tor isn't started, then load tabs after Tor:Ready, too. And
+                            // if Gecko isn't loaded, then wait until the profile is loaded (avoiding the race
+                            // between loading the page and checking if |browser.privatebrowsing.autoStart| is true.
+                            EventDispatcher.getInstance().registerUiThreadListener(new BundleEventListener() {
+                                // isSanitized is true if Sanitizing is enable and it is completed or if Sanitizing is disabled.
+                                private boolean isSanitized = (mIsSanitizeTabsEnabled && mIsSanitizeCompleted) || !mIsSanitizeTabsEnabled;
+                                private boolean isTorReady = browserApp.checkTorIsStarted();
+                                private boolean isGeckoReady = GeckoThread.isRunning();
+
+                                @Override
+                                public void handleMessage(String event, GeckoBundle message, EventCallback callback) {
+                                    if ("Sanitize:Finished".equals(event)) {
+                                        EventDispatcher.getInstance().unregisterUiThreadListener(this, "Sanitize:Finished");
+                                        isSanitized = true;
+
+                                    } else if ("Tor:Ready".equals(event)) {
+                                        EventDispatcher.getInstance().unregisterUiThreadListener(this, "Tor:Ready");
+                                        isTorReady = true;
+                                    } else if ("Gecko:Ready".equals(event)) {
+                                        EventDispatcher.getInstance().unregisterUiThreadListener(this, "Gecko:Ready");
+                                        isGeckoReady = true;
+                                    } else if ("Tor:CheckIfReady".equals(event)) {
+                                        EventDispatcher.getInstance().unregisterUiThreadListener(this, "Tor:CheckIfReady");
+                                    }
+
+                                    if (isSanitized && isTorReady && isGeckoReady) {
+                                        loadStartupTab(passedUri, intent, flags);
+                                    }
+                                }
+                            }, "Sanitize:Finished", "Tor:Ready", "Tor:CheckIfReady", "Gecko:Ready");
+
+                            // Run the event callback now, just in case Tor:Ready and Sanitize:Finished were
+                            // dispatched before the listener was created.
+                            EventDispatcher.getInstance().dispatch("Tor:CheckIfReady", null);
+                        }
                     }
                 }
             });
