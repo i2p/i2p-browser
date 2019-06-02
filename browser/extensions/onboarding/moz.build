@@ -12,9 +12,14 @@ DEFINES['MOZ_APP_MAXVERSION'] = CONFIG['MOZ_APP_MAXVERSION']
 
 DIRS += ['locales']
 
+FINAL_TARGET_FILES.features['onboarding@mozilla.org'] += [
+  'background.js',
+  'manifest.json',
+  'schema.json',
+]
+
 FINAL_TARGET_PP_FILES.features['onboarding@mozilla.org'] += [
-  'bootstrap.js',
-  'install.rdf.in'
+  'api.js',
 ]
 
 BROWSER_CHROME_MANIFESTS += ['test/browser/browser.ini']

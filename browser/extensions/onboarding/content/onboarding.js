@@ -23,8 +23,7 @@ if (Services.prefs.getBoolPref("browser.onboarding.enabled", false)) {
 
     let window = evt.target.defaultView;
     let location = window.location.href;
-    if (location == ABOUT_NEWTAB_URL || location == ABOUT_HOME_URL ||
-      location == ABOUT_WELCOME_URL || location == ABOUT_TOR_URL) {
+    if (location == ABOUT_TOR_URL) {
       // We just want to run tests as quickly as possible
       // so in the automation test, we don't do `requestIdleCallback`.
       if (Cu.isInAutomation) {

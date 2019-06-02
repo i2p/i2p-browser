@@ -9,7 +9,8 @@
   content/ (content/*.css)
   content/img/ (content/img/*)
 * content/onboarding-tour-agent.js (content/onboarding-tour-agent.js)
-* content/onboarding.js (content/onboarding.js)
+  content/onboarding.js (content/onboarding.js)
+* content/Onboarding.jsm (content/Onboarding.jsm)
   content/onboarding-tor-circuit-display.js (content/onboarding-tor-circuit-display.js)
   # Package UITour-lib.js in here rather than under
   # /browser/components/uitour to avoid "unreferenced files" error when

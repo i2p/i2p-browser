@@ -103,7 +103,8 @@ function openTorTab(aURL, aFrameScript) {
   let win = Services.wm.getMostRecentWindow('navigator:browser');
   if (win) {
     let tabBrowser = win.gBrowser;
-    let tab = tabBrowser.addTab(aURL);
+    let triggeringPrincipal = Services.scriptSecurityManager.createNullPrincipal({});
+    let tab = tabBrowser.addTab(aURL, { triggeringPrincipal });
     tabBrowser.selectedTab = tab;
 
     if (aFrameScript) {
@@ -234,35 +235,41 @@ function observe(subject, topic, data) {
   }
 }
 
-function install(aData, aReason) {}
+this.onboarding = class extends ExtensionAPI {
+  onStartup() {
+    resProto.setSubstitutionWithFlags(RESOURCE_HOST,
+      Services.io.newURI("chrome/content/", null, this.extension.rootURI),
+      resProto.ALLOW_CONTENT_ACCESS);
 
-function uninstall(aData, aReason) {}
+    if (this.extension.rootURI instanceof Ci.nsIJARURI) {
+      this.manifest = this.extension.rootURI.JARFile.QueryInterface(Ci.nsIFileURL).file;
+    } else if (this.extension.rootURI instanceof Ci.nsIFileURL) {
+      this.manifest = this.extension.rootURI.file;
+    }
 
-function startup(aData, aReason) {
-  resProto.setSubstitutionWithFlags(RESOURCE_HOST,
-                                    Services.io.newURI("chrome/content/", null, aData.resourceURI),
-                                    resProto.ALLOW_CONTENT_ACCESS);
+    if (this.manifest) {
+      Components.manager.addBootstrappedManifestLocation(this.manifest);
+    } else {
+      Cu.reportError("Cannot find onboarding chrome.manifest for registring translated strings");
+    }
 
-  // Cache startup data which contains stuff like the version number, etc.
-  // so we can use it when we init the telemetry
-  startupData = aData;
-  // Only start Onboarding when the browser UI is ready
-  if (Services.startup.startingUp) {
-    Services.obs.addObserver(observe, BROWSER_READY_NOTIFICATION);
-    Services.obs.addObserver(observe, BROWSER_SESSION_STORE_NOTIFICATION);
-  } else {
-    onBrowserReady();
-    syncTourChecker.init();
+    // Only start Onboarding when the browser UI is ready
+    if (Services.startup.startingUp) {
+      Services.obs.addObserver(observe, BROWSER_READY_NOTIFICATION);
+      Services.obs.addObserver(observe, BROWSER_SESSION_STORE_NOTIFICATION);
+    } else {
+      onBrowserReady();
+      syncTourChecker.init();
+    }
   }
-}
 
-function shutdown(aData, aReason) {
-  resProto.setSubstitution(RESOURCE_HOST, null);
+  onShutdown() {
+    resProto.setSubstitution(RESOURCE_HOST, null);
 
-  startupData = null;
-  // Stop waiting for browser to be ready
-  if (waitingForBrowserReady) {
-    Services.obs.removeObserver(observe, BROWSER_READY_NOTIFICATION);
+    // Stop waiting for browser to be ready
+    if (waitingForBrowserReady) {
+      Services.obs.removeObserver(observe, BROWSER_READY_NOTIFICATION);
+    }
+    syncTourChecker.uninit();
   }
-  syncTourChecker.uninit();
-}
+};

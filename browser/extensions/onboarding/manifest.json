@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+    "name": "Onboarding",
+    "version": "1.0",
+  
+    "applications": {
+      "gecko": {
+        "id": "onboarding@mozilla.org"
+      }
+    },
+  
+    "background": {
+      "scripts": ["background.js"]
+    },
+  
+    "experiment_apis": {
+      "onboarding": {
+        "schema": "schema.json",
+        "parent": {
+          "scopes": ["addon_parent"],
+          "script": "api.js",
+          "events": ["startup"]
+        }
+      }
+    }
+  }
