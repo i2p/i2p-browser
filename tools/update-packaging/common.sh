@@ -212,9 +212,9 @@ list_files() {
     | sed 's/\.\/\(.*\)/\1/' \
     | sort -r > "${tmpfile}"
   while read -r file; do
-    if [ "$file" = "TorBrowser/Data/Browser/profiles.ini" -o                   \
-         "$file" = "TorBrowser/Data/Browser/profile.default/bookmarks.html" -o \
-         "$file" = "TorBrowser/Data/Tor/torrc" ]; then
+    if [ "$file" = "I2PBrowser/Data/Browser/profiles.ini" -o                   \
+         "$file" = "I2PBrowser/Data/Browser/profile.default/bookmarks.html" -o \
+         "$file" = "I2PBrowser/Data/I2P/router.config" ]; then
       continue;
     fi
     eval "${1}[$count]=\"$file\""

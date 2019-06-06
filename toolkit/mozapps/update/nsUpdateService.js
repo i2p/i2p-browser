@@ -1928,7 +1928,7 @@ UpdateService.prototype = {
       // On Windows, the updater files were stored under
       // Browser/TorBrowser/Data/Browser/Caches/firefox/
       oldUpdateInfoDir.appendRelativePath(
-                                "TorBrowser\\Data\\Browser\\Caches\\firefox");
+                                "I2PBrowser\\Data\\Browser\\Caches\\firefox");
 #endif
 
       // Remove the updates directory.

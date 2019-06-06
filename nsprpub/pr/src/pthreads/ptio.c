@@ -2095,6 +2095,7 @@ static PRInt32 pt_TCP_SendTo(
         fd->secret->md.osfd, buf, amount, MSG_FASTOPEN,
         (struct sockaddr*)addrp, addr_len);
 #else
+    /*
     sa_endpoints_t endpoints;
     endpoints.sae_srcif = 0;
     endpoints.sae_srcaddr = NULL;
@@ -2105,7 +2106,7 @@ static PRInt32 pt_TCP_SendTo(
     iov[0].iov_base = buf;
     iov[0].iov_len = amount;
     PRInt32 rv = connectx(fd->secret->md.osfd, &endpoints, SAE_ASSOCID_ANY,
-                         CONNECT_DATA_IDEMPOTENT, iov, 1, &bytes, NULL);
+                         CONNECT_DATA_IDEMPOTENT, iov, 1, &bytes, NULL);*/
 #endif
     syserrno = errno;
     if ( (bytes == -1) && (syserrno == EWOULDBLOCK || syserrno == EAGAIN)
