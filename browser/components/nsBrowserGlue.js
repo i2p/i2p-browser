@@ -1100,7 +1100,7 @@ BrowserGlue.prototype = {
           // disabled. Even if they lack Mozilla's blessing they are enabled
           // nevertheless.
           if ((addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) &&
-              !(addon.id == "torbutton@torproject.org" ||
+              !(addon.id == "i2pbutton@geti2p.net" ||
                 addon.id == "https-everywhere-eff@eff.org")) {
             this._notifyUnsignedAddonsDisabled();
             break;

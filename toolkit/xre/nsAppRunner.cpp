@@ -1814,7 +1814,7 @@ static nsresult GetOverrideStringBundleForLocale(nsIStringBundleService* aSBS,
   NS_ENSURE_ARG(aLocale);
   NS_ENSURE_ARG(aResult);
 
-  const char* kFormatStr = "jar:%s!/chrome/locale/%s/torbutton.properties";
+  const char* kFormatStr = "jar:%s!/chrome/locale/%s/i2pbutton.properties";
   nsPrintfCString strBundleURL(kFormatStr, aTorbuttonURI, aLocale);
   nsresult rv = aSBS->CreateBundle(strBundleURL.get(), aResult);
   NS_ENSURE_SUCCESS(rv, rv);
@@ -1853,7 +1853,7 @@ static void GetOverrideStringBundle(nsIStringBundleService* aSBS,
     return;
   }
 
-  uriString.Append("extensions/torbutton@torproject.org.xpi");
+  uriString.Append("extensions/i2pbutton@geti2p.net.xpi");
 #else
   // Build Torbutton file URI string by starting from the profiles directory.
   bool persistent = false;  // ignored
@@ -1870,7 +1870,7 @@ static void GetOverrideStringBundle(nsIStringBundleService* aSBS,
     return;
   }
 
-  uriString.Append("profile.default/extensions/torbutton@torproject.org.xpi");
+  uriString.Append("profile.default/extensions/i2pbutton@geti2p.net.xpi");
 #endif
 
   nsAutoCString userAgentLocale;

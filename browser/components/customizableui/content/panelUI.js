@@ -130,7 +130,7 @@ const PanelUI = {
                                  "chrome://branding/locale/brand.properties");
       let stringArgs = [brands.GetStringFromName("brandShortName")];
       let torbuttonBundle = Services.strings.createBundle(
-                            "chrome://torbutton/locale/torbutton.properties");
+                            "chrome://i2pbutton/locale/i2pbutton.properties");
       let label = torbuttonBundle.formatStringFromName(
                               "updateDownloadingPanelUILabel", stringArgs, 1);
       let attrName = "label-update-downloading";

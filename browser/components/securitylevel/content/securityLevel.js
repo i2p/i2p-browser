@@ -16,7 +16,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
 XPCOMUtils.defineLazyGetter(this, "SecurityLevelStrings", function() {
   let sls = null;
   try {
-    sls = Services.strings.createBundle("chrome://torbutton/locale/securityLevel.properties");
+    sls = Services.strings.createBundle("chrome://i2pbutton/locale/securityLevel.properties");
   } catch(e) { }
 
   // tries to get the given key from the string bundle, return fallback on failure
@@ -67,7 +67,7 @@ XPCOMUtils.defineLazyGetter(this, "SecurityLevelStrings", function() {
         let locale = "";
         try {
           let { getLocale } =
-            Cu.import("resource://torbutton/modules/utils.js", {});
+            Cu.import("resource://i2pbutton/modules/utils.js", {});
           locale = getLocale();
         } catch(e) {}
 
@@ -92,8 +92,8 @@ XPCOMUtils.defineLazyGetter(this, "SecurityLevelStrings", function() {
   Getters and Setters for relevant torbutton prefs
 */
 const SecurityLevelPrefs = {
-  security_slider_pref : "extensions.torbutton.security_slider",
-  security_custom_pref : "extensions.torbutton.security_custom",
+  security_slider_pref : "extensions.i2pbutton.security_slider",
+  security_custom_pref : "extensions.i2pbutton.security_custom",
 
   get securitySlider() {
     try {
@@ -170,7 +170,7 @@ const SecurityLevelButton = {
     this._populateXUL(button);
     this._configUIFromPrefs(button);
 
-    this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
+    this._securityPrefsBranch = Services.prefs.getBranch("extensions.i2pbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
 
     CustomizableUI.addListener(this);
@@ -296,7 +296,7 @@ const SecurityLevelPanel = {
   },
 
   init : function() {
-    this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
+    this._securityPrefsBranch = Services.prefs.getBranch("extensions.i2pbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
   },
 
@@ -462,7 +462,7 @@ const SecurityLevelPreferences =
     this._configUIFromPrefs();
 
     // register for pref chagnes
-    this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
+    this._securityPrefsBranch = Services.prefs.getBranch("extensions.i2pbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
   },
 

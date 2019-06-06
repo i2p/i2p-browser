@@ -138,7 +138,7 @@ static const char NEVER_ASK_FOR_OPEN_FILE_PREF[] =
     "browser.helperApps.neverAsk.openFile";
 
 static const char WARNING_DIALOG_CONTRACT_ID[] =
-    "@torproject.org/torbutton-extAppBlocker;1";
+    "@geti2p.net/i2pbutton-extAppBlocker;1";
 
 // Helper functions for Content-Disposition headers
 

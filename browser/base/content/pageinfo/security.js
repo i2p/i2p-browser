@@ -13,7 +13,7 @@ ChromeUtils.defineModuleGetter(this, "PluralForm",
                                "resource://gre/modules/PluralForm.jsm");
 
 XPCOMUtils.defineLazyGetter(this, "gTorButtonBundle", function() {
-  return Services.strings.createBundle("chrome://torbutton/locale/torbutton.properties");
+  return Services.strings.createBundle("chrome://i2pbutton/locale/i2pbutton.properties");
 });
 
 var security = {

@@ -47,7 +47,7 @@ function showCircuitDiagram() {
 
 function showNewCircuitButton() {
   // 3 of 3: Show the New Circuit button info panel.
-  let target = "torBrowser-circuitDisplay-newCircuitButton";
+  let target = "i2pBrowser-tunnelDisplay-newTunnelButton";
   let title = getStringFromName("new-circuit.title");
   let msg = getStringFromName("new-circuit.msg");
   let button1Label = getStringFromName("three-of-three");
@@ -66,8 +66,8 @@ function cleanUp() {
 }
 
 function getStringFromName(aName) {
-  const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
-  const PREFIX = "onboarding.tor-circuit-display.";
+  const TORBUTTON_BUNDLE_URI = "chrome://i2pbutton/locale/browserOnboarding.properties";
+  const PREFIX = "onboarding.i2p-tunnel-display.";
 
   if (!gStringBundle) {
     gStringBundle = Services.strings.createBundle(TORBUTTON_BUNDLE_URI)

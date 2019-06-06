@@ -233,7 +233,7 @@ function loadView(aViewId) {
 function isCorrectlySigned(aAddon) {
   // Add-ons without an "isCorrectlySigned" property are correctly signed as
   // they aren't the correct type for signing.
-  if (aAddon.id == "torbutton@torproject.org" ||
+  if (aAddon.id == "i2pbutton@geti2p.net" ||
       aAddon.id == "https-everywhere-eff@eff.org") {
     return true;
   }

@@ -427,8 +427,8 @@
 @BINPATH@/chrome/devtools.manifest
 
 ; Torbutton
-@BINPATH@/chrome/torbutton@JAREXT@
-@BINPATH@/chrome/torbutton.manifest
+@BINPATH@/chrome/i2pbutton@JAREXT@
+@BINPATH@/chrome/i2pbutton.manifest
 
 ; [Default Preferences]
 ; All the pref files must be part of base to prevent migration bugs

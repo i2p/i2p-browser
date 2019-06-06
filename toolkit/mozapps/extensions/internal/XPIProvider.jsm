@@ -810,7 +810,7 @@ function isUsableAddon(aAddon) {
     return true;
 
   // Ensure that we allow torbutton, https-everywhere, and the meek helper.
-  if (aAddon.id == "torbutton@torproject.org" ||
+  if (aAddon.id == "i2pbutton@geti2p.net" ||
       aAddon.id == "https-everywhere-eff@eff.org" ||
       aAddon.id == "meek-http-helper@bamsoftware.com") {
     return true;
@@ -1609,9 +1609,9 @@ var XPIStates = {
 
         // Uninstall torbutton if it is installed in the user profile on Android
         if (AppConstants.platform === "android" &&
-            id === "torbutton@torproject.org" &&
+            id === "i2pbutton@geti2p.net" &&
             location.name === KEY_APP_PROFILE) {
-          logger.debug("Uninstalling torbutton from user profile.");
+          logger.debug("Uninstalling i2pbutton from user profile.");
           location.uninstallAddon(id);
           changed = true;
           continue;
@@ -2962,7 +2962,7 @@ var XPIProvider = {
         // Make sure Torbutton, EFF's HTTPS-Everywhere and meek
         // are still working after an update.
         if (mustSign(addon.type) &&
-            addon.id != "torbutton@torproject.org" &&
+            addon.id != "i2pbutton@geti2p.net" &&
             addon.id != "https-everywhere-eff@eff.org" &&
             addon.id != "meek-http-helper@bamsoftware.com" &&
             addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) {
