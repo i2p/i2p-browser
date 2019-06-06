@@ -794,7 +794,7 @@ if (typeof Mozilla == "undefined") {
   * @summary Opens the Security Level Panel.
   */
   Mozilla.UITour.torBrowserOpenSecurityLevelPanel = function() {
-    _sendEvent("torBrowserOpenSecurityLevelPanel");
+    _sendEvent("i2pBrowserOpenSecurityLevelPanel");
   };
 })();
 

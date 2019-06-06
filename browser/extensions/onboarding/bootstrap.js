@@ -31,15 +31,15 @@ const PREF_WHITELIST = [
 
 [
   // I2P Browser tours:
-  "onboarding-tour-tor-welcome",
-  "onboarding-tour-tor-privacy",
-  "onboarding-tour-tor-network",
-  "onboarding-tour-tor-circuit-display",
-  "onboarding-tour-tor-security",
-  "onboarding-tour-tor-expect-differences",
-  "onboarding-tour-tor-onion-services",
-  "onboarding-tour-tor-toolbar-update-8-5",
-  "onboarding-tour-tor-security-update-8-5",
+  "onboarding-tour-i2p-welcome",
+  "onboarding-tour-i2p-privacy",
+  "onboarding-tour-i2p-network",
+  "onboarding-tour-i2p-circuit-display",
+  "onboarding-tour-i2p-security",
+  "onboarding-tour-i2p-expect-differences",
+  "onboarding-tour-i2p-onion-services",
+  "onboarding-tour-i2p-toolbar-update-8-5",
+  "onboarding-tour-i2p-security-update-8-5",
 #if 0
 // Firefox tours. To reduce conflicts when rebasing against newer Firefox
 // code, we use the preprocessor to omit this code block.

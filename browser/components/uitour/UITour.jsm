@@ -46,13 +46,13 @@ const TOR_BROWSER_PAGE_ACTIONS_ALLOWED = new Set([
   "showMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
   "hideMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
   "closeTab",
-  "torBrowserOpenSecurityLevelPanel",
+  "i2pBrowserOpenSecurityLevelPanel",
 ]);
 
 const TOR_BROWSER_TARGETS_ALLOWED = new Set([
-  "torBrowser-circuitDisplay",
-  "torBrowser-circuitDisplay-diagram",
-  "torBrowser-circuitDisplay-newCircuitButton",
+  "i2pBrowser-circuitDisplay",
+  "i2pBrowser-circuitDisplay-diagram",
+  "i2pBrowser-circuitDisplay-newCircuitButton",
 ]);
 
 const TOR_BROWSER_MENUS_ALLOWED = new Set([
@@ -117,12 +117,12 @@ var UITour = {
 
   highlightEffects: ["random", "wobble", "zoom", "color"],
   targets: new Map([
-    ["torBrowser-circuitDisplay", {
+    ["i2pBrowser-circuitDisplay", {
       query: "#connection-icon",
     }],
-    ["torBrowser-circuitDisplay-diagram",
+    ["i2pBrowser-circuitDisplay-diagram",
       torBrowserCircuitDisplayTarget("circuit-display-nodes")],
-    ["torBrowser-circuitDisplay-newCircuitButton",
+    ["i2pBrowser-circuitDisplay-newCircuitButton",
       torBrowserCircuitDisplayTarget("circuit-reload-button")],
 
     ["accountStatus", {
@@ -717,7 +717,7 @@ var UITour = {
         break;
       }
 
-      case "torBrowserOpenSecurityLevelPanel":
+      case "i2pBrowserOpenSecurityLevelPanel":
         let securityLevelButton =
                       window.document.getElementById("security-level-button");
         if (securityLevelButton)

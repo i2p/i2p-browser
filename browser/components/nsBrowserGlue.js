@@ -171,8 +171,8 @@ if (AppConstants.MOZ_CRASHREPORTER) {
 }
 
 if (AppConstants.TOR_BROWSER_UPDATE) {
-  XPCOMUtils.defineLazyModuleGetter(this, "AboutTBUpdate",
-                                    "resource:///modules/AboutTBUpdate.jsm");
+  XPCOMUtils.defineLazyModuleGetter(this, "AboutIBUpdate",
+                                    "resource:///modules/AboutIBUpdate.jsm");
 }
 
 XPCOMUtils.defineLazyGetter(this, "gBrandBundle", function() {
