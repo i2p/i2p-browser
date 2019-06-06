@@ -358,11 +358,11 @@ AboutReaderListener.init();
 #ifdef TOR_BROWSER_UPDATE
 let AboutTBUpdateListener = {
   init: function(chromeGlobal) {
-    chromeGlobal.addEventListener('AboutTBUpdateLoad', this, false, true);
+    chromeGlobal.addEventListener('AboutIBUpdateLoad', this, false, true);
   },
 
   get isAboutTBUpdate() {
-    return content.document.documentURI.toLowerCase() == "about:i2bbupdate";
+    return content.document.documentURI.toLowerCase() == "about:ibupdate";
   },
 
   handleEvent: function(aEvent) {
@@ -370,7 +370,7 @@ let AboutTBUpdateListener = {
       return;
 
     switch (aEvent.type) {
-      case "AboutTBUpdateLoad":
+      case "AboutIBUpdateLoad":
         this.onPageLoad();
         break;
       case "pagehide":
@@ -380,7 +380,7 @@ let AboutTBUpdateListener = {
   },
 
   receiveMessage: function(aMessage) {
-    if (this.isAboutTBUpdate && (aMessage.name == "AboutTBUpdate:Update"))
+    if (this.isAboutTBUpdate && (aMessage.name == "AboutIBUpdate:Update"))
       this.onUpdate(aMessage.data);
   },
 
@@ -402,16 +402,16 @@ let AboutTBUpdateListener = {
   },
 
   onPageLoad: function() {
-    addMessageListener("AboutTBUpdate:Update", this);
+    addMessageListener("AboutIBUpdate:Update", this);
     addEventListener("pagehide", this, true);
-    sendAsyncMessage("AboutTBUpdate:RequestUpdate");
+    sendAsyncMessage("AboutIBUpdate:RequestUpdate");
   },
 
   onPageHide: function(aEvent) {
     if (aEvent.target.defaultView.frameElement) {
       return;
     }
-    removeMessageListener("AboutTBUpdate:Update", this);
+    removeMessageListener("AboutIBUpdate:Update", this);
     removeEventListener("pagehide", this, true);
   },
 

@@ -307,7 +307,7 @@ var gInitialPages = [
   "about:sessionrestore"
 ];
 if (AppConstants.TOR_BROWSER_UPDATE) {
-  gInitialPages.push("about:i2bbupdate");
+  gInitialPages.push("about:ibupdate");
 }
 
 function isInitialPage(url) {

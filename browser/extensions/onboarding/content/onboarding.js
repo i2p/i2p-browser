@@ -12,8 +12,8 @@ const ONBOARDING_CSS_URL = "resource://onboarding/onboarding.css";
 const ABOUT_HOME_URL = "about:home";
 const ABOUT_NEWTAB_URL = "about:newtab";
 const ABOUT_TOR_URL = "about:i2p";
-const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
-const TORBROWSER_WELCOME_TOUR_NAME_KEY = "onboarding.tour-tor-welcome";
+const TORBUTTON_BUNDLE_URI = "chrome://i2pbutton/locale/browserOnboarding.properties";
+const TORBROWSER_WELCOME_TOUR_NAME_KEY = "onboarding.tour-i2p-welcome";
 const BUNDLE_URI = "chrome://onboarding/locale/onboarding.properties";
 const UITOUR_JS_URI = "resource://onboarding/lib/UITour-lib.js";
 const TOUR_AGENT_JS_URI = "resource://onboarding/onboarding-tour-agent.js";
@@ -110,169 +110,169 @@ function createOnboardingTourButton(div, buttonId, l10nId, buttonElementTagName 
 var onboardingTourset = {
   // Tour items for new users:
   "welcome": {
-    id: "onboarding-tour-tor-welcome",
+    id: "onboarding-tour-i2p-welcome",
     tourNameId: TORBROWSER_WELCOME_TOUR_NAME_KEY,
     instantComplete: true,
     getPage(win) {
       let div = win.document.createElement("div");
 
       createOnboardingTourDescription(div,
-        "onboarding.tour-tor-welcome.title", "onboarding.tour-tor-welcome.description");
+        "onboarding.tour-i2p-welcome.title", "onboarding.tour-i2p-welcome.description");
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-welcome.png");
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-welcome-button", "onboarding.tour-tor-welcome.next-button");
+        "onboarding-tour-i2p-welcome-button", "onboarding.tour-i2p-welcome.next-button");
 
       return div;
     },
   },
   "privacy": {
-    id: "onboarding-tour-tor-privacy",
-    tourNameId: "onboarding.tour-tor-privacy",
+    id: "onboarding-tour-i2p-privacy",
+    tourNameId: "onboarding.tour-i2p-privacy",
     instantComplete: true,
     getPage(win) {
       let div = win.document.createElement("div");
 
       createOnboardingTourDescription(div,
-        "onboarding.tour-tor-privacy.title", "onboarding.tour-tor-privacy.description");
+        "onboarding.tour-i2p-privacy.title", "onboarding.tour-i2p-privacy.description");
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-privacy.png");
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-privacy-button", "onboarding.tour-tor-privacy.button");
+        "onboarding-tour-i2p-privacy-button", "onboarding.tour-i2p-privacy.button");
 
       return div;
     },
   },
   "tor-network": {
-    id: "onboarding-tour-tor-network",
-    tourNameId: "onboarding.tour-tor-network",
+    id: "onboarding-tour-i2p-network",
+    tourNameId: "onboarding.tour-i2p-network",
     instantComplete: true,
     getPage(win) {
       let div = win.document.createElement("div");
 
       createOnboardingTourDescription(div,
-        "onboarding.tour-tor-network.title", "onboarding.tour-tor-network.description");
+        "onboarding.tour-i2p-network.title", "onboarding.tour-i2p-network.description");
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-network.png");
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-network-button", "onboarding.tour-tor-network.button");
+        "onboarding-tour-i2p-network-button", "onboarding.tour-i2p-network.button");
 
       return div;
     },
   },
   "circuit-display": {
-    id: "onboarding-tour-tor-circuit-display",
-    tourNameId: "onboarding.tour-tor-circuit-display",
+    id: "onboarding-tour-i2p-circuit-display",
+    tourNameId: "onboarding.tour-i2p-circuit-display",
     getPage(win) {
       let div = win.document.createElement("div");
 
       createOnboardingTourDescription(div,
-        "onboarding.tour-tor-circuit-display.title", "onboarding.tour-tor-circuit-display.description");
+        "onboarding.tour-i2p-circuit-display.title", "onboarding.tour-i2p-circuit-display.description");
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-circuit-display.png");
       let btnContainer = createOnboardingTourButton(div,
-        "onboarding-tour-tor-circuit-display-button", "onboarding.tour-tor-circuit-display.button");
-      btnContainer.className = "onboarding-tour-tor-action-button-container";
+        "onboarding-tour-i2p-circuit-display-button", "onboarding.tour-i2p-circuit-display.button");
+      btnContainer.className = "onboarding-tour-i2p-action-button-container";
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-circuit-display-next-button", "onboarding.tour-tor-circuit-display.next-button");
+        "onboarding-tour-i2p-circuit-display-next-button", "onboarding.tour-i2p-circuit-display.next-button");
 
       return div;
     },
   },
   "security": {
-    id: "onboarding-tour-tor-security",
-    tourNameId: "onboarding.tour-tor-security",
-    highlightId: "onboarding.tour-tor-update.prefix-new",
+    id: "onboarding-tour-i2p-security",
+    tourNameId: "onboarding.tour-i2p-security",
+    highlightId: "onboarding.tour-i2p-update.prefix-new",
     getPage(win) {
       let div = win.document.createElement("div");
 
       let desc = createOnboardingTourDescription(div,
-        "onboarding.tour-tor-security.title", "onboarding.tour-tor-security.description");
+        "onboarding.tour-i2p-security.title", "onboarding.tour-i2p-security.description");
       let additionalDesc = win.document.createElement("p");
       additionalDesc.className = "onboarding-tour-description-suffix";
       additionalDesc.setAttribute("data-l10n-id",
-        "onboarding.tour-tor-security.description-suffix");
+        "onboarding.tour-i2p-security.description-suffix");
       desc.appendChild(additionalDesc);
 
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-security.png");
       let btnContainer = createOnboardingTourButton(div,
-        "onboarding-tour-tor-security-button", "onboarding.tour-tor-security-level.button");
-      btnContainer.className = "onboarding-tour-tor-action-button-container";
+        "onboarding-tour-i2p-security-button", "onboarding.tour-i2p-security-level.button");
+      btnContainer.className = "onboarding-tour-i2p-action-button-container";
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-security-next-button", "onboarding.tour-tor-security-level.next-button");
+        "onboarding-tour-i2p-security-next-button", "onboarding.tour-i2p-security-level.next-button");
 
       return div;
     },
   },
   "expect-differences": {
-    id: "onboarding-tour-tor-expect-differences",
-    tourNameId: "onboarding.tour-tor-expect-differences",
+    id: "onboarding-tour-i2p-expect-differences",
+    tourNameId: "onboarding.tour-i2p-expect-differences",
     getPage(win) {
       let div = win.document.createElement("div");
 
       createOnboardingTourDescription(div,
-        "onboarding.tour-tor-expect-differences.title", "onboarding.tour-tor-expect-differences.description");
+        "onboarding.tour-i2p-expect-differences.title", "onboarding.tour-i2p-expect-differences.description");
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-expect-differences.png");
       let btnContainer = createOnboardingTourButton(div,
-        "onboarding-tour-tor-expect-differences-button", "onboarding.tour-tor-expect-differences.button");
-      btnContainer.className = "onboarding-tour-tor-action-button-container";
+        "onboarding-tour-i2p-expect-differences-button", "onboarding.tour-i2p-expect-differences.button");
+      btnContainer.className = "onboarding-tour-i2p-action-button-container";
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-expect-differences-next-button", "onboarding.tour-tor-expect-differences.next-button");
+        "onboarding-tour-i2p-expect-differences-next-button", "onboarding.tour-i2p-expect-differences.next-button");
 
       return div;
     },
   },
   "onion-services": {
-    id: "onboarding-tour-tor-onion-services",
-    tourNameId: "onboarding.tour-tor-onion-services",
+    id: "onboarding-tour-i2p-onion-services",
+    tourNameId: "onboarding.tour-i2p-onion-services",
     getPage(win) {
       let div = win.document.createElement("div");
 
       createOnboardingTourDescription(div,
-        "onboarding.tour-tor-onion-services.title", "onboarding.tour-tor-onion-services.description");
+        "onboarding.tour-i2p-onion-services.title", "onboarding.tour-i2p-onion-services.description");
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-onion-services.png");
       let btnContainer = createOnboardingTourButton(div,
-        "onboarding-tour-tor-onion-services-button", "onboarding.tour-tor-onion-services.button");
-      btnContainer.className = "onboarding-tour-tor-action-button-container";
+        "onboarding-tour-i2p-onion-services-button", "onboarding.tour-i2p-onion-services.button");
+      btnContainer.className = "onboarding-tour-i2p-action-button-container";
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-onion-services-next-button", "onboarding.tour-tor-onion-services.next-button");
+        "onboarding-tour-i2p-onion-services-next-button", "onboarding.tour-i2p-onion-services.next-button");
 
       return div;
     },
   },
   // Tour items for users who have updated their I2P Browser:
   "toolbar-update-8.5": {
-    id: "onboarding-tour-tor-toolbar-update-8-5",
-    tourNameId: "onboarding.tour-tor-toolbar",
-    highlightId: "onboarding.tour-tor-update.prefix-updated",
+    id: "onboarding-tour-i2p-toolbar-update-8-5",
+    tourNameId: "onboarding.tour-i2p-toolbar",
+    highlightId: "onboarding.tour-i2p-update.prefix-updated",
     instantComplete: true,
     getPage(win) {
       let div = win.document.createElement("div");
 
       let desc = createOnboardingTourDescription(div,
-        "onboarding.tour-tor-toolbar-update-8.5.title", "onboarding.tour-tor-toolbar-update-8.5.description");
+        "onboarding.tour-i2p-toolbar-update-8.5.title", "onboarding.tour-i2p-toolbar-update-8.5.description");
 
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-toolbar-layout.png");
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-toolbar-next-button", "onboarding.tour-tor-toolbar-update-8.5.next-button");
+        "onboarding-tour-i2p-toolbar-next-button", "onboarding.tour-i2p-toolbar-update-8.5.next-button");
 
       return div;
     },
   },
   "security-update-8.5": {
-    id: "onboarding-tour-tor-security-update-8-5",
-    tourNameId: "onboarding.tour-tor-security",
-    highlightId: "onboarding.tour-tor-update.prefix-new",
+    id: "onboarding-tour-i2p-security-update-8-5",
+    tourNameId: "onboarding.tour-i2p-security",
+    highlightId: "onboarding.tour-i2p-update.prefix-new",
     getPage(win) {
       let div = win.document.createElement("div");
 
       let desc = createOnboardingTourDescription(div,
-        "onboarding.tour-tor-security-update-8.5.title", "onboarding.tour-tor-security-update-8.5.description");
+        "onboarding.tour-i2p-security-update-8.5.title", "onboarding.tour-i2p-security-update-8.5.description");
 
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-security-level.png");
       let btnContainer = createOnboardingTourButton(div,
-        "onboarding-tour-tor-security-button", "onboarding.tour-tor-security-level.button");
-      btnContainer.className = "onboarding-tour-tor-action-button-container";
+        "onboarding-tour-i2p-security-button", "onboarding.tour-i2p-security-level.button");
+      btnContainer.className = "onboarding-tour-i2p-action-button-container";
       // It is confusing to use the two onion-services IDs below, but they
       // provide the functionality and translated string ("Done") that we need.
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-onion-services-next-button", "onboarding.tour-tor-onion-services.next-button");
+        "onboarding-tour-i2p-onion-services-next-button", "onboarding.tour-i2p-onion-services.next-button");
 
       return div;
     },
@@ -963,27 +963,27 @@ class Onboarding {
         this.gotoPage(tourId);
         this._removeTourFromNotificationQueue(tourId);
         break;
-      case "onboarding-tour-tor-welcome-button":
-      case "onboarding-tour-tor-privacy-button":
-      case "onboarding-tour-tor-network-button":
-      case "onboarding-tour-tor-circuit-display-next-button":
-      case "onboarding-tour-tor-security-next-button":
-      case "onboarding-tour-tor-expect-differences-next-button":
-      case "onboarding-tour-tor-onion-services-next-button":
-      case "onboarding-tour-tor-toolbar-next-button":
+      case "onboarding-tour-i2p-welcome-button":
+      case "onboarding-tour-i2p-privacy-button":
+      case "onboarding-tour-i2p-network-button":
+      case "onboarding-tour-i2p-circuit-display-next-button":
+      case "onboarding-tour-i2p-security-next-button":
+      case "onboarding-tour-i2p-expect-differences-next-button":
+      case "onboarding-tour-i2p-onion-services-next-button":
+      case "onboarding-tour-i2p-toolbar-next-button":
         this.gotoNextTourItem();
         handledTourActionClick = true;
         break;
-      case "onboarding-tour-tor-circuit-display-button":
-        let kFrameScript = "resource://onboarding/onboarding-tor-circuit-display.js";
+      case "onboarding-tour-i2p-circuit-display-button":
+        let kFrameScript = "resource://onboarding/onboarding-i2p-circuit-display.js";
         sendMessageToChrome("tor-open-tab",
                             {url: kOnionURL, frameScriptURL: kFrameScript});
         break;
-      case "onboarding-tour-tor-expect-differences-button":
+      case "onboarding-tour-i2p-expect-differences-button":
         const kFAQURL = "https://support.torproject.org/#faq";
         sendMessageToChrome("tor-open-tab", {url: kFAQURL});
         break;
-      case "onboarding-tour-tor-onion-services-button":
+      case "onboarding-tour-i2p-onion-services-button":
         sendMessageToChrome("tor-open-tab", {url: kOnionURL});
         break;
     }
