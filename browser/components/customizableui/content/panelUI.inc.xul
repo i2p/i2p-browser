@@ -84,8 +84,7 @@
        noautohide="true"
        nopreventnavboxhide="true"
        role="alert">
-       <!-- MEEH TODO: Figure out why firefox fails to load with this enabled. -->
-  <!--<popupnotification id="appMenu-update-available-notification"
+  <popupnotification id="appMenu-update-available-notification"
                      popupid="update-available"
                      label="&updateAvailable.header.message;"
                      buttonlabel="&updateAvailable.acceptButton.label;"
@@ -136,7 +135,7 @@
     <popupnotificationcontent id="update-restart-notification-content" orient="vertical">
       <description id="update-restart-description">&#160;</description>
     </popupnotificationcontent>
-  </popupnotification>-->
+  </popupnotification>
 </panel>
 
 <menupopup id="customizationPaletteItemContextMenu"
