@@ -350,7 +350,7 @@ pref("browser.taskbar.lists.recent.enabled", false);
 #endif
 
 #ifdef TOR_BROWSER_VERSION
-#expand pref("torbrowser.version", __TOR_BROWSER_VERSION__);
+#expand pref("i2pbrowser.version", __TOR_BROWSER_VERSION__);
 #endif
 
 // If we are bundling fonts, whitelist those bundled fonts, and restrict system fonts to a selection.
