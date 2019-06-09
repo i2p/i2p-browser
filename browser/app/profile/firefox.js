@@ -165,7 +165,7 @@ pref("app.update.silent", false);
 pref("app.update.staging.enabled", false);
 
 // Update service URL:
-pref("app.update.url", "https://aus1.torproject.org/torbrowser/update_3/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%");
+pref("app.update.url", "https://i2pbrowser.meeh.no/i2pbrowser/update_3/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%");
 
 // app.update.url.manual is in branding section
 // app.update.url.details is in branding section

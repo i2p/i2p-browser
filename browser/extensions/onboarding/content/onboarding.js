@@ -976,15 +976,15 @@ class Onboarding {
         break;
       case "onboarding-tour-i2p-circuit-display-button":
         let kFrameScript = "resource://onboarding/onboarding-i2p-circuit-display.js";
-        sendMessageToChrome("tor-open-tab",
+        sendMessageToChrome("i2p-open-tab",
                             {url: kOnionURL, frameScriptURL: kFrameScript});
         break;
       case "onboarding-tour-i2p-expect-differences-button":
-        const kFAQURL = "https://support.torproject.org/#faq";
-        sendMessageToChrome("tor-open-tab", {url: kFAQURL});
+        const kFAQURL = "https://geti2p.net/en/faq";
+        sendMessageToChrome("i2p-open-tab", {url: kFAQURL});
         break;
       case "onboarding-tour-i2p-onion-services-button":
-        sendMessageToChrome("tor-open-tab", {url: kOnionURL});
+        sendMessageToChrome("i2p-open-tab", {url: kOnionURL});
         break;
     }
     if (classList.contains("onboarding-tour-item")) {
