@@ -9233,6 +9233,10 @@ bool nsContentUtils::IsSpecificAboutPage(JSObject* aGlobal, const char* aUri) {
   nsAutoCString host;
   if (NS_SUCCEEDED(uri->GetHost(host))) {
     bool hasOnionURI = StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+    // Threat .i2p as .onion
+    if (!hasOnionURI) {
+      hasOnionURI = StringEndsWith(host, NS_LITERAL_CSTRING(".i2p"));
+    }
     return hasOnionURI;
   }
 

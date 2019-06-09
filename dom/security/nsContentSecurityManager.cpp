@@ -856,6 +856,10 @@ nsContentSecurityManager::IsOriginPotentiallyTrustworthy(
       *aIsTrustWorthy = true;
       return NS_OK;
     }
+    if (nsMixedContentBlocker::IsPotentiallyTrustworthyEepsite(uri)) {
+      *aIsTrustWorthy = true;
+      return NS_OK;
+    }
   }
 
   return NS_OK;

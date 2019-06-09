@@ -329,6 +329,12 @@ static uint32_t GetSecurityStateFromSecurityInfoAndRequest(
                    "uri is onion.\n"));
           securityState = nsIWebProgressListener::STATE_IS_SECURE;
         }
+        if (StringEndsWith(host, NS_LITERAL_CSTRING(".i2p"))) {
+          MOZ_LOG(gSecureDocLog, LogLevel::Debug,
+                  ("SecureUI: GetSecurityState: - "
+                   "uri is eepsite.\n"));
+          securityState = nsIWebProgressListener::STATE_IS_SECURE;
+        }
       }
     }
   }

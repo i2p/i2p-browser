@@ -1653,6 +1653,10 @@ HttpBaseChannel::SetReferrerWithPolicy(nsIURI* referrer,
       StringEndsWith(referrerHost, NS_LITERAL_CSTRING(".onion"))) {
     return NS_OK;
   }
+  if (userHideOnionReferrerSource && !currentHost.Equals(referrerHost) &&
+      StringEndsWith(referrerHost, NS_LITERAL_CSTRING(".i2p"))) {
+    return NS_OK;
+  }
 
   // check policy for sending ref only when hosts match
   if (userReferrerXOriginPolicy == 2 && !currentHost.Equals(referrerHost))

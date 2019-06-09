@@ -407,6 +407,24 @@ bool nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(nsIURI* aURL) {
   return StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
 }
 
+bool nsMixedContentBlocker::IsPotentiallyTrustworthyEepsite(nsIURI* aURL) {
+  static bool sInited = false;
+  static bool sWhiteListOnions = false;
+  if (!sInited) {
+    Preferences::AddBoolVarCache(&sWhiteListOnions,
+                                 "dom.securecontext.whitelist_eepsites");
+    sInited = true;
+  }
+  if (!sWhiteListOnions) {
+    return false;
+  }
+
+  nsAutoCString host;
+  nsresult rv = aURL->GetHost(host);
+  NS_ENSURE_SUCCESS(rv, false);
+  return StringEndsWith(host, NS_LITERAL_CSTRING(".i2p"));
+}
+
 /* Static version of ShouldLoad() that contains all the Mixed Content Blocker
  * logic.  Called from non-static ShouldLoad().
  */
@@ -722,8 +740,10 @@ nsresult nsMixedContentBlocker::ShouldLoad(
       return NS_OK;
     }
 
-    bool parentIsOnion =
-        StringEndsWith(parentHost, NS_LITERAL_CSTRING(".onion"));
+    bool parentIsOnion = StringEndsWith(parentHost, NS_LITERAL_CSTRING(".onion"));
+    if (!parentIsOnion) {
+      parentIsOnion = StringEndsWith(parentHost, NS_LITERAL_CSTRING(".i2p"));
+    }
     if (!parentIsOnion) {
       *aDecision = ACCEPT;
       return NS_OK;
@@ -737,6 +757,10 @@ nsresult nsMixedContentBlocker::ShouldLoad(
   // .onion URLs are encrypted and authenticated. Don't treat them as mixed
   // content if potentially trustworthy (i.e. whitelisted).
   if (isHttpScheme && IsPotentiallyTrustworthyOnion(innerContentLocation)) {
+    *aDecision = ACCEPT;
+    return NS_OK;
+  }
+  if (isHttpScheme && IsPotentiallyTrustworthyEepsite(innerContentLocation)) {
     *aDecision = ACCEPT;
     return NS_OK;
   }

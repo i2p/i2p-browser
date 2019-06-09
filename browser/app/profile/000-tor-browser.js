@@ -330,6 +330,7 @@ pref("browser.download.panel.shown", true);
 
 // Treat .onions as secure
 pref("dom.securecontext.whitelist_onions", true);
+pref("dom.securecontext.whitelist_eepsites", true);
 
 // Onboarding.
 pref("browser.onboarding.tourset-version", 3);

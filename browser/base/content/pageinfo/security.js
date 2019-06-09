@@ -56,6 +56,9 @@ var security = {
     if (hostName && hostName.endsWith(".onion")) {
       isOnion = true;
     }
+    if (hostName && hostName.endsWith(".i2p")) {
+      isOnion = true;
+    }
 
     ui.QueryInterface(nsISSLStatusProvider);
     var status = ui.SSLStatus;

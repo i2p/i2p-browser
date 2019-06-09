@@ -5592,7 +5592,7 @@ var IdentityHandler = {
   },
 
   isOnionHost: function isOnionHost() {
-    return this._uri.host.toLowerCase().endsWith(".onion");
+    return this._uri.host.toLowerCase().endsWith(".onion") || this._uri.host.toLowerCase().endsWith(".i2p");
   },
 
   /**

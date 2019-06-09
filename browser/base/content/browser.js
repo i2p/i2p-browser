@@ -7532,7 +7532,7 @@ var gIdentityHandler = {
   },
 
   get _uriIsOnionHost() {
-    return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".onion") : false;
+    return this._uriHasHost ? (this._uri.host.toLowerCase().endsWith(".onion") || this._uri.host.toLowerCase().endsWith(".i2p")) : false;
   },
   get _uriIsI2PHost() {
     return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".i2p") : false;
