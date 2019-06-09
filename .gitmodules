@@ -1,6 +1,3 @@
-[submodule "toolkit/torproject/torbutton"]
-	path = toolkit/torproject/torbutton
-	url = https://git.torproject.org/torbutton.git
 [submodule "i2pbutton"]
 	path = toolkit/i2p/i2pbutton
 	url = https://github.com/mikalv/i2pbutton.git
