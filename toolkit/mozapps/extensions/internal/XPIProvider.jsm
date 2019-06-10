@@ -811,15 +811,9 @@ function isUsableAddon(aAddon) {
 
   // Ensure that we allow torbutton, https-everywhere, and the meek helper.
   if (aAddon.id == "i2pbutton@geti2p.net" ||
-      aAddon.id == "https-everywhere-eff@eff.org" ||
-      aAddon.id == "meek-http-helper@bamsoftware.com") {
+      aAddon.id == "https-everywhere-eff@eff.org" /*||aAddon.id == ""*/) {
     return true;
   }
-
-  // Ensure that Tor Launcher is never enabled as an add-on. It will be
-  // removed inside getInstallState() soon.
-  if (aAddon.id == "tor-launcher@torproject.org")
-    return false;
 
   if (mustSign(aAddon.type) && !aAddon.isCorrectlySigned) {
     logger.warn(`Add-on ${aAddon.id} is not correctly signed.`);
@@ -1612,16 +1606,6 @@ var XPIStates = {
             id === "i2pbutton@geti2p.net" &&
             location.name === KEY_APP_PROFILE) {
           logger.debug("Uninstalling i2pbutton from user profile.");
-          location.uninstallAddon(id);
-          changed = true;
-          continue;
-        }
-
-        // Since it is now part of the browser, uninstall the Tor Launcher
-        // extension. This will remove the Tor Launcher .xpi from user
-        // profiles on macOS.
-        if (id === "tor-launcher@torproject.org") {
-          logger.debug("Uninstalling the Tor Launcher extension.");
           location.uninstallAddon(id);
           changed = true;
           continue;
