@@ -171,8 +171,7 @@ if (AppConstants.MOZ_CRASHREPORTER) {
 }
 
 if (AppConstants.TOR_BROWSER_UPDATE) {
-  XPCOMUtils.defineLazyModuleGetter(this, "AboutIBUpdate",
-                                    "resource:///modules/AboutIBUpdate.jsm");
+  XPCOMUtils.defineLazyModuleGetter(this, "AboutIBUpdate", "resource:///modules/AboutTBUpdate.jsm");
 }
 
 XPCOMUtils.defineLazyGetter(this, "gBrandBundle", function() {
@@ -1114,7 +1113,7 @@ BrowserGlue.prototype = {
     }
 
     if (AppConstants.TOR_BROWSER_UPDATE) {
-      AboutTBUpdate.init();
+      AboutIBUpdate.init();
     }
 
     Sanitizer.onStartup();

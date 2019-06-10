@@ -9,13 +9,13 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-this.EXPORTED_SYMBOLS = [ "AboutTBUpdate" ];
+this.EXPORTED_SYMBOLS = [ "AboutIBUpdate" ];
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/NetUtil.jsm");
 
-const kRequestUpdateMessageName = "AboutTBUpdate:RequestUpdate";
-const kSendUpdateMessageName    = "AboutTBUpdate:Update";
+const kRequestUpdateMessageName = "AboutIBUpdate:RequestUpdate";
+const kSendUpdateMessageName    = "AboutIBUpdate:Update";
 
 #ifdef TOR_BROWSER_VERSION
 #expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
@@ -27,7 +27,7 @@ const kSendUpdateMessageName    = "AboutTBUpdate:Update";
  * message that's handled here. It is modeled after Mozilla's about:home
  * implementation.
  */
-var AboutTBUpdate = {
+var AboutIBUpdate = {
   init: function() {
     let mm = Cc["@mozilla.org/globalmessagemanager;1"]
                .getService(Ci.nsIMessageListenerManager);
@@ -36,10 +36,10 @@ var AboutTBUpdate = {
 
   receiveMessage: function(aMessage) {
     if (aMessage.name == kRequestUpdateMessageName)
-      this.sendAboutTBUpdateData(aMessage.target);
+      this.sendAboutIBUpdateData(aMessage.target);
   },
 
-  sendAboutTBUpdateData: function(aTarget) {
+  sendAboutIBUpdateData: function(aTarget) {
     let data = this.releaseNoteInfo;
     data.moreInfoURL = this.moreInfoURL;
     if (aTarget && aTarget.messageManager) {
@@ -53,7 +53,7 @@ var AboutTBUpdate = {
 
   get moreInfoURL() {
     try {
-      return Services.prefs.getCharPref("torbrowser.post_update.url");
+      return Services.prefs.getCharPref("i2pbrowser.post_update.url");
     } catch (e) {}
 
     // Use the default URL as a fallback.

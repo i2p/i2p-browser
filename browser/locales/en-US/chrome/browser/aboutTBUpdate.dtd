@@ -1,8 +1,8 @@
-<!ENTITY aboutTBUpdate.changelogTitle "I2P Browser Changelog">
-<!ENTITY aboutTBUpdate.updated "I2P Browser has been updated.">
-<!ENTITY aboutTBUpdate.linkPrefix "For the most up-to-date information about this release, ">
-<!ENTITY aboutTBUpdate.linkLabel  "visit our website">
-<!ENTITY aboutTBUpdate.linkSuffix ".">
-<!ENTITY aboutTBUpdate.version "Version">
-<!ENTITY aboutTBUpdate.releaseDate "Release Date">
-<!ENTITY aboutTBUpdate.releaseNotes "Release Notes">
+<!ENTITY aboutIBUpdate.changelogTitle "I2P Browser Changelog">
+<!ENTITY aboutIBUpdate.updated "I2P Browser has been updated.">
+<!ENTITY aboutIBUpdate.linkPrefix "For the most up-to-date information about this release, ">
+<!ENTITY aboutIBUpdate.linkLabel  "visit our website">
+<!ENTITY aboutIBUpdate.linkSuffix ".">
+<!ENTITY aboutIBUpdate.version "Version">
+<!ENTITY aboutIBUpdate.releaseDate "Release Date">
+<!ENTITY aboutIBUpdate.releaseNotes "Release Notes">
