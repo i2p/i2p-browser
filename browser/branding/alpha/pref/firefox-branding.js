@@ -18,8 +18,8 @@ pref("app.update.promptWaitTime", 3600);
 // app.update.url.details: a default value for the "More information about this
 // update" link supplied in the "An update is available" page of the update
 // wizard.
-pref("app.update.url.manual", "https://www.torproject.org/download/download-easy.html");
-pref("app.update.url.details", "https://www.torproject.org/projects/torbrowser.html");
+pref("app.update.url.manual", "https://geti2p.net/en/download/lab");
+pref("app.update.url.details", "https://geti2p.net/en/i2pbrowser");
 
 //pref("app.releaseNotesURL", "https://www.mozilla.org/%LOCALE%/firefox/%VERSION%/releasenotes/?utm_source=firefox-browser&utm_medium=firefox-browser&utm_campaign=whatsnew");
 
