@@ -569,8 +569,8 @@ var PermissionPromptPrototype = {
           if (PrivateBrowsingUtils.isBrowserPrivate(browser)) {
             scope = SitePermissions.SCOPE_SESSION;
           }
-          SitePermissions.set(
-            principal.URI,
+          SitePermissions.setForPrincipal(
+            principal,
             this.permissionKey,
             promptAction.action,
             scope
