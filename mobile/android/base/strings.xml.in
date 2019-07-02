@@ -102,7 +102,6 @@
   <string name="pref_choice_tor_bridges_enabled_summary">&pref_choice_tor_bridges_enabled_summary;</string>
   <string name="pref_bridges_type_obfs4">&pref_bridges_type_obfs4;</string>
   <string name="pref_bridges_type_meek_azure">&pref_bridges_type_meek_azure;</string>
-  <string name="pref_bridges_type_obfs3">&pref_bridges_type_obfs3;</string>
 
   <string name="pref_tor_bridges_provide_manual_button_title">&pref_tor_bridges_provide_manual_button_title;</string>
   <string name="pref_tor_bridges_provide_select_text_title">&pref_tor_bridges_provide_select_text_title;</string>

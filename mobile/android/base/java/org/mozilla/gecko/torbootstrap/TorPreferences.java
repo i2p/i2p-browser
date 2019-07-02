@@ -679,9 +679,6 @@ public class TorPreferences extends AppCompatPreferenceActivity {
                         case "meek":
                             buttonId = R.id.radio_pref_bridges_meek_azure;
                             break;
-                        case "obfs3":
-                            buttonId = R.id.radio_pref_bridges_obfs3;
-                            break;
                     }
 
                     if (buttonId != -1) {

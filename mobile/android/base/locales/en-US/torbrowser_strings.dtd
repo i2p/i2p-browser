@@ -54,7 +54,6 @@
 <!-- When another PT is recommended, change TorNetworkBridgeSelectPreference::saveCurrentCheckedRadioButton(), too -->
 <!ENTITY pref_bridges_type_obfs4 "obfs4 (recommended)">
 <!ENTITY pref_bridges_type_meek_azure "meek-azure">
-<!ENTITY pref_bridges_type_obfs3 "obfs3">
 <!ENTITY pref_tor_network_bridges_enabled_change_builtin "You\'re using a built-in bridge to connect to Tor. Change">
 <!ENTITY pref_tor_network_bridges_enabled_change_custom "You\'re using a custom bridge to connect to Tor. Change">
 <!ENTITY pref_tor_network_using_multiple_provided_bridges "You\'re using multiple custom bridges.">
