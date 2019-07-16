@@ -45,6 +45,7 @@
   skin/classic/browser/connection-secure.svg                   (../shared/identity-block/connection-secure.svg)
   skin/classic/browser/connection-mixed-passive-loaded.svg     (../shared/identity-block/connection-mixed-passive-loaded.svg)
   skin/classic/browser/connection-mixed-active-loaded.svg      (../shared/identity-block/connection-mixed-active-loaded.svg)
+  skin/classic/browser/garlic.svg                              (../shared/identity-block/garlic.svg)
   skin/classic/browser/onion.svg                               (../shared/identity-block/onion.svg)
   skin/classic/browser/onion-lock.svg                          (../shared/identity-block/onion-lock.svg)
   skin/classic/browser/onion-disabled.svg                      (../shared/identity-block/onion-disabled.svg)
