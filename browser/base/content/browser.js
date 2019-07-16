@@ -7840,9 +7840,21 @@ var gIdentityHandler = {
       return this._uriIsOnionHost ? "onionVerifiedIdentity" : "verifiedIdentity";
     }
     if (this._uriHasHost && this._isSecure) {
-      return this._uriIsOnionHost ? "onionVerifiedDomain" : "verifiedDomain";
+      if (this._uriIsOnionHost) {
+        return "onionVerifiedDomain";
+      } else if (this._uriIsI2PHost) {
+        return "garlicUnknownIdentity";
+      } else {
+        return "verifiedDomain";
+      }
     }
-    return this._uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
+    if (this._uriIsOnionHost) {
+      return "onionUnknownIdentity";
+    } else if (this._uriIsI2PHost) {
+      return "garlicUnknownIdentity";
+    } else {
+      return "unknownIdentity";
+    }
   },
 
   /**
@@ -7920,6 +7932,9 @@ var gIdentityHandler = {
       let uriIsOnionHost = this._uriIsOnionHost;
       if (this._isBroken) {
         this._identityBox.className = uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
+        if (this._uriIsI2PHost) {
+          this._identityBox.className = "garlicUnknownIdentity";
+        }
 
         if (this._isMixedActiveContentLoaded) {
           this._identityBox.classList.add(uriIsOnionHost ? "onionMixedActiveContent" : "mixedActiveContent");
@@ -7931,7 +7946,9 @@ var gIdentityHandler = {
           this._identityBox.classList.add("weakCipher");
         }
       } else {
-        if (!uriIsOnionHost) {
+        if (this._uriIsI2PHost) {
+          this._identityBox.className = "garlicUnknownIdentity";
+        } else if (!uriIsOnionHost) {
           let warnOnInsecure = Services.prefs.getBoolPref("security.insecure_connection_icon.enabled") ||
                                (Services.prefs.getBoolPref("security.insecure_connection_icon.pbmode.enabled") &&
                                PrivateBrowsingUtils.isWindowPrivate(window));

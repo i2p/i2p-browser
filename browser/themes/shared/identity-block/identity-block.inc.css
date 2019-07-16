@@ -208,6 +208,12 @@ toolbar[brighttext] #urlbar[pageproxystate="valid"] > #identity-box.chromeUI > #
   visibility: visible;
 }
 
+#urlbar[pageproxystate="valid"] > #identity-box.garlicUnknownIdentity > #connection-icon,
+#urlbar[pageproxystate="valid"] > #identity-box.garlicSelfSigned > #connection-icon {
+  list-style-image: url(chrome://browser/skin/garlic.svg);
+  visibility: visible;
+}
+
 #urlbar[pageproxystate="valid"] > #identity-box.onionUnknownIdentity > #connection-icon,
 #urlbar[pageproxystate="valid"] > #identity-box.onionSelfSigned > #connection-icon {
   list-style-image: url(chrome://browser/skin/onion.svg);
