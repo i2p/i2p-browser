@@ -53,6 +53,7 @@ static const char kPrefIPv4OnlyDomains[] = "network.dns.ipv4OnlyDomains";
 static const char kPrefDisableIPv6[] = "network.dns.disableIPv6";
 static const char kPrefDisablePrefetch[] = "network.dns.disablePrefetch";
 static const char kPrefBlockDotOnion[] = "network.dns.blockDotOnion";
+static const char kPrefBlockDotI2P[] = "network.dns.blockDotI2P";
 static const char kPrefDnsLocalDomains[] = "network.dns.localDomains";
 static const char kPrefDnsForceResolve[] = "network.dns.forceResolve";
 static const char kPrefDnsOfflineLocalhost[] = "network.dns.offline-localhost";
@@ -512,6 +513,7 @@ nsDNSService::Init() {
   bool disablePrefetch = false;
   bool disableDNS = false;
   bool blockDotOnion = true;
+  bool blockDotI2P = true;
   int proxyType = nsIProtocolProxyService::PROXYCONFIG_DIRECT;
   bool notifyResolution = false;
 
@@ -538,6 +540,7 @@ nsDNSService::Init() {
     prefs->GetBoolPref(kPrefDnsOfflineLocalhost, &offlineLocalhost);
     prefs->GetBoolPref(kPrefDisablePrefetch, &disablePrefetch);
     prefs->GetBoolPref(kPrefBlockDotOnion, &blockDotOnion);
+    prefs->GetBoolPref(kPrefBlockDotI2P, &blockDotI2P);
 
     // If a manual proxy is in use, disable prefetch implicitly
     prefs->GetIntPref("network.proxy.type", &proxyType);
@@ -562,6 +565,7 @@ nsDNSService::Init() {
       prefs->AddObserver(kPrefDnsOfflineLocalhost, this, false);
       prefs->AddObserver(kPrefDisablePrefetch, this, false);
       prefs->AddObserver(kPrefBlockDotOnion, this, false);
+      prefs->AddObserver(kPrefBlockDotI2P, this, false);
       prefs->AddObserver(kPrefDnsNotifyResolution, this, false);
 
       // Monitor these to see if there is a change in proxy configuration
@@ -594,6 +598,7 @@ nsDNSService::Init() {
     mDisableIPv6 = disableIPv6;
     mDisableDNS = disableDNS;
     mBlockDotOnion = blockDotOnion;
+    mBlockDotI2P = blockDotI2P;
     mForceResolve = forceResolve;
     mForceResolveOn = !mForceResolve.IsEmpty();
 
@@ -678,6 +683,9 @@ nsresult nsDNSService::PreprocessHostname(bool aLocalDomain,
                                           nsACString &aACE) {
   // Enforce RFC 7686
   if (mBlockDotOnion && StringEndsWith(aInput, NS_LITERAL_CSTRING(".onion"))) {
+    return NS_ERROR_UNKNOWN_HOST;
+  }
+  if (mBlockDotI2P && StringEndsWith(aInput, NS_LITERAL_CSTRING(".i2p"))) {
     return NS_ERROR_UNKNOWN_HOST;
   }
 
