@@ -2125,6 +2125,7 @@ pref("network.dns.disablePrefetch", false);
 // This preference controls whether .onion hostnames are
 // rejected before being given to DNS. RFC 7686
 pref("network.dns.blockDotOnion", true);
+pref("network.dns.blockDotI2P", true);
 
 // These domains are treated as localhost equivalent
 pref("network.dns.localDomains", "");
