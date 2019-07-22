@@ -24,13 +24,11 @@
 #include FennecManifest_permissions.xml.in
 
     <application android:label="@string/moz_app_displayname"
-                 android:icon="@mipmap/ic_launcher"
-                 android:logo="@drawable/logo"
+                 android:icon="@drawable/icon"
                  android:name="@MOZ_ANDROID_APPLICATION_CLASS@"
                  android:hardwareAccelerated="true"
                  android:supportsRtl="true"
                  android:allowBackup="false"
-                 android:usesCleartextTraffic="true"
                  >
 
         <meta-data android:name="com.sec.android.support.multiwindow" android:value="true"/>
