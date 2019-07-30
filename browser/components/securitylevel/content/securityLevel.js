@@ -124,7 +124,7 @@ const SecurityLevelPrefs = {
   set securityCustom(val) {
     Services.prefs.setBoolPref(this.security_custom_pref, val);
   },
-};
+}; /* Security Level Prefs */
 
 /*
   Security Level Button Code
@@ -134,6 +134,8 @@ const SecurityLevelPrefs = {
 
 const SecurityLevelButton = {
   _securityPrefsBranch : null,
+  _button : null,
+  _anchor : null,
 
   _populateXUL : function(securityLevelButton) {
     if (securityLevelButton != null) {
@@ -164,11 +166,38 @@ const SecurityLevelButton = {
     }
   },
 
+  get button() {
+    if (this._button) {
+      return this._button;
+    }
+
+    let button = document.getElementById("security-level-button");
+    if (!button) {
+      return null;
+    }
+
+    return this._button = button;
+  },
+
+  get anchor() {
+    if (this._anchor) {
+      return this._anchor;
+    }
+
+    let anchor = document.getAnonymousElementByAttribute(this.button, "class",
+                                                   "toolbarbutton-icon");
+    if (!anchor) {
+      return null;
+    }
+
+    anchor.setAttribute("consumeanchor", SecurityLevelButton.button.id);
+    return this._anchor = anchor;
+  },
+
   init : function() {
     // set the initial class based off of the current pref
-    let button = document.getElementById("security-level-button");
-    this._populateXUL(button);
-    this._configUIFromPrefs(button);
+    this._populateXUL(this.button);
+    this._configUIFromPrefs(this.button);
 
     this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
@@ -191,13 +220,13 @@ const SecurityLevelButton = {
     switch(topic) {
       case "nsPref:changed":
         if (data == "security_slider") {
-          this._configUIFromPrefs(document.getElementById("security-level-button"));
+          this._configUIFromPrefs(this.button);
         }
         break;
     }
   },
 
-  // callbacks for entering the 'Customize Firefox' screen to set icon
+  // callback for entering the 'Customize Firefox' screen to set icon
   onCustomizeStart : function(window) {
     let navigatorToolbox = document.getElementById("navigator-toolbox");
     let button = navigatorToolbox.palette.querySelector("#security-level-button");
@@ -210,14 +239,20 @@ const SecurityLevelButton = {
     if (aNode.id == "security-level-button" && !aWasRemoval) {
       this._populateXUL(aNode);
       this._configUIFromPrefs(aNode);
+      // clear out our cached elements as they seem to be recreated when the UI is customized
+      delete this._button;
+      delete this._anchor;
     }
   },
 
   // when toolbar button is pressed
-  onCommand : function(anchor, event) {
-    SecurityLevelPanel.show(anchor);
+  onCommand : function(event) {
+    // we need to set this attribute for the button to be shaded correctly to look like it is pressed
+    // while the security level panel is open
+    this.button.setAttribute("open", "true");
+    SecurityLevelPanel.show(event);
   },
-};
+}; /* Security Level Button */
 
 /*
   Security Level Panel Code
@@ -305,19 +340,16 @@ const SecurityLevelPanel = {
     this._securityPrefsBranch = null;
   },
 
-  show : function(anchor) {
+  show : function() {
     // we have to defer this until after the browser has finished init'ing before
     // we can populate the panel
     if (!this._populated) {
       this._populateXUL();
     }
 
-    // save off anchor in case we want to show from our own code
-    this._anchor = anchor;
-
     let panel = document.getElementById("securityLevel-panel");
     panel.hidden = false;
-    PanelMultiView.openPopup(panel, anchor, "bottomcenter topright",
+    PanelMultiView.openPopup(panel, SecurityLevelButton.anchor, "bottomcenter topright",
                              0, 0, false, null).catch(Cu.reportError);
   },
 
@@ -326,7 +358,19 @@ const SecurityLevelPanel = {
     PanelMultiView.hidePopup(panel);
   },
 
-  // when prefs change
+  restoreDefaults : function() {
+    SecurityLevelPrefs.securityCustom = false;
+    // hide and reshow so that layout re-renders properly
+    this.hide();
+    this.show(this._anchor);
+  },
+
+  openAdvancedSecuritySettings : function() {
+    openPreferences("privacy-securitylevel");
+    this.hide();
+  },
+
+  // callback when prefs change
   observe : function(subject, topic, data) {
     switch(topic) {
       case "nsPref:changed":
@@ -337,18 +381,16 @@ const SecurityLevelPanel = {
     }
   },
 
-  restoreDefaults : function() {
-    SecurityLevelPrefs.securityCustom = false;
-    // hide and reshow so that layout re-renders properly
-    this.hide();
-    this.show(this._anchor);
+  // callback when the panel is displayed
+  onPopupShown : function(event) {
+    SecurityLevelButton.button.setAttribute("open", "true");
   },
 
-  openAdvancedSecuritySettings : async function() {
-    openPreferences("privacy-securitylevel");
-    this.hide();
+  // callback when the panel is hidden
+  onPopupHidden : function(event) {
+    SecurityLevelButton.button.removeAttribute("open");
   }
-};
+}; /* Security Level Panel */
 
 /*
   Security Level Preferences Code
@@ -507,7 +549,7 @@ const SecurityLevelPreferences =
   restoreDefaults : function() {
     SecurityLevelPrefs.securityCustom = false;
   },
-};
+}; /* Security Level Prefereces */
 
 Object.defineProperty(this, "SecurityLevelButton", {
   value: SecurityLevelButton,

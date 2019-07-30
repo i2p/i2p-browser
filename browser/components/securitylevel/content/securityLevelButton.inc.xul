@@ -1,5 +1,5 @@
-<toolbarbutton id="security-level-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
+<toolbarbutton id="security-level-button" class="toolbarbutton-1 chromeclass-toolbar-additional badged-button"
                removable="true"
-               oncommand="SecurityLevelButton.onCommand(this, event);"
+               onmousedown="SecurityLevelButton.onCommand();"
                closemenu="none"
                cui-areatype="toolbar"/>

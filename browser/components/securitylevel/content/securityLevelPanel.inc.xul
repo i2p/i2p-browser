@@ -3,7 +3,10 @@
    type="arrow"
    orient="vertical"
    level="top"
-   hidden="true">
+   hidden="true"
+   onpopupshown="SecurityLevelPanel.onPopupShown(event);"
+   onpopuphidden="SecurityLevelPanel.onPopupHidden(event);"
+   >
   <panelmultiview mainViewId="securityLevel-panelview">
     <panelview id="securityLevel-panelview" descriptionheightworkaround="true">
       <vbox class="panel-subview-body">
