@@ -763,6 +763,9 @@ var BrowserApp = {
       true
     );
 
+    // Torbutton scripts included in browser.xul
+    torbutton_init();
+
     // We can't delay registering WebChannel listeners: if the first page is
     // about:accounts, which can happen when starting the Firefox Account flow
     // from the first run experience, or via the Firefox Account Status

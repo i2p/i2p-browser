@@ -4,6 +4,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <?xml-stylesheet href="chrome://browser/content/browser.css" type="text/css"?>
+<?xml-stylesheet href="chrome://torbutton/skin/torbutton.css" type="text/css"?>
 
 <window id="main-window"
         onload="BrowserApp.startup();"
@@ -11,6 +12,7 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script type="application/javascript" src="chrome://browser/content/browser.js"/>
+  <script type="application/javascript" src="chrome://torbutton/content/torbutton.js"/>
 
   <deck id="browsers" flex="1"/>
 
