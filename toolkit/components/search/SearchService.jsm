@@ -924,6 +924,7 @@ SearchService.prototype = {
     let locale = Services.locale.requestedLocale;
     let buildID = Services.appinfo.platformBuildID;
     let appVersion = Services.appinfo.version;
+    let enabledScopes = Services.prefs.getIntPref("extensions.enabledScopes", -1);
 
     // Allows us to force a cache refresh should the cache format change.
     cache.version = CACHE_VERSION;
@@ -936,6 +937,10 @@ SearchService.prototype = {
     // Store the appVersion as well so we can do extra things during major updates.
     cache.appVersion = appVersion;
     cache.locale = locale;
+
+    // Bug 31563: we want to force reloading engines if extensions.enabledScopes
+    // pref changes
+    cache.enabledScopes = enabledScopes;
 
     cache.visibleDefaultEngines = this._visibleDefaultEngines;
     cache.metaData = this._metaData;
@@ -1025,7 +1030,8 @@ SearchService.prototype = {
       cache.buildID != buildID ||
       cache.visibleDefaultEngines.length !=
         this._visibleDefaultEngines.length ||
-      this._visibleDefaultEngines.some(notInCacheVisibleEngines);
+      this._visibleDefaultEngines.some(notInCacheVisibleEngines) ||
+      cache.enabledScopes !== Services.prefs.getIntPref("extensions.enabledScopes", -1);
 
     if (!rebuildCache) {
       SearchUtils.log("_loadEngines: loading from cache directories");
