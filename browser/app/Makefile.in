@@ -104,7 +104,7 @@ ifdef MOZ_UPDATER
 	ln -s ../../../../Library/LaunchServices/org.mozilla.updater '$(dist_dest)/Contents/MacOS/updater.app/Contents/MacOS/org.mozilla.updater'
 endif
 endif
-	printf APPLTORB > '$(dist_dest)/Contents/PkgInfo'
+	printf APPLI2PB > '$(dist_dest)/Contents/PkgInfo'
 endif
 
 .PHONY: features
