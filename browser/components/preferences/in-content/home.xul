@@ -37,7 +37,7 @@
                 class="check-home-page-controlled"
                 data-preference-related="browser.startup.homepage">
         <menupopup>
-            <menuitem value="0" data-l10n-id="home-mode-choice-default" />
+            <menuitem value="0" label="&aboutTor.title;" />
             <menuitem value="2" data-l10n-id="home-mode-choice-custom" />
             <menuitem value="1" data-l10n-id="home-mode-choice-blank" />
         </menupopup>
@@ -79,7 +79,7 @@
                 onsyncfrompreference="return gHomePane.syncFromNewTabPref();"
                 onsynctopreference="return gHomePane.syncToNewTabPref(this.value);">
       <menupopup>
-          <menuitem value="0" data-l10n-id="home-mode-choice-default" />
+          <menuitem value="0" label="&aboutTor.title;" />
           <menuitem value="1" data-l10n-id="home-mode-choice-blank" />
       </menupopup>
     </menulist>

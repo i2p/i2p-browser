@@ -17,7 +17,10 @@
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/privacy.css"?>
 <?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelPreferences.css"?>
 
-<!DOCTYPE page>
+<!DOCTYPE page [
+<!ENTITY % aboutTorDTD SYSTEM "chrome://torbutton/locale/aboutTor.dtd">
+  %aboutTorDTD;
+]>
 
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       xmlns:html="http://www.w3.org/1999/xhtml"
