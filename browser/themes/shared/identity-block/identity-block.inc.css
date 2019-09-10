@@ -173,6 +173,10 @@ toolbar[brighttext] #urlbar[pageproxystate="valid"] > #identity-box.chromeUI > #
 /* TRACKING PROTECTION ICON */
 
 #tracking-protection-icon-box {
+  display: none;
+}
+
+#tracking-protection-icon-box {
   visibility: collapse;
   overflow: hidden;
   width: 20px;

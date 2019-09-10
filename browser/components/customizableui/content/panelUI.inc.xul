@@ -257,7 +257,7 @@
           </hbox>
         </toolbaritem>
         <toolbarseparator class="sync-ui-item"/>
-        <toolbaritem>
+        <toolbaritem hidden="true">
           <toolbarbutton id="appMenu-tp-button"
                class="subviewbutton subviewbutton-iconic"
                oncommand="ContentBlocking.openPreferences('appMenu-trackingprotection');">
@@ -266,7 +266,7 @@
             <label id="appMenu-tp-category"/>
           </toolbarbutton>
         </toolbaritem>
-        <toolbarseparator id="appMenu-tp-separator"/>
+        <toolbarseparator hidden="true" id="appMenu-tp-separator"/>
         <toolbarbutton id="appMenu-new-window-button"
                        class="subviewbutton subviewbutton-iconic"
                        label="&newNavigatorCmd.label;"

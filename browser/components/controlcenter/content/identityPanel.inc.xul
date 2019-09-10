@@ -73,7 +73,8 @@
       <!-- Tracking Protection Section -->
       <hbox id="tracking-protection-container"
             class="identity-popup-section"
-            when-connection="not-secure secure secure-ev secure-cert-user-overridden extension">
+            when-connection="not-secure secure secure-ev secure-cert-user-overridden extension"
+            hidden="true">
         <vbox id="identity-popup-content-blocking-content" flex="1">
           <hbox align="start">
             <label id="content-blocking-label"
