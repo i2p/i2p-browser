@@ -118,7 +118,7 @@ var onboardingTourset = {
 
       createOnboardingTourDescription(div,
         "onboarding.tour-i2p-welcome.title", "onboarding.tour-i2p-welcome.description");
-      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-welcome.png");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_i2p-welcome.svg");
       createOnboardingTourButton(div,
         "onboarding-tour-i2p-welcome-button", "onboarding.tour-i2p-welcome.next-button");
 
@@ -134,7 +134,7 @@ var onboardingTourset = {
 
       createOnboardingTourDescription(div,
         "onboarding.tour-i2p-privacy.title", "onboarding.tour-i2p-privacy.description");
-      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-privacy.png");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_i2p-privacy.svg");
       createOnboardingTourButton(div,
         "onboarding-tour-i2p-privacy-button", "onboarding.tour-i2p-privacy.button");
 
@@ -150,7 +150,7 @@ var onboardingTourset = {
 
       createOnboardingTourDescription(div,
         "onboarding.tour-i2p-network.title", "onboarding.tour-i2p-network.description");
-      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-network.png");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_i2p-network.svg");
       createOnboardingTourButton(div,
         "onboarding-tour-i2p-network-button", "onboarding.tour-i2p-network.button");
 
@@ -190,7 +190,7 @@ var onboardingTourset = {
         "onboarding.tour-i2p-security.description-suffix");
       desc.appendChild(additionalDesc);
 
-      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-security.png");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_i2p-security.svg");
       let btnContainer = createOnboardingTourButton(div,
         "onboarding-tour-i2p-security-button", "onboarding.tour-i2p-security-level.button");
       btnContainer.className = "onboarding-tour-i2p-action-button-container";
@@ -208,7 +208,7 @@ var onboardingTourset = {
 
       createOnboardingTourDescription(div,
         "onboarding.tour-i2p-expect-differences.title", "onboarding.tour-i2p-expect-differences.description");
-      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-expect-differences.png");
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_i2p-expect-differences.svg");
       let btnContainer = createOnboardingTourButton(div,
         "onboarding-tour-i2p-expect-differences-button", "onboarding.tour-i2p-expect-differences.button");
       btnContainer.className = "onboarding-tour-i2p-action-button-container";
