@@ -165,16 +165,16 @@ pref("network.predictor.enabled", false); // Temporarily disabled. See https://b
 
 // Proxy and proxy security
 pref("network.proxy.http", "127.0.0.1");
-pref("network.proxy.http_port", 4444);
+pref("network.proxy.http_port", 7644);
 pref("network.proxy.ssl", "127.0.0.1");
-pref("network.proxy.ssl_port", 4444);
+pref("network.proxy.ssl_port", 7644);
 pref("network.proxy.ftp", "127.0.0.1");
-pref("network.proxy.ftp_port", 4444);
+pref("network.proxy.ftp_port", 7644);
 // Critical to access console.
 pref("network.proxy.no_proxies_on", "localhost, 127.0.0.1");
 
 pref("network.proxy.type", 1);
-pref("network.security.ports.banned", "4444,4445,9050,9051,9150,9151");
+pref("network.security.ports.banned", "7644,4444,4445,9050,9051,9150,9151");
 pref("network.dns.disablePrefetch", true);
 pref("network.protocol-handler.external-default", false);
 pref("network.protocol-handler.external.mailto", false);
