@@ -134,6 +134,7 @@ XPCSHELL_TESTS_MANIFESTS += ['test/unit/xpcshell.ini']
 EXTRA_JS_MODULES += [
     'AboutNewTab.jsm',
     'AsyncTabSwitcher.jsm',
+    'BridgeDB.jsm',
     'BrowserUsageTelemetry.jsm',
     'BrowserWindowTracker.jsm',
     'ContentClick.jsm',
@@ -165,6 +166,8 @@ EXTRA_JS_MODULES += [
     'TabsList.jsm',
     'TabUnloader.jsm',
     'ThemeVariableMap.jsm',
+    'TorProtocolService.jsm',
+    'TorStrings.jsm',
     'TransientPrefs.jsm',
     'webrtcUI.jsm',
     'ZoomUI.jsm',

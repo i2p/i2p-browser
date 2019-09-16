@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/content/torpreferences/torPreferences.css"?>
+
+<dialog id="torPreferences-torLog-dialog" type="child" class="prefwindow"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    buttons="accept,extra1"
+    role="dialog">
+  <html:textarea
+    id="torPreferences-torDialog-textarea"
+    multiline="true"
+    readonly="true"/>
+  <script type="application/javascript"><![CDATA[
+    "use strict";
+
+    let torLogDialog = window.arguments[0];
+    let dialog = document.getElementById("torPreferences-torLog-dialog");
+    torLogDialog.init(window, dialog);
+  ]]></script>
+</dialog>

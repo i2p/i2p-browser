@@ -1,0 +1,125 @@
+<!-- Tor panel -->
+
+<script type="application/javascript"
+        src="chrome://browser/content/torpreferences/torPane.js"/>
+<html:template id="template-paneTor">
+<hbox id="torPreferencesCategory"
+      class="subcategory"
+      data-category="paneTor"
+      hidden="true">
+  <html:h1 id="torPreferences-header"/>
+</hbox>
+
+<groupbox data-category="paneTor"
+          hidden="true">
+  <description flex="1">
+    <html:span id="torPreferences-description" class="tail-with-learn-more"/>
+    <label id="torPreferences-learnMore" class="learnMore text-link" is="text-link"/>
+  </description>
+</groupbox>
+
+<!-- Bridges -->
+<groupbox id="torPreferences-bridges-group"
+          data-category="paneTor"
+          hidden="true">
+  <html:h2 id="torPreferences-bridges-header"/>
+  <description flex="1">
+    <html:span id="torPreferences-bridges-description" class="tail-with-learn-more"/>
+    <label id="torPreferences-bridges-learnMore" class="learnMore text-link" is="text-link"/>
+  </description>
+  <checkbox id="torPreferences-bridges-toggle" oncommand="gTorPane.onToggleBridge(this.checked).onUpdateBridgeSettings();"/>
+  <radiogroup id="torPreferences-bridges-bridgeSelection"
+              oncommand="gTorPane.onSelectBridgeOption(this.value).onUpdateBridgeSettings();">
+    <hbox class="indent">
+      <radio id="torPreferences-bridges-radioBuiltin"/>
+      <spacer flex="1"/>
+      <menulist id="torPreferences-bridges-builtinList" class="torMarginFix" oncommand="gTorPane.onUpdateBridgeSettings();">
+        <menupopup/>
+      </menulist>
+    </hbox>
+    <vbox class="indent">
+      <hbox>
+        <radio id="torPreferences-bridges-radioRequestBridge"/>
+        <space flex="1"/>
+        <button id="torPreferences-bridges-buttonRequestBridge" class="torMarginFix" oncommand="gTorPane.onRequestBridge();"/>
+      </hbox>
+      <html:textarea
+        id="torPreferences-bridges-textareaRequestBridge"
+        class="indent torMarginFix"
+        multiline="true"
+        rows="3"
+        readonly="true"/>
+    </vbox>
+    <hbox class="indent" flex="1">
+      <vbox flex="1">
+        <radio id="torPreferences-bridges-radioProvideBridge"/>
+        <description id="torPreferences-bridges-descriptionProvideBridge" class="indent"/>
+        <html:textarea
+          id="torPreferences-bridges-textareaProvideBridge"
+          class="indent torMarginFix"
+          multiline="true"
+          rows="3"
+          onblur="gTorPane.onUpdateBridgeSettings();"/>
+      </vbox>
+    </hbox>
+  </radiogroup>
+</groupbox>
+
+<!-- Advanced -->
+<groupbox id="torPreferences-advanced-group"
+          data-category="paneTor"
+          hidden="true">
+  <html:h2 id="torPreferences-advanced-header"/>
+  <description flex="1">
+    <html:span id="torPreferences-advanced-description" class="tail-with-learn-more"/>
+    <label id="torPreferences-advanced-learnMore" class="learnMore text-link" is="text-link" style="display:none"/>
+  </description>
+  <grid flex="1">
+    <columns>
+      <column flex="0"/>
+      <column flex="1"/>
+    </columns>
+    <rows>
+      <!-- Local Proxy -->
+      <checkbox id="torPreferences-advanced-toggleProxy" oncommand="gTorPane.onToggleProxy(this.checked).onUpdateProxySettings();"/>
+      <row class="indent" align="center">
+        <label id="torPreferences-localProxy-type"/>
+        <hbox>
+          <spacer flex="1"/>
+          <menulist id="torPreferences-localProxy-builtinList" class="torMarginFix" oncommand="gTorPane.onSelectProxyType(this.value).onUpdateProxySettings();">
+            <menupopup/>
+          </menulist>
+        </hbox>
+      </row>
+      <row class="indent" align="center">
+        <label id="torPreferences-localProxy-address"/>
+        <hbox align="center">
+          <textbox id="torPreferences-localProxy-textboxAddress" class="torMarginFix" flex="4" onblur="gTorPane.onUpdateProxySettings();"/>
+          <label id="torPreferences-localProxy-port"/>
+          <!-- proxy-port-input class style pulled from preferences.css and used in the vanilla proxy setup menu -->
+          <html:input id="torPreferences-localProxy-textboxPort" class="proxy-port-input torMarginFix" hidespinbuttons="true" type="number" min="0" max="65535" maxlength="5" onblur="gTorPane.onUpdateProxySettings();"/>
+        </hbox>
+      </row>
+      <row class="indent" align="center">
+        <label id="torPreferences-localProxy-username"/>
+        <hbox align="center">
+          <textbox id="torPreferences-localProxy-textboxUsername" class="torMarginFix" flex="1" onblur="gTorPane.onUpdateProxySettings();"/>
+          <label id="torPreferences-localProxy-password"/>
+          <textbox id="torPreferences-localProxy-textboxPassword" class="torMarginFix" type="password" flex="1" onblur="gTorPane.onUpdateProxySettings();"/>
+        </hbox>
+      </row>
+      <!-- Firewall -->
+      <checkbox id="torPreferences-advanced-toggleFirewall" oncommand="gTorPane.onToggleFirewall(this.checked).onUpdateFirewallSettings();"/>
+      <row class="indent" align="center">
+        <label id="torPreferences-advanced-allowedPorts"/>
+        <textbox id="torPreferences-advanced-textboxAllowedPorts" class="torMarginFix" value="80,443" onblur="gTorPane.onUpdateFirewallSettings();"/>
+      </row>
+    </rows>
+  </grid>
+  <hbox id="torPreferences-torDaemon-hbox" align="center">
+    <label id="torPreferences-torLogs"/>
+    <spacer flex="1"/>
+    <button id="torPreferences-buttonTorLogs" class="torMarginFix" oncommand="gTorPane.onViewTorLogs();"/>
+  </hbox>
+</groupbox>
+</html:template>

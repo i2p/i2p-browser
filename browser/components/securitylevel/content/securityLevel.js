@@ -8,102 +8,11 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   PanelMultiView: "resource:///modules/PanelMultiView.jsm",
 });
 
-XPCOMUtils.defineLazyGlobalGetters(this, ["DOMParser"]);
-XPCOMUtils.defineLazyGetter(this, "domParser", () => {
-  const parser = new DOMParser();
-  parser.forceEnableDTD();
-  return parser;
-});
-
-/*
- Security Level Strings
-
- Strings loaded from torbutton, but en-US defaults provided in case torbutton addon not enabled
-*/
-XPCOMUtils.defineLazyGetter(this, "SecurityLevelStrings", function() {
-  // copied from testing/marionette/l10n.js
-  let localizeEntity = function(urls, id) {
-    // Build a string which contains all possible entity locations
-    let locations = [];
-    urls.forEach((url, index) => {
-      locations.push(`<!ENTITY % dtd_${index} SYSTEM "${url}">%dtd_${index};`);
-    });
-
-    // Use the DOM parser to resolve the entity and extract its real value
-    let header = `<?xml version="1.0"?><!DOCTYPE elem [${locations.join("")}]>`;
-    let elem = `<elem id="elementID">&${id};</elem>`;
-    let doc = domParser.parseFromString(header + elem, "text/xml");
-    let element = doc.querySelector("elem[id='elementID']");
-
-    if (element === null) {
-      throw new Error(`Entity with id='${id}' hasn't been found`);
-    }
-
-    return element.textContent;
-  };
-
-  let getString = function(key, fallback) {
-    try {
-      return localizeEntity(
-        ['chrome://torbutton/locale/torbutton.dtd'],
-        `torbutton.prefs.sec_${key}`
-      );
-    } catch (e) { }
-    return fallback;
-  };
-
-  // read localized strings from torbutton; but use hard-coded en-US strings as fallbacks in case of error
-  let retval = {
-    securityLevel : getString("caption", "Security Level"),
-    customWarning : getString("custom_warning", "Custom"),
-    overview : getString("overview", "Disable certain web features that can be used to attack your security and anonymity."),
-    standard : {
-      level : getString("standard_label", "Standard"),
-      tooltip : getString("standard_tooltip", "Security Level : Standard"),
-      summary : getString("standard_description", "All Tor Browser and website features are enabled."),
-    },
-    safer : {
-      level : getString("safer_label", "Safer"),
-      tooltip : getString("safer_tooltip", "Security Level : Safer"),
-      summary : getString("safer_description", "Disables website features that are often dangerous, causing some sites to lose functionality."),
-      description1 : getString("js_on_https_sites_only", "JavaScript is disabled on non-HTTPS sites."),
-      description2 : getString("limit_typography", "Some fonts and math symbols are disabled."),
-      description3 : getString("click_to_play_media", "Audio and video (HTML5 media), and WebGL are click-to-play."),
-    },
-    safest : {
-      level : getString("safest_label", "Safest"),
-      tooltip : getString("safest_tooltip", "Security Level : Safest"),
-      summary : getString("safest_description", "Only allows website features required for static sites and basic services. These changes affect images, media, and scripts."),
-      description1 : getString("js_disabled", "JavaScript is disabled by default on all sites."),
-      description2 : getString("limit_graphics_and_typography", "Some fonts, icons, math symbols, and images are disabled."),
-      description3 : getString("click_to_play_media", "Audio and video (HTML5 media), and WebGL are click-to-play."),
-    },
-    custom : {
-      summary : getString("custom_summary", "Your custom browser preferences have resulted in unusual security settings. For security and privacy reasons, we recommend you choose one of the default security levels."),
-    },
-    learnMore : getString("learn_more_label", "Learn more"),
-    learnMoreURL : function() {
-        let locale = "";
-        try {
-          let { getLocale } =
-            Cu.import("resource://torbutton/modules/utils.js", {});
-          locale = getLocale();
-        } catch(e) {}
-
-        if (locale == "") {
-          locale = "en-US";
-        }
-
-        return "https://tb-manual.torproject.org/" + locale + "/security-settings/";
-      }(),
-    restoreDefaults : getString("restore_defaults", "Restore Defaults"),
-    advancedSecuritySettings : getString("advanced_security_settings", "Advanced Security Settings\u2026"),
-  };
-
-
-  return retval;
-});
-
+ChromeUtils.defineModuleGetter(
+  this,
+  "TorStrings",
+  "resource:///modules/TorStrings.jsm"
+);
 
 /*
   Security Level Prefs
@@ -158,8 +67,8 @@ const SecurityLevelButton = {
 
   _populateXUL : function(securityLevelButton) {
     if (securityLevelButton != null) {
-      securityLevelButton.setAttribute("tooltiptext", SecurityLevelStrings.securityLevel);
-      securityLevelButton.setAttribute("label", SecurityLevelStrings.securityLevel);
+      securityLevelButton.setAttribute("tooltiptext", TorStrings.securityLevel.securityLevel);
+      securityLevelButton.setAttribute("label", TorStrings.securityLevel.securityLevel);
     }
   },
 
@@ -171,15 +80,15 @@ const SecurityLevelButton = {
       switch(securitySlider) {
         case 4:
           classList.add("standard");
-          securityLevelButton.setAttribute("tooltiptext", SecurityLevelStrings.standard.tooltip);
+          securityLevelButton.setAttribute("tooltiptext", TorStrings.securityLevel.standard.tooltip);
           break;
         case 2:
           classList.add("safer");
-          securityLevelButton.setAttribute("tooltiptext", SecurityLevelStrings.safer.tooltip);
+          securityLevelButton.setAttribute("tooltiptext", TorStrings.securityLevel.safer.tooltip);
           break;
         case 1:
           classList.add("safest");
-          securityLevelButton.setAttribute("tooltiptext", SecurityLevelStrings.safest.tooltip);
+          securityLevelButton.setAttribute("tooltiptext", TorStrings.securityLevel.safest.tooltip);
           break;
       }
     }
@@ -294,12 +203,12 @@ const SecurityLevelPanel = {
     let buttonRestoreDefaults = panelview.querySelector("#securityLevel-restoreDefaults");
     let buttonAdvancedSecuritySettings = panelview.querySelector("#securityLevel-advancedSecuritySettings");
 
-    labelHeader.setAttribute("value", SecurityLevelStrings.securityLevel);
-    labelCustomWarning.setAttribute("value", SecurityLevelStrings.customWarning);
-    labelLearnMore.setAttribute("value", SecurityLevelStrings.learnMore);
-    labelLearnMore.setAttribute("href", SecurityLevelStrings.learnMoreURL);
-    buttonRestoreDefaults.setAttribute("label", SecurityLevelStrings.restoreDefaults);
-    buttonAdvancedSecuritySettings.setAttribute("label", SecurityLevelStrings.advancedSecuritySettings);
+    labelHeader.setAttribute("value", TorStrings.securityLevel.securityLevel);
+    labelCustomWarning.setAttribute("value", TorStrings.securityLevel.customWarning);
+    labelLearnMore.setAttribute("value", TorStrings.securityLevel.learnMore);
+    labelLearnMore.setAttribute("href", TorStrings.securityLevel.learnMoreURL);
+    buttonRestoreDefaults.setAttribute("label", TorStrings.securityLevel.restoreDefaults);
+    buttonAdvancedSecuritySettings.setAttribute("label", TorStrings.securityLevel.advancedSecuritySettings);
 
     // rest of the XUL is set based on security prefs
     this._configUIFromPrefs();
@@ -328,24 +237,24 @@ const SecurityLevelPanel = {
     switch(securitySlider) {
       // standard
       case 4:
-        labelLevel.setAttribute("value", SecurityLevelStrings.standard.level);
-        summary.textContent = SecurityLevelStrings.standard.summary;
+        labelLevel.setAttribute("value", TorStrings.securityLevel.standard.level);
+        summary.textContent = TorStrings.securityLevel.standard.summary;
         break;
       // safer
       case 2:
-        labelLevel.setAttribute("value", SecurityLevelStrings.safer.level);
-        summary.textContent = SecurityLevelStrings.safer.summary;
+        labelLevel.setAttribute("value", TorStrings.securityLevel.safer.level);
+        summary.textContent = TorStrings.securityLevel.safer.summary;
         break;
       // safest
       case 1:
-        labelLevel.setAttribute("value", SecurityLevelStrings.safest.level);
-        summary.textContent = SecurityLevelStrings.safest.summary;
+        labelLevel.setAttribute("value", TorStrings.securityLevel.safest.level);
+        summary.textContent = TorStrings.securityLevel.safest.summary;
         break;
     }
 
     // override the summary text with custom warning
     if (securityCustom) {
-      summary.textContent = SecurityLevelStrings.custom.summary;
+      summary.textContent = TorStrings.securityLevel.custom.summary;
     }
   },
 
@@ -428,11 +337,11 @@ const SecurityLevelPreferences =
     labelHeader.textContent = TorStrings.securityLevel.securityLevel;
 
     let spanOverview = groupbox.querySelector("#securityLevel-overview");
-    spanOverview.textContent = SecurityLevelStrings.overview;
+    spanOverview.textContent = TorStrings.securityLevel.overview;
 
     let labelLearnMore = groupbox.querySelector("#securityLevel-learnMore");
-    labelLearnMore.setAttribute("value", SecurityLevelStrings.learnMore);
-    labelLearnMore.setAttribute("href", SecurityLevelStrings.learnMoreURL);
+    labelLearnMore.setAttribute("value", TorStrings.securityLevel.learnMore);
+    labelLearnMore.setAttribute("href", TorStrings.securityLevel.learnMoreURL);
 
     let populateRadioElements = function(vboxQuery, stringStruct) {
       let vbox = groupbox.querySelector(vboxQuery);
@@ -441,13 +350,13 @@ const SecurityLevelPreferences =
       radio.setAttribute("label", stringStruct.level);
 
       let customWarning = vbox.querySelector("#securityLevel-customWarning");
-      customWarning.setAttribute("value", SecurityLevelStrings.customWarning);
+      customWarning.setAttribute("value", TorStrings.securityLevel.customWarning);
 
       let labelSummary = vbox.querySelector("#securityLevel-summary");
       labelSummary.textContent = stringStruct.summary;
 
       let labelRestoreDefaults = vbox.querySelector("#securityLevel-restoreDefaults");
-      labelRestoreDefaults.setAttribute("value", SecurityLevelStrings.restoreDefaults);
+      labelRestoreDefaults.setAttribute("value", TorStrings.securityLevel.restoreDefaults);
 
       let description1 = vbox.querySelector("#securityLevel-description1");
       if (description1) {
@@ -463,9 +372,9 @@ const SecurityLevelPreferences =
       }
     };
 
-    populateRadioElements("#securityLevel-vbox-standard", SecurityLevelStrings.standard);
-    populateRadioElements("#securityLevel-vbox-safer", SecurityLevelStrings.safer);
-    populateRadioElements("#securityLevel-vbox-safest", SecurityLevelStrings.safest);
+    populateRadioElements("#securityLevel-vbox-standard", TorStrings.securityLevel.standard);
+    populateRadioElements("#securityLevel-vbox-safer", TorStrings.securityLevel.safer);
+    populateRadioElements("#securityLevel-vbox-safest", TorStrings.securityLevel.safest);
   },
 
   _configUIFromPrefs : function() {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/content/torpreferences/torPreferences.css"?>
+
+<dialog id="torPreferences-requestBridge-dialog" type="child" class="prefwindow"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    title="Request Bridge"
+    buttons="cancel,accept"
+    role="dialog">
+  <command id="torPreferences-requestBridge-submitCommand" oncommand="requestBridgeDialog.onSubmitCaptcha();"/>
+  <!-- ok, so &#8203; is a zero-width space. We need to have *something* in the innerText so that XUL knows how tall the
+       description node is so that it can determine how large to make the dialog element's inner draw area. If we have
+       nothing in the innerText, then it collapse to 0 height, and the contents of the dialog ends up partially hidden >:( -->
+  <description id="torPreferences-requestBridge-description">&#8203;</description>
+  <!-- init to transparent 400x125 png -->
+  <image id="torPreferences-requestBridge-captchaImage" flex="1"/>
+  <hbox id="torPreferences-requestBridge-inputHbox">
+    <textbox id="torPreferences-requestBridge-captchaTextbox" flex="1" />
+    <command id="torPreferences-requestBridge-refreshCaptchaCommand" oncommand="requestBridgeDialog.onRefreshCaptcha();"/>
+    <button id="torPreferences-requestBridge-refreshCaptchaButton" image="chrome://browser/skin/reload.svg"/>
+  </hbox>
+  <hbox id="torPreferences-requestBridge-incorrectCaptchaHbox" align="center">
+    <image id="torPreferences-requestBridge-errorIcon" />
+    <label id="torPreferences-requestBridge-incorrectCaptchaError" flex="1"/>
+  </hbox>
+  <script type="application/javascript"><![CDATA[
+    "use strict";
+
+    let requestBridgeDialog = window.arguments[0];
+    let dialog = document.getElementById("torPreferences-requestBridge-dialog");
+    requestBridgeDialog.init(window, dialog);
+  ]]></script>
+</dialog>

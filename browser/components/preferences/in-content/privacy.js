@@ -62,6 +62,7 @@ XPCOMUtils.defineLazyGetter(this, "AlertsServiceDND", function() {
   }
 });
 
+// TODO: module import via ChromeUtils.defineModuleGetter
 XPCOMUtils.defineLazyScriptGetter(
   this,
   ["SecurityLevelPreferences"],
