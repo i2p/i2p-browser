@@ -1458,7 +1458,9 @@ public class BrowserApp extends GeckoApp
         // Website suggestions for address bar inputs should not be enabled when running in automation.
         // After the upgrade to support library v.26 it could fail otherwise unrelated Robocop tests
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=1385464#c3
-        if (!isInAutomation) {
+        // But only disable it when this isn't Tor Browser, because isInAutomation is overloaded such
+        // that it is |true| in Tor Browser.
+        if (!isInAutomation || AppConstants.isTorBrowser()) {
             mBrowserToolbar.setOnFilterListener(new BrowserToolbar.OnFilterListener() {
                 @Override
                 public void onFilter(String searchText, AutocompleteHandler handler) {
