@@ -8,6 +8,20 @@
 # file and directory removals automatically so this file should not be used in
 # the vast majority of cases.
 
+#ifndef XP_MACOSX
+# Tor Browser no longer uses http helper profiles for meek and moat.
+# For macOS, the profiles are created under TorBrowser-Data and
+# Tor Launcher takes care of removing them during browser startup.
+# For Linux and Windows, the profiles were embedded in the install
+# directory and, if meek or moat was ever used, extra files that
+# were not part of the browser package will have been created within
+# the profile directories. The following two lines cause "rmrfdir"
+# directives to be added to our MAR files to cause the updater to
+# recursively remove these profile directories and everything in them.
+TorBrowser/Data/Browser/profile.meek-http-helper/*
+TorBrowser/Data/Browser/profile.moat-http-helper/*
+#endif
+
 # When to use removed-files.in file to remove files and directories:
 # * Empty directories that were accidentally added to the installation
 #   directory.
