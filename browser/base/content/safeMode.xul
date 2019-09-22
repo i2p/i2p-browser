@@ -18,7 +18,7 @@
             onload="onLoad()">
 
   <linkset>
-    <html:link rel="localization" href="branding/brand.ftl"/>
+    <html:link rel="localization" href="branding/i2p-browser-brand.ftl"/>
     <html:link rel="localization" href="browser/safeMode.ftl"/>
   </linkset>
 
