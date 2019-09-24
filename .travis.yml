@@ -18,6 +18,8 @@ addons:
       - nodejs
       - npm
       - rustc
+      - cargo
+      - yasm
       - build-essential
 before_script:
   - ./mach configure --enable-hardening --enable-strip --enable-xul --enable-updater --with-distribution-id=net.geti2p --enable-update-channel=alpha --with-branding=alpha --enable-bundled-fonts --with-tor-browser-version=2.1.1 --enable-tor-browser-data-outside-app-dir --enable-application=browser
