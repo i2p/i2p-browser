@@ -40,6 +40,10 @@ addons:
       - llvm-dev
       - llvm-6.0-runtime
       - llvm-6.0-dev
+      - llvm-runtime
+      - libtinfo-dev
+      - libllvm6.0
+      - llvm-6.0
       - libiw-dev
       - libxt-dev
       - libxrender-dev
