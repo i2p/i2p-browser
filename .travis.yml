@@ -15,7 +15,7 @@ addons:
     update: true
     packages:
       - cmake
-      - node
+      - nodejs
       - npm
       - rustc
       - build-essential
