@@ -3,15 +3,23 @@ compiler:
   - clang
   - gcc
 cache: ccache
+dist: bionic
 git:
   submodules: true
   depth: 1
 os: linux
 python:
   - '2.7'
+addons:
+  apt:
+    update: true
+    packages:
+      - cmake
+      - node
+      - npm
+      - rustc
+      - build-essential
 before_script:
-  - sudo apt-get update
-  - sudo apt-get install -y rust
   - ./mach configure --enable-hardening --enable-strip --enable-xul --enable-updater --with-distribution-id=net.geti2p --enable-update-channel=alpha --with-branding=alpha --enable-bundled-fonts --with-tor-browser-version=2.1.1 --enable-tor-browser-data-outside-app-dir --enable-application=browser
 
 script: ./mach build --verbose
