@@ -2,6 +2,7 @@ language: python
 compiler:
   - clang
   - gcc
+cache: ccache
 git:
   submodules: true
   depth: 1
