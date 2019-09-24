@@ -36,6 +36,10 @@ addons:
       - libffi-dev
       - mesa-common-dev
       - nasm
+      - llvm-8-tools
+      - llvm-dev
+      - llvm-6.0-runtime
+      - llvm-6.0-dev
       - libiw-dev
       - libxt-dev
       - libxrender-dev
