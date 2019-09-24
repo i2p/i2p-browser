@@ -26,6 +26,8 @@ addons:
       - clang
       - libgconf2-dev
       - gconf2
+      - libdbus-glib-1-2
+      - libdbus-glib-1-dev
       - build-essential
       - libpango1.0-dev
       - libfontconfig1-dev
