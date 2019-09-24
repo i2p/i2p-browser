@@ -24,6 +24,8 @@ addons:
       - cargo
       - yasm
       - clang
+      - libgconf2-dev
+      - gconf2
       - build-essential
       - libpango1.0-dev
       - libfontconfig1-dev
