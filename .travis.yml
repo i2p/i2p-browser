@@ -21,6 +21,29 @@ addons:
       - cargo
       - yasm
       - build-essential
+      - libpango1.0-dev
+      - libfontconfig1-dev
+      - libfreetype6-dev
+      - libcurl4-openssl-dev
+      - dbus-x11
+      - libasound2-dev
+      - clang-8
+      - autotools-dev
+      - autoconf2.13
+      - libgtk-3-dev
+      - libffi-dev
+      - mesa-common-dev
+      - nasm
+      - libiw-dev
+      - libxt-dev
+      - libxrender-dev
+      - libx11-dev
+      - libpulse-dev
+      - libgtk2.0-dev
+      - llvm-8-dev
+      - unzip
+      - xvfb
+      - zip
 before_script:
   - ./mach configure --enable-hardening --enable-strip --enable-xul --enable-updater --with-distribution-id=net.geti2p --enable-update-channel=alpha --with-branding=alpha --enable-bundled-fonts --with-tor-browser-version=2.1.1 --enable-tor-browser-data-outside-app-dir --enable-application=browser
 
