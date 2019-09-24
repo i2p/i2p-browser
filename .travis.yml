@@ -1,0 +1,15 @@
+language: python
+compiler:
+  - clang
+  - gcc
+git:
+  submodules: true
+  depth: 1
+os: linux
+python:
+  - '2.7'
+before_script:
+  - ./mach configure --enable-hardening --enable-strip --enable-xul --enable-updater --with-distribution-id=net.geti2p --enable-update-channel=alpha --with-branding=alpha --enable-bundled-fonts --with-i2p-browser-version=2.1.1
+
+script: ./mach build --verbose
+
