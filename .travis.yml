@@ -2,7 +2,10 @@ language: python
 compiler:
   - clang
   - gcc
-cache: ccache
+cache:
+  - ccache
+  - npm
+  - cargo
 dist: bionic
 git:
   submodules: true
@@ -10,6 +13,11 @@ git:
 os: linux
 python:
   - '2.7'
+branches:
+  only:
+  - develop
+  - /^i2p-browser-.*$/
+  - /^pr.*$/
 addons:
   apt:
     update: true
@@ -60,7 +68,7 @@ addons:
       - xvfb
       - zip
 before_script:
-  - ./mach configure --enable-hardening --enable-strip --enable-xul --enable-updater --with-distribution-id=net.geti2p --enable-update-channel=alpha --with-branding=browser/branding/alpha --enable-bundled-fonts --with-tor-browser-version=2.1.1 --enable-tor-browser-data-outside-app-dir --enable-application=browser
+  - ./mach configure --enable-hardening --enable-strip --enable-xul --enable-updater --with-distribution-id=net.geti2p --enable-update-channel=alpha --with-branding=browser/branding/alpha --enable-bundled-fonts --with-tor-browser-version=2.1.1 --enable-tor-browser-data-outside-app-dir --enable-application=browser --disable-stylo
 
 script: ./mach build --verbose
 
