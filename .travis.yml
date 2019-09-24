@@ -23,6 +23,7 @@ addons:
       - rustc
       - cargo
       - yasm
+      - clang
       - build-essential
       - libpango1.0-dev
       - libfontconfig1-dev
