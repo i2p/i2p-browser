@@ -102,10 +102,17 @@ function nonBrowserWindowStartup() {
   }
 
   if (PrivateBrowsingUtils.permanentPrivateBrowsing) {
-    document.getElementById("macDockMenuNewWindow").hidden = true;
+    element = document.getElementById("macDockMenuNewWindow");
+    if (element) {
+      element.hidden = true;
+    }
   }
+
   if (!PrivateBrowsingUtils.enabled) {
-    document.getElementById("macDockMenuNewPrivateWindow").hidden = true;
+    element = document.getElementById("macDockMenuNewPrivateWindow");
+    if (element) {
+      element.hidden = true;
+    }
   }
 
   delayedStartupTimeoutId = setTimeout(nonBrowserWindowDelayedStartup, 0);
