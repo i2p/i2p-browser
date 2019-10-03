@@ -85,6 +85,10 @@ NS_IMPL_ISUPPORTS(nsAppShellService, nsIAppShellService, nsIObserver)
 
 NS_IMETHODIMP
 nsAppShellService::CreateHiddenWindow() {
+  if (mHiddenWindow) {
+    return NS_OK;
+  }
+
   return CreateHiddenWindowHelper(false);
 }
 
