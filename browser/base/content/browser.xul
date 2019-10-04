@@ -1206,6 +1206,16 @@
                      ondragenter="newWindowButtonObserver.onDragOver(event)"
                      ondragexit="newWindowButtonObserver.onDragExit(event)"/>
 
+      <toolbarbutton id="new-identity-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
+                     label="&torbutton.context_menu.new_identity;"
+                     oncommand="torbutton_new_identity();"
+                     tooltiptext="&torbutton.context_menu.new_identity;"/>
+
+      <toolbarbutton id="new-circuit-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
+                     label="&torbutton.context_menu.new_circuit;"
+                     oncommand="torbutton_new_circuit();"
+                     tooltiptext="&torbutton.context_menu.new_circuit;"/>
+
       <toolbarbutton id="fullscreen-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
                      observes="View:FullScreen"
                      type="checkbox"

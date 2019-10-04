@@ -161,3 +161,11 @@ toolbarpaletteitem[place="palette"] > #bookmarks-menu-button,
 #appMenu-library-downloads-show-button {
   list-style-image: url("chrome://browser/skin/folder.svg");
 }
+
+#appMenuNewIdentity {
+  list-style-image: url("chrome://browser/skin/new_identity.svg");
+}
+
+#appMenuNewCircuit {
+  list-style-image: url("chrome://browser/skin/new_circuit.svg");
+}
