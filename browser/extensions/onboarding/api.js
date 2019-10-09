@@ -39,13 +39,12 @@ const PREF_WHITELIST = [
   // Tor Browser tours:
   "onboarding-tour-tor-welcome",
   "onboarding-tour-tor-privacy",
-  "onboarding-tour-tor-network",
+  "onboarding-tour-tor-network-9-0",
   "onboarding-tour-tor-circuit-display",
   "onboarding-tour-tor-security",
   "onboarding-tour-tor-expect-differences",
   "onboarding-tour-tor-onion-services",
-  "onboarding-tour-tor-toolbar-update-8-5",
-  "onboarding-tour-tor-security-update-8-5",
+  "onboarding-tour-tor-toolbar-update-9-0",
 #if 0
 // Firefox tours. To reduce conflicts when rebasing against newer Firefox
 // code, we use the preprocessor to omit this code block.

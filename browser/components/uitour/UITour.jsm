@@ -72,11 +72,15 @@ const TOR_BROWSER_PAGE_ACTIONS_ALLOWED = new Set([
   "showInfo",  // restricted to TOR_BROWSER_TARGETS_ALLOWED
   "showMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
   "hideMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
+  "showHighlight", // restricted to TOR_BROWSER_TARGETS_ALLOWED
+  "hideHighlight", // restricted to TOR_BROWSER_TARGETS_ALLOWED
+  "openPreferences",
   "closeTab",
   "torBrowserOpenSecurityLevelPanel",
 ]);
 
 const TOR_BROWSER_TARGETS_ALLOWED = new Set([
+  "torBrowser-newIdentityButton",
   "torBrowser-circuitDisplay",
   "torBrowser-circuitDisplay-diagram",
   "torBrowser-circuitDisplay-newCircuitButton",
@@ -136,6 +140,9 @@ var UITour = {
       torBrowserCircuitDisplayTarget("circuit-display-nodes")],
     ["torBrowser-circuitDisplay-newCircuitButton",
       torBrowserCircuitDisplayTarget("circuit-reload-button")],
+    ["torBrowser-newIdentityButton", {
+      query: "#new-identity-button",
+    }],
 
     [
       "accountStatus",

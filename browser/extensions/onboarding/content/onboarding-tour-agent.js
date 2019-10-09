@@ -21,6 +21,12 @@ let onClick = evt => {
     case "onboarding-tour-tor-security-button":
       Mozilla.UITour.torBrowserOpenSecurityLevelPanel();
       break;
+    case "onboarding-tour-tor-toolbar-update-9-0-button":
+      Mozilla.UITour.showHighlight("torBrowser-newIdentityButton", "zoom");
+      break;
+    case "onboarding-tour-tor-network-action-button":
+      Mozilla.UITour.openPreferences("tor");
+      break;
 #if 0
 // Firefox onboarding actions. To reduce conflicts when rebasing against
 // newer Firefox code, we use the preprocessor to omit this code block.

@@ -119,19 +119,41 @@ var onboardingTourset = {
       return div;
     },
   },
-  "tor-network": {
-    id: "onboarding-tour-tor-network",
+  // In Tor Browser 9.0, we replaced the Tor Network panel with an updated one.
+  "tor-network-9.0": {
+    id: "onboarding-tour-tor-network-9-0",
     tourNameId: "onboarding.tour-tor-network",
-    instantComplete: true,
+    highlightId: "onboarding.tour-tor-update.prefix-new",
     getPage(win) {
       let div = win.document.createElement("div");
 
-      createOnboardingTourDescription(div,
+      let desc = createOnboardingTourDescription(div,
         "onboarding.tour-tor-network.title", "onboarding.tour-tor-network.description");
-      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-network.png");
-      createOnboardingTourButton(div,
-        "onboarding-tour-tor-network-button", "onboarding.tour-tor-network.button");
+      let additionalDesc = win.document.createElement("p");
+      additionalDesc.className = "onboarding-tour-description-para2";
+      additionalDesc.setAttribute("data-l10n-id",
+        "onboarding.tour-tor-network.description-para2");
+      desc.appendChild(additionalDesc);
 
+      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-network.png");
+      let btnContainer = createOnboardingTourButton(div,
+        "onboarding-tour-tor-network-action-button", "onboarding.tour-tor-network.action-button");
+      btnContainer.className = "onboarding-tour-tor-action-button-container";
+
+      // The next button (right side) is a "Done" button if we are displaying
+      // the tour to users who updated their browser; otherwise, it is a
+      // button that takes the user to the next onboarding page.
+      let nextBtnID, nextBtnL10nID;
+      if (this._tourType === "update") {
+        // Using the onion services IDs here seems like a mistake, but it
+        // provides the functionality and translated string ("Done") we need.
+        nextBtnID = "onboarding-tour-tor-onion-services-next-button";
+        nextBtnL10nID = "onboarding.tour-tor-onion-services.next-button";
+      } else {
+        nextBtnID = "onboarding-tour-tor-network-button";
+        nextBtnL10nID = "onboarding.tour-tor-network.button";
+      }
+      createOnboardingTourButton(div, nextBtnID, nextBtnL10nID);
       return div;
     },
   },
@@ -156,7 +178,6 @@ var onboardingTourset = {
   "security": {
     id: "onboarding-tour-tor-security",
     tourNameId: "onboarding.tour-tor-security",
-    highlightId: "onboarding.tour-tor-update.prefix-new",
     getPage(win) {
       let div = win.document.createElement("div");
 
@@ -215,42 +236,27 @@ var onboardingTourset = {
     },
   },
   // Tour items for users who have updated their Tor Browser:
-  "toolbar-update-8.5": {
-    id: "onboarding-tour-tor-toolbar-update-8-5",
+  "toolbar-update-9.0": {
+    id: "onboarding-tour-tor-toolbar-update-9-0",
     tourNameId: "onboarding.tour-tor-toolbar",
     highlightId: "onboarding.tour-tor-update.prefix-updated",
-    instantComplete: true,
     getPage(win) {
       let div = win.document.createElement("div");
 
       let desc = createOnboardingTourDescription(div,
-        "onboarding.tour-tor-toolbar-update-8.5.title", "onboarding.tour-tor-toolbar-update-8.5.description");
+        "onboarding.tour-tor-toolbar-update-9.0.title", "onboarding.tour-tor-toolbar-update-9.0.description");
+      let additionalDesc = win.document.createElement("p");
+      additionalDesc.className = "onboarding-tour-description-para2";
+      additionalDesc.setAttribute("data-l10n-id",
+        "onboarding.tour-tor-toolbar-update-9.0.description-para2");
+      desc.appendChild(additionalDesc);
 
       createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-toolbar-layout.png");
-      createOnboardingTourButton(div,
-        "onboarding-tour-tor-toolbar-next-button", "onboarding.tour-tor-toolbar-update-8.5.next-button");
-
-      return div;
-    },
-  },
-  "security-update-8.5": {
-    id: "onboarding-tour-tor-security-update-8-5",
-    tourNameId: "onboarding.tour-tor-security",
-    highlightId: "onboarding.tour-tor-update.prefix-new",
-    getPage(win) {
-      let div = win.document.createElement("div");
-
-      let desc = createOnboardingTourDescription(div,
-        "onboarding.tour-tor-security-update-8.5.title", "onboarding.tour-tor-security-update-8.5.description");
-
-      createOnboardingTourContent(div, "resource://onboarding/img/figure_tor-security-level.png");
       let btnContainer = createOnboardingTourButton(div,
-        "onboarding-tour-tor-security-button", "onboarding.tour-tor-security-level.button");
+        "onboarding-tour-tor-toolbar-update-9-0-button", "onboarding.tour-tor-toolbar-update-9.0.button");
       btnContainer.className = "onboarding-tour-tor-action-button-container";
-      // It is confusing to use the two onion-services IDs below, but they
-      // provide the functionality and translated string ("Done") that we need.
       createOnboardingTourButton(div,
-        "onboarding-tour-tor-onion-services-next-button", "onboarding.tour-tor-onion-services.next-button");
+        "onboarding-tour-tor-toolbar-next-button", "onboarding.tour-tor-toolbar-update-9.0.next-button");
 
       return div;
     },
