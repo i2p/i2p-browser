@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -64,6 +65,7 @@ import org.mozilla.gecko.util.PRNGFixes;
 import org.mozilla.gecko.util.ProxySelector;
 import org.mozilla.gecko.util.ShortcutUtils;
 import org.mozilla.gecko.util.ThreadUtils;
+import org.mozilla.gecko.widget.ExternalIntentDuringPrivateBrowsingPromptFragment;
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 
@@ -813,8 +815,9 @@ public class GeckoApplication extends Application
                         context.getContentResolver().delete(intent.getData(), null, null);
                     }
                 };
-                ActivityHandlerHelper.startIntentForActivity(currentActivity, chooser,
-                                                             handler);
+                ActivityHandlerHelper.registerActivityHandler(handler);
+                ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                        currentActivity, ((AppCompatActivity)currentActivity).getSupportFragmentManager(), intent);
             }
         });
     }

@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.speech.RecognizerIntent;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import org.mozilla.gecko.ActivityHandlerHelper;
 import org.mozilla.gecko.GeckoAppShell;
@@ -30,6 +31,7 @@ import org.mozilla.gecko.util.HardwareUtils;
 import org.mozilla.gecko.util.InputOptionsUtils;
 import org.mozilla.gecko.util.StringUtils;
 import org.mozilla.gecko.util.ThreadUtils;
+import org.mozilla.gecko.widget.ExternalIntentDuringPrivateBrowsingPromptFragment;
 import org.mozilla.gecko.widget.themed.ThemedImageButton;
 import org.mozilla.gecko.widget.themed.ThemedLinearLayout;
 
@@ -59,6 +61,8 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
     private final ThemedImageButton mSearchIcon;
     private final ThemedImageButton mVoiceInput;
     private final ThemedImageButton mQrCode;
+
+    private Activity mActivity;
 
     private OnFocusChangeListener mFocusChangeListener;
 
@@ -185,6 +189,10 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
         mQrCode.setPrivateMode(isPrivate);
     }
 
+    public void setActivity(Activity activity) {
+        mActivity = activity;
+    }
+
     /**
      * Called when the parent gains focus (on app launch and resume)
      */
@@ -294,8 +302,7 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
         Telemetry.sendUIEvent(TelemetryContract.Event.ACTION, TelemetryContract.Method.ACTIONBAR, "voice_input_launch");
         final Intent intent = InputOptionsUtils.createVoiceRecognizerIntent(getResources().getString(R.string.voicesearch_prompt));
 
-        final Activity activity = ActivityUtils.getActivityFromContext(getContext());
-        ActivityHandlerHelper.startIntentForActivity(activity, intent, new ActivityResultHandler() {
+        ActivityHandlerHelper.registerActivityHandler(new ActivityResultHandler() {
             @Override
             public void onActivityResult(int resultCode, Intent data) {
                 if (resultCode != Activity.RESULT_OK) {
@@ -316,6 +323,8 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
                 imm.showSoftInput(mEditText, InputMethodManager.SHOW_IMPLICIT);
             }
         });
+        ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                mActivity, ((AppCompatActivity)mActivity).getSupportFragmentManager(), intent);
     }
 
     private boolean qrCodeIsEnabled(Context context) {
@@ -331,8 +340,7 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
         Telemetry.sendUIEvent(TelemetryContract.Event.ACTION, TelemetryContract.Method.ACTIONBAR, "qrcode_input_launch");
         final Intent intent = InputOptionsUtils.createQRCodeReaderIntent();
 
-        final Activity activity = ActivityUtils.getActivityFromContext(getContext());
-        ActivityHandlerHelper.startIntentForActivity(activity, intent, new ActivityResultHandler() {
+        ActivityHandlerHelper.registerActivityHandler(new ActivityResultHandler() {
             @Override
             public void onActivityResult(int resultCode, Intent intent) {
                 if (resultCode == Activity.RESULT_OK) {
@@ -353,5 +361,7 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
                 // as well as the actual result, which may hold a URL.
             }
         });
+        ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                mActivity, ((AppCompatActivity)mActivity).getSupportFragmentManager(), intent);
     }
 }

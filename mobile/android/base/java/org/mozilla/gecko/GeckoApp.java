@@ -43,6 +43,7 @@ import org.mozilla.gecko.util.ThreadUtils;
 import org.mozilla.gecko.util.ViewUtil;
 import org.mozilla.gecko.widget.ActionModePresenter;
 import org.mozilla.gecko.widget.AnchoredPopup;
+import org.mozilla.gecko.widget.ExternalIntentDuringPrivateBrowsingPromptFragment;
 import org.mozilla.geckoview.GeckoSession;
 import org.mozilla.geckoview.GeckoSessionSettings;
 import org.mozilla.geckoview.GeckoView;
@@ -766,11 +767,13 @@ public abstract class GeckoApp extends GeckoActivity
             if (email != null) {
                 Uri contactUri = Uri.parse(email);
                 Intent i = new Intent(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT, contactUri);
-                startActivity(i);
+                ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                        this, getSupportFragmentManager(), i);
             } else if (phone != null) {
                 Uri contactUri = Uri.parse(phone);
                 Intent i = new Intent(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT, contactUri);
-                startActivity(i);
+                ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                        this, getSupportFragmentManager(), i);
             } else {
                 // something went wrong.
                 Log.e(LOGTAG, "Received Contact:Add message with no email nor phone number");

@@ -123,7 +123,7 @@ public final class IntentHelper implements BundleEventListener {
                                           String className,
                                           String action,
                                           String title,
-                                          final boolean showPromptInPrivateBrowsing) {
+                                          boolean showPromptInPrivateBrowsing) {
         final Context context = getContext();
         final Intent intent = getOpenURIIntent(context, targetURI,
                                                mimeType, action, title);
@@ -141,10 +141,15 @@ public final class IntentHelper implements BundleEventListener {
             }
         }
 
+        // Always prompt for Intents
+        showPromptInPrivateBrowsing = true;
+
         final FragmentActivity activity = getActivity();
         if (!showPromptInPrivateBrowsing || activity == null) {
             if (activity == null) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // We'll find out what this breaks.
+                return false;
             }
             return ActivityHandlerHelper.startIntentAndCatch(LOGTAG, context, intent);
         } else {
@@ -152,7 +157,7 @@ public final class IntentHelper implements BundleEventListener {
             // statically, but since this method is called from Gecko and I'm
             // unfamiliar with that code, this is a simpler solution.
             return ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
-                    context, activity.getSupportFragmentManager(), intent);
+                    activity, activity.getSupportFragmentManager(), intent);
         }
     }
 
@@ -472,7 +477,9 @@ public final class IntentHelper implements BundleEventListener {
         // isn't owned exclusively by Firefox, so there's no real benefit to using content:// URIs
         // here.
         try (StrictModeContext unused = StrictModeContext.allowAllVmPolicies()) {
-            ActivityHandlerHelper.startIntentForActivity(activity, intent, handler);
+            // Always prompt.
+            ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                    activity, activity.getSupportFragmentManager(), intent);
         } catch (SecurityException e) {
             Log.w(LOGTAG, "Forbidden to launch activity.", e);
         }

@@ -222,6 +222,7 @@ public abstract class BrowserToolbar extends ThemedRelativeLayout
         prefs = new ToolbarPrefs();
         urlDisplayLayout.setToolbarPrefs(prefs);
         urlEditLayout.setToolbarPrefs(prefs);
+        urlEditLayout.setActivity(activity);
 
         // ScrollViews are allowed to have only one child.
         final View scrollChild = urlDisplayScroll.getChildAt(0);

@@ -176,6 +176,7 @@ import org.mozilla.gecko.util.WindowUtil;
 import org.mozilla.gecko.widget.ActionModePresenter;
 import org.mozilla.gecko.widget.AnchoredPopup;
 import org.mozilla.gecko.widget.AnimatedProgressBar;
+import org.mozilla.gecko.widget.ExternalIntentDuringPrivateBrowsingPromptFragment;
 import org.mozilla.gecko.widget.GeckoActionProvider;
 import org.mozilla.gecko.widget.SplashScreen;
 import org.mozilla.geckoview.DynamicToolbarAnimator;
@@ -2249,7 +2250,8 @@ public class BrowserApp extends GeckoApp
                 if (AppConstants.RELEASE_OR_BETA) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("market://details?id=" + getPackageName()));
-                    startActivity(intent);
+                    ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                        this, getSupportFragmentManager(), intent);
                     break;
                 }
 
@@ -4227,7 +4229,8 @@ public class BrowserApp extends GeckoApp
         if (flags.contains(OnUrlOpenListener.Flags.OPEN_WITH_INTENT)) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
-            startActivity(intent);
+            ExternalIntentDuringPrivateBrowsingPromptFragment.showDialogOrAndroidChooser(
+                this, getSupportFragmentManager(), intent);
         } else {
             // By default this listener is used for lists where the offline reader-view icon
             // is shown - hence we need to redirect to the reader-view page by default.
