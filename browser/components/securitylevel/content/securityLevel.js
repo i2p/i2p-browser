@@ -160,12 +160,25 @@ const SecurityLevelButton = {
     }
   },
 
-  // when toolbar button is pressed
-  onCommand : function(event) {
+  // for when the toolbar button needs to be activated and displays the Security Level panel
+  //
+  // In the toolbarbutton xul you'll notice we register this callback for both onkeypress and
+  // onmousedown. We do this to match the behavior of other panel spawning buttons such as Downloads,
+  // Library, and the Hamburger menus. Using oncommand alone would result in only getting fired
+  // after onclick, which is mousedown followed by mouseup.
+  onCommand : function(aEvent) {
+    // snippet stolen from /browser/components/downloads/indicator.js DownloadsIndicatorView.onCommand(evt)
+    if (
+      (aEvent.type == "mousedown" && aEvent.button != 0) ||
+      (aEvent.type == "keypress" && aEvent.key != " " && aEvent.key != "Enter")
+    ) {
+      return;
+    }
+
     // we need to set this attribute for the button to be shaded correctly to look like it is pressed
     // while the security level panel is open
     this.button.setAttribute("open", "true");
-    SecurityLevelPanel.show(event);
+    SecurityLevelPanel.show();
   },
 }; /* Security Level Button */
 
