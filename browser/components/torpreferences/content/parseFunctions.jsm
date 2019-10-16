@@ -53,7 +53,7 @@ let parseUsernamePassword = function(aUsernameColonPassword) {
   return [username, password];
 };
 
-// expects tring in the format: ADDRESS:PORT,ADDRESS:PORT,...
+// expects a string in the format: ADDRESS:PORT,ADDRESS:PORT,...
 // returns array of ports (as ints)
 let parseAddrPortList = function(aAddrPortList) {
   let addrPorts = aAddrPortList.split(",");
@@ -62,10 +62,23 @@ let parseAddrPortList = function(aAddrPortList) {
   return retval;
 };
 
-// expects a '/n' delimited string of bridge string, which we split and trim
+// expects a '/n' or '/r/n' delimited bridge string, which we split and trim
+// each bridge string can also optionally have 'bridge' at the beginning ie:
+// bridge $(type) $(address):$(port) $(certificate)
+// we strip out the 'bridge' prefix here
 let parseBridgeStrings = function(aBridgeStrings) {
+
+  // replace carriage returns ('\r') with new lines ('\n')
+  aBridgeStrings = aBridgeStrings.replace(/\r/g, "\n");
+  // then replace contiguous new lines ('\n') with a single one
+  aBridgeStrings = aBridgeStrings.replace(/[\n]+/g, "\n");
+
+  // split on the newline and for each bridge string: trim, remove starting 'bridge' string
+  // finally discard entries that are empty strings; empty strings could occur if we receive
+  // a new line containing only whitespace
   let splitStrings = aBridgeStrings.split("\n");
-  return splitStrings.map(val => val.trim());
+  return splitStrings.map(val => val.trim().replace(/^bridge\s+/i, ""))
+                     .filter(bridgeString => bridgeString != "");
 };
 
 // expecting a ',' delimited list of ints with possible white space between
