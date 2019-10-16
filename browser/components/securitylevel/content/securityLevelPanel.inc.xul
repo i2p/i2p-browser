@@ -23,7 +23,8 @@
         <label
           id="securityLevel-learnMore"
           class="learnMore text-link"
-          onclick="SecurityLevelPanel.hide();"/>
+          onclick="SecurityLevelPanel.hide();"
+          is="text-link"/>
         <button
           id="securityLevel-restoreDefaults"
           oncommand="SecurityLevelPanel.restoreDefaults();"/>

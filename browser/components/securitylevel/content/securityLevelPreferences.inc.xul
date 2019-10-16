@@ -3,7 +3,7 @@
   <vbox data-subcategory="securitylevel" flex="1">
     <description flex="1">
       <html:span id="securityLevel-overview" class="tail-with-learn-more"/>
-      <label id="securityLevel-learnMore" class="learnMore text-link"/>
+      <label id="securityLevel-learnMore" class="learnMore text-link" is="text-link"/>
     </description>
     <radiogroup id="securityLevel-radiogroup"
                 oncommand="SecurityLevelPreferences.selectSecurityLevel();">
