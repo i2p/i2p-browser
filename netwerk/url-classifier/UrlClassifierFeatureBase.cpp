@@ -75,7 +75,7 @@ void UrlClassifierFeatureBase::InitializePreferences() {
 
   nsCOMPtr<nsIUrlClassifierSkipListService> skipListService =
       do_GetService("@mozilla.org/url-classifier/skip-list-service;1");
-  if (NS_WARN_IF(!skipListService)) {
+  if (!skipListService) {
     return;
   }
 
