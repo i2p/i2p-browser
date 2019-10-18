@@ -32,9 +32,6 @@ public class FirstrunPanel extends Fragment {
     protected boolean showBrowserHint = true;
     public static final String NO_MESSAGE = "";
 
-    //Default FxA entrypoint
-    protected String entrypoint = FxAccountConstants.ENDPOINT_FIRSTRUN;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         final ViewGroup root = (ViewGroup) inflater.inflate(R.layout.firstrun_basepanel_checkable_fragment, container, false);
@@ -43,9 +40,6 @@ public class FirstrunPanel extends Fragment {
             final int image = args.getInt(FirstrunPagerConfig.KEY_IMAGE);
             final String message = args.getString(FirstrunPagerConfig.KEY_MESSAGE);
             final String subtext = args.getString(FirstrunPagerConfig.KEY_SUBTEXT);
-            if (args.containsKey(FirstrunPagerConfig.KEY_ENTRYPOINT)) {
-                entrypoint = args.getString(FirstrunPagerConfig.KEY_ENTRYPOINT);
-            }
 
             ((ImageView) root.findViewById(R.id.firstrun_image)).setImageDrawable(getResources().getDrawable(image));
             ((TextView) root.findViewById(R.id.firstrun_text)).setText(message);
@@ -69,7 +63,7 @@ public class FirstrunPanel extends Fragment {
             showBrowserHint = false;
 
             final Intent intent = new Intent(FxAccountConstants.ACTION_FXA_GET_STARTED);
-            intent.putExtra(FxAccountWebFlowActivity.EXTRA_ENDPOINT, entrypoint);
+            intent.putExtra(FxAccountWebFlowActivity.EXTRA_ENDPOINT, FxAccountConstants.ENDPOINT_FIRSTRUN);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
 
