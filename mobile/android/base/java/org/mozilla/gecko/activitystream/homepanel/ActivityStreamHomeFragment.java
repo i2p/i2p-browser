@@ -7,7 +7,6 @@ package org.mozilla.gecko.activitystream.homepanel;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -47,8 +46,7 @@ public class ActivityStreamHomeFragment
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         final boolean shouldReload = TextUtils.equals(s, ActivityStreamPanel.PREF_BOOKMARKS_ENABLED)
                 || TextUtils.equals(s, ActivityStreamPanel.PREF_VISITED_ENABLED)
-                || TextUtils.equals(s, ActivityStreamPanel.PREF_POCKET_ENABLED)
-                || TextUtils.equals(s, ActivityStreamPanel.PREF_USER_DISMISSED_SIGNIN);
+                || TextUtils.equals(s, ActivityStreamPanel.PREF_POCKET_ENABLED);
 
         if (shouldReload) {
             activityStreamPanel.reload(getLoaderManager(), getContext(), sharedPreferences);
@@ -63,7 +61,7 @@ public class ActivityStreamHomeFragment
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         if (activityStreamPanel == null) {
             activityStreamPanel = (ActivityStreamPanel) inflater.inflate(R.layout.activity_stream, container, false);
