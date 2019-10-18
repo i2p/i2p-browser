@@ -52,7 +52,12 @@ public class FirstrunPager extends RtlViewPager {
         if (child instanceof Decor) {
             ((RtlViewPager.LayoutParams) params).isDecor = true;
             mDecor = (Decor) child;
-            mDecor.setOnTitleClickListener(itemIndex -> setCurrentItem(itemIndex, true));
+            mDecor.setOnTitleClickListener(new TabMenuStrip.OnTitleClickListener() {
+                @Override
+                public void onTitleClicked(int index) {
+                    setCurrentItem(index, true);
+                }
+            });
         }
 
         super.addView(child, index, params);
@@ -64,6 +69,8 @@ public class FirstrunPager extends RtlViewPager {
 
         if (Restrictions.isRestrictedProfile(appContext)) {
             panels = FirstrunPagerConfig.getRestricted(appContext);
+        } else if (FirefoxAccounts.firefoxAccountsExist(appContext)) {
+            panels = FirstrunPagerConfig.forFxAUser(appContext, useLocalValues);
         } else {
             panels = FirstrunPagerConfig.getDefault(appContext, useLocalValues);
         }
