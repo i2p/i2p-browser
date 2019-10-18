@@ -29,9 +29,6 @@ public class SendTabPanel extends FirstrunPanel {
             final int image = args.getInt(FirstrunPagerConfig.KEY_IMAGE);
             final String message = args.getString(FirstrunPagerConfig.KEY_MESSAGE);
             final String subtext = args.getString(FirstrunPagerConfig.KEY_SUBTEXT);
-            if (args.containsKey(FirstrunPagerConfig.KEY_ENTRYPOINT)) {
-                entrypoint = args.getString(FirstrunPagerConfig.KEY_ENTRYPOINT);
-            }
 
             ((ImageView) root.findViewById(R.id.firstrun_image)).setImageDrawable(getResources().getDrawable(image));
             ((TextView) root.findViewById(R.id.firstrun_text)).setText(message);
@@ -50,7 +47,7 @@ public class SendTabPanel extends FirstrunPanel {
             showBrowserHint = false;
 
             final Intent intent = new Intent(FxAccountConstants.ACTION_FXA_GET_STARTED);
-            intent.putExtra(FxAccountWebFlowActivity.EXTRA_ENDPOINT, entrypoint);
+            intent.putExtra(FxAccountWebFlowActivity.EXTRA_ENDPOINT, FxAccountConstants.ENDPOINT_FIRSTRUN);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
 
