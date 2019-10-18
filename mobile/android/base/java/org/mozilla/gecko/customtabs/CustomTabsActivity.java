@@ -621,7 +621,8 @@ public class CustomTabsActivity extends AppCompatActivity
             final Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
             try {
-                startActivity(intent);
+                // Bug 31144 - Don't know how to handle this case.
+                //startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 Log.w(LOGTAG, "No activity handler found for: " + request.uri);
             }
