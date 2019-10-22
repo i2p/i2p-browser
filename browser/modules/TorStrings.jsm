@@ -211,7 +211,7 @@ var TorStrings = {
         "torPreferences.advancedDescription",
         "Configure how Tor Browser connects to the internet."
       ),
-      useLocalProxy: getString("torPreferences.useProxy", "Use a local proxy"),
+      useLocalProxy: getString("torsettings.useProxy.checkbox", "I use a proxy to connect to the Internet"),
       proxyType: getString("torsettings.useProxy.type", "Proxy Type"),
       proxyTypeSOCKS4: getString("torsettings.useProxy.type.socks4", "SOCKS4"),
       proxyTypeSOCKS5: getString("torsettings.useProxy.type.socks5", "SOCKS5"),
