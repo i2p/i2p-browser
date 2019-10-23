@@ -13,6 +13,9 @@
 #include "nsIURI.h"
 #include "nsURLHelper.h"
 
+static const char kSourceChar = ':';
+static const char kSanitizedChar = '+';
+
 namespace mozilla {
 
 using dom::URLParams;
@@ -151,8 +154,7 @@ void OriginAttributes::CreateSuffix(nsACString& aStr) const {
 
   if (!mFirstPartyDomain.IsEmpty()) {
     nsAutoString sanitizedFirstPartyDomain(mFirstPartyDomain);
-    sanitizedFirstPartyDomain.ReplaceChar(
-        dom::quota::QuotaManager::kReplaceChars, '+');
+    sanitizedFirstPartyDomain.ReplaceChar(kSourceChar, kSanitizedChar);
 
     params.Set(NS_LITERAL_STRING("firstPartyDomain"),
                sanitizedFirstPartyDomain);
@@ -239,7 +241,9 @@ class MOZ_STACK_CLASS PopulateFromSuffixIterator final
 
     if (aName.EqualsLiteral("firstPartyDomain")) {
       MOZ_RELEASE_ASSERT(mOriginAttributes->mFirstPartyDomain.IsEmpty());
-      mOriginAttributes->mFirstPartyDomain.Assign(aValue);
+      nsAutoString firstPartyDomain(aValue);
+      firstPartyDomain.ReplaceChar(kSanitizedChar, kSourceChar);
+      mOriginAttributes->mFirstPartyDomain.Assign(firstPartyDomain);
       return true;
     }
 
