@@ -14,7 +14,7 @@ panelview#securityLevel-panelview>vbox.panel-subview-body {
 
 label#securityLevel-header {
   text-transform: uppercase;
-  color: GrayText;
+  color: var(--panel-disabled-color);
   font-size: 0.85em;
   margin: 0 0 0.4em 0;
   padding: 0;
