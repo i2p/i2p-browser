@@ -41,6 +41,7 @@ class _RFPHelper {
   // ============================================================================
   constructor() {
     this._initialized = false;
+    this._borderDimensions = null;
   }
 
   init() {
@@ -348,6 +349,24 @@ class _RFPHelper {
     });
   }
 
+  getBorderDimensions(aBrowser) {
+    if (this._borderDimensions) {
+      return this._borderDimensions;
+    }
+
+    const win = aBrowser.ownerGlobal;
+    const browserStyle = win.getComputedStyle(aBrowser);
+
+    this._borderDimensions = {
+      top : parseInt(browserStyle.borderTopWidth),
+      right: parseInt(browserStyle.borderRightWidth),
+      bottom : parseInt(browserStyle.borderBottomWidth),
+      left : parseInt(browserStyle.borderLeftWidth),
+    };
+
+    return this._borderDimensions;
+  }
+
   _addOrClearContentMargin(aBrowser) {
     let tab = aBrowser.getTabBrowser().getTabForBrowser(aBrowser);
 
@@ -356,9 +375,13 @@ class _RFPHelper {
       return;
     }
 
+    // we add the letterboxing class even if the content does not need letterboxing
+    // in which case margins are set such that the borders are hidden
+    aBrowser.classList.add("letterboxing");
+
     // We should apply no margin around an empty tab or a tab with system
     // principal.
-    if (tab.isEmpty || aBrowser.contentPrincipal.isSystemPrincipal) {
+    if (!tab.needsLetterbox || aBrowser.contentPrincipal.isSystemPrincipal) {
       this._clearContentViewMargin(aBrowser);
     } else {
       this._roundContentView(aBrowser);
@@ -523,10 +546,29 @@ class _RFPHelper {
     // Calculating the margins around the browser element in order to round the
     // content viewport. We will use a 200x100 stepping if the dimension set
     // is not given.
-    let margins = calcMargins(containerWidth, containerHeight);
+
+    const borderDimensions = this.getBorderDimensions(aBrowser);
+    const marginDims = calcMargins(containerWidth, containerHeight - borderDimensions.top);
+
+    let margins = {
+      top : 0,
+      right : 0,
+      bottom : 0,
+      left : 0,
+    };
+
+    // snap browser element to top
+    margins.top = 0;
+    // and leave 'double' margin at the bottom
+    margins.bottom = 2 * marginDims.height - borderDimensions.bottom;
+    // identical margins left and right
+    margins.right = marginDims.width - borderDimensions.right;
+    margins.left = marginDims.width - borderDimensions.left;
+
+    const marginStyleString = `${margins.top}px ${margins.right}px ${margins.bottom}px ${margins.left}px`;
 
     // If the size of the content is already quantized, we do nothing.
-    if (aBrowser.style.margin == `${margins.height}px ${margins.width}px`) {
+    if (aBrowser.style.margin === marginStyleString) {
       log("_roundContentView[" + logId + "] is_rounded == true");
       if (this._isLetterboxingTesting) {
         log(
@@ -547,19 +589,35 @@ class _RFPHelper {
         "_roundContentView[" +
           logId +
           "] setting margins to " +
-          margins.width +
-          " x " +
-          margins.height
+          marginStyleString
       );
-      // One cannot (easily) control the color of a margin unfortunately.
-      // An initial attempt to use a border instead of a margin resulted
-      // in offset event dispatching; so for now we use a colorless margin.
-      aBrowser.style.margin = `${margins.height}px ${margins.width}px`;
+
+      // The margin background color is determined by the background color of the
+      // window's tabpanels#tabbrowser-tabpanels element
+      aBrowser.style.margin = marginStyleString;
     });
   }
 
   _clearContentViewMargin(aBrowser) {
+    const borderDimensions = this.getBorderDimensions(aBrowser);
+    // set the margins such that the browser elements border is visible up top, but
+    // are rendered off-screen on the remaining sides
+    let margins = {
+      top : 0,
+      right : -borderDimensions.right,
+      bottom : -borderDimensions.bottom,
+      left : -borderDimensions.left,
+    };
+    const marginStyleString = `${margins.top}px ${margins.right}px ${margins.bottom}px ${margins.left}px`;
+
     aBrowser.ownerGlobal.requestAnimationFrame(() => {
+      aBrowser.style.margin = marginStyleString;
+    });
+  }
+
+  _removeLetterboxing(aBrowser) {
+    aBrowser.ownerGlobal.requestAnimationFrame(() => {
+      aBrowser.classList.remove("letterboxing");
       aBrowser.style.margin = "";
     });
   }
@@ -580,6 +638,11 @@ class _RFPHelper {
       kEventLetterboxingSizeUpdate,
       this
     );
+
+    const tabPanel = aWindow.document.getElementById("tabbrowser-tabpanels");
+    if (tabPanel) {
+      tabPanel.classList.add("letterboxing");
+    }
 
     // Rounding the content viewport.
     this._updateMarginsForTabsInWindow(aWindow);
@@ -608,10 +671,17 @@ class _RFPHelper {
       this
     );
 
-    // Clear all margins and tooltip for all browsers.
+    // revert tabpanel's background colors to default
+    const tabPanel = aWindow.document.getElementById("tabbrowser-tabpanels");
+    if (tabPanel) {
+      tabPanel.classList.remove("letterboxing");
+    }
+
+    // and revert each browser element to default,
+    // restore default margins and remove letterboxing class
     for (let tab of tabBrowser.tabs) {
       let browser = tab.linkedBrowser;
-      this._clearContentViewMargin(browser);
+      this._removeLetterboxing(browser);
     }
   }
 

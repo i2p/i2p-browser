@@ -2090,6 +2090,16 @@
         </getter>
       </property>
 
+      <property name="needsLetterbox" readonly="true">
+        <getter>
+          let browser = this.linkedBrowser;
+          if (isBlankPageURL(browser.currentURI.spec))
+            return false;
+
+          return true;
+        </getter>
+      </property>
+
       <property name="lastAccessed">
         <getter>
           return this._lastAccessed == Infinity ? Date.now() : this._lastAccessed;

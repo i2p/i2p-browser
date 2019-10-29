@@ -33,6 +33,12 @@
   background-color: #f9f9fa;
 }
 
+/* extend down the toolbar's colors when letterboxing is enabled*/
+#tabbrowser-tabpanels.letterboxing {
+  background-color: var(--toolbar-bgcolor);
+  background-image: var(--toolbar-bgimage);
+}
+
 :root[privatebrowsingmode=temporary] #tabbrowser-tabpanels {
   /* Value for --in-content-page-background in aboutPrivateBrowsing.css */
   background-color: #25003e;
