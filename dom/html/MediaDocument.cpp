@@ -121,14 +121,6 @@ nsresult MediaDocument::Init() {
   nsresult rv = nsHTMLDocument::Init();
   NS_ENSURE_SUCCESS(rv, rv);
 
-  // Create a bundle for the localization
-  nsCOMPtr<nsIStringBundleService> stringService =
-      mozilla::services::GetStringBundleService();
-  if (stringService) {
-    stringService->CreateBundle(NSMEDIADOCUMENT_PROPERTIES_URI,
-                                getter_AddRefs(mStringBundle));
-  }
-
   mIsSyntheticDocument = true;
 
   return NS_OK;
@@ -327,6 +319,38 @@ nsresult MediaDocument::LinkScript(const nsAString& aScript) {
   return head->AppendChildTo(script, false);
 }
 
+void MediaDocument::FormatStringFromName(const char* aName,
+                                         const char16_t** aParams,
+                                         uint32_t aLength, nsAString& aResult) {
+  bool spoofLocale = nsContentUtils::SpoofLocaleEnglish() && !AllowsL10n();
+  if (!spoofLocale) {
+    if (!mStringBundle) {
+      nsCOMPtr<nsIStringBundleService> stringService =
+          mozilla::services::GetStringBundleService();
+      if (stringService) {
+        stringService->CreateBundle(NSMEDIADOCUMENT_PROPERTIES_URI,
+                                    getter_AddRefs(mStringBundle));
+      }
+    }
+    if (mStringBundle) {
+      mStringBundle->FormatStringFromName(aName, aParams, aLength, aResult);
+    }
+  } else {
+    if (!mStringBundleEnglish) {
+      nsCOMPtr<nsIStringBundleService> stringService =
+          mozilla::services::GetStringBundleService();
+      if (stringService) {
+        stringService->CreateBundle(NSMEDIADOCUMENT_PROPERTIES_URI_en_US,
+                                    getter_AddRefs(mStringBundleEnglish));
+      }
+    }
+    if (mStringBundleEnglish) {
+      mStringBundleEnglish->FormatStringFromName(aName, aParams, aLength,
+                                                 aResult);
+    }
+  }
+}
+
 void MediaDocument::UpdateTitleAndCharset(const nsACString& aTypeStr,
                                           nsIChannel* aChannel,
                                           const char* const* aFormatNames,
@@ -338,7 +362,6 @@ void MediaDocument::UpdateTitleAndCharset(const nsACString& aTypeStr,
   NS_ConvertASCIItoUTF16 typeStr(aTypeStr);
   nsAutoString title;
 
-  if (mStringBundle) {
     // if we got a valid size (not all media have a size)
     if (aWidth != 0 && aHeight != 0) {
       nsAutoString widthStr;
@@ -349,27 +372,24 @@ void MediaDocument::UpdateTitleAndCharset(const nsACString& aTypeStr,
       if (!fileStr.IsEmpty()) {
         const char16_t* formatStrings[4] = {fileStr.get(), typeStr.get(),
                                             widthStr.get(), heightStr.get()};
-        mStringBundle->FormatStringFromName(aFormatNames[eWithDimAndFile],
-                                            formatStrings, 4, title);
+        FormatStringFromName(aFormatNames[eWithDimAndFile], formatStrings, 4,
+                             title);
       } else {
         const char16_t* formatStrings[3] = {typeStr.get(), widthStr.get(),
                                             heightStr.get()};
-        mStringBundle->FormatStringFromName(aFormatNames[eWithDim],
-                                            formatStrings, 3, title);
+        FormatStringFromName(aFormatNames[eWithDim], formatStrings, 3, title);
       }
     } else {
       // If we got a filename, display it
       if (!fileStr.IsEmpty()) {
         const char16_t* formatStrings[2] = {fileStr.get(), typeStr.get()};
-        mStringBundle->FormatStringFromName(aFormatNames[eWithFile],
-                                            formatStrings, 2, title);
+        FormatStringFromName(aFormatNames[eWithFile], formatStrings, 2, title);
       } else {
         const char16_t* formatStrings[1] = {typeStr.get()};
-        mStringBundle->FormatStringFromName(aFormatNames[eWithNoInfo],
-                                            formatStrings, 1, title);
+        FormatStringFromName(aFormatNames[eWithNoInfo], formatStrings, 1,
+                             title);
       }
     }
-  }
 
   // set it on the document
   if (aStatus.IsEmpty()) {
@@ -379,8 +399,7 @@ void MediaDocument::UpdateTitleAndCharset(const nsACString& aTypeStr,
     nsAutoString titleWithStatus;
     const nsPromiseFlatString& status = PromiseFlatString(aStatus);
     const char16_t* formatStrings[2] = {title.get(), status.get()};
-    mStringBundle->FormatStringFromName("TitleWithStatus", formatStrings, 2,
-                                        titleWithStatus);
+    FormatStringFromName("TitleWithStatus", formatStrings, 2, titleWithStatus);
     IgnoredErrorResult ignored;
     SetTitle(titleWithStatus, ignored);
   }

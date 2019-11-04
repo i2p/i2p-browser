@@ -72,9 +72,9 @@ nsresult NumericInputTypeBase::GetRangeOverflowMessage(nsAString& aMessage) {
   MOZ_ASSERT(ok, "buf not big enough");
 
   const char16_t* params[] = {maxStr.get()};
-  return nsContentUtils::FormatLocalizedString(
+  return nsContentUtils::FormatMaybeLocalizedString(
       nsContentUtils::eDOM_PROPERTIES, "FormValidationNumberRangeOverflow",
-      params, aMessage);
+      mInputElement->OwnerDoc(), params, aMessage);
 }
 
 nsresult NumericInputTypeBase::GetRangeUnderflowMessage(nsAString& aMessage) {
@@ -89,9 +89,9 @@ nsresult NumericInputTypeBase::GetRangeUnderflowMessage(nsAString& aMessage) {
   MOZ_ASSERT(ok, "buf not big enough");
 
   const char16_t* params[] = {minStr.get()};
-  return nsContentUtils::FormatLocalizedString(
+  return nsContentUtils::FormatMaybeLocalizedString(
       nsContentUtils::eDOM_PROPERTIES, "FormValidationNumberRangeUnderflow",
-      params, aMessage);
+      mInputElement->OwnerDoc(), params, aMessage);
 }
 
 bool NumericInputTypeBase::ConvertStringToNumber(
@@ -150,15 +150,15 @@ bool NumberInputType::HasBadInput() const {
 }
 
 nsresult NumberInputType::GetValueMissingMessage(nsAString& aMessage) {
-  return nsContentUtils::GetLocalizedString(nsContentUtils::eDOM_PROPERTIES,
-                                            "FormValidationBadInputNumber",
-                                            aMessage);
+  return nsContentUtils::GetMaybeLocalizedString(
+      nsContentUtils::eDOM_PROPERTIES, "FormValidationBadInputNumber",
+      mInputElement->OwnerDoc(), aMessage);
 }
 
 nsresult NumberInputType::GetBadInputMessage(nsAString& aMessage) {
-  return nsContentUtils::GetLocalizedString(nsContentUtils::eDOM_PROPERTIES,
-                                            "FormValidationBadInputNumber",
-                                            aMessage);
+  return nsContentUtils::GetMaybeLocalizedString(
+      nsContentUtils::eDOM_PROPERTIES, "FormValidationBadInputNumber",
+      mInputElement->OwnerDoc(), aMessage);
 }
 
 bool NumberInputType::IsMutable() const {

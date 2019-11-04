@@ -577,14 +577,13 @@ nsresult ImageDocument::OnLoadComplete(imgIRequest* aRequest,
   UpdateTitleAndCharset();
 
   // mImageContent can be null if the document is already destroyed
-  if (NS_FAILED(aStatus) && mStringBundle && mImageContent) {
+  if (NS_FAILED(aStatus) && mImageContent) {
     nsAutoCString src;
     mDocumentURI->GetSpec(src);
     NS_ConvertUTF8toUTF16 srcString(src);
     const char16_t* formatString[] = {srcString.get()};
     nsAutoString errorMsg;
-    mStringBundle->FormatStringFromName("InvalidImage", formatString, 1,
-                                        errorMsg);
+    FormatStringFromName("InvalidImage", formatString, 1, errorMsg);
 
     mImageContent->SetAttr(kNameSpaceID_None, nsGkAtoms::alt, errorMsg, false);
   }
@@ -788,7 +787,7 @@ void ImageDocument::UpdateTitleAndCharset() {
     ratioStr.AppendInt(NSToCoordFloor(GetRatio() * 100));
 
     const char16_t* formatString[1] = {ratioStr.get()};
-    mStringBundle->FormatStringFromName("ScaledImage", formatString, 1, status);
+    FormatStringFromName("ScaledImage", formatString, 1, status);
   }
 
   static const char* const formatNames[4] = {

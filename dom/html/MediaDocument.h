@@ -16,6 +16,9 @@
 #define NSMEDIADOCUMENT_PROPERTIES_URI \
   "chrome://global/locale/layout/MediaDocument.properties"
 
+#define NSMEDIADOCUMENT_PROPERTIES_URI_en_US \
+  "resource://gre/res/locale/layout/MediaDocument.properties"
+
 namespace mozilla {
 namespace dom {
 
@@ -60,6 +63,9 @@ class MediaDocument : public nsHTMLDocument {
   nsresult LinkStylesheet(const nsAString& aStylesheet);
   nsresult LinkScript(const nsAString& aScript);
 
+  void FormatStringFromName(const char* aName, const char16_t** aParams,
+                            uint32_t aLength, nsAString& aResult);
+
   // |aFormatNames[]| needs to have four elements in the following order:
   // a format name with neither dimension nor file, a format name with
   // filename but w/o dimension, a format name with dimension but w/o filename,
@@ -77,6 +83,7 @@ class MediaDocument : public nsHTMLDocument {
                              const nsAString& aStatus = EmptyString());
 
   nsCOMPtr<nsIStringBundle> mStringBundle;
+  nsCOMPtr<nsIStringBundle> mStringBundleEnglish;
   static const char* const sFormatNames[4];
 
  private:
