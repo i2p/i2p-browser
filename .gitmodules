@@ -1,0 +1,3 @@
+[submodule "i2pbutton68"]
+	path = toolkit/i2p/i2pbutton
+	url = https://github.com/i2p/i2pbutton.git

@@ -29,6 +29,9 @@ if CONFIG['MOZ_MAINTENANCE_SERVICE'] or CONFIG['MOZ_UPDATER']:
         'mozapps/update/common',
     ]
 
+if CONFIG['MOZ_BUILD_APP'] == 'mobile/android':
+    DIRS += ['i2p/i2pbutton']
+
 if CONFIG['MOZ_MAINTENANCE_SERVICE']:
     DIRS += [
         'components/maintenanceservice'
