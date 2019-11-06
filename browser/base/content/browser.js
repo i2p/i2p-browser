@@ -612,6 +612,7 @@ var gPageIcons = {
 };
 
 var gInitialPages = [
+  "about:i2p",
   "about:blank",
   "about:newtab",
   "about:home",
