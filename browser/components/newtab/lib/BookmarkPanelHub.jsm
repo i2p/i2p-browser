@@ -39,7 +39,7 @@ class _BookmarkPanelHub {
     this._addImpression = addImpression;
     this._dispatch = dispatch;
     this._l10n = new DOMLocalization([
-      "browser/branding/sync-brand.ftl",
+      "browser/branding/sync-i2p-bowser-brand.ftl",
       "browser/newtab/asrouter.ftl",
     ]);
     this._initialized = true;

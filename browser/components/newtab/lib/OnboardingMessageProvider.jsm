@@ -42,9 +42,9 @@ async function getAddonInfo() {
 }
 
 const L10N = new Localization([
-  "branding/brand.ftl",
+  "branding/i2p-bowser-brand.ftl",
   "browser/branding/brandings.ftl",
-  "browser/branding/sync-brand.ftl",
+  "browser/branding/sync-i2p-bowser-brand.ftl",
   "browser/newtab/onboarding.ftl",
 ]);
 

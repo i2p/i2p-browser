@@ -52,7 +52,7 @@ let testLangpacks;
 function createLangpack(locale, version) {
   return AddonTestUtils.createTempXPIFile({
     "manifest.json": getManifestData(locale, version),
-    [`browser/${locale}/branding/brand.ftl`]: "-brand-short-name = Firefox",
+    [`browser/${locale}/branding/i2p-bowser-brand.ftl`]: "-brand-short-name = Firefox",
   });
 }
 

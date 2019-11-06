@@ -18,7 +18,7 @@
         data-l10n-attrs="title, style">
 
   <linkset>
-    <html:link rel="localization" href="browser/branding/sync-brand.ftl"/>
+    <html:link rel="localization" href="browser/branding/sync-i2p-bowser-brand.ftl"/>
     <html:link rel="localization" href="browser/preferences/fxaPairDevice.ftl"/>
   </linkset>
   <script src="chrome://browser/content/preferences/in-content/fxaPairDevice.js"/>
