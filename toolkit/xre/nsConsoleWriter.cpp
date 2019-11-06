@@ -29,7 +29,7 @@ void WriteConsoleLog() {
   } else {
     if (!gLogConsoleErrors) return;
 
-    rv = nsXREDirProvider::GetUserAppDataDirectory(getter_AddRefs(lfile));
+    rv = gDirServiceProvider->GetUserAppDataDirectory(getter_AddRefs(lfile));
     if (NS_FAILED(rv)) return;
 
     lfile->AppendNative(NS_LITERAL_CSTRING("console.log"));
