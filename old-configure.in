@@ -2191,6 +2191,22 @@ if test -n "$MOZ_UPDATER"; then
 fi
 
 dnl ========================================================
+dnl I2P additions
+dnl ========================================================
+MOZ_ARG_ENABLE_BOOL(i2p-browser-data-outside-app-dir,
+[  --enable-i2p-browser-data-outside-app-dir
+                          Enable I2P Browser data outside of app directory],
+    I2P_BROWSER_DATA_OUTSIDE_APP_DIR=1,
+    I2P_BROWSER_DATA_OUTSIDE_APP_DIR= )
+
+if test -n "$I2P_BROWSER_DATA_OUTSIDE_APP_DIR"; then
+    AC_DEFINE(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
+fi
+
+AC_SUBST(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
+
+
+dnl ========================================================
 dnl parental controls (for Windows Vista)
 dnl ========================================================
 MOZ_ARG_DISABLE_BOOL(parental-controls,

@@ -112,6 +112,12 @@ class nsXREDirProvider final : public nsIDirectoryServiceProvider2,
    */
   nsresult GetProfileDir(nsIFile** aResult);
 
+  /**
+   * Get the I2PBrowser user data directory by calling the
+   * I2PBrowser_GetUserDataDir() utility function.
+   */
+  nsresult GetI2PBrowserUserDataDir(nsIFile** aFile);
+
  protected:
   nsresult GetFilesInternal(const char* aProperty,
                             nsISimpleEnumerator** aResult);

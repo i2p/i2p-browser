@@ -15,6 +15,14 @@
 #include "nsProfileLock.h"
 #include "nsINIParser.h"
 
+enum ProfileStatus {
+  PROFILE_STATUS_OK,
+  PROFILE_STATUS_ACCESS_DENIED,
+  PROFILE_STATUS_READ_ONLY,
+  PROFILE_STATUS_IS_LOCKED,
+  PROFILE_STATUS_OTHER_ERROR
+};
+
 class nsToolkitProfile final
     : public nsIToolkitProfile,
       public mozilla::LinkedListElement<RefPtr<nsToolkitProfile>> {
@@ -79,10 +87,13 @@ class nsToolkitProfileService final : public nsIToolkitProfileService {
   nsresult SelectStartupProfile(int* aArgc, char* aArgv[], bool aIsResetting,
                                 nsIFile** aRootDir, nsIFile** aLocalDir,
                                 nsIToolkitProfile** aProfile, bool* aDidCreate,
-                                bool* aWasDefaultSelection);
+                                bool* aWasDefaultSelection,
+                                ProfileStatus& aProfileStatus);
   nsresult CreateResetProfile(nsIToolkitProfile** aNewProfile);
   nsresult ApplyResetProfile(nsIToolkitProfile* aOldProfile);
   void CompleteStartup();
+  static ProfileStatus CheckProfileWriteAccess(nsIToolkitProfile* aProfile);
+  static ProfileStatus CheckProfileWriteAccess(nsIFile* aProfileDir);
 
  private:
   friend class nsToolkitProfile;

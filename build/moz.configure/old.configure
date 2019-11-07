@@ -261,6 +261,8 @@ def old_configure_options(*options):
     '--with-user-appdir',
     '--x-includes',
     '--x-libraries',
+    # I2P
+    '--enable-i2p-browser-data-outside-app-dir',
 )
 def prepare_configure_options(extra_old_configure_args, all_options, *options):
     # old-configure only supports the options listed in @old_configure_options
