@@ -88,12 +88,28 @@ PushServiceBase.prototype = {
     }
     if (topic === "sessionstore-windows-restored") {
       Services.obs.removeObserver(this, "sessionstore-windows-restored");
-      this._handleReady();
+      try {
+        this._handleReady();
+      } catch (ex) {
+        // NS_ERROR_NOT_AVAILABLE will get thrown for the PushService getter
+        // if the PushService is disabled.
+        if (ex.result != Cr.NS_ERROR_NOT_AVAILABLE) {
+          throw ex;
+        }
+      }
       return;
     }
     if (topic === "android-push-service") {
       // Load PushService immediately.
-      this._handleReady();
+      try {
+        this._handleReady();
+      } catch (ex) {
+        // NS_ERROR_NOT_AVAILABLE will get thrown for the PushService getter
+        // if the PushService is disabled.
+        if (ex.result != Cr.NS_ERROR_NOT_AVAILABLE) {
+          throw ex;
+        }
+      }
     }
   },
 
