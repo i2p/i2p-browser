@@ -74,21 +74,9 @@ EnterprisePoliciesManager.prototype = {
   ),
 
   _initialize() {
-    let provider = this._chooseProvider();
-
-    if (!provider) {
-      this.status = Ci.nsIEnterprisePolicies.INACTIVE;
-      return;
-    }
-
-    if (provider.failed) {
-      this.status = Ci.nsIEnterprisePolicies.FAILED;
-      return;
-    }
-
-    this.status = Ci.nsIEnterprisePolicies.ACTIVE;
-    this._parsedPolicies = {};
-    this._activatePolicies(provider.policies);
+    // We don't want to have any enterprise policies in I2P Browser enabled as
+    // those can affect proxy settings etc.
+    this.status = Ci.nsIEnterprisePolicies.INACTIVE;
   },
 
   _chooseProvider() {
