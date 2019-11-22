@@ -22,6 +22,7 @@ pref("startup.homepage_override_url", "https://geti2p.net");
 pref("app.update.promptWaitTime", 3600);
 pref("app.update.badge", true);
 pref("extensions.hotfix.id", ""); // Bug 16837: Disable hotfix updates as they may cause compat issues
+pref("app.update.notifyDuringDownload", true);
 
 #ifdef XP_WIN
 // For now, disable staged updates on Windows (see #18292).
