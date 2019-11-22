@@ -33,6 +33,9 @@ pref("app.update.staging.enabled", false);
 // one which is still used, see bug 22071.
 pref("services.blocklist.update_enabled", false);
 
+// Disable the "Refresh" prompt that is displayed for stale profiles.
+pref("browser.disableResetPrompt", true);
+
 // Disable "Slow startup" warnings and associated disk history
 // (bug #13346)
 pref("browser.slowStartup.notificationDisabled", true);
