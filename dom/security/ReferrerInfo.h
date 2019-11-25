@@ -155,7 +155,7 @@ class ReferrerInfo : public nsIReferrerInfo {
    * Computing whether the request is cross-origin may be expensive, so please
    * do that in cases where we're going to use this information later on.
    */
-  bool IsCrossOriginRequest(nsIHttpChannel* aChannel) const;
+  static bool IsCrossOriginRequest(nsIHttpChannel* aChannel);
 
   /*
    * Check whether referrer is allowed to send in secure to insecure scenario.

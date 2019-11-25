@@ -322,7 +322,8 @@ nsresult ReferrerInfo::HandleUserReferrerSendingPolicy(nsIHttpChannel* aChannel,
   return NS_OK;
 }
 
-bool ReferrerInfo::IsCrossOriginRequest(nsIHttpChannel* aChannel) const {
+/* static */
+bool ReferrerInfo::IsCrossOriginRequest(nsIHttpChannel* aChannel) {
   nsCOMPtr<nsILoadInfo> loadInfo = aChannel->LoadInfo();
 
   nsCOMPtr<nsIURI> triggeringURI;
