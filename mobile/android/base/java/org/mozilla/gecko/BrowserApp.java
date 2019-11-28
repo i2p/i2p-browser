@@ -3032,7 +3032,10 @@ public class BrowserApp extends GeckoApp
                     // When the content loaded in the background (such as about:tor),
                     // it was loaded while mBrowserChrome was GONE. We should refresh the
                     // height now so the page is rendered correctly.
-                    Tabs.getInstance().getSelectedTab().doReload(true);
+                    final Tab currentTab = Tabs.getInstance().getSelectedTab();
+                    if (currentTab != null) {
+                        currentTab.doReload(true);
+                    }
 
                     // If we finished, then Tor bootstrapped 100%
                     mTorNeedsStart = false;
