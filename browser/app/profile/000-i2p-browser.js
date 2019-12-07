@@ -7,7 +7,6 @@
 // Disable initial homepage notifications
 pref("browser.search.update", false);
 pref("browser.rights.3.shown", true);
-pref("browser.startup.homepage_override.mstone", "ignore");
 pref("startup.homepage_welcome_url", "");
 pref("startup.homepage_welcome_url.additional", "");
 
@@ -24,10 +23,7 @@ pref("app.update.badge", true);
 pref("extensions.hotfix.id", ""); // Bug 16837: Disable hotfix updates as they may cause compat issues
 pref("app.update.notifyDuringDownload", true);
 
-#ifdef XP_WIN
-// For now, disable staged updates on Windows (see #18292).
 pref("app.update.staging.enabled", false);
-#endif
 
 // No need to contact the Kinto-based blocklist system in addition to the old
 // one which is still used, see bug 22071.
@@ -94,6 +90,7 @@ pref("datareporting.healthreport.about.reportUrlUnified", "data:text/plain,");
 // Make sure Unified Telemetry is really disabled, see: #18738.
 pref("toolkit.telemetry.unified", false);
 pref("toolkit.telemetry.enabled", false);
+pref("toolkit.telemetry.updatePing.enabled", false); // Make sure updater telemetry is disabled; see #25909.
 // No experiments, use I2P Browser.
 pref("experiments.enabled", false);
 pref("browser.syncPromoViewsLeftMap", "{\"addons\":0, \"passwords\":0, \"bookmarks\":0}"); // Don't promote sync

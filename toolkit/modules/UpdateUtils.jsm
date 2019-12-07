@@ -98,7 +98,7 @@ var UpdateUtils = {
           case "PRODUCT":
             return Services.appinfo.name;
           case "VERSION":
-            return Services.appinfo.version;
+            return return AppConstants.I2P_BROWSER_VERSION;
           case "BUILD_ID":
             return Services.appinfo.appBuildID;
           case "BUILD_TARGET":
@@ -169,8 +169,9 @@ var UpdateUtils = {
    * @return A Promise that resolves with a boolean.
    */
   getAppUpdateAutoEnabled() {
-    if (AppConstants.platform != "win") {
-      // On platforms other than Windows the setting is stored in a preference.
+    if (AppConstants.I2P_BROWSER_UPDATE || (AppConstants.platform != "win")) {
+      // On platforms other than Windows and always in I2P Browser the setting
+      // is stored in a preference.
       let prefValue = Services.prefs.getBoolPref(
         PREF_APP_UPDATE_AUTO,
         DEFAULT_APP_UPDATE_AUTO
@@ -257,8 +258,9 @@ var UpdateUtils = {
    *         this operation simply sets a pref.
    */
   setAppUpdateAutoEnabled(enabledValue) {
-    if (AppConstants.platform != "win") {
-      // Only in Windows do we store the update config in the update directory
+    if (AppConstants.I2P_BROWSER_UPDATE || (AppConstants.platform != "win")) {
+      // Only in Windows (but never for I2P Browser) do we store the update config
+      // in the update directory
       let prefValue = !!enabledValue;
       Services.prefs.setBoolPref(PREF_APP_UPDATE_AUTO, prefValue);
       maybeUpdateAutoConfigChanged(prefValue);

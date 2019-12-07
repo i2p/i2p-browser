@@ -32,11 +32,15 @@ XPCOMUtils.defineLazyGlobalGetters(this, ["DOMParser", "XMLHttpRequest"]);
 XPCOMUtils.defineLazyModuleGetters(this, {
   AsyncShutdown: "resource://gre/modules/AsyncShutdown.jsm",
   CertUtils: "resource://gre/modules/CertUtils.jsm",
+#ifdef XP_WIN
   ctypes: "resource://gre/modules/ctypes.jsm",
+#endif
   DeferredTask: "resource://gre/modules/DeferredTask.jsm",
   OS: "resource://gre/modules/osfile.jsm",
   UpdateUtils: "resource://gre/modules/UpdateUtils.jsm",
+#if !defined(I2P_BROWSER_UPDATE)
   WindowsRegistry: "resource://gre/modules/WindowsRegistry.jsm",
+#endif
 });
 
 const UPDATESERVICE_CID = Components.ID(
@@ -62,7 +66,6 @@ const PREF_APP_UPDATE_IDLETIME = "app.update.idletime";
 const PREF_APP_UPDATE_LOG = "app.update.log";
 const PREF_APP_UPDATE_LOG_FILE = "app.update.log.file";
 const PREF_APP_UPDATE_NOTIFIEDUNSUPPORTED = "app.update.notifiedUnsupported";
-const PREF_APP_UPDATE_NOTIFYDURINGDOWNLOAD = "app.update.notifyDuringDownload";
 const PREF_APP_UPDATE_POSTUPDATE = "app.update.postupdate";
 const PREF_APP_UPDATE_PROMPTWAITTIME = "app.update.promptWaitTime";
 const PREF_APP_UPDATE_SERVICE_ENABLED = "app.update.service.enabled";
@@ -308,6 +311,7 @@ function testWriteAccess(updateTestFile, createDirectory) {
   updateTestFile.remove(false);
 }
 
+#ifdef XP_WIN
 /**
  * Windows only function that closes a Win32 handle.
  *
@@ -398,6 +402,7 @@ function getPerInstallationMutexName(aGlobal = true) {
     (aGlobal ? "Global\\" : "") + "MozillaUpdateMutex-" + hasher.finish(true)
   );
 }
+#endif
 
 /**
  * Whether or not the current instance has the update mutex. The update mutex
@@ -408,6 +413,7 @@ function getPerInstallationMutexName(aGlobal = true) {
  * @return true if this instance holds the update mutex
  */
 function hasUpdateMutex() {
+#ifdef XP_WIN
   if (AppConstants.platform != "win") {
     return true;
   }
@@ -415,6 +421,9 @@ function hasUpdateMutex() {
     gUpdateMutexHandle = createMutex(getPerInstallationMutexName(true), false);
   }
   return !!gUpdateMutexHandle;
+#else
+  return true;
+#endif
 }
 
 /**
@@ -445,6 +454,11 @@ function areDirectoryEntriesWriteable(aDir) {
  * @return true if elevation is required, false otherwise
  */
 function getElevationRequired() {
+#if defined(I2P_BROWSER_UPDATE)
+  // To avoid potential security holes associated with running the updater
+  // process with elevated privileges, I2P Browser does not support elevation.
+  return false;
+#else
   if (AppConstants.platform != "macosx") {
     return false;
   }
@@ -479,6 +493,7 @@ function getElevationRequired() {
       "not required"
   );
   return false;
+#endif
 }
 
 /**
@@ -511,6 +526,7 @@ function getCanApplyUpdates() {
     return false;
   }
 
+#if !defined(I2P_BROWSER_UPDATE)
   if (AppConstants.platform == "macosx") {
     LOG(
       "getCanApplyUpdates - bypass the write since elevation can be used " +
@@ -526,6 +542,7 @@ function getCanApplyUpdates() {
     );
     return true;
   }
+#endif
 
   try {
     if (AppConstants.platform == "win") {
@@ -1191,6 +1208,9 @@ function handleUpdateFailure(update, errorCode) {
     cancelations++;
     Services.prefs.setIntPref(PREF_APP_UPDATE_CANCELATIONS, cancelations);
     if (AppConstants.platform == "macosx") {
+#if defined(I2P_BROWSER_UPDATE)
+      cleanupActiveUpdate();
+#else
       let osxCancelations = Services.prefs.getIntPref(
         PREF_APP_UPDATE_CANCELATIONS_OSX,
         0
@@ -1214,6 +1234,7 @@ function handleUpdateFailure(update, errorCode) {
           (update.state = STATE_PENDING_ELEVATE)
         );
       }
+#endif
       update.statusText = gUpdateBundle.GetStringFromName("elevationFailure");
       update.QueryInterface(Ci.nsIWritablePropertyBag);
       update.setProperty("patchingFailed", "elevationFailure");
@@ -1746,7 +1767,26 @@ function Update(update) {
     this._patches.push(patch);
   }
 
-  if (this._patches.length == 0 && !update.hasAttribute("unsupported")) {
+  if (update.hasAttribute("unsupported")) {
+    this.unsupported = ("true" == update.getAttribute("unsupported"));
+  } else if (update.hasAttribute("minSupportedOSVersion")) {
+    let minOSVersion = update.getAttribute("minSupportedOSVersion");
+    try {
+      let osVersion = Services.sysinfo.getProperty("version");
+      this.unsupported = (Services.vc.compare(osVersion, minOSVersion) < 0);
+    } catch (e) {}
+  }
+  if (!this.unsupported && update.hasAttribute("minSupportedInstructionSet")) {
+    let minInstructionSet = update.getAttribute("minSupportedInstructionSet");
+    if (['MMX', 'SSE', 'SSE2', 'SSE3',
+        'SSE4A', 'SSE4_1', 'SSE4_2'].indexOf(minInstructionSet) >= 0) {
+      try {
+        this.unsupported = !Services.sysinfo.getProperty("has" + minInstructionSet);
+      } catch (e) {}
+    }
+  }
+
+  if (this._patches.length == 0 && !this.unsupported) {
     throw Cr.NS_ERROR_ILLEGAL_VALUE;
   }
 
@@ -1784,9 +1824,7 @@ function Update(update) {
       if (!isNaN(attr.value)) {
         this.promptWaitTime = parseInt(attr.value);
       }
-    } else if (attr.name == "unsupported") {
-      this.unsupported = attr.value == "true";
-    } else {
+    } else if (attr.name != "unsupported") {
       switch (attr.name) {
         case "appVersion":
         case "buildID":
@@ -1811,7 +1849,11 @@ function Update(update) {
   }
 
   if (!this.previousAppVersion) {
+#ifdef I2P_BROWSER_UPDATE
+    this.previousAppVersion = AppConstants.I2P_BROWSER_VERSION;
+#else
     this.previousAppVersion = Services.appinfo.version;
+#endif
   }
 
   if (!this.elevationFailure) {
@@ -2202,12 +2244,14 @@ UpdateService.prototype = {
         Services.obs.removeObserver(this, topic);
         Services.prefs.removeObserver(PREF_APP_UPDATE_LOG, this);
 
+#ifdef XP_WIN
         if (AppConstants.platform == "win" && gUpdateMutexHandle) {
           // If we hold the update mutex, let it go!
           // The OS would clean this up sometime after shutdown,
           // but that would have no guarantee on timing.
           closeHandle(gUpdateMutexHandle);
         }
+#endif
         if (this._retryTimer) {
           this._retryTimer.cancel();
         }
@@ -2251,6 +2295,7 @@ UpdateService.prototype = {
         }
         break;
       case "test-close-handle-update-mutex":
+#ifdef XP_WIN
         if (Cu.isInAutomation) {
           if (AppConstants.platform == "win" && gUpdateMutexHandle) {
             LOG("UpdateService:observe - closing mutex handle for testing");
@@ -2258,6 +2303,7 @@ UpdateService.prototype = {
             gUpdateMutexHandle = null;
           }
         }
+#endif
         break;
     }
   },
@@ -2279,6 +2325,9 @@ UpdateService.prototype = {
    */
   _postUpdateProcessing: function AUS__postUpdateProcessing() {
     gUpdateFileWriteInfo = { phase: "startup", failure: false };
+#if defined(I2P_BROWSER_UPDATE) && !defined(XP_MACOSX)
+    this._removeOrphanedTorBrowserFiles();
+#endif
     if (!this.canCheckForUpdates) {
       LOG(
         "UpdateService:_postUpdateProcessing - unable to check for " +
@@ -2517,6 +2566,42 @@ UpdateService.prototype = {
       prompter.showUpdateError(update);
     }
   },
+
+#if defined(I2P_BROWSER_UPDATE) && !defined(XP_MACOSX)
+  /**
+   * When updating from an earlier version to I2P Browser 6.0 or later, old
+   * update info files are left behind on Linux and Windows. Remove them.
+   */
+  _removeOrphanedTorBrowserFiles: function AUS__removeOrphanedTorBrowserFiles() {
+    try {
+      let oldUpdateInfoDir = getAppBaseDir();  // aka the Browser directory.
+
+#ifdef XP_WIN
+      // On Windows, the updater files were stored under
+      // Browser/TorBrowser/Data/Browser/Caches/firefox/
+      oldUpdateInfoDir.appendRelativePath(
+                                "TorBrowser\\Data\\Browser\\Caches\\firefox");
+#endif
+
+      // Remove the updates directory.
+      let updatesDir = oldUpdateInfoDir.clone();
+      updatesDir.append("updates");
+      if (updatesDir.exists() && updatesDir.isDirectory()) {
+        updatesDir.remove(true);
+      }
+
+      // Remove files: active-update.xml and updates.xml
+      let filesToRemove = [ "active-update.xml", "updates.xml" ];
+      filesToRemove.forEach(function(aFileName) {
+        let f = oldUpdateInfoDir.clone();
+        f.append(aFileName);
+        if (f.exists()) {
+          f.remove(false);
+        }
+      });
+    } catch (e) {}
+  },
+#endif
 
   /**
    * Register an observer when the network comes online, so we can short-circuit
@@ -2877,9 +2962,14 @@ UpdateService.prototype = {
     updates.forEach(function(aUpdate) {
       // Ignore updates for older versions of the application and updates for
       // the same version of the application with the same build ID.
-      if (
-        vc.compare(aUpdate.appVersion, Services.appinfo.version) < 0 ||
-        (vc.compare(aUpdate.appVersion, Services.appinfo.version) == 0 &&
+#ifdef I2P_BROWSER_UPDATE
+      let compatVersion = AppConstants.I2P_BROWSER_VERSION;
+#else
+      let compatVersion = Services.appinfo.version;
+#endif
+      let rc = vc.compare(aUpdate.appVersion, compatVersion);
+      if (rc < 0 ||
+          (rc == 0 &&
           aUpdate.buildID == Services.appinfo.appBuildID)
       ) {
         LOG(
@@ -3253,20 +3343,32 @@ UpdateService.prototype = {
     // current application's version or the update's version is the same as the
     // application's version and the build ID is the same as the application's
     // build ID.
+#ifdef I2P_BROWSER_UPDATE
+    let compatVersion = AppConstants.I2P_BROWSER_VERSION;
+#else
+    let compatVersion = Services.appinfo.version;
+#endif
     if (
       update.appVersion &&
-      (Services.vc.compare(update.appVersion, Services.appinfo.version) < 0 ||
+      (Services.vc.compare(update.appVersion, compatVersion) < 0 ||
         (update.buildID &&
           update.buildID == Services.appinfo.appBuildID &&
-          update.appVersion == Services.appinfo.version))
+          update.appVersion == compatVersion))
     ) {
       LOG(
         "UpdateService:downloadUpdate - canceling download of update since " +
           "it is for an earlier or same application version and build ID.\n" +
+#ifdef I2P_BROWSER_UPDATE
+          "current I2P Browser version: " +
+          compatVersion +
+          "\n" +
+          "update I2P Browser version : " +
+#else
           "current application version: " +
-          Services.appinfo.version +
+          compatVersion +
           "\n" +
           "update application version : " +
+#endif
           update.appVersion +
           "\n" +
           "current build ID: " +
@@ -3884,6 +3986,7 @@ Checker.prototype = {
    */
   _callback: null,
 
+#if !defined(I2P_BROWSER_UPDATE)
   _getCanMigrate: function UC__getCanMigrate() {
     if (AppConstants.platform != "win") {
       return false;
@@ -3953,6 +4056,7 @@ Checker.prototype = {
     LOG("Checker:_getCanMigrate - no registry entries for this installation");
     return false;
   },
+#endif // !defined(I2P_BROWSER_UPDATE)
 
   /**
    * The URL of the update service XML file to connect to that contains details
@@ -3976,9 +4080,11 @@ Checker.prototype = {
       url += (url.includes("?") ? "&" : "?") + "force=1";
     }
 
+#if !defined(I2P_BROWSER_UPDATE)
     if (this._getCanMigrate()) {
       url += (url.includes("?") ? "&" : "?") + "mig64=1";
     }
+#endif
 
     LOG("Checker:getUpdateURL - update URL: " + url);
     return url;
@@ -4352,13 +4458,11 @@ Downloader.prototype = {
         // retrying after a failed cancel is not an error, so we will set the
         // cancel promise to null in the failure case.
         this._cancelPromise = null;
-        this._notifyDownloadStatusObservers();
         throw e;
       }
     } else if (this._request && this._request instanceof Ci.nsIRequest) {
       this._request.cancel(cancelError);
     }
-    this._notifyDownloadStatusObservers();
   },
 
   /**
@@ -4406,13 +4510,6 @@ Downloader.prototype = {
     }
 
     LOG("Downloader:_verifyDownload downloaded size == expected size.");
-
-    // The hash check is not necessary when mar signatures are used to verify
-    // the downloaded mar file.
-    if (AppConstants.MOZ_VERIFY_MAR_SIGNATURE) {
-      return true;
-    }
-
     let fileStream = Cc["@mozilla.org/network/file-input-stream;1"].
                      createInstance(Ci.nsIFileInputStream);
     fileStream.init(destination, FileUtils.MODE_RDONLY, FileUtils.PERMS_FILE, 0);
@@ -4579,14 +4676,6 @@ Downloader.prototype = {
 
     return selectedPatch;
   },
-
-  _notifyDownloadStatusObservers: function Downloader_notifyDownloadStatusObservers() {
-    if (Services.prefs.getBoolPref(PREF_APP_UPDATE_NOTIFYDURINGDOWNLOAD, false)) {
-      let status = this.updateService.isDownloading ? "downloading" : "idle";
-      Services.obs.notifyObservers(this._update, "update-downloading", status);
-    }
-  },
-
 
   /**
    * Whether or not we are currently downloading something.
@@ -4840,7 +4929,6 @@ Downloader.prototype = {
         .getService(Ci.nsIUpdateManager)
         .saveUpdates();
     }
-    this._notifyDownloadStatusObservers();
     return STATE_DOWNLOADING;
   },
 
@@ -5213,16 +5301,9 @@ Downloader.prototype = {
         } else {
           state = STATE_PENDING;
         }
-#if defined(I2P_BROWSER_UPDATE)
-        // In I2P Browser, show update-related messages in the hamburger menu
-        // even if the update was started in the foreground, e.g., from the
-        // about box.
-        shouldShowPrompt = !getCanStageUpdates();
-#else
         if (this.background) {
           shouldShowPrompt = !getCanStageUpdates();
         }
-#endif
         AUSTLMY.pingDownloadCode(this.isCompleteUpdate, AUSTLMY.DWNLD_SUCCESS);
 
         // Tell the updater.exe we're ready to apply.
@@ -5390,7 +5471,6 @@ Downloader.prototype = {
     }
 
     this._request = null;
-    this._notifyDownloadStatusObservers();
 
     if (state == STATE_DOWNLOAD_FAILED) {
       var allFailed = true;
@@ -5520,16 +5600,9 @@ Downloader.prototype = {
           LOG(
             "Downloader:onStopRequest - failed to stage update. Exception: " + e
           );
-#if defined(I2P_BROWSER_UPDATE)
-          // In I2P Browser, show update-related messages in the hamburger menu
-          // even if the update was started in the foreground, e.g., from the
-          // about box.
-          shouldShowPrompt = true;
-#else
           if (this.background) {
             shouldShowPrompt = true;
           }
-#endif
         }
       } else {
         this._patch.setProperty("applyStart", Math.floor(Date.now() / 1000));
@@ -5679,7 +5752,15 @@ UpdatePrompt.prototype = {
     );
     Services.obs.notifyObservers(update, "update-downloaded", update.state);
 
-    if (Services.prefs.getBoolPref(PREF_APP_UPDATE_DOORHANGER, false)) {
+    if (background && Services.prefs.getBoolPref(PREF_APP_UPDATE_DOORHANGER, false)) {
+      // To fix https://trac.torproject.org/projects/tor/ticket/27828
+      // ("Check for I2P Browser update" doesn't seem to do anything), in
+      // I2P Browser we only return here when the background parameter is
+      // true. This causes the update wizard XUL window to (correctly) be
+      // opened in response to "Check for I2P Browser Update."
+      // This change does not alter the behavior of any existing
+      // update-related UI because all callers of showUpdateDownloaded()
+      // other than Torbutton pass true for the background parameter.
       return;
     }
 
@@ -6023,3 +6104,4 @@ var EXPORTED_SYMBOLS = [
   "UpdatePrompt",
   "UpdateManager",
 ];
+

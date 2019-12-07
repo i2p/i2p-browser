@@ -41,6 +41,7 @@ void LaunchChildMac(int aArgc, char** aArgv, pid_t* aPid) {
   }
 }
 
+#ifndef I2P_BROWSER_UPDATE
 BOOL InstallPrivilegedHelper() {
   AuthorizationRef authRef = NULL;
   OSStatus status = AuthorizationCreate(
@@ -79,6 +80,7 @@ BOOL InstallPrivilegedHelper() {
 
   return result;
 }
+#endif
 
 void AbortElevatedUpdate() {
   mozilla::MacAutoreleasePool pool;

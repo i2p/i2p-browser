@@ -28,8 +28,14 @@ if [ $1 = -h ]; then
   notice ""
   notice "Options:"
   notice "  -h  show this help text"
+  notice "  -q  be less verbose"
   notice ""
   exit 1
+fi
+
+if [ $1 = -q ]; then
+  QUIET=1
+  shift
 fi
 
 # -----------------------------------------------------------------------------
@@ -63,6 +69,13 @@ if [ ! -f "precomplete" ]; then
 fi
 
 list_files files
+list_symlinks symlinks symlink_targets
+
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# we should remove the following lines (which remove entire directories
+# which, if present, contain old, unpacked copies of HTTPS Everywhere):
+ext_path='I2PBrowser/Data/Browser/profile.default/extensions'
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
 
 popd
 
@@ -74,6 +87,22 @@ notice "Adding type instruction to update manifests"
 notice "       type complete"
 echo "type \"complete\"" >> "$updatemanifestv2"
 echo "type \"complete\"" >> "$updatemanifestv3"
+
+# TODO When I2P_BROWSER_DATA_OUTSIDE_APP_DIR is used on all platforms,
+# we should remove the following lines:
+# If removal of any old, existing directories is desired, emit the appropriate
+# rmrfdir commands.
+notice ""
+notice "Adding directory removal instructions to update manifests"
+for dir_to_remove in $directories_to_remove; do
+  # rmrfdir requires a trailing slash; if slash is missing, add one.
+  if ! [[ "$dir_to_remove" =~ /$ ]]; then
+   dir_to_remove="${dir_to_remove}/"
+  fi
+  echo "rmrfdir \"$dir_to_remove\"" >> "$updatemanifestv2"
+  echo "rmrfdir \"$dir_to_remove\"" >> "$updatemanifestv3"
+done
+# END I2P_BROWSER_DATA_OUTSIDE_APP_DIR removal
 
 notice ""
 notice "Adding file add instructions to update manifests"
@@ -101,6 +130,15 @@ for ((i=0; $i<$num_files; i=$i+1)); do
   copy_perm "$targetdir/$f" "$workdir/$f"
 
   targetfiles="$targetfiles \"$f\""
+done
+
+notice ""
+notice "Adding symlink add instructions to update manifests"
+num_symlinks=${#symlinks[*]}
+for ((i=0; $i<$num_symlinks; i=$i+1)); do
+  link="${symlinks[$i]}"
+  target="${symlink_targets[$i]}"
+  make_addsymlink_instruction "$link" "$target" "$updatemanifestv2" "$updatemanifestv3"
 done
 
 # Append remove instructions for any dead files.

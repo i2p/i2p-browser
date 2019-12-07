@@ -89,6 +89,11 @@ endif
 endif
 endif
 
+ifdef I2P_BROWSER_UPDATE
+DEFINES += -DI2P_BROWSER_UPDATE
+endif
+
+
 ifneq (,$(filter WINNT Darwin Android,$(OS_TARGET)))
 DEFINES += -DMOZ_SHARED_MOZGLUE=1
 endif

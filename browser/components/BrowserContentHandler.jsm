@@ -40,6 +40,7 @@ XPCOMUtils.defineLazyGetter(this, "gSystemPrincipal", () =>
 XPCOMUtils.defineLazyGlobalGetters(this, [URL]);
 
 const NEWINSTALL_PAGE = "about:newinstall";
+const kTBSavedVersionPref = "browser.startup.homepage_override.i2pbrowser.version";
 
 function shouldLoadURI(aURI) {
   if (aURI && !aURI.schemeIs("chrome")) {
@@ -127,6 +128,12 @@ function needHomepageOverride(prefb) {
 
   var mstone = Services.appinfo.platformVersion;
 
+  var savedTBVersion = null;
+  try {
+    savedTBVersion = prefb.getCharPref(kTBSavedVersionPref);
+  } catch (e) {}
+
+
   var savedBuildID = prefb.getCharPref(
     "browser.startup.homepage_override.buildID",
     ""
@@ -145,7 +152,22 @@ function needHomepageOverride(prefb) {
 
     prefb.setCharPref("browser.startup.homepage_override.mstone", mstone);
     prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
-    return savedmstone ? OVERRIDE_NEW_MSTONE : OVERRIDE_NEW_PROFILE;
+    prefb.setCharPref(kTBSavedVersionPref, AppConstants.I2P_BROWSER_VERSION);
+
+    // After an upgrade from an older release of Tor Browser (<= 5.5a1), the
+    // savedmstone will be undefined because those releases included the
+    // value "ignore" for the browser.startup.homepage_override.mstone pref.
+    // To correctly detect an upgrade vs. a new profile, we check for the
+    // presence of the "app.update.postupdate" pref.
+    let updated = prefb.prefHasUserValue("app.update.postupdate");
+    return (savedmstone || updated) ? OVERRIDE_NEW_MSTONE
+                                    : OVERRIDE_NEW_PROFILE;
+  }
+
+  if (AppConstants.I2P_BROWSER_VERSION != savedTBVersion) {
+    prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
+    prefb.setCharPref(kTBSavedVersionPref, AppConstants.I2P_BROWSER_VERSION);
+    return OVERRIDE_NEW_MSTONE;
   }
 
   if (buildID != savedBuildID) {
@@ -638,6 +660,13 @@ nsBrowserContentHandler.prototype = {
         "browser.startup.homepage_override.buildID",
         "unknown"
       );
+
+      // We do the same for the I2P Browser version.
+      let old_tbversion = null;
+      try {
+        old_tbversion = prefb.getCharPref(kTBSavedVersionPref);
+      } catch (e) {}
+
       override = needHomepageOverride(prefb);
       if (override != OVERRIDE_NONE) {
         switch (override) {
@@ -677,6 +706,7 @@ nsBrowserContentHandler.prototype = {
             }
 
             overridePage = overridePage.replace("%OLD_VERSION%", old_mstone);
+            overridePage = overridePage.replace("%OLD_I2P_BROWSER_VERSION%", old_tbversion);
             break;
         }
       }

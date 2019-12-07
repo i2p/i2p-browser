@@ -45,8 +45,11 @@ function UpdateServiceStub() {
   // contains the status file's path
 
   // We may need to migrate update data
+  // In I2P Browser we skip this because we do not use an update agent and we
+  // do not want to store any data outside of the browser installation directory.
   if (
     AppConstants.platform == "win" &&
+    !AppConstants.I2P_BROWSER_UPDATE &&
     !Services.prefs.getBoolPref(prefUpdateDirMigrated, false)
   ) {
     migrateUpdateDirectory();

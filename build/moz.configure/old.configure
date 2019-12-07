@@ -262,6 +262,8 @@ def old_configure_options(*options):
     '--x-includes',
     '--x-libraries',
     # I2P
+    '--with-i2p-browser-version',
+    '--enable-i2p-browser-update',
     '--enable-i2p-browser-data-outside-app-dir',
 )
 def prepare_configure_options(extra_old_configure_args, all_options, *options):

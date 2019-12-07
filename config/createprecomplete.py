@@ -21,6 +21,8 @@ def get_build_entries(root_path):
             rel_path_file = os.path.join(parent_dir_rel_path, file_name)
             rel_path_file = rel_path_file.replace("\\", "/")
             if not (rel_path_file.endswith("channel-prefs.js") or
+                    rel_path_file == "I2PBrowser/Data/Browser/profiles.ini" or
+                    rel_path_file == "I2PBrowser/Data/Browser/profile.default/bookmarks.html" or
                     rel_path_file.endswith("update-settings.ini") or
                     rel_path_file.find("distribution/") != -1):
                 rel_file_path_set.add(rel_path_file)
