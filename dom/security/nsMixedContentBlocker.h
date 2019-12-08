@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+IsPotentiallyTrustworthyEepsite/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set ts=8 sts=2 et sw=2 tw=80: */
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -50,7 +50,7 @@ class nsMixedContentBlocker : public nsIContentPolicy,
   // See:
   // https://w3c.github.io/webappsec-secure-contexts/#is-origin-trustworthy
   static bool IsPotentiallyTrustworthyLoopbackURL(nsIURI* aURL);
-  static bool IsPotentiallyTrustworthyOnion(nsIURI* aURL);
+  static bool IsPotentiallyTrustworthyEepsite(nsIURI* aURL);
   static bool IsPotentiallyTrustworthyOrigin(nsIURI* aURI);
 
   /* Static version of ShouldLoad() that contains all the Mixed Content Blocker

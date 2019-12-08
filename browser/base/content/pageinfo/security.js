@@ -22,6 +22,13 @@ ChromeUtils.defineModuleGetter(
   "PluralForm",
   "resource://gre/modules/PluralForm.jsm"
 );
+XPCOMUtils.defineLazyGetter(
+  this,
+  "gI2PButtonBundle",
+  function() {
+    return Services.strings.createBundle("chrome://i2pbutton/locale/i2pbutton.properties");
+  }
+);
 
 var security = {
   init(uri, windowInfo) {
@@ -56,6 +63,10 @@ var security = {
         Ci.nsIWebProgressListener.STATE_LOADED_MIXED_DISPLAY_CONTENT);
     var isInsecure = ui.state & Ci.nsIWebProgressListener.STATE_IS_INSECURE;
     var isEV = ui.state & Ci.nsIWebProgressListener.STATE_IDENTITY_EV_TOPLEVEL;
+    var isEepsite = false;
+    if (hostName && hostName.endsWith(".i2p")) {
+      isEepsite = true;
+    }
     var secInfo = ui.secInfo;
 
     if (!isInsecure && secInfo) {
@@ -71,6 +82,7 @@ var security = {
         isBroken,
         isMixed,
         isEV,
+        isEepsite,
         cert,
         certificateTransparency: undefined,
       };
@@ -130,6 +142,7 @@ var security = {
       isBroken,
       isMixed,
       isEV,
+      isEepsite,
       cert: null,
       certificateTransparency: null,
     };
@@ -329,23 +342,53 @@ function securityOnLoad(uri, windowInfo) {
     }
     msg2 = pkiBundle.getString("pageInfo_Privacy_None2");
   } else if (info.encryptionStrength > 0) {
-    hdr = pkiBundle.getFormattedString(
-      "pageInfo_EncryptionWithBitsAndProtocol",
-      [info.encryptionAlgorithm, info.encryptionStrength + "", info.version]
-    );
+    if (!info.isEepsite) {
+      hdr = pkiBundle.getFormattedString(
+        "pageInfo_EncryptionWithBitsAndProtocol",
+        [info.encryptionAlgorithm, info.encryptionStrength + "", info.version]
+      );
+    } else {
+      try {
+        hdr = gI2PButtonBundle.formatStringFromName(
+          "pageInfo_EepsiteEncryptionWithBitsAndProtocol",
+          [
+            info.encryptionAlgorithm,
+            info.encryptionStrength + "",
+            info.version,
+          ],
+          3
+        );
+      } catch(err) {
+        hdr = "Connection Encrypted (Hidden Service, "
+               + info.encryptionAlgorithm
+               + ", "
+               + info.encryptionStrength
+               + " bit keys, "
+               + info.version
+               + ")";
+      }
+    }
     msg1 = pkiBundle.getString("pageInfo_Privacy_Encrypted1");
     msg2 = pkiBundle.getString("pageInfo_Privacy_Encrypted2");
     security._cert = info.cert;
   } else {
-    hdr = pkiBundle.getString("pageInfo_NoEncryption");
-    if (info.hostName != null) {
-      msg1 = pkiBundle.getFormattedString("pageInfo_Privacy_None1", [
-        info.hostName,
-      ]);
+    if (!info.isEepsite) {
+      hdr = pkiBundle.getString("pageInfo_NoEncryption");
+      if (info.hostName != null)
+        msg1 = pkiBundle.getFormattedString("pageInfo_Privacy_None1", [info.hostName]);
+      else
+        msg1 = pkiBundle.getString("pageInfo_Privacy_None4");
+      msg2 = pkiBundle.getString("pageInfo_Privacy_None2");
     } else {
-      msg1 = pkiBundle.getString("pageInfo_Privacy_None4");
+      try {
+        hdr = gI2PButtonBundle.GetStringFromName("pageInfo_EepsiteEncryption");
+      } catch (err) {
+        hdr = "Connection Encrypted (Hidden Service)";
+      }
+
+      msg1 = pkiBundle.getString("pageInfo_Privacy_Encrypted1");
+      msg2 = pkiBundle.getString("pageInfo_Privacy_Encrypted2");
     }
-    msg2 = pkiBundle.getString("pageInfo_Privacy_None2");
   }
   setText("security-technical-shortform", hdr);
   setText("security-technical-longform1", msg1);

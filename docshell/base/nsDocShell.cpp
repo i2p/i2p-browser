@@ -63,6 +63,7 @@
 #include "mozilla/dom/ChildSHistory.h"
 #include "mozilla/dom/nsCSPContext.h"
 #include "mozilla/dom/LoadURIOptionsBinding.h"
+#include "mozilla/dom/nsMixedContentBlocker.h"
 
 #include "mozilla/net/ReferrerPolicy.h"
 #include "mozilla/net/UrlClassifierFeatureFactory.h"
@@ -5583,7 +5584,8 @@ nsDocShell::GetAllowMixedContentAndConnectionData(
     // aRootHasSecureConnection should be false.
     nsCOMPtr<nsIURI> rootUri = rootPrincipal->GetURI();
     if (nsContentUtils::IsSystemPrincipal(rootPrincipal) || !rootUri ||
-        !SchemeIsHTTPS(rootUri)) {
+        !SchemeIsHTTPS(rootUri) &&
+        !nsMixedContentBlocker::IsPotentiallyTrustworthyEepsite(rootUri)) {
       *aRootHasSecureConnection = false;
     }
 

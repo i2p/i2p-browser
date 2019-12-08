@@ -113,6 +113,9 @@ var gIdentityHandler = {
     );
   },
 
+  get _uriIsEepsiteHost() {
+    return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".i2p") : false;
+  },
   // smart getters
   get _identityPopup() {
     delete this._identityPopup;
@@ -595,12 +598,12 @@ var gIdentityHandler = {
   get pointerlockFsWarningClassName() {
     // Note that the fullscreen warning does not handle _isSecureInternalUI.
     if (this._uriHasHost && this._isEV) {
-      return "verifiedIdentity";
+      return this._uriIsEepsiteHost ? "eepsiteVerifiedIdentity" : "verifiedIdentity";
     }
     if (this._uriHasHost && this._isSecure) {
-      return "verifiedDomain";
+      return this._uriIsEepsiteHost ? "eepsiteVerifiedDomain" : "verifiedDomain";
     }
-    return "unknownIdentity";
+    return this._uriIsEepsiteHost ? "eepsiteVerifiedDomain" : "verifiedDomain";
   },
 
   /**
@@ -608,6 +611,9 @@ var gIdentityHandler = {
    * built-in (returns false) or imported (returns true).
    */
   _hasCustomRoot() {
+    if (!this._secInfo) {
+      return false;
+    }
     let issuerCert = null;
     // Walk the whole chain to get the last cert.
     // eslint-disable-next-line no-empty
@@ -635,9 +641,10 @@ var gIdentityHandler = {
       let brandBundle = document.getElementById("bundle_brand");
       icon_label = brandBundle.getString("brandShorterName");
     } else if (this._uriHasHost && this._isEV) {
-      this._identityBox.className = "verifiedIdentity";
+      let uriIsEepsiteHost = this._uriIsEepsiteHost;
+      this._identityBox.className = uriIsEepsiteHost ? "eepsiteVerifiedIdentity" : "verifiedIdentity";
       if (this._isMixedActiveContentBlocked) {
-        this._identityBox.classList.add("mixedActiveBlocked");
+        this._identityBox.classList.add(uriIsEepsiteHost ? "eepsiteMixedActiveBlocked" : "mixedActiveBlocked");
       }
 
       if (!this._isCertUserOverridden) {
@@ -671,10 +678,16 @@ var gIdentityHandler = {
         "identity.extension.label",
         [extensionName]
       );
-    } else if (this._uriHasHost && this._isSecure) {
-      this._identityBox.className = "verifiedDomain";
+      // _isSecure implicitly includes hidden services, which may not have an SSL certificate
+    } else if (this._uriHasHost && this._isSecure && this._secInfo != null) {
+      let uriIsEepsiteHost = this._uriIsEepsiteHost;
+      if (uriIsEepsiteHost) {
+        this._identityBox.className = this._secInfo.serverCert.isSelfSigned ? "eepsiteSelfSigned" : "eepsiteVerifiedDomain";
+      } else {
+        this._identityBox.className = "verifiedDomain";
+      }
       if (this._isMixedActiveContentBlocked) {
-        this._identityBox.classList.add("mixedActiveBlocked");
+        this._identityBox.classList.add(uriIsEepsiteHost ? "eepsiteMixedActiveBlocked" : "mixedActiveBlocked");
       }
       if (!this._isCertUserOverridden) {
         // It's a normal cert, verifier is the CA Org.
@@ -693,35 +706,37 @@ var gIdentityHandler = {
       // For net errors we should not show notSecure as it's likely confusing
       this._identityBox.className = "unknownIdentity";
     } else {
+      let uriIsEepsiteHost = this._uriIsEepsiteHost;
       if (this._isBroken) {
-        this._identityBox.className = "unknownIdentity";
+        this._identityBox.className = uriIsEepsiteHost ? "eepsiteUnknownIdentity" : "unknownIdentity";
 
         if (this._isMixedActiveContentLoaded) {
-          this._identityBox.classList.add("mixedActiveContent");
+          this._identityBox.classList.add(uriIsEepsiteHost ? "eepsiteMixedActiveContent" : "mixedActiveContent");
         } else if (this._isMixedActiveContentBlocked) {
-          this._identityBox.classList.add(
-            "mixedDisplayContentLoadedActiveBlocked"
-          );
+          this._identityBox.classList.add(uriIsEepsiteHost ? "eepsiteMixedDisplayContentLoadedActiveBlocked" : "mixedDisplayContentLoadedActiveBlocked");
         } else if (this._isMixedPassiveContentLoaded) {
-          this._identityBox.classList.add("mixedDisplayContent");
+          this._identityBox.classList.add(uriIsEepsiteHost ? "eepsiteMixedDisplayContent" : "mixedDisplayContent");
         } else {
           this._identityBox.classList.add("weakCipher");
         }
       } else {
-        let warnOnInsecure =
-          this._insecureConnectionIconEnabled ||
-          (this._insecureConnectionIconPBModeEnabled &&
-            PrivateBrowsingUtils.isWindowPrivate(window));
-        let className = warnOnInsecure ? "notSecure" : "unknownIdentity";
-        this._identityBox.className = className;
+        if (!uriIsEepsiteHost) {
+          let warnOnInsecure = this._insecureConnectionIconEnabled ||
+                              (this._insecureConnectionIconPBModeEnabled &&
+                              PrivateBrowsingUtils.isWindowPrivate(window));
+          let className = warnOnInsecure ? "notSecure" : "unknownIdentity";
+          this._identityBox.className = className;
 
-        let warnTextOnInsecure =
-          this._insecureConnectionTextEnabled ||
-          (this._insecureConnectionTextPBModeEnabled &&
-            PrivateBrowsingUtils.isWindowPrivate(window));
-        if (warnTextOnInsecure) {
-          icon_label = gNavigatorBundle.getString("identity.notSecure.label");
-          this._identityBox.classList.add("notSecureText");
+          let warnTextOnInsecure = this._insecureConnectionTextEnabled ||
+                                  (this._insecureConnectionTextPBModeEnabled &&
+                                  PrivateBrowsingUtils.isWindowPrivate(window));
+          if (warnTextOnInsecure) {
+            icon_label = gNavigatorBundle.getString("identity.notSecure.label");
+            this._identityBox.classList.add("notSecureText");
+          }
+        // http eepsite is secure
+        } else {
+          this._identityBox.className = "eepsiteUnknownIdentity";
         }
       }
       if (this._hasInsecureLoginForms) {

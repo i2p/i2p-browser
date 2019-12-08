@@ -777,7 +777,7 @@ nsresult HTMLFormElement::DoSecureToInsecureSubmitCheck(nsIURI* aActionURL,
     return NS_OK;
   }
 
-  if (nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(aActionURL)) {
+  if (nsMixedContentBlocker::IsPotentiallyTrustworthyEepsite(aActionURL)) {
     return NS_OK;
   }
 

@@ -386,12 +386,12 @@ bool nsMixedContentBlocker::IsPotentiallyTrustworthyLoopbackURL(nsIURI* aURL) {
 /* Maybe we have a .onion URL. Treat it as whitelisted as well if
  * `dom.securecontext.whitelist_onions` is `true`.
  */
-bool nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(nsIURI* aURL) {
+bool nsMixedContentBlocker::IsPotentiallyTrustworthyEepsite(nsIURI* aURL) {
   static bool sInited = false;
   static bool sWhiteListOnions = false;
   if (!sInited) {
     Preferences::AddBoolVarCache(&sWhiteListOnions,
-                                 "dom.securecontext.whitelist_onions");
+                                 "dom.securecontext.whitelist_eepsites");
     sInited = true;
   }
   if (!sWhiteListOnions) {
@@ -401,7 +401,7 @@ bool nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(nsIURI* aURL) {
   nsAutoCString host;
   nsresult rv = aURL->GetHost(host);
   NS_ENSURE_SUCCESS(rv, false);
-  return StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+  return StringEndsWith(host, NS_LITERAL_CSTRING(".i2p"));
 }
 
 bool nsMixedContentBlocker::IsPotentiallyTrustworthyOrigin(nsIURI* aURI) {
@@ -470,7 +470,7 @@ bool nsMixedContentBlocker::IsPotentiallyTrustworthyOrigin(nsIURI* aURI) {
   }
   // Maybe we have a .onion URL. Treat it as whitelisted as well if
   // `dom.securecontext.whitelist_onions` is `true`.
-  if (nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(aURI)) {
+  if (nsMixedContentBlocker::IsPotentiallyTrustworthyEepsite(aURI)) {
     return true;
   }
   return false;
@@ -728,8 +728,8 @@ nsresult nsMixedContentBlocker::ShouldLoad(
     return NS_OK;
   }
 
-  // Check the parent scheme. If it is not an HTTPS page then mixed content
-  // restrictions do not apply.
+  // Check the parent scheme. If it is not an HTTPS or .i2p page then mixed
+  // content restrictions do not apply.
   bool parentIsHttps;
   nsCOMPtr<nsIURI> innerRequestingLocation =
       NS_GetInnermostURI(requestingLocation);
@@ -746,6 +746,29 @@ nsresult nsMixedContentBlocker::ShouldLoad(
     return NS_OK;
   }
   if (!parentIsHttps) {
+    nsAutoCString parentHost;
+    rv = innerRequestingLocation->GetHost(parentHost);
+    if (NS_FAILED(rv)) {
+      NS_ERROR("requestingLocation->GetHost failed");
+      *aDecision = REJECT_REQUEST;
+      return NS_OK;
+    }
+
+    bool parentIsEepsite =
+        StringEndsWith(parentHost, NS_LITERAL_CSTRING(".i2p"));
+    if (!parentIsEepsite) {
+      *aDecision = ACCEPT;
+      return NS_OK;
+    }
+  }
+
+  bool isHttpScheme = false;
+  rv = innerContentLocation->SchemeIs("http", &isHttpScheme);
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  // .i2p URLs are encrypted and authenticated. Don't treat them as mixed
+  // content if potentially trustworthy (i.e. whitelisted)+  if (isHttpScheme && IsPotentiallyTrustworthyEepsite(innerContentLocation)) {
+  if (isHttpScheme && IsPotentiallyTrustworthyEepsite(innerContentLocation)) {
     *aDecision = ACCEPT;
     return NS_OK;
   }
@@ -771,14 +794,6 @@ nsresult nsMixedContentBlocker::ShouldLoad(
     return NS_OK;
   }
 
-  bool isHttpScheme = false;
-  rv = innerContentLocation->SchemeIs("http", &isHttpScheme);
-  NS_ENSURE_SUCCESS(rv, rv);
-
-  if (isHttpScheme && IsPotentiallyTrustworthyOrigin(innerContentLocation)) {
-    *aDecision = ACCEPT;
-    return NS_OK;
-  }
 
   // The page might have set the CSP directive 'upgrade-insecure-requests'. In
   // such a case allow the http: load to succeed with the promise that the
