@@ -2642,6 +2642,7 @@ static bool CheckCompatibility(nsIFile* aProfileDir, const nsCString& aVersion,
     return false;
   }
 
+  nsAutoCString buf;
 
   nsAutoCString tbVersion(I2P_BROWSER_VERSION_QUOTED);
   rv = parser.GetString("Compatibility", "LastI2PBrowserVersion", buf);
