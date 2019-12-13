@@ -1268,7 +1268,7 @@ nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult,
 #if defined(I2P_BROWSER_UPDATE)
   // For I2P Browser, we store update history, etc. within the UpdateInfo
   // directory under the user data directory.
-  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(updRoot));
+  nsresult rv = GetI2PBrowserUserDataDir(getter_AddRefs(updRoot));
   NS_ENSURE_SUCCESS(rv, rv);
   rv = updRoot->AppendNative(NS_LITERAL_CSTRING("UpdateInfo"));
   NS_ENSURE_SUCCESS(rv, rv);
