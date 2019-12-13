@@ -80,7 +80,6 @@ BOOL InstallPrivilegedHelper() {
 
   return result;
 }
-#endif
 
 void AbortElevatedUpdate() {
   mozilla::MacAutoreleasePool pool;
@@ -119,3 +118,5 @@ bool LaunchElevatedUpdate(int aArgc, char** aArgv, pid_t* aPid) {
   }
   return didSucceed;
 }
+#endif
+
