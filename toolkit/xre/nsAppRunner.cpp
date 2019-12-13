@@ -2648,7 +2648,6 @@ static bool CheckCompatibility(nsIFile* aProfileDir, const nsCString& aVersion,
   rv = parser.GetString("Compatibility", "LastI2PBrowserVersion", buf);
   if (NS_FAILED(rv) || !tbVersion.Equals(buf)) return false;
 
-  nsAutoCString buf;
   rv = parser.GetString("Compatibility", "LastOSABI", buf);
   if (NS_FAILED(rv) || !aOSABI.Equals(buf)) return false;
 
