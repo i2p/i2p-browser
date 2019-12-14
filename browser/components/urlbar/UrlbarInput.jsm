@@ -443,7 +443,7 @@ class UrlbarInput {
       return;
     }
 
-    this._loadURL(url, where, openParams);
+    this._loadURL(url, where, openParams, null);
   }
 
   handleRevert() {
