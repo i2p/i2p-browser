@@ -387,4 +387,11 @@ this.AppConstants = Object.freeze({
 #else
     false,
 #endif
+
+  I2P_BROWSER_UPDATE:
+#ifdef I2P_BROWSER_UPDATE
+  true,
+#else
+  false,
+#endif
 });
