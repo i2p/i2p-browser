@@ -694,8 +694,6 @@ SearchService.prototype = {
         await this._ensureKnownRegionPromise;
       }
 
-      this._setupRemoteSettings().catch(Cu.reportError);
-
       await this._loadEngines(cache);
 
       // Make sure the current list of engines is persisted, without the need to wait.
