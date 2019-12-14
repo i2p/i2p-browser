@@ -19,6 +19,7 @@ DIRS += [
     'profile',
     'recordreplay',
     'themes',
+    'i2p/i2pbutton',
 ]
 
 if CONFIG['MOZ_UPDATER'] and CONFIG['MOZ_WIDGET_TOOLKIT'] != 'android':
