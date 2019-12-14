@@ -106,6 +106,8 @@
     <command id="cmd_forward"/>
     <command id="cmd_enableCheckCompatibility"/>
     <command id="cmd_enableUpdateSecurity"/>
+    <command id="cmd_pluginEnable"/>
+    <command id="cmd_pluginDisable"/>
     <command id="cmd_toggleAutoUpdateDefault"/>
     <command id="cmd_resetAddonAutoUpdate"/>
     <command id="cmd_showUnsignedExtensions"/>
@@ -366,6 +368,13 @@
                           command="cmd_enableUpdateSecurity"/>
                   <spacer flex="5000"/> <!-- Necessary to allow the message to wrap -->
                 </hbox>
+                <vbox id="plugin-disable-button" class="global-info" flex="1" align="end">
+                  <button class="button-plugin-disable"
+                          label="&plugins.installed.disable;"
+                          tooltiptext="&plugins.installed.disable.tip;"
+                          command="cmd_pluginDisable"/>
+                  <spacer flex="5000"/>
+                </vbox>
               </hbox>
               <vbox id="addon-list-empty" class="alert-container"
                     flex="1" hidden="true">
@@ -376,6 +385,17 @@
                           id="discover-button-install"
                           data-l10n-id="list-empty-button"
                           command="cmd_goToDiscoverPane"/>
+                </vbox>
+                <spacer class="alert-spacer-after"/>
+              </vbox>
+              <vbox id="plugin-enable-button" class="alert-container" flex="1"
+                    hidden="true">
+                <spacer class="alert-spacer-before"/>
+                <vbox class="alert">
+                  <label value="&plugins.installed.find;"/>
+                  <button class="button-plugin-enable"
+                          label="&plugins.installed.enable;"
+                          command="cmd_pluginEnable"/>
                 </vbox>
                 <spacer class="alert-spacer-after"/>
               </vbox>
