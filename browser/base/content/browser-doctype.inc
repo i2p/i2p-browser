@@ -18,3 +18,9 @@
 %reportphishDTD;
 <!ENTITY % editBookmarkOverlayDTD SYSTEM "chrome://browser/locale/places/editBookmarkOverlay.dtd">
 %editBookmarkOverlayDTD;
+<!ENTITY % i2pbuttonDTD SYSTEM "chrome://i2pbutton/locale/i2pbutton.dtd">
+%i2pbuttonDTD;
+<!ENTITY % aboutI2PDTD SYSTEM "chrome://i2pbutton/locale/aboutI2P.dtd">
+%aboutI2PDTD;
+<!ENTITY % aboutDialogDTD SYSTEM "chrome://i2pbutton/locale/aboutDialog.dtd">
+%aboutDialogDTD;

@@ -276,11 +276,19 @@
                        class="subviewbutton subviewbutton-iconic"
                        label="&newPrivateWindow.label;"
                        key="key_privatebrowsing"
-                       command="Tools:PrivateBrowsing"/>
+                       command="Tools:PrivateBrowsing"
+                       hidden="true"/>
         <toolbarbutton id="appMenuRestoreLastSession"
                        label="&appMenuHistory.restoreSession.label;"
                        class="subviewbutton subviewbutton-iconic"
-                       command="Browser:RestoreLastSession"/>
+                       command="Browser:RestoreLastSession"
+                       hidden="true"/>
+        <toolbarseparator/>
+        <toolbarbutton id="appMenuNewIdentity"
+                 class="subviewbutton subviewbutton-iconic"
+                 key="i2pbutton-new-identity-key"
+                 label="&i2pbutton.context_menu.new_identity;"
+                 oncommand="i2pbutton_new_identity();"/>
         <toolbarseparator/>
         <toolbaritem id="appMenu-zoom-controls" class="toolbaritem-combined-buttons" closemenu="none">
           <!-- Use a spacer, because panel sizing code gets confused when using CSS methods. -->

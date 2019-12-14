@@ -29,6 +29,13 @@
                           accesskey="&newNavigatorCmd.accesskey;"
                           key="key_newNavigator"
                           command="cmd_newNavigator"/>
+                <menuseparator/>
+                <menuitem id="menu_newIdentity"
+                          accesskey="&i2pbutton.context_menu.new_identity_key;"
+                          key="i2pbutton-new-identity-key"
+                          label="&i2pbutton.context_menu.new_identity;"
+                          oncommand="i2pbutton_new_identity();"/>
+                <menuseparator/>
                 <menuitem id="menu_newPrivateWindow"
                           label="&newPrivateWindow.label;"
                           accesskey="&newPrivateWindow.accesskey;"
@@ -563,20 +570,20 @@
 #endif
                   >
               <menupopup id="menu_HelpPopup" onpopupshowing="buildHelpMenu();">
-                <menuitem id="menu_openHelp"
+                <!-- <menuitem id="menu_openHelp"
                           oncommand="openHelpLink('firefox-help')"
                           onclick="checkForMiddleClick(this, event);"
                           label="&productHelp2.label;"
                           accesskey="&productHelp2.accesskey;"
 #ifdef XP_MACOSX
-                          key="key_openHelpMac"/>
+                          key="key_openHelpMac"/> -->
 #else
-                          />
+                          /> -->
 #endif
-                <menuitem id="menu_openTour"
+                <!-- <menuitem id="menu_openTour"
                           oncommand="openTourPage();"
                           label="&helpShowTour2.label;"
-                          accesskey="&helpShowTour2.accesskey;"/>
+                          accesskey="&helpShowTour2.accesskey;"/> -->
                 <menuitem id="menu_keyboardShortcuts"
                           oncommand="openHelpLink('keyboard-shortcuts')"
                           onclick="checkForMiddleClick(this, event);"
@@ -587,18 +594,18 @@
                           label="&helpTroubleshootingInfo.label;"
                           oncommand="openTroubleshootingPage()"
                           onclick="checkForMiddleClick(this, event);"/>
-                <menuitem id="feedbackPage"
+                <!-- <menuitem id="feedbackPage"
                           accesskey="&helpFeedbackPage.accesskey;"
                           label="&helpFeedbackPage.label;"
                           oncommand="openFeedbackPage()"
-                          onclick="checkForMiddleClick(this, event);"/>
+                          onclick="checkForMiddleClick(this, event);"/> -->
                 <menuitem id="helpSafeMode"
                           accesskey="&helpSafeMode.accesskey;"
                           label="&helpSafeMode.label;"
                           stopaccesskey="&helpSafeMode.stop.accesskey;"
                           stoplabel="&helpSafeMode.stop.label;"
                           oncommand="safeModeRestart();"/>
-                <menuitem id="menu_HelpPopup_reportPhishingtoolmenu"
+                <!-- <menuitem id="menu_HelpPopup_reportPhishingtoolmenu"
                           label="&reportDeceptiveSiteMenu.title;"
                           accesskey="&reportDeceptiveSiteMenu.accesskey;"
                           disabled="true"
@@ -609,7 +616,7 @@
                           disabled="true"
                           oncommand="ReportFalseDeceptiveSite();"
                           onclick="checkForMiddleClick(this, event);"
-                          hidden="true"/>
+                          hidden="true"/> -->
                 <menuseparator id="helpPolicySeparator"
                           hidden="true"/>
                 <menuitem id="helpPolicySupport"
