@@ -98,7 +98,7 @@ var UpdateUtils = {
           case "PRODUCT":
             return Services.appinfo.name;
           case "VERSION":
-            return return AppConstants.I2P_BROWSER_VERSION;
+            return AppConstants.I2P_BROWSER_VERSION;
           case "BUILD_ID":
             return Services.appinfo.appBuildID;
           case "BUILD_TARGET":
