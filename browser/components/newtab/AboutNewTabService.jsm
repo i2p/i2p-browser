@@ -10,8 +10,6 @@ const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 const {E10SUtils} = ChromeUtils.import("resource://gre/modules/E10SUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "AboutNewTab",
-                               "resource:///modules/AboutNewTab.jsm");
 
 const TOPIC_APP_QUIT = "quit-application-granted";
 const TOPIC_LOCALES_CHANGE = "intl:app-locales-changed";
@@ -47,12 +45,6 @@ function AboutNewTabService() {
   this.toggleActivityStream(true);
   this.initialized = true;
   this.alreadyRecordedTopsitesPainted = false;
-
-  if (IS_MAIN_PROCESS) {
-    AboutNewTab.init();
-  } else if (IS_PRIVILEGED_PROCESS) {
-    Services.obs.addObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
-  }
 }
 
 /*
@@ -179,11 +171,6 @@ AboutNewTabService.prototype = {
       }
       case TOPIC_APP_QUIT:
         this.uninit();
-        if (IS_MAIN_PROCESS) {
-          AboutNewTab.uninit();
-        } else if (IS_PRIVILEGED_PROCESS) {
-          Services.obs.removeObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
-        }
         break;
       case TOPIC_LOCALES_CHANGE:
         this.updatePrerenderedPath();
@@ -243,20 +230,7 @@ AboutNewTabService.prototype = {
    * the newtab page has no effect on the result of this function.
    */
   get defaultURL() {
-    // Generate the desired activity stream resource depending on state, e.g.,
-    // resource://activity-stream/prerendered/ar/activity-stream.html
-    // resource://activity-stream/prerendered/en-US/activity-stream-prerendered.html
-    // resource://activity-stream/prerendered/static/activity-stream-debug.html
-    return [
-      "resource://activity-stream/prerendered/",
-      this._activityStreamPath,
-      "activity-stream",
-      this._activityStreamPrerender ? "-prerendered" : "",
-      // Debug version loads dev scripts but noscripts separately loads scripts
-      this._activityStreamDebug && !this._privilegedContentProcess ? "-debug" : "",
-      this._privilegedContentProcess ? "-noscripts" : "",
-      ".html",
-    ].join("");
+    return "about:i2p";
   },
 
   /*

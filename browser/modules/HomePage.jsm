@@ -17,7 +17,7 @@ ChromeUtils.defineModuleGetter(
 );
 
 const kPrefName = "browser.startup.homepage";
-const kDefaultHomePage = "about:home";
+const kDefaultHomePage = "about:i2p";
 
 function getHomepagePref(useDefault) {
   let homePage;

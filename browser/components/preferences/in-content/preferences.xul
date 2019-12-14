@@ -16,7 +16,10 @@
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/containers.css"?>
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/privacy.css"?>
 
-<!DOCTYPE page>
+<!DOCTYPE page [
+<!ENTITY % aboutI2PDTD SYSTEM "chrome://i2pbutton/locale/aboutI2P.dtd">
+  %aboutI2PDTD;
+]>
 
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       xmlns:html="http://www.w3.org/1999/xhtml"
