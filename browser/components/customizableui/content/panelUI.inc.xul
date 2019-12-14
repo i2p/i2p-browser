@@ -147,14 +147,15 @@
   <popupnotification id="appMenu-update-restart-notification"
                      popupid="update-restart"
                      data-lazy-l10n-id="appmenu-update-restart"
-                     data-l10n-attrs="buttonlabel, buttonaccesskey, secondarybuttonlabel, secondarybuttonaccesskey"
+                     data-l10n-attrs="buttonaccesskey, secondarybuttonlabel, secondarybuttonaccesskey"
+                     buttonlabel="&updateRestart.panelUI.label2;"
                      closebuttonhidden="true"
                      dropmarkerhidden="true"
                      checkboxhidden="true"
                      buttonhighlight="true"
                      hidden="true">
     <popupnotificationcontent id="update-restart-notification-content" orient="vertical">
-      <description id="update-restart-description" data-lazy-l10n-id="appmenu-update-restart-message"></description>
+      <description id="update-restart-description">&#160;</description>
     </popupnotificationcontent>
   </popupnotification>
 
