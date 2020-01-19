@@ -45,8 +45,8 @@ async function init(aEvent) {
     bits: Services.appinfo.is64Bit ? 64 : 32,
   };
 
-  // Adjust version text to show the Tor Browser version
-  versionAttributes.version = AppConstants.TOR_BROWSER_VERSION +
+  // Adjust version text to show the I2P Browser version
+  versionAttributes.version = AppConstants.I2P_BROWSER_VERSION +
                               " (based on Mozilla Firefox " +
                               AppConstants.MOZ_APP_VERSION_DISPLAY + ")";
 

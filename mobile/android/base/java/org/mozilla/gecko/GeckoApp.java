@@ -1049,9 +1049,9 @@ public abstract class GeckoApp extends GeckoActivity
         // Tell Stumbler to register a local broadcast listener to listen for preference intents.
         // We do this via intents since we can't easily access Stumbler directly,
         // as it might be compiled outside of Fennec.
-        // Tor Browser: We don't want Fennec using or receiving Stumbler
+        // I2P Browser: We don't want Fennec using or receiving Stumbler
         // SafeReceiver excluded at compile-time
-        //if (!AppConstants.isTorBrowser()) {
+        //if (!AppConstants.isI2PBrowser()) {
         //    final Intent stumblerIntent = new Intent(getApplicationContext(), SafeReceiver.class);
         //    stumblerIntent.setAction(INTENT_REGISTER_STUMBLER_LISTENER);
         //    getApplicationContext().sendBroadcast(stumblerIntent);

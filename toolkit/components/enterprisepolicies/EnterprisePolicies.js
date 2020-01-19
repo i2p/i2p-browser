@@ -88,7 +88,7 @@ EnterprisePoliciesManager.prototype = {
   ),
 
   _initialize() {
-    // We don't want to have any enterprise policies in Tor Browser enabled as
+    // We don't want to have any enterprise policies in I2P Browser enabled as
     // those can affect proxy settings etc. See: e.g. #30575.
     this.status = Ci.nsIEnterprisePolicies.INACTIVE;
   },

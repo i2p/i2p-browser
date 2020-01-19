@@ -123,7 +123,7 @@ def fennec_nightly(nightly):
 
 
 imply_option('--enable-small-chunk-size', True)
-# Comment these so we can imply |False| in torbrowser.configure
+# Comment these so we can imply |False| in i2pbrowser.configure
 # The Build system doesn't allow multiple imply_option()
 # calls with the same key.
 #imply_option('MOZ_SERVICES_HEALTHREPORT', True)
@@ -138,7 +138,7 @@ def check_target(target):
             'Build_Instructions/Simple_Firefox_for_Android_build '
             'for more information about the necessary options.')
 
-include('torbrowser.configure')
+include('i2pbrowser.configure')
 
 include('../../toolkit/moz.configure')
 include('../../build/moz.configure/android-sdk.configure')

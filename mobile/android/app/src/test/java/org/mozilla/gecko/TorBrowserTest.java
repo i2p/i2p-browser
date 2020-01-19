@@ -11,17 +11,17 @@ import org.mozilla.gecko.AppConstants;
 import static org.junit.Assert.*;
 
 @RunWith(TestRunner.class)
-public class TorBrowserTest {
+public class I2PBrowserTest {
     /**
      * Tests the compile-time constants are set.
      */
     @Test
-    public void testIsTorBrowser() {
-        assertTrue(AppConstants.isTorBrowser());
+    public void testIsI2PBrowser() {
+        assertTrue(AppConstants.isI2PBrowser());
     }
 
     @Test
-    public void testTorBrowserVersion() {
-        assertEquals(AppConstants.TOR_BROWSER_VERSION, "9.0");
+    public void testI2PBrowserVersion() {
+        assertEquals(AppConstants.I2P_BROWSER_VERSION, "9.0");
     }
 }

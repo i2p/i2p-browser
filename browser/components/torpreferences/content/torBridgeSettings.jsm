@@ -117,7 +117,7 @@ class TorBridgeSettings {
     }
 
     // fisher-yates shuffle
-    // shuffle so that Tor Browser users don't all try the built-in bridges in the same order
+    // shuffle so that I2P Browser users don't all try the built-in bridges in the same order
     for (let i = retval.length - 1; i > 0; --i) {
       // number n such that 0.0 <= n < 1.0
       const n = Math.random();

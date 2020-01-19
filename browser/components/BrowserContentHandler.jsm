@@ -43,7 +43,7 @@ XPCOMUtils.defineLazyGlobalGetters(this, [URL]);
 
 const NEWINSTALL_PAGE = "about:newinstall";
 
-const kTBSavedVersionPref = "browser.startup.homepage_override.torbrowser.version";
+const kTBSavedVersionPref = "browser.startup.homepage_override.i2pbrowser.version";
 
 function shouldLoadURI(aURI) {
   if (aURI && !aURI.schemeIs("chrome")) {
@@ -108,7 +108,7 @@ const OVERRIDE_ALTERNATE_PROFILE = 4;
  * Returns:
  *  OVERRIDE_NEW_PROFILE if this is the first run with a new profile.
  *  OVERRIDE_NEW_MSTONE if this is the first run with a build with a different
- *                      Gecko milestone or Tor Browser version (i.e. right
+ *                      Gecko milestone or I2P Browser version (i.e. right
  *                      after an upgrade).
  *  OVERRIDE_NEW_BUILD_ID if this is the first run with a new build ID of the
  *                        same Gecko milestone (i.e. after a nightly upgrade).
@@ -155,9 +155,9 @@ function needHomepageOverride(prefb) {
 
     prefb.setCharPref("browser.startup.homepage_override.mstone", mstone);
     prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
-    prefb.setCharPref(kTBSavedVersionPref, AppConstants.TOR_BROWSER_VERSION);
+    prefb.setCharPref(kTBSavedVersionPref, AppConstants.I2P_BROWSER_VERSION);
 
-    // After an upgrade from an older release of Tor Browser (<= 5.5a1), the
+    // After an upgrade from an older release of I2P Browser (<= 5.5a1), the
     // savedmstone will be undefined because those releases included the
     // value "ignore" for the browser.startup.homepage_override.mstone pref.
     // To correctly detect an upgrade vs. a new profile, we check for the
@@ -167,9 +167,9 @@ function needHomepageOverride(prefb) {
                                     : OVERRIDE_NEW_PROFILE;
   }
 
-  if (AppConstants.TOR_BROWSER_VERSION != savedTBVersion) {
+  if (AppConstants.I2P_BROWSER_VERSION != savedTBVersion) {
     prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
-    prefb.setCharPref(kTBSavedVersionPref, AppConstants.TOR_BROWSER_VERSION);
+    prefb.setCharPref(kTBSavedVersionPref, AppConstants.I2P_BROWSER_VERSION);
     return OVERRIDE_NEW_MSTONE;
   }
 
@@ -687,7 +687,7 @@ nsBrowserContentHandler.prototype = {
         "unknown"
       );
 
-      // We do the same for the Tor Browser version.
+      // We do the same for the I2P Browser version.
       let old_tbversion = null;
       try {
         old_tbversion = prefb.getCharPref(kTBSavedVersionPref);
@@ -721,12 +721,12 @@ nsBrowserContentHandler.prototype = {
             // to be read. If a crash occurs after updating, before restarting,
             // we may open the startPage in addition to restoring the session.
             //
-            // Tor Browser: Instead of opening the post-update "override page"
+            // I2P Browser: Instead of opening the post-update "override page"
             // directly, we ensure that about:tor will be opened in a special
             // mode that notifies the user that their browser was updated.
             // The about:tor page will provide a link to the override page
             // where the user can learn more about the update, as well as a
-            // link to the Tor Browser changelog page (about:tbupdate). The
+            // link to the I2P Browser changelog page (about:tbupdate). The
             // override page URL comes from the openURL attribute within the
             // updates.xml file or, if no showURL action is present, from the
             // startup.homepage_override_url pref.
@@ -742,13 +742,13 @@ nsBrowserContentHandler.prototype = {
             }
 
             overridePage = overridePage.replace("%OLD_VERSION%", old_mstone);
-            overridePage = overridePage.replace("%OLD_TOR_BROWSER_VERSION%",
+            overridePage = overridePage.replace("%OLD_I2P_BROWSER_VERSION%",
                                                 old_tbversion);
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
             if (overridePage)
             {
-              prefb.setCharPref("torbrowser.post_update.url", overridePage);
-              prefb.setBoolPref("torbrowser.post_update.shouldNotify", true);
+              prefb.setCharPref("i2pbrowser.post_update.url", overridePage);
+              prefb.setBoolPref("i2pbrowser.post_update.shouldNotify", true);
               // If the user's homepage is about:tor, we will inform them
               // about the update on that page; otherwise, we arrange to
               // open about:tor in a secondary tab.

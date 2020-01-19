@@ -133,8 +133,8 @@ public class IconDownloader implements IconLoader {
             return null;
         }
 
-        if (AppConstants.isTorBrowser()) {
-            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+        if (AppConstants.isI2PBrowser()) {
+            Log.i(LOGTAG, "This is I2P Browser. Skipping.");
             return null;
         }
 
@@ -189,8 +189,8 @@ public class IconDownloader implements IconLoader {
     @VisibleForTesting
     @NonNull
     HttpURLConnection connectTo(String uri) throws URISyntaxException, IOException {
-        if (AppConstants.isTorBrowser()) {
-            Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+        if (AppConstants.isI2PBrowser()) {
+            Log.i(LOGTAG, "This is I2P Browser. Skipping.");
             throw new IOException();
         }
 

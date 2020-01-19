@@ -124,7 +124,7 @@ TEST(UrlClassifier, ReadNoiseEntriesV2)
       GeneratePrefix(_Fragment("chrome.com/"), 4),
       GeneratePrefix(_Fragment("safebrowsing.com/"), 4),
       GeneratePrefix(_Fragment("opera.com/"), 4),
-      GeneratePrefix(_Fragment("torbrowser.com/"), 4),
+      GeneratePrefix(_Fragment("i2pbrowser.com/"), 4),
       GeneratePrefix(_Fragment("gfaads.com/"), 4),
       GeneratePrefix(_Fragment("qggdsas.com/"), 4),
       GeneratePrefix(_Fragment("nqtewq.com/"), 4),

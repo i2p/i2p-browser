@@ -2023,15 +2023,15 @@ static ReturnAbortOnError ShowProfileManager(
   return LaunchChild(aNative);
 }
 
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
-static ProfileStatus CheckTorBrowserDataWriteAccess(nsIFile* aAppDir) {
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
+static ProfileStatus CheckI2PBrowserDataWriteAccess(nsIFile* aAppDir) {
   // Check whether we can write to the directory that will contain
-  // TorBrowser-Data.
+  // I2PBrowser-Data.
   nsCOMPtr<nsIFile> tbDataDir;
   RefPtr<nsXREDirProvider> dirProvider = nsXREDirProvider::GetSingleton();
   if (!dirProvider) return PROFILE_STATUS_OTHER_ERROR;
   nsresult rv =
-      dirProvider->GetTorBrowserUserDataDir(getter_AddRefs(tbDataDir));
+      dirProvider->GetI2PBrowserUserDataDir(getter_AddRefs(tbDataDir));
   NS_ENSURE_SUCCESS(rv, PROFILE_STATUS_OTHER_ERROR);
   nsCOMPtr<nsIFile> tbDataDirParent;
   rv = tbDataDir->GetParent(getter_AddRefs(tbDataDirParent));
@@ -2644,8 +2644,8 @@ static bool CheckCompatibility(nsIFile* aProfileDir, const nsCString& aVersion,
 
   nsAutoCString buf;
 
-  nsAutoCString tbVersion(TOR_BROWSER_VERSION_QUOTED);
-  rv = parser.GetString("Compatibility", "LastTorBrowserVersion", buf);
+  nsAutoCString tbVersion(I2P_BROWSER_VERSION_QUOTED);
+  rv = parser.GetString("Compatibility", "LastI2PBrowserVersion", buf);
   if (NS_FAILED(rv) || !tbVersion.Equals(buf)) return false;
 
   rv = parser.GetString("Compatibility", "LastOSABI", buf);
@@ -2733,10 +2733,10 @@ static void WriteVersion(nsIFile* aProfileDir, const nsCString& aVersion,
   PR_Write(fd, kHeader, sizeof(kHeader) - 1);
   PR_Write(fd, aVersion.get(), aVersion.Length());
 
-  nsAutoCString tbVersion(TOR_BROWSER_VERSION_QUOTED);
-  static const char kTorBrowserVersionHeader[] =
-      NS_LINEBREAK "LastTorBrowserVersion=";
-  PR_Write(fd, kTorBrowserVersionHeader, sizeof(kTorBrowserVersionHeader) - 1);
+  nsAutoCString tbVersion(I2P_BROWSER_VERSION_QUOTED);
+  static const char kI2PBrowserVersionHeader[] =
+      NS_LINEBREAK "LastI2PBrowserVersion=";
+  PR_Write(fd, kI2PBrowserVersionHeader, sizeof(kI2PBrowserVersionHeader) - 1);
   PR_Write(fd, tbVersion.get(), tbVersion.Length());
 
   static const char kOSABIHeader[] = NS_LINEBREAK "LastOSABI=";
@@ -3223,7 +3223,7 @@ int XREMain::XRE_mainInit(bool* aExitFlag) {
   if (PR_GetEnv("XRE_MAIN_BREAK")) NS_BREAK();
 #endif
 
-#if defined(XP_MACOSX) && defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(XP_MACOSX) && defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
   bool hideDockIcon = (CheckArg("invisible") == ARG_FOUND);
   if (hideDockIcon) {
     ProcessSerialNumber psn = {0, kCurrentProcess};
@@ -3566,7 +3566,7 @@ int XREMain::XRE_mainInit(bool* aExitFlag) {
                                      gSafeMode);
 
 #if defined(MOZ_HAS_REMOTE)
-  // In Tor Browser, remoting is disabled by default unless -osint is used.
+  // In I2P Browser, remoting is disabled by default unless -osint is used.
   bool allowRemote = (CheckArg("allow-remote") == ARG_FOUND);
   bool isOsint = (CheckArg("osint", nullptr, CheckArgFlag::None) == ARG_FOUND);
   if (!allowRemote && !isOsint) {
@@ -4097,7 +4097,7 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
   }
 
 #if (defined(MOZ_UPDATER) && !defined(MOZ_WIDGET_ANDROID)) || \
-    defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+    defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
   nsCOMPtr<nsIFile> exeFile, exeDir;
   bool persistent;
   rv = mDirProvider.GetFile(XRE_EXECUTABLE_FILE, &persistent,
@@ -4108,13 +4108,13 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
 #endif
 
   rv = NS_NewToolkitProfileService(getter_AddRefs(mProfileSvc));
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
   if (NS_FAILED(rv)) {
     // NS_NewToolkitProfileService() returns a generic NS_ERROR_FAILURE error
-    // if creation of the TorBrowser-Data directory fails due to access denied
+    // if creation of the I2PBrowser-Data directory fails due to access denied
     // or because of a read-only disk volume. Do an extra check here to detect
     // these errors so we can display an informative error message.
-    ProfileStatus status = CheckTorBrowserDataWriteAccess(exeDir);
+    ProfileStatus status = CheckI2PBrowserDataWriteAccess(exeDir);
     if ((PROFILE_STATUS_ACCESS_DENIED == status) ||
         (PROFILE_STATUS_READ_ONLY == status)) {
       ProfileErrorDialog(nullptr, nullptr, status, nullptr, mNativeApp,
@@ -4225,12 +4225,12 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
   if (CheckArg("test-process-updates")) {
     SaveToEnv("MOZ_TEST_PROCESS_UPDATES=1");
   }
-#ifdef TOR_BROWSER_UPDATE
-  nsAutoCString compatVersion(TOR_BROWSER_VERSION_QUOTED);
+#ifdef I2P_BROWSER_UPDATE
+  nsAutoCString compatVersion(I2P_BROWSER_VERSION_QUOTED);
 #endif
   ProcessUpdates(mDirProvider.GetGREDir(), exeDir, updRoot, gRestartArgc,
                  gRestartArgv,
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
                  compatVersion.get()
 #else
                  mAppData->version

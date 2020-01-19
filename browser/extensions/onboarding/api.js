@@ -20,7 +20,7 @@ const RESOURCE_HOST = "onboarding";
 
 const {PREF_STRING, PREF_BOOL, PREF_INT} = Ci.nsIPrefBranch;
 
-// In Tor Browser we initialize onboarding upon "final-ui-startup" instead
+// In I2P Browser we initialize onboarding upon "final-ui-startup" instead
 // of waiting for "browser-delayed-startup-finished"; otherwise, on first
 // run the onboarding frame script's "onload" listener is installed too
 // late to detect that about:tor is loaded.
@@ -36,7 +36,7 @@ const PREF_WHITELIST = [
 ];
 
 [
-  // Tor Browser tours:
+  // I2P Browser tours:
   "onboarding-tour-tor-welcome",
   "onboarding-tour-tor-privacy",
   "onboarding-tour-tor-network-9-0",
@@ -190,7 +190,7 @@ function initContentMessageListener() {
         openTorTab(msg.data.params.url, msg.data.params.frameScriptURL);
         break;
 #if 0
-// No telemetry in Tor Browser.
+// No telemetry in I2P Browser.
       case "ping-centre":
         try {
           OnboardingTelemetry.process(msg.data.params.data);

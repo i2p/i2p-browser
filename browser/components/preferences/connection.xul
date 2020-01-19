@@ -23,7 +23,7 @@
   <linkset>
     <html:link rel="localization" href="browser/preferences/connection.ftl"/>
     <html:link rel="localization" href="browser/preferences/preferences.ftl"/>
-    <html:link rel="localization" href="branding/tor-browser-brand.ftl"/>
+    <html:link rel="localization" href="branding/i2p-browser-brand.ftl"/>
   </linkset>
 
   <script src="chrome://browser/content/utilityOverlay.js"/>

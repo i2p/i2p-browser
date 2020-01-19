@@ -7,15 +7,15 @@
 <!-- Location note: Tor First run messages -->
 <!ENTITY firstrun_welcome_tab_title "Welcome">
 <!ENTITY firstrun_welcome_title "You\'re ready.">
-<!ENTITY firstrun_welcome_message "Tor Browser offers the highest standard of privacy and security while browsing the web. You\'re now protected against tracking, surveillance, and censorship. This quick onboarding will show you how.">
+<!ENTITY firstrun_welcome_message "I2P Browser offers the highest standard of privacy and security while browsing the web. You\'re now protected against tracking, surveillance, and censorship. This quick onboarding will show you how.">
 <!ENTITY firstrun_welcome_next "Start now">
 <!ENTITY firstrun_privacy_tab_title "Privacy">
 <!ENTITY firstrun_privacy_title "Snub trackers and snoopers.">
-<!ENTITY firstrun_privacy_message "Tor Browser isolates cookies and deletes your browser history after your session. These modifications ensure your privacy and security are protected in the browser. Click ‘Tor Network’ to learn how we protect you on the network level.">
+<!ENTITY firstrun_privacy_message "I2P Browser isolates cookies and deletes your browser history after your session. These modifications ensure your privacy and security are protected in the browser. Click ‘Tor Network’ to learn how we protect you on the network level.">
 <!ENTITY firstrun_privacy_next "Go to Tor Network">
 <!ENTITY firstrun_tornetwork_tab_title "Tor Network">
 <!ENTITY firstrun_tornetwork_title "Travel a decentralized network.">
-<!ENTITY firstrun_tornetwork_message "Tor Browser connects you to the Tor network run by thousands of volunteers around the world. Unlike a VPN, there\'s no one point of failure or centralized entity you need to trust in order to enjoy the internet privately.">
+<!ENTITY firstrun_tornetwork_message "I2P Browser connects you to the Tor network run by thousands of volunteers around the world. Unlike a VPN, there\'s no one point of failure or centralized entity you need to trust in order to enjoy the internet privately.">
 <!ENTITY firstrun_tornetwork_next "Next">
 <!ENTITY firstrun_secsettings_tab_title "Security">
 <!ENTITY firstrun_secsettings_title "Choose your experience.">
@@ -38,7 +38,7 @@
 <!ENTITY pref_tor_select_a_bridge_title "Select a Bridge">
 <!ENTITY pref_tor_provide_a_bridge_title "Provide a Bridge">
 
-<!ENTITY pref_category_tor_network_summary "Tor Browser connects you to the Tor Network run by thousands of volunteers around the world! Can these options help you?">
+<!ENTITY pref_category_tor_network_summary "I2P Browser connects you to the Tor Network run by thousands of volunteers around the world! Can these options help you?">
 <!ENTITY pref_category_tor_bridge_summary "Bridges are unlisted Tor relays that make it more difficult to block connections into the Tor network. Because of how some countries try to block Tor, certain bridges work in some countries but not others.">
 
 <!ENTITY pref_choice_tor_bridges_enabled_title "Internet is censored here">
@@ -61,4 +61,4 @@
 
 <!ENTITY tor_notify_user_about_error "An error occurred, please swipe for more information.">
 
-<!ENTITY sync_not_supported "Sync is not currently supported in Tor Browser on Android">
+<!ENTITY sync_not_supported "Sync is not currently supported in I2P Browser on Android">

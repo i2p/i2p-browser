@@ -337,11 +337,11 @@ static bool IsOlderVersion(nsIFile* versionFile, const char* appVersion) {
   return false;
 }
 
-#ifndef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
-#if defined(TOR_BROWSER_UPDATE) && defined(XP_MACOSX)
+#ifndef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
+#if defined(I2P_BROWSER_UPDATE) && defined(XP_MACOSX)
 static nsresult GetUpdateDirFromAppDir(nsIFile *aAppDir, nsIFile **aResult) {
   // On Mac OSX, we stage the update to an Updated.app directory that is
-  // directly below the main Tor Browser.app directory (two levels up from
+  // directly below the main I2P Browser.app directory (two levels up from
   // the appDir).
   NS_ENSURE_ARG_POINTER(aAppDir);
   NS_ENSURE_ARG_POINTER(aResult);
@@ -433,7 +433,7 @@ static bool CopyUpdaterIntoUpdateDir(nsIFile* greDir, nsIFile* appDir,
 }
 #endif
 
-#if defined(TOR_BROWSER_UPDATE) && defined(MOZ_VERIFY_MAR_SIGNATURE) && \
+#if defined(I2P_BROWSER_UPDATE) && defined(MOZ_VERIFY_MAR_SIGNATURE) && \
     defined(MAR_NSS) && defined(XP_MACOSX)
 /**
  * Ideally we would save and restore the original library path value after
@@ -638,7 +638,7 @@ static void ApplyUpdate(nsIFile* greDir, nsIFile* updateDir, nsIFile* appDir,
   } else {
     // Get the directory where the update is staged or will be staged.
 #if defined(XP_MACOSX)
-#if defined(TOR_BROWSER_UPDATE) && !defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+#if defined(I2P_BROWSER_UPDATE) && !defined(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
     rv = GetUpdateDirFromAppDir(appDir, getter_AddRefs(updatedDir));
     if (NS_FAILED(rv)) {
 #else
@@ -737,7 +737,7 @@ static void ApplyUpdate(nsIFile* greDir, nsIFile* updateDir, nsIFile* appDir,
     PR_SetEnv("MOZ_SAFE_MODE_RESTART=1");
   }
 
-#if defined(TOR_BROWSER_UPDATE) && defined(MOZ_VERIFY_MAR_SIGNATURE) && \
+#if defined(I2P_BROWSER_UPDATE) && defined(MOZ_VERIFY_MAR_SIGNATURE) && \
     defined(MAR_NSS) && defined(XP_MACOSX)
   // On macOS, append the app directory to the shared library search path
   // so the system can locate the shared libraries that are needed by the
@@ -795,7 +795,7 @@ UpdateDriverSetupMacCommandLine(argc, argv, restart);
 #ifdef DEBUG
 dump_argv("ApplyUpdate after SetupMacCommandLine", argv, argc);
 #endif
-#ifndef TOR_BROWSER_UPDATE
+#ifndef I2P_BROWSER_UPDATE
 // We need to detect whether elevation is required for this update. This can
 // occur when an admin user installs the application, but another admin
 // user attempts to update (see bug 394984).
@@ -879,7 +879,7 @@ static bool ProcessHasTerminated(ProcessType pt) {
 nsresult ProcessUpdates(nsIFile* greDir, nsIFile* appDir, nsIFile* updRootDir,
                         int argc, char** argv, const char* appVersion,
                         bool restart, ProcessType* pid) {
-#if defined(XP_WIN) && defined(TOR_BROWSER_UPDATE)
+#if defined(XP_WIN) && defined(I2P_BROWSER_UPDATE)
   // Try to remove the "tobedeleted" directory which, if present, contains
   // files that could not be removed during a previous update (e.g., DLLs
   // that were in use and therefore locked by Windows).
@@ -1007,8 +1007,8 @@ nsUpdateProcessor::ProcessUpdate() {
   }
 
   nsAutoCString appVersion;
-#ifdef TOR_BROWSER_UPDATE
-  appVersion = TOR_BROWSER_VERSION_QUOTED;
+#ifdef I2P_BROWSER_UPDATE
+  appVersion = I2P_BROWSER_VERSION_QUOTED;
 #else
   nsCOMPtr<nsIXULAppInfo> appInfo =
       do_GetService("@mozilla.org/xre/app-info;1", &rv);

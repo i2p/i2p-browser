@@ -9,7 +9,7 @@ DIRS += [
     'pdfjs',
 ]
 
-if not CONFIG['TOR_BROWSER_DISABLE_TOR_LAUNCHER']:
+if not CONFIG['I2P_BROWSER_DISABLE_TOR_LAUNCHER']:
     DIRS += [
         'tor-launcher',
     ]

@@ -709,7 +709,7 @@ public class AndroidFxAccount {
    * @param ignoreSettings whether we should check if syncing is allowed via in-app or system settings.
    */
   public void requestImmediateSync(String[] stagesToSync, String[] stagesToSkip, boolean ignoreSettings) {
-    if (AppConstants.isTorBrowser()) {
+    if (AppConstants.isI2PBrowser()) {
       return;
     } else {
       FirefoxAccounts.requestImmediateSync(getAndroidAccount(), stagesToSync, stagesToSkip, ignoreSettings);
@@ -724,7 +724,7 @@ public class AndroidFxAccount {
    * @param stagesToSkip stage names to skip; can be null to skip <b>no</b> known stages.
    */
   public void requestEventualSync(String[] stagesToSync, String[] stagesToSkip) {
-    if (AppConstants.isTorBrowser()) {
+    if (AppConstants.isI2PBrowser()) {
       return;
     } else {
       FirefoxAccounts.requestEventualSync(getAndroidAccount(), stagesToSync, stagesToSkip);

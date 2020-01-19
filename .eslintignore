@@ -228,7 +228,7 @@ media/webrtc/trunk/**
 mobile/android/tests/browser/chrome/tp5/**
 
 # uses `#include`
-mobile/android/app/000-tor-browser-android.js
+mobile/android/app/000-i2p-browser-android.js
 
 # Uses `#filter substitution`
 mobile/android/app/mobile.js

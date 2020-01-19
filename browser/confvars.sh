@@ -37,14 +37,14 @@ elif test "$MOZ_UPDATE_CHANNEL" = "alpha"; then
   # alpha is currently using the -release channel id. However we accept
   # both -alpha and -release channel ID for the alpha so that we can
   # switch it to -alpha at some point. See bug 32498.
-  ACCEPTED_MAR_CHANNEL_IDS=torbrowser-torproject-alpha,torbrowser-torproject-release
-  MAR_CHANNEL_ID=torbrowser-torproject-release
+  ACCEPTED_MAR_CHANNEL_IDS=i2pbrowser-torproject-alpha,i2pbrowser-torproject-release
+  MAR_CHANNEL_ID=i2pbrowser-torproject-release
 elif test "$MOZ_UPDATE_CHANNEL" = "nightly"; then
-  ACCEPTED_MAR_CHANNEL_IDS=torbrowser-torproject-nightly
-  MAR_CHANNEL_ID=torbrowser-torproject-nightly
+  ACCEPTED_MAR_CHANNEL_IDS=i2pbrowser-torproject-nightly
+  MAR_CHANNEL_ID=i2pbrowser-torproject-nightly
 else
-  ACCEPTED_MAR_CHANNEL_IDS=torbrowser-torproject-release
-  MAR_CHANNEL_ID=torbrowser-torproject-release
+  ACCEPTED_MAR_CHANNEL_IDS=i2pbrowser-torproject-release
+  MAR_CHANNEL_ID=i2pbrowser-torproject-release
 fi
 # ASan reporter builds should have different channel ids
 if [ "${MOZ_ASAN_REPORTER}" = "1" ]; then

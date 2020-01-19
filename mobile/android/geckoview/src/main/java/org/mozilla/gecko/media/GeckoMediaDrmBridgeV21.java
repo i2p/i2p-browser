@@ -484,8 +484,8 @@ public class GeckoMediaDrmBridgeV21 implements GeckoMediaDrm {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            if (BuildConfig.TOR_BROWSER_VERSION != "") {
-                Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            if (BuildConfig.I2P_BROWSER_VERSION != "") {
+                Log.i(LOGTAG, "This is I2P Browser. Skipping.");
                 return null;
             }
 

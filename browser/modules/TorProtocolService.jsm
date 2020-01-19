@@ -11,7 +11,7 @@ var TorProtocolService = {
     Ci.nsISupports
   ).wrappedJSObject,
 
-  // maintain a map of tor settings set by Tor Browser so that we don't
+  // maintain a map of tor settings set by I2P Browser so that we don't
   // repeatedly set the same key/values over and over
   // this map contains string keys to primitive or array values
   _settingsCache: new Map(),

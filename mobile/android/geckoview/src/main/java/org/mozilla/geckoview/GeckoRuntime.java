@@ -118,7 +118,7 @@ public final class GeckoRuntime implements Parcelable {
             Log.d(LOGTAG, "Lifecycle: onResume");
             // Monitor network status and send change notifications to Gecko
             // while active.
-            if (BuildConfig.TOR_BROWSER_VERSION != "") {
+            if (BuildConfig.I2P_BROWSER_VERSION != "") {
                 GeckoNetworkManager.getInstance().start(GeckoAppShell.getApplicationContext());
             }
         }
@@ -127,7 +127,7 @@ public final class GeckoRuntime implements Parcelable {
         void onPause() {
             Log.d(LOGTAG, "Lifecycle: onPause");
             // Stop monitoring network status while inactive.
-            if (BuildConfig.TOR_BROWSER_VERSION != "") {
+            if (BuildConfig.I2P_BROWSER_VERSION != "") {
                 GeckoNetworkManager.getInstance().stop();
             }
         }

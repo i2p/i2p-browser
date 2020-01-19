@@ -327,7 +327,7 @@ let LEGACY_ACTORS = {
   },
 };
 
-if (AppConstants.TOR_BROWSER_UPDATE) {
+if (AppConstants.I2P_BROWSER_UPDATE) {
   LEGACY_ACTORS["AboutTBUpdate"] = {
     child: {
       module: "resource:///actors/AboutTBUpdateChild.jsm",
@@ -546,7 +546,7 @@ if (AppConstants.MOZ_CRASHREPORTER) {
   });
 }
 
-if (AppConstants.TOR_BROWSER_UPDATE) {
+if (AppConstants.I2P_BROWSER_UPDATE) {
   XPCOMUtils.defineLazyModuleGetter(this, "AboutTBUpdate",
                                     "resource:///modules/AboutTBUpdate.jsm");
 }
@@ -1948,7 +1948,7 @@ BrowserGlue.prototype = {
       UnsubmittedCrashHandler.init();
     }
 
-    if (AppConstants.TOR_BROWSER_UPDATE) {
+    if (AppConstants.I2P_BROWSER_UPDATE) {
       AboutTBUpdate.init();
     }
 

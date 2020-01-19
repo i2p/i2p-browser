@@ -68,7 +68,7 @@ async function getRuntimeIcon(runtime, channel) {
     }
   }
 
-  // Use the release build skin for devtools within Tor Browser alpha releases.
+  // Use the release build skin for devtools within I2P Browser alpha releases.
   if (channel === "alpha")
     return "chrome://devtools/skin/images/aboutdebugging-firefox-release.svg";
 

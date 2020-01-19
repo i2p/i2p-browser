@@ -92,9 +92,9 @@ public class ImageLoader {
 
         @Override
         protected HttpURLConnection openConnection(Uri path) throws IOException {
-            if (AppConstants.isTorBrowser()) {
-                String err = "This is Tor Browser. Downloading is disabled for: " + path.toString();
-                Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+            if (AppConstants.isI2PBrowser()) {
+                String err = "This is I2P Browser. Downloading is disabled for: " + path.toString();
+                Log.i(LOGTAG, "This is I2P Browser. Skipping.");
                 throw new IOException(err);
             }
 

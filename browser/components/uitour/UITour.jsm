@@ -68,25 +68,25 @@ ChromeUtils.defineModuleGetter(
 // See LOG_LEVELS in Console.jsm. Common examples: "All", "Info", "Warn", & "Error".
 const PREF_LOG_LEVEL = "browser.uitour.loglevel";
 
-const TOR_BROWSER_PAGE_ACTIONS_ALLOWED = new Set([
-  "showInfo",  // restricted to TOR_BROWSER_TARGETS_ALLOWED
-  "showMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
-  "hideMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
-  "showHighlight", // restricted to TOR_BROWSER_TARGETS_ALLOWED
-  "hideHighlight", // restricted to TOR_BROWSER_TARGETS_ALLOWED
+const I2P_BROWSER_PAGE_ACTIONS_ALLOWED = new Set([
+  "showInfo",  // restricted to I2P_BROWSER_TARGETS_ALLOWED
+  "showMenu",  // restricted to I2P_BROWSER_MENUS_ALLOWED
+  "hideMenu",  // restricted to I2P_BROWSER_MENUS_ALLOWED
+  "showHighlight", // restricted to I2P_BROWSER_TARGETS_ALLOWED
+  "hideHighlight", // restricted to I2P_BROWSER_TARGETS_ALLOWED
   "openPreferences",
   "closeTab",
   "torBrowserOpenSecurityLevelPanel",
 ]);
 
-const TOR_BROWSER_TARGETS_ALLOWED = new Set([
+const I2P_BROWSER_TARGETS_ALLOWED = new Set([
   "torBrowser-newIdentityButton",
   "torBrowser-circuitDisplay",
   "torBrowser-circuitDisplay-diagram",
   "torBrowser-circuitDisplay-newCircuitButton",
 ]);
 
-const TOR_BROWSER_MENUS_ALLOWED = new Set([
+const I2P_BROWSER_MENUS_ALLOWED = new Set([
   "controlCenter",
 ]);
 
@@ -450,7 +450,7 @@ var UITour = {
       return false;
     }
 
-    if (!TOR_BROWSER_PAGE_ACTIONS_ALLOWED.has(action)) {
+    if (!I2P_BROWSER_PAGE_ACTIONS_ALLOWED.has(action)) {
       log.warn("Ignoring disallowed action:", action);
       return false;
     }
@@ -1071,7 +1071,7 @@ var UITour = {
     }
 
     let targetObject;
-    if (TOR_BROWSER_TARGETS_ALLOWED.has(aTargetName)) {
+    if (I2P_BROWSER_TARGETS_ALLOWED.has(aTargetName)) {
       targetObject = this.targets.get(aTargetName);
     }
     if (!targetObject) {
@@ -1544,7 +1544,7 @@ var UITour = {
   },
 
   showMenu(aWindow, aMenuName, aOpenCallback = null) {
-    if (!TOR_BROWSER_MENUS_ALLOWED.has(aMenuName)) {
+    if (!I2P_BROWSER_MENUS_ALLOWED.has(aMenuName)) {
       return;
     }
 
@@ -1660,7 +1660,7 @@ var UITour = {
   },
 
   hideMenu(aWindow, aMenuName) {
-    if (!TOR_BROWSER_MENUS_ALLOWED.has(aMenuName)) {
+    if (!I2P_BROWSER_MENUS_ALLOWED.has(aMenuName)) {
       return;
     }
 

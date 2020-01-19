@@ -56,7 +56,7 @@ pref("extensions.recommendations.themeRecommendationUrl", "https://color.firefox
 
 pref("extensions.update.autoUpdateDefault", true);
 
-// No AUS check for system add-on updates for Tor Browser users.
+// No AUS check for system add-on updates for I2P Browser users.
 pref("extensions.systemAddon.update.url", "");
 pref("extensions.systemAddon.update.enabled", false);
 
@@ -156,7 +156,7 @@ pref("app.update.silent", false);
 pref("app.update.staging.enabled", true);
 
 // Update service URL:
-pref("app.update.url", "https://aus1.torproject.org/torbrowser/update_3/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%");
+pref("app.update.url", "https://aus1.torproject.org/i2pbrowser/update_3/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%");
 
 // app.update.url.manual is in branding section
 // app.update.url.details is in branding section

@@ -38,7 +38,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   DeferredTask: "resource://gre/modules/DeferredTask.jsm",
   OS: "resource://gre/modules/osfile.jsm",
   UpdateUtils: "resource://gre/modules/UpdateUtils.jsm",
-#if !defined(TOR_BROWSER_UPDATE)
+#if !defined(I2P_BROWSER_UPDATE)
   WindowsRegistry: "resource://gre/modules/WindowsRegistry.jsm",
 #endif
 });
@@ -455,9 +455,9 @@ function areDirectoryEntriesWriteable(aDir) {
  * @return true if elevation is required, false otherwise
  */
 function getElevationRequired() {
-#if defined(TOR_BROWSER_UPDATE)
+#if defined(I2P_BROWSER_UPDATE)
   // To avoid potential security holes associated with running the updater
-  // process with elevated privileges, Tor Browser does not support elevation.
+  // process with elevated privileges, I2P Browser does not support elevation.
   return false;
 #else
   if (AppConstants.platform != "macosx") {
@@ -527,7 +527,7 @@ function getCanApplyUpdates() {
     return false;
   }
 
-#if !defined(TOR_BROWSER_UPDATE)
+#if !defined(I2P_BROWSER_UPDATE)
   if (AppConstants.platform == "macosx") {
     LOG(
       "getCanApplyUpdates - bypass the write since elevation can be used " +
@@ -1209,7 +1209,7 @@ function handleUpdateFailure(update, errorCode) {
     cancelations++;
     Services.prefs.setIntPref(PREF_APP_UPDATE_CANCELATIONS, cancelations);
     if (AppConstants.platform == "macosx") {
-#if defined(TOR_BROWSER_UPDATE)
+#if defined(I2P_BROWSER_UPDATE)
       cleanupActiveUpdate();
 #else
       let osxCancelations = Services.prefs.getIntPref(
@@ -1850,8 +1850,8 @@ function Update(update) {
   }
 
   if (!this.previousAppVersion) {
-#ifdef TOR_BROWSER_UPDATE
-    this.previousAppVersion = AppConstants.TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+    this.previousAppVersion = AppConstants.I2P_BROWSER_VERSION;
 #else
     this.previousAppVersion = Services.appinfo.version;
 #endif
@@ -2326,8 +2326,8 @@ UpdateService.prototype = {
    */
   _postUpdateProcessing: function AUS__postUpdateProcessing() {
     gUpdateFileWriteInfo = { phase: "startup", failure: false };
-#if defined(TOR_BROWSER_UPDATE) && !defined(XP_MACOSX)
-    this._removeOrphanedTorBrowserFiles();
+#if defined(I2P_BROWSER_UPDATE) && !defined(XP_MACOSX)
+    this._removeOrphanedI2PBrowserFiles();
 #endif
     if (!this.canCheckForUpdates) {
       LOG(
@@ -2568,20 +2568,20 @@ UpdateService.prototype = {
     }
   },
 
-#if defined(TOR_BROWSER_UPDATE) && !defined(XP_MACOSX)
+#if defined(I2P_BROWSER_UPDATE) && !defined(XP_MACOSX)
   /**
-   * When updating from an earlier version to Tor Browser 6.0 or later, old
+   * When updating from an earlier version to I2P Browser 6.0 or later, old
    * update info files are left behind on Linux and Windows. Remove them.
    */
-  _removeOrphanedTorBrowserFiles: function AUS__removeOrphanedTorBrowserFiles() {
+  _removeOrphanedI2PBrowserFiles: function AUS__removeOrphanedI2PBrowserFiles() {
     try {
       let oldUpdateInfoDir = getAppBaseDir();  // aka the Browser directory.
 
 #ifdef XP_WIN
       // On Windows, the updater files were stored under
-      // Browser/TorBrowser/Data/Browser/Caches/firefox/
+      // Browser/I2PBrowser/Data/Browser/Caches/firefox/
       oldUpdateInfoDir.appendRelativePath(
-                                "TorBrowser\\Data\\Browser\\Caches\\firefox");
+                                "I2PBrowser\\Data\\Browser\\Caches\\firefox");
 #endif
 
       // Remove the updates directory.
@@ -2963,8 +2963,8 @@ UpdateService.prototype = {
     updates.forEach(function(aUpdate) {
       // Ignore updates for older versions of the application and updates for
       // the same version of the application with the same build ID.
-#ifdef TOR_BROWSER_UPDATE
-      let compatVersion = AppConstants.TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+      let compatVersion = AppConstants.I2P_BROWSER_VERSION;
 #else
       let compatVersion = Services.appinfo.version;
 #endif
@@ -3344,8 +3344,8 @@ UpdateService.prototype = {
     // current application's version or the update's version is the same as the
     // application's version and the build ID is the same as the application's
     // build ID.
-#ifdef TOR_BROWSER_UPDATE
-    let compatVersion = AppConstants.TOR_BROWSER_VERSION;
+#ifdef I2P_BROWSER_UPDATE
+    let compatVersion = AppConstants.I2P_BROWSER_VERSION;
 #else
     let compatVersion = Services.appinfo.version;
 #endif
@@ -3359,11 +3359,11 @@ UpdateService.prototype = {
       LOG(
         "UpdateService:downloadUpdate - canceling download of update since " +
           "it is for an earlier or same application version and build ID.\n" +
-#ifdef TOR_BROWSER_UPDATE
-          "current Tor Browser version: " +
+#ifdef I2P_BROWSER_UPDATE
+          "current I2P Browser version: " +
           compatVersion +
           "\n" +
-          "update Tor Browser version : " +
+          "update I2P Browser version : " +
 #else
           "current application version: " +
           compatVersion +
@@ -3987,7 +3987,7 @@ Checker.prototype = {
    */
   _callback: null,
 
-#if !defined(TOR_BROWSER_UPDATE)
+#if !defined(I2P_BROWSER_UPDATE)
   _getCanMigrate: function UC__getCanMigrate() {
     if (AppConstants.platform != "win") {
       return false;
@@ -4057,7 +4057,7 @@ Checker.prototype = {
     LOG("Checker:_getCanMigrate - no registry entries for this installation");
     return false;
   },
-#endif // !defined(TOR_BROWSER_UPDATE)
+#endif // !defined(I2P_BROWSER_UPDATE)
 
   /**
    * The URL of the update service XML file to connect to that contains details
@@ -4081,7 +4081,7 @@ Checker.prototype = {
       url += (url.includes("?") ? "&" : "?") + "force=1";
     }
 
-#if !defined(TOR_BROWSER_UPDATE)
+#if !defined(I2P_BROWSER_UPDATE)
     if (this._getCanMigrate()) {
       url += (url.includes("?") ? "&" : "?") + "mig64=1";
     }
@@ -5314,8 +5314,8 @@ Downloader.prototype = {
         } else {
           state = STATE_PENDING;
         }
-#if defined(TOR_BROWSER_UPDATE)
-        // In Tor Browser, show update-related messages in the hamburger menu
+#if defined(I2P_BROWSER_UPDATE)
+        // In I2P Browser, show update-related messages in the hamburger menu
         // even if the update was started in the foreground, e.g., from the
         // about box.
         shouldShowPrompt = !getCanStageUpdates();
@@ -5621,8 +5621,8 @@ Downloader.prototype = {
           LOG(
             "Downloader:onStopRequest - failed to stage update. Exception: " + e
           );
-#if defined(TOR_BROWSER_UPDATE)
-          // In Tor Browser, show update-related messages in the hamburger menu
+#if defined(I2P_BROWSER_UPDATE)
+          // In I2P Browser, show update-related messages in the hamburger menu
           // even if the update was started in the foreground, e.g., from the
           // about box.
           shouldShowPrompt = true;
@@ -5782,10 +5782,10 @@ UpdatePrompt.prototype = {
 
     if (background && Services.prefs.getBoolPref(PREF_APP_UPDATE_DOORHANGER, false)) {
       // To fix https://trac.torproject.org/projects/tor/ticket/27828
-      // ("Check for Tor Browser update" doesn't seem to do anything), in
-      // Tor Browser we only return here when the background parameter is
+      // ("Check for I2P Browser update" doesn't seem to do anything), in
+      // I2P Browser we only return here when the background parameter is
       // true. This causes the update wizard XUL window to (correctly) be
-      // opened in response to "Check for Tor Browser Update."
+      // opened in response to "Check for I2P Browser Update."
       // This change does not alter the behavior of any existing
       // update-related UI because all callers of showUpdateDownloaded()
       // other than Torbutton pass true for the background parameter.

@@ -37,7 +37,7 @@ const PREF_EM_AUTOUPDATE_DEFAULT = "extensions.update.autoUpdateDefault";
 const PREF_EM_STRICT_COMPATIBILITY = "extensions.strictCompatibility";
 const PREF_EM_CHECK_UPDATE_SECURITY = "extensions.checkUpdateSecurity";
 const PREF_SYS_ADDON_UPDATE_ENABLED = "extensions.systemAddon.update.enabled";
-const PREF_EM_LAST_TORBROWSER_VERSION = "extensions.lastTorBrowserVersion";
+const PREF_EM_LAST_I2PBROWSER_VERSION = "extensions.lastI2PBrowserVersion";
 
 const PREF_MIN_WEBEXT_PLATFORM_VERSION =
   "extensions.webExtensionsMinPlatformVersion";
@@ -752,24 +752,24 @@ var AddonManagerInternal = {
 
       // To ensure that extension and plugin code gets a chance to run
       // after each browser update, set appChanged = true when the
-      // Tor Browser version has changed even if the Mozilla app
+      // I2P Browser version has changed even if the Mozilla app
       // version has not changed.
       let tbChanged = undefined;
       try {
-        tbChanged = AppConstants.TOR_BROWSER_VERSION !=
-                   Services.prefs.getCharPref(PREF_EM_LAST_TORBROWSER_VERSION);
+        tbChanged = AppConstants.I2P_BROWSER_VERSION !=
+                   Services.prefs.getCharPref(PREF_EM_LAST_I2PBROWSER_VERSION);
       }
       catch (e) { }
       if (tbChanged !== false) {
-        // Because PREF_EM_LAST_TORBROWSER_VERSION was not present in older
-        // versions of Tor Browser, an app change is indicated when tbChanged
+        // Because PREF_EM_LAST_I2PBROWSER_VERSION was not present in older
+        // versions of I2P Browser, an app change is indicated when tbChanged
         // is undefined or true.
         if (appChanged === false) {
           appChanged = true;
         }
 
-        Services.prefs.setCharPref(PREF_EM_LAST_TORBROWSER_VERSION,
-                                   AppConstants.TOR_BROWSER_VERSION);
+        Services.prefs.setCharPref(PREF_EM_LAST_I2PBROWSER_VERSION,
+                                   AppConstants.I2P_BROWSER_VERSION);
       }
 
       if (!MOZ_COMPATIBILITY_NIGHTLY) {

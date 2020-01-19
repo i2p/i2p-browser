@@ -12,7 +12,7 @@ const { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const ONBOARDING_CSS_URL = "resource://onboarding/onboarding.css";
 const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
-const TORBROWSER_WELCOME_TOUR_NAME_KEY = "onboarding.tour-tor-welcome";
+const I2PBROWSER_WELCOME_TOUR_NAME_KEY = "onboarding.tour-tor-welcome";
 const BUNDLE_URI = "chrome://torbutton/locale/onboarding.properties";
 const UITOUR_JS_URI = "resource://onboarding/lib/UITour-lib.js";
 const TOUR_AGENT_JS_URI = "resource://onboarding/onboarding-tour-agent.js";
@@ -84,12 +84,12 @@ function createOnboardingTourButton(div, buttonId, l10nId, buttonElementTagName 
   return aside;
 }
 
-// Tor Browser tours:
+// I2P Browser tours:
 var onboardingTourset = {
   // Tour items for new users:
   "welcome": {
     id: "onboarding-tour-tor-welcome",
-    tourNameId: TORBROWSER_WELCOME_TOUR_NAME_KEY,
+    tourNameId: I2PBROWSER_WELCOME_TOUR_NAME_KEY,
     instantComplete: true,
     getPage(win) {
       let div = win.document.createElement("div");
@@ -119,7 +119,7 @@ var onboardingTourset = {
       return div;
     },
   },
-  // In Tor Browser 9.0, we replaced the Tor Network panel with an updated one.
+  // In I2P Browser 9.0, we replaced the Tor Network panel with an updated one.
   "tor-network-9.0": {
     id: "onboarding-tour-tor-network-9-0",
     tourNameId: "onboarding.tour-tor-network",
@@ -235,7 +235,7 @@ var onboardingTourset = {
       return div;
     },
   },
-  // Tour items for users who have updated their Tor Browser:
+  // Tour items for users who have updated their I2P Browser:
   "toolbar-update-9.0": {
     id: "onboarding-tour-tor-toolbar-update-9-0",
     tourNameId: "onboarding.tour-tor-toolbar",
@@ -702,7 +702,7 @@ class Onboarding {
   }
 
   _resizeUI() {
-    // In Tor Browser we check against innerWidth instead of against the
+    // In I2P Browser we check against innerWidth instead of against the
     // body's bounding rect because about:tor keeps its body hidden until
     // the Tor status is known, and the bounding rect is zero while the
     // body is hidden.
@@ -714,7 +714,7 @@ class Onboarding {
     }
 
     this._initUI();
-    // For Tor Browser, show the "Let's get started" speech bubble until each
+    // For I2P Browser, show the "Let's get started" speech bubble until each
     // tour item has been completed.
     let isTourComplete = (ICON_STATE_WATERMARK ==
       Services.prefs.getStringPref("browser.onboarding.state",
@@ -757,7 +757,7 @@ class Onboarding {
     this._onIconStateChange(Services.prefs.getStringPref("browser.onboarding.state", ICON_STATE_DEFAULT));
 
     // Doing tour notification takes some effort. Let's do it on idle.
-// For now, onboarding notifications are disabled in Tor Browser.
+// For now, onboarding notifications are disabled in I2P Browser.
 //    this._window.requestIdleCallback(() => this.showNotification());
   }
 
@@ -1680,7 +1680,7 @@ class Onboarding {
 
     let header = this._window.document.createElement("header");
     header.id = "onboarding-header";
-// In Tor Browser, we do not want header text.
+// In I2P Browser, we do not want header text.
 //    header.textContent = this._bundle.GetStringFromName("onboarding.overlay-title2");
     this._dialog.appendChild(header);
 
@@ -1858,11 +1858,11 @@ class _TorOnboardingStringBundle {
     this._mFirefoxBundle = Services.strings.createBundle(BUNDLE_URI);
     this._mTorButtonBundle = Services.strings.createBundle(TORBUTTON_BUNDLE_URI);
 
-    // If the Tor Browser onboarding strings which ship inside Torbutton are
+    // If the I2P Browser onboarding strings which ship inside Torbutton are
     // not available, fail initialization so that no tours are shown.
     try {
       let result = this._mTorButtonBundle.GetStringFromName(
-                                            TORBROWSER_WELCOME_TOUR_NAME_KEY);
+                                            I2PBROWSER_WELCOME_TOUR_NAME_KEY);
       this.inited = true;
     } catch (e) {}
   }

@@ -2,12 +2,12 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!ENTITY  brandShorterName      "Tor Browser">
-<!ENTITY  brandShortName        "Tor Browser">
-<!ENTITY  brandFullName         "Tor Browser">
+<!ENTITY  brandShorterName      "I2P Browser">
+<!ENTITY  brandShortName        "I2P Browser">
+<!ENTITY  brandFullName         "I2P Browser">
 <!-- LOCALIZATION NOTE (brandProductName):
    This brand name can be used in messages where the product name needs to
    remain unchanged across different versions (Nightly, Beta, etc.). -->
-<!ENTITY  brandProductName      "Tor Browser">
+<!ENTITY  brandProductName      "I2P Browser">
 <!ENTITY  vendorShortName       "Tor Project">
 <!ENTITY  trademarkInfo.part1   "'Tor' and the 'Onion Logo' are registered trademarks of the Tor Project, Inc.">

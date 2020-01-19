@@ -69,7 +69,7 @@ class TorStringBundle {
 */
 var TorStrings = {
   /*
-    Tor Browser Security Level Strings
+    I2P Browser Security Level Strings
   */
   securityLevel: (function() {
     let tsb = new TorStringBundle(
@@ -93,7 +93,7 @@ var TorStrings = {
         tooltip: getString("standard_tooltip", "Security Level : Standard"),
         summary: getString(
           "standard_description",
-          "All Tor Browser and website features are enabled."
+          "All I2P Browser and website features are enabled."
         ),
       },
       safer: {
@@ -173,7 +173,7 @@ var TorStrings = {
       ),
       torPreferencesDescription: getString(
         "torPreferences.torSettingsDescription",
-        "Tor Browser routes your traffic over the Tor Network, run by thousands of volunteers around the world."
+        "I2P Browser routes your traffic over the Tor Network, run by thousands of volunteers around the world."
       ),
       learnMore: getString("torPreferences.learnMore", "Learn More"),
       bridgesHeading: getString("torPreferences.bridges", "Bridges"),
@@ -209,7 +209,7 @@ var TorStrings = {
       advancedHeading: getString("torPreferences.advanced", "Advanced"),
       advancedDescription: getString(
         "torPreferences.advancedDescription",
-        "Configure how Tor Browser connects to the internet."
+        "Configure how I2P Browser connects to the internet."
       ),
       useLocalProxy: getString("torsettings.useProxy.checkbox", "I use a proxy to connect to the Internet"),
       proxyType: getString("torsettings.useProxy.type", "Proxy Type"),
@@ -275,7 +275,7 @@ var TorStrings = {
       ),
       copyLog: getString("torsettings.copyLog", "Copy Tor Log to Clipboard"),
 
-      learnMoreTorBrowserURL: `https://tb-manual.torproject.org/${getLocale()}/about/`,
+      learnMoreI2PBrowserURL: `https://tb-manual.torproject.org/${getLocale()}/about/`,
       learnMoreBridgesURL: `https://tb-manual.torproject.org/${getLocale()}/bridges/`,
       learnMoreNetworkSettingsURL: `about:blank`,
     };

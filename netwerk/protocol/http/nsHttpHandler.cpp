@@ -551,7 +551,7 @@ nsresult nsHttpHandler::Init() {
     obsService->AddObserver(this, NS_XPCOM_SHUTDOWN_OBSERVER_ID, true);
     obsService->AddObserver(this, "net:clear-active-logins", true);
     obsService->AddObserver(this, "net:prune-dead-connections", true);
-    // Sent by the TorButton add-on in the Tor Browser
+    // Sent by the TorButton add-on in the I2P Browser
     obsService->AddObserver(this, "net:prune-all-connections", true);
     obsService->AddObserver(this, "net:cancel-all-connections", true);
     obsService->AddObserver(this, "last-pb-context-exited", true);

@@ -113,10 +113,10 @@ class nsXREDirProvider final : public nsIDirectoryServiceProvider2,
   nsresult GetProfileDir(nsIFile** aResult);
 
   /**
-   * Get the TorBrowser user data directory by calling the
-   * TorBrowser_GetUserDataDir() utility function.
+   * Get the I2PBrowser user data directory by calling the
+   * I2PBrowser_GetUserDataDir() utility function.
    */
-  nsresult GetTorBrowserUserDataDir(nsIFile** aFile);
+  nsresult GetI2PBrowserUserDataDir(nsIFile** aFile);
 
  protected:
   nsresult GetFilesInternal(const char* aProperty,

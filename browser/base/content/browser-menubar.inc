@@ -580,11 +580,11 @@
                 <box id="helpSafeMode"/>
                 <box id="menu_HelpPopup_reportPhishingtoolmenu"/>
                 <box id="menu_HelpPopup_reportPhishingErrortoolmenu"/>
-                <!-- Add Tor Browser manual link -->
+                <!-- Add I2P Browser manual link -->
                 <menuitem id="torBrowserUserManual"
                           oncommand="gBrowser.selectedTab = gBrowser.addTab('https://tb-manual.torproject.org/' + Services.locale.requestedLocale, {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});"
-                          label="&aboutTor.torbrowser_user_manual.label;"
-                          accesskey="&aboutTor.torbrowser_user_manual.accesskey;"/>
+                          label="&aboutTor.i2pbrowser_user_manual.label;"
+                          accesskey="&aboutTor.i2pbrowser_user_manual.accesskey;"/>
                 <!-- Bug 18905: Hide unused help menu items -->
                 <!-- <menuitem id="menu_openHelp"
                           oncommand="openHelpLink('firefox-help')"

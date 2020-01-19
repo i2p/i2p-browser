@@ -153,7 +153,7 @@ public class AppConstants {
     // so it matches the RFP string from necko.
     // toolkit/components/resistfingerprinting/nsRFPService.h
     public static final String USER_AGENT_FENNEC_MOBILE =
-//#ifdef TOR_BROWSER_VERSION
+//#ifdef I2P_BROWSER_VERSION
         "Mozilla/5.0 (Android 6.0; Mobile; rv:68.0) Gecko/20100101 Firefox/68.0";
 //#else
         "Mozilla/5.0 (Android " +
@@ -163,7 +163,7 @@ public class AppConstants {
         AppConstants.MOZ_APP_VERSION;
 //#endif
 
-//#ifdef TOR_BROWSER_VERSION
+//#ifdef I2P_BROWSER_VERSION
     public static final String USER_AGENT_FENNEC_TABLET = USER_AGENT_FENNEC_MOBILE;
 //#else
     public static final String USER_AGENT_FENNEC_TABLET = "Mozilla/5.0 (Android " +
@@ -371,15 +371,15 @@ public class AppConstants {
         null;
 //#endif
 
-    public static final String TOR_BROWSER_VERSION =
-//#ifdef TOR_BROWSER_VERSION
-        "@TOR_BROWSER_VERSION@";
+    public static final String I2P_BROWSER_VERSION =
+//#ifdef I2P_BROWSER_VERSION
+        "@I2P_BROWSER_VERSION@";
 //#else
         null;
 //#endif
 
-    public static final boolean isTorBrowser() {
-//#ifdef TOR_BROWSER_VERSION
+    public static final boolean isI2PBrowser() {
+//#ifdef I2P_BROWSER_VERSION
         return true;
 //#else
         return true;

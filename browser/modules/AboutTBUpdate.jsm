@@ -17,7 +17,7 @@ Cu.import("resource://gre/modules/NetUtil.jsm");
 const kRequestUpdateMessageName = "AboutTBUpdate:RequestUpdate";
 const kSendUpdateMessageName    = "AboutTBUpdate:Update";
 
-#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION_QUOTED__;
+#expand const I2P_BROWSER_VERSION = __I2P_BROWSER_VERSION_QUOTED__;
 
 /**
  * This code provides services to the about:tbupdate page. Whenever
@@ -47,7 +47,7 @@ var AboutTBUpdate = {
 
   get moreInfoURL() {
     try {
-      return Services.prefs.getCharPref("torbrowser.post_update.url");
+      return Services.prefs.getCharPref("i2pbrowser.post_update.url");
     } catch (e) {}
 
     // Use the default URL as a fallback.
@@ -55,33 +55,33 @@ var AboutTBUpdate = {
   },
 
   // Read the text from the beginning of the changelog file that is located
-  // at TorBrowser/Docs/ChangeLog.txt and return an object that contains
+  // at I2PBrowser/Docs/ChangeLog.txt and return an object that contains
   // the following properties:
-  //   version        e.g., Tor Browser 8.5
+  //   version        e.g., I2P Browser 8.5
   //   releaseDate    e.g., March 31 2019
   //   releaseNotes   details of changes (lines 2 - end of ChangeLog.txt)
   // We attempt to parse the first line of ChangeLog.txt to extract the
   // version and releaseDate. If parsing fails, we return the entire first
   // line in version and omit releaseDate.
   //
-  // On Mac OS, when building with --enable-tor-browser-data-outside-app-dir
+  // On Mac OS, when building with --enable-i2p-browser-data-outside-app-dir
   // to support Gatekeeper signing, the ChangeLog.txt file is located in
-  // TorBrowser.app/Contents/Resources/TorBrowser/Docs/.
+  // I2PBrowser.app/Contents/Resources/I2PBrowser/Docs/.
   get releaseNoteInfo() {
     let info = {};
 
     try {
-#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+#ifdef I2P_BROWSER_DATA_OUTSIDE_APP_DIR
       // "XREExeF".parent is the directory that contains firefox, i.e.,
-      // Browser/ or, on Mac OS, TorBrowser.app/Contents/MacOS/.
+      // Browser/ or, on Mac OS, I2PBrowser.app/Contents/MacOS/.
       let f = Services.dirsvc.get("XREExeF", Ci.nsIFile).parent;
 #ifdef XP_MACOSX
       f = f.parent;
       f.append("Resources");
 #endif
-      f.append("TorBrowser");
+      f.append("I2PBrowser");
 #else
-      // "DefProfRt" is .../TorBrowser/Data/Browser
+      // "DefProfRt" is .../I2PBrowser/Data/Browser
       let f = Cc["@mozilla.org/file/directory_service;1"]
                 .getService(Ci.nsIProperties).get("DefProfRt", Ci.nsIFile);
       f = f.parent.parent;  // Remove "Data/Browser"
@@ -111,7 +111,7 @@ var AboutTBUpdate = {
         info.releaseNotes = matchArray[2];
         let line1 = matchArray[1];
         // Extract the version and releaseDate. The first line looks like:
-        //   Tor Browser 8.5 -- May 1 2019
+        //   I2P Browser 8.5 -- May 1 2019
         // The regex uses two capture groups:
         //   text that does not include a hyphen: (^[^-]*)
         //   remaining text: (.*$)

@@ -1,9 +1,9 @@
-// # Test for TB4: Tor Browser's Firefox preference overrides
+// # Test for TB4: I2P Browser's Firefox preference overrides
 // Simple regression tests to check the value of each pref and
 // decides if it is set as expected.
 
 // TODO: Write unit tests to check that each pref setting here
-// causes the browser to have the desired behavior (a big task). 
+// causes the browser to have the desired behavior (a big task).
 
 function test() {
 
@@ -151,7 +151,7 @@ let expectedPrefs = [
    ["security.tls.version.max", 3],
 
    // Version placeholder
-   ["torbrowser.version", "UNKNOWN"],
+   ["i2pbrowser.version", "UNKNOWN"],
 
   ];
 
@@ -167,7 +167,7 @@ let getPref = function (prefName) {
 let testPref = function([key, expectedValue]) {
   let foundValue = getPref(key);
   is(foundValue, expectedValue, "Pref '" + key + "' should be '" + expectedValue +"'.");
-};  
+};
 
 expectedPrefs.map(testPref);
 

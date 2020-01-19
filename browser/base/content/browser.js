@@ -628,7 +628,7 @@ var gInitialPages = [
   "about:newinstall",
 ];
 
-if (AppConstants.TOR_BROWSER_UPDATE) {
+if (AppConstants.I2P_BROWSER_UPDATE) {
   gInitialPages.push("about:tbupdate");
 }
 
@@ -920,7 +920,7 @@ const gStoragePressureObserver = {
     }
     this._lastNotificationTime = Date.now();
 
-    MozXULElement.insertFTLIfNeeded("branding/tor-browser-brand.ftl");
+    MozXULElement.insertFTLIfNeeded("branding/i2p-browser-brand.ftl");
     MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
 
     const BYTES_IN_GIGABYTE = 1073741824;

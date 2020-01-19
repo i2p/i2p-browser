@@ -173,7 +173,7 @@ const gTorPane = (function() {
         learnMore.setAttribute("value", TorStrings.settings.learnMore);
         learnMore.setAttribute(
           "href",
-          TorStrings.settings.learnMoreTorBrowserURL
+          TorStrings.settings.learnMoreI2PBrowserURL
         );
       }
 

@@ -649,7 +649,7 @@ public class BrowserApp extends GeckoApp
         // Telemetry-uploading by abusing the isInAutomation detection.
         isInAutomation =
           (IntentUtils.getIsInAutomationFromEnvironment(safeStartingIntent)
-           || AppConstants.isTorBrowser());
+           || AppConstants.isI2PBrowser());
 
         GeckoProfile.setIntentArgs(safeStartingIntent.getStringExtra("args"));
 
@@ -1271,7 +1271,7 @@ public class BrowserApp extends GeckoApp
             delegate.onResume(this);
         }
 
-        // isInAutomation is overloaded with isTorBrowser(), but here we actually
+        // isInAutomation is overloaded with isI2PBrowser(), but here we actually
         // need to know if we are in automation.
         final SafeIntent intent = new SafeIntent(getIntent());
         if (!IntentUtils.getIsInAutomationFromEnvironment(intent)) {
@@ -1459,9 +1459,9 @@ public class BrowserApp extends GeckoApp
         // Website suggestions for address bar inputs should not be enabled when running in automation.
         // After the upgrade to support library v.26 it could fail otherwise unrelated Robocop tests
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=1385464#c3
-        // But only disable it when this isn't Tor Browser, because isInAutomation is overloaded such
-        // that it is |true| in Tor Browser.
-        if (!isInAutomation || AppConstants.isTorBrowser()) {
+        // But only disable it when this isn't I2P Browser, because isInAutomation is overloaded such
+        // that it is |true| in I2P Browser.
+        if (!isInAutomation || AppConstants.isI2PBrowser()) {
             mBrowserToolbar.setOnFilterListener(new BrowserToolbar.OnFilterListener() {
                 @Override
                 public void onFilter(String searchText, AutocompleteHandler handler) {

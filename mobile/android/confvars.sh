@@ -15,7 +15,7 @@ MOZ_OFFICIAL_BRANDING_DIRECTORY=mobile/android/branding/official
 
 # We support Android SDK version 16 and up by default.
 # See the --enable-android-min-sdk and --enable-android-max-sdk arguments in configure.in.
-# 
+#
 # Warning: Before increasing the with-android-min-sdk value, please note several places in and out
 # of tree have to be changed. Otherwise, places like Treeherder or archive.mozilla.org will
 # advertise a bad API level. This may confuse people. As an example, please look at bug 1384482.
@@ -38,7 +38,7 @@ MOZ_USE_NATIVE_POPUP_WINDOWS=1
 
 MOZ_APP_ID={aa3c5121-dab2-40e2-81ca-7ea25febc110}
 
-### Tor Browser for Android ###
+### I2P Browser for Android ###
 
 # Disables support at compile-time for casting (Mozilla Media Manager)
 # and prevents dependency on Google Play Services support

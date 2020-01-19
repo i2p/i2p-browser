@@ -68,8 +68,8 @@ public abstract class AbstractCommunicator {
     }
 
     private void openConnectionAndSetHeaders() {
-        if (AppConstants.isTorBrowser()) {
-            Log.i(LOG_TAG, "This is Tor Browser. Skipping.");
+        if (AppConstants.isI2PBrowser()) {
+            Log.i(LOG_TAG, "This is I2P Browser. Skipping.");
             throw new Exception();
         }
 

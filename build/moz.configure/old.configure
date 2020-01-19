@@ -263,9 +263,9 @@ def old_configure_options(*options):
     '--x-libraries',
 
     # Tor additions.
-    '--with-tor-browser-version',
-    '--enable-tor-browser-update',
-    '--enable-tor-browser-data-outside-app-dir',
+    '--with-i2p-browser-version',
+    '--enable-i2p-browser-update',
+    '--enable-i2p-browser-data-outside-app-dir',
     '--enable-tor-launcher',
 )
 def prepare_configure_options(extra_old_configure_args, all_options, *options):

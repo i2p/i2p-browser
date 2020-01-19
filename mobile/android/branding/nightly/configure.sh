@@ -2,7 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-MOZ_APP_DISPLAYNAME="Tor Browser Nightly"
-ANDROID_PACKAGE_NAME=org.torproject.torbrowser_nightly
+MOZ_APP_DISPLAYNAME="I2P Browser Nightly"
+ANDROID_PACKAGE_NAME=org.torproject.i2pbrowser_nightly
 MOZ_UPDATER=
 MOZ_ANDROID_ANR_REPORTER=

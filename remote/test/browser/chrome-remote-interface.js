@@ -2268,7 +2268,7 @@ var CDP =
 	$export($export.S + $export.F * !($acosh
 	  // V8 bug: https://code.google.com/p/v8/issues/detail?id=3509
 	  && Math.floor($acosh(Number.MAX_VALUE)) == 710
-	  // Tor Browser bug: Math.acosh(Infinity) -> NaN
+	  // I2P Browser bug: Math.acosh(Infinity) -> NaN
 	  && $acosh(Infinity) == Infinity
 	), 'Math', {
 	  acosh: function acosh(x) {
@@ -2301,7 +2301,7 @@ var CDP =
 	  return !isFinite(x = +x) || x == 0 ? x : x < 0 ? -asinh(-x) : Math.log(x + Math.sqrt(x * x + 1));
 	}
 
-	// Tor Browser bug: Math.asinh(0) -> -0
+	// I2P Browser bug: Math.asinh(0) -> -0
 	$export($export.S + $export.F * !($asinh && 1 / $asinh(0) > 0), 'Math', { asinh: asinh });
 
 
@@ -2313,7 +2313,7 @@ var CDP =
 	var $export = __webpack_require__(8);
 	var $atanh = Math.atanh;
 
-	// Tor Browser bug: Math.atanh(-0) -> 0
+	// I2P Browser bug: Math.atanh(-0) -> 0
 	$export($export.S + $export.F * !($atanh && 1 / $atanh(-0) < 0), 'Math', {
 	  atanh: function atanh(x) {
 	    return (x = +x) == 0 ? x : Math.log((1 + x) / (1 - x)) / 2;
@@ -2396,7 +2396,7 @@ var CDP =
 	module.exports = (!$expm1
 	  // Old FF bug
 	  || $expm1(10) > 22025.465794806719 || $expm1(10) < 22025.4657948067165168
-	  // Tor Browser bug
+	  // I2P Browser bug
 	  || $expm1(-2e-17) != -2e-17
 	) ? function expm1(x) {
 	  return (x = +x) == 0 ? x : x > -1e-6 && x < 1e-6 ? x + x * x / 2 : Math.exp(x) - 1;
@@ -12199,7 +12199,7 @@ var CDP =
 			self.url = response.url
 			self.statusCode = response.status
 			self.statusMessage = response.statusText
-			
+
 			response.headers.forEach(function (header, key){
 				self.headers[key.toLowerCase()] = header
 				self.rawHeaders.push(key, header)
@@ -12329,7 +12329,7 @@ var CDP =
 					self.push(new Buffer(response))
 					break
 				}
-				// Falls through in IE8	
+				// Falls through in IE8
 			case 'text':
 				try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
 					response = xhr.responseText

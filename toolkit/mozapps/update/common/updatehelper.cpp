@@ -62,10 +62,10 @@ BOOL PathGetSiblingFilePath(LPWSTR destinationBuffer, LPCWSTR siblingFilePath,
  * @return TRUE if successful
  */
 BOOL GetSecureOutputDirectoryPath(LPWSTR outBuf) {
-#ifdef TOR_BROWSER_UPDATE
+#ifdef I2P_BROWSER_UPDATE
   // This function is used to support the maintenance service and elevated
-  // updates and is therefore not called by Tor Browser's updater. We stub
-  // it out to avoid any chance that the Tor Browser updater will create
+  // updates and is therefore not called by I2P Browser's updater. We stub
+  // it out to avoid any chance that the I2P Browser updater will create
   // files under C:\Program Files (x86)\ or a similar location.
   return FALSE;
 #else

@@ -266,7 +266,7 @@ if 'Android' != CONFIG['OS_TARGET']:
     ]
 else:
     DEFINES['ANDROID'] = True
-    if not CONFIG['TOR_BROWSER_VERSION']:
+    if not CONFIG['I2P_BROWSER_VERSION']:
         EXTRA_JS_MODULES += [
             'secondscreen/RokuApp.jsm',
             'secondscreen/SimpleServiceDiscovery.jsm',
@@ -304,8 +304,8 @@ for var in ('MOZ_SYSTEM_NSS',
     if CONFIG[var]:
         DEFINES[var] = True
 
-if CONFIG['TOR_BROWSER_UPDATE']:
-    DEFINES['TOR_BROWSER_UPDATE'] = 1
+if CONFIG['I2P_BROWSER_UPDATE']:
+    DEFINES['I2P_BROWSER_UPDATE'] = 1
 
 JAR_MANIFESTS += ['jar.mn']
 

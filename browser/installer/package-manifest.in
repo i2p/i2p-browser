@@ -36,7 +36,7 @@
 ; Mac bundle stuff
 @APPNAME@/Contents/Info.plist
 #ifdef MOZ_UPDATER
-#ifndef TOR_BROWSER_UPDATE
+#ifndef I2P_BROWSER_UPDATE
 @APPNAME@/Contents/Library/LaunchServices
 #endif
 #endif
@@ -246,7 +246,7 @@
 @RESPATH@/browser/chrome/browser.manifest
 @RESPATH@/browser/chrome/pdfjs.manifest
 @RESPATH@/browser/chrome/pdfjs/*
-#ifndef TOR_BROWSER_DISABLE_TOR_LAUNCHER
+#ifndef I2P_BROWSER_DISABLE_TOR_LAUNCHER
 @RESPATH@/browser/chrome/torlauncher.manifest
 @RESPATH@/browser/chrome/torlauncher/*
 @RESPATH@/browser/@PREF_DIR@/torlauncher-prefs.js
@@ -303,7 +303,7 @@
 @RESPATH@/browser/defaults/settings/pinning
 @RESPATH@/browser/defaults/settings/main
 @RESPATH@/browser/defaults/settings/security-state
-@RESPATH@/browser/@PREF_DIR@/000-tor-browser.js
+@RESPATH@/browser/@PREF_DIR@/000-i2p-browser.js
 
 ; Warning: changing the path to channel-prefs.js can cause bugs (Bug 756325)
 ; Technically this is an app pref file, but we are keeping it in the original

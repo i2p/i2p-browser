@@ -173,7 +173,7 @@ EXTRA_JS_MODULES += [
     'ZoomUI.jsm',
 ]
 
-if CONFIG['TOR_BROWSER_UPDATE']:
+if CONFIG['I2P_BROWSER_UPDATE']:
     EXTRA_PP_JS_MODULES += [
         'AboutTBUpdate.jsm',
     ]

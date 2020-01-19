@@ -50,7 +50,7 @@ public class FirefoxAccounts {
    * @return Firefox account objects.
    */
   public static Account[] getFirefoxAccounts(final Context context) {
-    if (AppConstants.isTorBrowser()) {
+    if (AppConstants.isI2PBrowser()) {
       return new Account[0];
     } else {
       // TBA: Conditionally disable this at run-time.
@@ -119,7 +119,7 @@ public class FirefoxAccounts {
   }
 
   public static void logSyncOptions(Bundle syncOptions) {
-    if (AppConstants.isTorBrowser()) {
+    if (AppConstants.isI2PBrowser()) {
       // Don't log an erroneous message, this'll only confuse someone looking at the logs.
       return;
     } else {
@@ -158,7 +158,7 @@ public class FirefoxAccounts {
    * @param stagesToSkip stage names to skip.
    */
   protected static void requestSync(final Account account, final Bundle syncOptions, String[] stagesToSync, String[] stagesToSkip) {
-    if (AppConstants.isTorBrowser()) {
+    if (AppConstants.isI2PBrowser()) {
       return;
     } else {
       if (account == null) {
