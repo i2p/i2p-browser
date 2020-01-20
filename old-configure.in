@@ -2227,18 +2227,6 @@ AC_DEFINE_UNQUOTED(I2P_BROWSER_VERSION_QUOTED,"$I2P_BROWSER_VERSION")
 AC_SUBST(I2P_BROWSER_UPDATE)
 AC_SUBST(I2P_BROWSER_DATA_OUTSIDE_APP_DIR)
 
-MOZ_ARG_DISABLE_BOOL(tor-launcher,
-[  --disable-tor-launcher
-                          Do not include Tor Launcher],
-   I2P_BROWSER_DISABLE_TOR_LAUNCHER=1,
-   I2P_BROWSER_DISABLE_TOR_LAUNCHER=)
-
-if test -n "$I2P_BROWSER_DISABLE_TOR_LAUNCHER"; then
-    AC_DEFINE(I2P_BROWSER_DISABLE_TOR_LAUNCHER)
-fi
-
-AC_SUBST(I2P_BROWSER_DISABLE_TOR_LAUNCHER)
-
 dnl ========================================================
 dnl parental controls (for Windows Vista)
 dnl ========================================================

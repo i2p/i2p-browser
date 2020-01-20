@@ -266,7 +266,6 @@ def old_configure_options(*options):
     '--with-i2p-browser-version',
     '--enable-i2p-browser-update',
     '--enable-i2p-browser-data-outside-app-dir',
-    '--enable-tor-launcher',
 )
 def prepare_configure_options(extra_old_configure_args, all_options, *options):
     # old-configure only supports the options listed in @old_configure_options
