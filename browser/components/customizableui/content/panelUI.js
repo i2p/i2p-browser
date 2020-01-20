@@ -147,15 +147,15 @@ const PanelUI = {
   },
 
   _initUpdaterStrings() {
-    // If Torbutton is installed and enabled, replace the "Downloading update"
-    // string with one from torbutton.properties (to facilitate localization).
+    // If i2pbutton is installed and enabled, replace the "Downloading update"
+    // string with one from i2pbutton.properties (to facilitate localization).
     try {
       let brands = Services.strings.createBundle(
                                  "chrome://branding/locale/brand.properties");
       let stringArgs = [brands.GetStringFromName("brandShortName")];
-      let torbuttonBundle = Services.strings.createBundle(
-                            "chrome://torbutton/locale/torbutton.properties");
-      let label = torbuttonBundle.formatStringFromName(
+      let i2pbuttonBundle = Services.strings.createBundle(
+                            "chrome://i2pbutton/locale/i2pbutton.properties");
+      let label = i2pbuttonBundle.formatStringFromName(
                               "updateDownloadingPanelUILabel", stringArgs, 1);
       let attrName = "label-update-downloading";
       let elements = document.getElementsByClassName("panel-banner-item");

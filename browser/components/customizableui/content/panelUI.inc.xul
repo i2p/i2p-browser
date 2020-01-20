@@ -284,7 +284,7 @@
                        command="Browser:RestoreLastSession"
                        hidden="true"/>
         <toolbarseparator/>
-        <toolbarbutton id="appMenuNewIdentity"
+        <!--<toolbarbutton id="appMenuNewIdentity"
                  class="subviewbutton subviewbutton-iconic"
                  key="torbutton-new-identity-key"
                  label="&torbutton.context_menu.new_identity;"
@@ -293,7 +293,7 @@
                  class="subviewbutton subviewbutton-iconic"
                  key="torbutton-new-circuit-key"
                  label="&torbutton.context_menu.new_circuit;"
-                 oncommand="torbutton_new_circuit();"/>
+                 oncommand="torbutton_new_circuit();"/>-->
         <toolbarseparator/>
         <toolbaritem id="appMenu-zoom-controls" class="toolbaritem-combined-buttons" closemenu="none">
           <!-- Use a spacer, because panel sizing code gets confused when using CSS methods. -->

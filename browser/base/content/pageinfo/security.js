@@ -24,9 +24,9 @@ ChromeUtils.defineModuleGetter(
 );
 XPCOMUtils.defineLazyGetter(
   this,
-  "gTorButtonBundle",
+  "gi2pbuttonBundle",
   function() {
-    return Services.strings.createBundle("chrome://torbutton/locale/torbutton.properties");
+    return Services.strings.createBundle("chrome://i2pbutton/locale/i2pbutton.properties");
   }
 );
 
@@ -349,7 +349,7 @@ function securityOnLoad(uri, windowInfo) {
       );
     } else {
       try {
-        hdr = gTorButtonBundle.formatStringFromName(
+        hdr = gi2pbuttonBundle.formatStringFromName(
           "pageInfo_OnionEncryptionWithBitsAndProtocol",
           [
             info.encryptionAlgorithm,
@@ -381,7 +381,7 @@ function securityOnLoad(uri, windowInfo) {
       msg2 = pkiBundle.getString("pageInfo_Privacy_None2");
     } else {
       try {
-        hdr = gTorButtonBundle.GetStringFromName("pageInfo_OnionEncryption");
+        hdr = gi2pbuttonBundle.GetStringFromName("pageInfo_OnionEncryption");
       } catch (err) {
         hdr = "Connection Encrypted (Onion Service)";
       }

@@ -66,7 +66,7 @@ function cleanUp() {
 }
 
 function getStringFromName(aName) {
-  const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
+  const TORBUTTON_BUNDLE_URI = "chrome://i2pbutton/locale/browserOnboarding.properties";
   const PREFIX = "onboarding.tor-circuit-display.";
 
   if (!gStringBundle) {

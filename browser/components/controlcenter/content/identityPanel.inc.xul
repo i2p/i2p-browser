@@ -57,6 +57,7 @@
       </hbox>
 
       <!-- Circuit display section -->
+      <!--
       <hbox id="circuit-display-container" class="identity-popup-section">
         <vbox id="circuit-display-content" flex="1">
           <label id="circuit-display-headline"
@@ -69,7 +70,7 @@
           <hbox id="circuit-guard-note-container"/>
         </vbox>
       </hbox>
-
+-->
       <!-- Tracking Protection Section -->
       <hbox id="tracking-protection-container"
             class="identity-popup-section"

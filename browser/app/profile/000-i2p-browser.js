@@ -243,7 +243,7 @@ pref("extensions.autoDisableScopes", 0);
 pref("extensions.bootstrappedAddons", "{}");
 pref("extensions.checkCompatibility.4.*", false);
 pref("extensions.databaseSchema", 3);
-pref("extensions.enabledAddons", "https-everywhere%40eff.org:3.1.4,%7B73a6fe31-595d-460b-a920-fcc0f8843232%7D:2.6.6.1,torbutton%40torproject.org:1.5.2,ubufox%40ubuntu.com:2.6,%7B972ce4c6-7e08-4474-a285-3208198ce6fd%7D:17.0.5");
+pref("extensions.enabledAddons", "https-everywhere%40eff.org:3.1.4,%7B73a6fe31-595d-460b-a920-fcc0f8843232%7D:2.6.6.1,i2pbutton%geti2p.net:1.5.2,ubufox%40ubuntu.com:2.6,%7B972ce4c6-7e08-4474-a285-3208198ce6fd%7D:17.0.5");
 pref("extensions.enabledItems", "langpack-en-US@firefox.mozilla.org:,{73a6fe31-595d-460b-a920-fcc0f8843232}:1.9.9.57,{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.4,{972ce4c6-7e08-4474-a285-3208198ce6fd}:3.5.8");
 pref("extensions.enabledScopes", 5); // AddonManager.SCOPE_PROFILE=1 | AddonManager.SCOPE_APPLICATION=4
 pref("extensions.pendingOperations", false);
@@ -256,7 +256,7 @@ pref("extensions.getAddons.showPane", false);
 pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 // Show our legacy extensions directly on about:addons and get rid of the
 // warning for the default theme.
-pref("extensions.legacy.exceptions", "{972ce4c6-7e08-4474-a285-3208198ce6fd},torbutton@torproject.org");
+pref("extensions.legacy.exceptions", "{972ce4c6-7e08-4474-a285-3208198ce6fd},i2pbutton@torproject.org");
 // Bug 26114: Allow NoScript to access addons.mozilla.org etc.
 pref("extensions.webextensions.restrictedDomains", "");
 // Bug 31396: Disable indexedDB WebExtension storage backend.
@@ -265,7 +265,7 @@ pref("extensions.webextensions.ExtensionStorageIDB.enabled", false);
 pref("extensions.allowPrivateBrowsingByDefault", true);
 
 // Toolbar layout
-pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-list\":[],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"back-button\",\"forward-button\",\"stop-reload-button\",\"urlbar-container\",\"torbutton-button\",\"security-level-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"PanelUI-contents\":[\"home-button\",\"edit-controls\",\"zoom-controls\",\"new-window-button\",\"save-page-button\",\"print-button\",\"bookmarks-menu-button\",\"history-panelmenu\",\"find-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"]},\"seen\":[\"developer-button\",\"https-everywhere-eff_eff_org-browser-action\",\"_73a6fe31-595d-460b-a920-fcc0f8843232_-browser-action\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":14,\"newElementCount\":1}");
+pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-list\":[],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"back-button\",\"forward-button\",\"stop-reload-button\",\"urlbar-container\",\"i2pbutton-button\",\"security-level-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"PanelUI-contents\":[\"home-button\",\"edit-controls\",\"zoom-controls\",\"new-window-button\",\"save-page-button\",\"print-button\",\"bookmarks-menu-button\",\"history-panelmenu\",\"find-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"]},\"seen\":[\"developer-button\",\"https-everywhere-eff_eff_org-browser-action\",\"_73a6fe31-595d-460b-a920-fcc0f8843232_-browser-action\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":14,\"newElementCount\":1}");
 
 // Putting the search engine prefs into this file to fix #11236.
 // Default search engine
@@ -344,63 +344,63 @@ pref("browser.download.forward_oma_android_download_manager", false);
 
 #expand pref("i2pbrowser.version", __I2P_BROWSER_VERSION_QUOTED__);
 
-// Old torbutton prefs
+// Old i2pbutton prefs
 
 // debug prefs
-pref("extensions.torbutton.loglevel",4);
-pref("extensions.torbutton.logmethod",1); // 0=stdout, 1=errorconsole, 2=debuglog
+pref("extensions.i2pbutton.loglevel",4);
+pref("extensions.i2pbutton.logmethod",1); // 0=stdout, 1=errorconsole, 2=debuglog
 
 // Display prefs
-pref("extensions.torbutton.display_circuit", true);
-pref("extensions.torbutton@torproject.org.description", "chrome://torbutton/locale/torbutton.properties");
-pref("extensions.torbutton.updateNeeded", false);
+pref("extensions.i2pbutton.display_circuit", true);
+pref("extensions.i2pbutton@torproject.org.description", "chrome://i2pbutton/locale/i2pbutton.properties");
+pref("extensions.i2pbutton.updateNeeded", false);
 
 // Tor check and proxy prefs
-pref("extensions.torbutton.test_enabled",true);
-pref("extensions.torbutton.test_url","https://check.torproject.org/?TorButton=true");
-pref("extensions.torbutton.local_tor_check",true);
-pref("extensions.torbutton.versioncheck_url","https://www.torproject.org/projects/i2pbrowser/RecommendedTBBVersions");
-pref("extensions.torbutton.versioncheck_enabled",true);
-pref("extensions.torbutton.use_nontor_proxy",false);
+pref("extensions.i2pbutton.test_enabled",true);
+pref("extensions.i2pbutton.test_url","https://check.torproject.org/?i2pbutton=true");
+pref("extensions.i2pbutton.local_tor_check",true);
+pref("extensions.i2pbutton.versioncheck_url","https://www.torproject.org/projects/i2pbrowser/RecommendedTBBVersions");
+pref("extensions.i2pbutton.versioncheck_enabled",true);
+pref("extensions.i2pbutton.use_nontor_proxy",false);
 
 // State prefs:
-pref("extensions.torbutton.startup",false);
-pref("extensions.torbutton.inserted_button",false);
-pref("extensions.torbutton.inserted_security_level",false);
+pref("extensions.i2pbutton.startup",false);
+pref("extensions.i2pbutton.inserted_button",false);
+pref("extensions.i2pbutton.inserted_security_level",false);
 
 // This is only used when letterboxing is disabled.
 // See #7255 for details. We display the warning three times to make sure the
 // user did not click on it by accident.
-pref("extensions.torbutton.maximize_warnings_remaining", 3);
+pref("extensions.i2pbutton.maximize_warnings_remaining", 3);
 
 // Security prefs:
-pref("extensions.torbutton.clear_http_auth",true);
-pref("extensions.torbutton.close_newnym",true);
-pref("extensions.torbutton.resize_new_windows",false);
-pref("extensions.torbutton.startup_state", 2); // 0=non-tor, 1=tor, 2=last
-pref("extensions.torbutton.tor_memory_jar",false);
-pref("extensions.torbutton.nontor_memory_jar",false);
-pref("extensions.torbutton.launch_warning",true);
+pref("extensions.i2pbutton.clear_http_auth",true);
+pref("extensions.i2pbutton.close_newnym",true);
+pref("extensions.i2pbutton.resize_new_windows",false);
+pref("extensions.i2pbutton.startup_state", 2); // 0=non-tor, 1=tor, 2=last
+pref("extensions.i2pbutton.tor_memory_jar",false);
+pref("extensions.i2pbutton.nontor_memory_jar",false);
+pref("extensions.i2pbutton.launch_warning",true);
 
 // Opt out of Firefox addon pings:
 // https://developer.mozilla.org/en/Addons/Working_with_AMO
-pref("extensions.torbutton@torproject.org.getAddons.cache.enabled", false);
+pref("extensions.i2pbutton@torproject.org.getAddons.cache.enabled", false);
 
 // Security Slider
-pref("extensions.torbutton.security_slider", 4);
-pref("extensions.torbutton.security_custom", false);
+pref("extensions.i2pbutton.security_slider", 4);
+pref("extensions.i2pbutton.security_custom", false);
 
-pref("extensions.torbutton.confirm_plugins", true);
-pref("extensions.torbutton.confirm_newnym", true);
+pref("extensions.i2pbutton.confirm_plugins", true);
+pref("extensions.i2pbutton.confirm_newnym", true);
 
-pref("extensions.torbutton.noscript_inited", false);
-pref("extensions.torbutton.noscript_persist", false);
+pref("extensions.i2pbutton.noscript_inited", false);
+pref("extensions.i2pbutton.noscript_persist", false);
 
 // Browser home page:
 pref("browser.startup.homepage", "about:tor");
 
 // This pref specifies an ad-hoc "version" for various pref update hacks we need to do
-pref("extensions.torbutton.pref_fixup_version", 0);
+pref("extensions.i2pbutton.pref_fixup_version", 0);
 
 // If we are bundling fonts, whitelist those bundled fonts, and restrict system fonts to a selection.
 

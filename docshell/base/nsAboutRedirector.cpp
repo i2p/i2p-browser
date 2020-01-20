@@ -129,7 +129,7 @@ static const RedirEntry kRedirMap[] = {
      nsIAboutModule::HIDE_FROM_ABOUTABOUT |
          nsIAboutModule::URI_CAN_LOAD_IN_CHILD |
          nsIAboutModule::URI_MUST_LOAD_IN_CHILD},
-    {"tor", "chrome://torbutton/content/aboutTor/aboutTor.xhtml",
+    {"tor", "chrome://i2pbutton/content/aboutI2p/aboutI2p.xhtml",
      nsIAboutModule::URI_MUST_LOAD_IN_CHILD |
          nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
          nsIAboutModule::ALLOW_SCRIPT}};

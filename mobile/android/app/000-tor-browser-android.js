@@ -51,4 +51,4 @@ pref("intl.locale.requested", "");
 pref("security.webauth.webauthn_enable_android_fido2", false);
 
 // Disable the External App Blocker on Android
-pref("extensions.torbutton.launch_warning", false);
+pref("extensions.i2pbutton.launch_warning", false);

@@ -35,17 +35,6 @@
                           command="Tools:PrivateBrowsing"
                           key="key_privatebrowsing"/>
                 <menuseparator/>
-                <menuitem id="menu_newIdentity"
-                          accesskey="&torbutton.context_menu.new_identity_key;"
-                          key="torbutton-new-identity-key"
-                          label="&torbutton.context_menu.new_identity;"
-                          oncommand="torbutton_new_identity();"/>
-                <menuitem id="menu_newCircuit"
-                          accesskey="&torbutton.context_menu.new_circuit_key;"
-                          key="torbutton-new-circuit-key"
-                          label="&torbutton.context_menu.new_circuit;"
-                          oncommand="torbutton_new_circuit();"/>
-                <menuseparator/>
                 <menuitem id="menu_openLocation"
                           hidden="true"
                           label="&openLocationCmd.label;"
@@ -580,11 +569,6 @@
                 <box id="helpSafeMode"/>
                 <box id="menu_HelpPopup_reportPhishingtoolmenu"/>
                 <box id="menu_HelpPopup_reportPhishingErrortoolmenu"/>
-                <!-- Add I2P Browser manual link -->
-                <menuitem id="torBrowserUserManual"
-                          oncommand="gBrowser.selectedTab = gBrowser.addTab('https://tb-manual.torproject.org/' + Services.locale.requestedLocale, {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});"
-                          label="&aboutTor.i2pbrowser_user_manual.label;"
-                          accesskey="&aboutTor.i2pbrowser_user_manual.accesskey;"/>
                 <!-- Bug 18905: Hide unused help menu items -->
                 <!-- <menuitem id="menu_openHelp"
                           oncommand="openHelpLink('firefox-help')"

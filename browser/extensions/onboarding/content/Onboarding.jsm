@@ -11,9 +11,9 @@ var EXPORTED_SYMBOLS = ["Onboarding"];
 const { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const ONBOARDING_CSS_URL = "resource://onboarding/onboarding.css";
-const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
+const TORBUTTON_BUNDLE_URI = "chrome://i2pbutton/locale/browserOnboarding.properties";
 const I2PBROWSER_WELCOME_TOUR_NAME_KEY = "onboarding.tour-tor-welcome";
-const BUNDLE_URI = "chrome://torbutton/locale/onboarding.properties";
+const BUNDLE_URI = "chrome://i2pbutton/locale/onboarding.properties";
 const UITOUR_JS_URI = "resource://onboarding/lib/UITour-lib.js";
 const TOUR_AGENT_JS_URI = "resource://onboarding/onboarding-tour-agent.js";
 const BRAND_SHORT_NAME = Services.strings

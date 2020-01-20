@@ -11,5 +11,5 @@ DIRS += [
 
 if not CONFIG['I2P_BROWSER_DISABLE_TOR_LAUNCHER']:
     DIRS += [
-        'tor-launcher',
+        #'tor-launcher',
     ]

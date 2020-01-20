@@ -1464,10 +1464,10 @@ var XPIStates = {
       for (let [id, file] of loc.readAddons()) {
         knownIds.delete(id);
 
-        // Uninstall torbutton if it is installed in the user profile
-        if (id === "torbutton@torproject.org" &&
+        // Uninstall i2pbutton if it is installed in the user profile
+        if (id === "i2pbutton@geti2p.net" &&
             loc.name === KEY_APP_PROFILE) {
-          logger.debug("Uninstalling torbutton from user profile.");
+          logger.debug("Uninstalling i2pbutton from user profile.");
           loc.installer.uninstallAddon(id);
           changed = true;
           continue;

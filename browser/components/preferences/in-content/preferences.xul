@@ -19,8 +19,8 @@
 <?xml-stylesheet href="chrome://browser/content/torpreferences/torPreferences.css"?>
 
 <!DOCTYPE page [
-<!ENTITY % aboutTorDTD SYSTEM "chrome://torbutton/locale/aboutTor.dtd">
-  %aboutTorDTD;
+<!ENTITY % aboutI2pDTD SYSTEM "chrome://i2pbutton/locale/aboutI2p.dtd">
+  %aboutI2pDTD;
 ]>
 
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"

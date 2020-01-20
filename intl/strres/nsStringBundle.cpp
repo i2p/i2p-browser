@@ -81,7 +81,7 @@ static const char kContentBundles[][52] = {
     "chrome://global/locale/xbl.properties",
     "chrome://global/locale/xul.properties",
     "chrome://necko/locale/necko.properties",
-    "chrome://torbutton/locale/onboarding.properties",
+    "chrome://i2pbutton/locale/onboarding.properties",
 };
 
 static bool IsContentBundle(const nsCString& aUrl) {

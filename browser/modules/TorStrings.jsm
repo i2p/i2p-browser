@@ -6,7 +6,7 @@ const { XPCOMUtils } = ChromeUtils.import(
   "resource://gre/modules/XPCOMUtils.jsm"
 );
 const { getLocale } = ChromeUtils.import(
-  "resource://torbutton/modules/utils.js"
+  "resource://i2pbutton/modules/utils.js"
 );
 
 XPCOMUtils.defineLazyGlobalGetters(this, ["DOMParser"]);
@@ -19,7 +19,7 @@ XPCOMUtils.defineLazyGetter(this, "domParser", () => {
 /*
   Tor String Bundle
 
-  Strings loaded from torbutton/tor-launcher, but provide a fallback in case they aren't available
+  Strings loaded from i2pbutton/tor-launcher, but provide a fallback in case they aren't available
 */
 class TorStringBundle {
   constructor(aBundleURLs, aPrefix) {
@@ -73,14 +73,14 @@ var TorStrings = {
   */
   securityLevel: (function() {
     let tsb = new TorStringBundle(
-      ["chrome://torbutton/locale/torbutton.dtd"],
-      "torbutton.prefs.sec_"
+      ["chrome://i2pbutton/locale/i2pbutton.dtd"],
+      "i2pbutton.prefs.sec_"
     );
     let getString = function(key, fallback) {
       return tsb.getString(key, fallback);
     };
 
-    // read localized strings from torbutton; but use hard-coded en-US strings as fallbacks in case of error
+    // read localized strings from i2pbutton; but use hard-coded en-US strings as fallbacks in case of error
     let retval = {
       securityLevel: getString("caption", "Security Level"),
       customWarning: getString("custom_warning", "Custom"),

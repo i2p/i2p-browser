@@ -31,8 +31,7 @@
 <?xml-stylesheet href="chrome://browser/skin/searchbar.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/skin/places/tree-icons.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/skin/places/editBookmark.css" type="text/css"?>
-<?xml-stylesheet href="chrome://torbutton/skin/tor-circuit-display.css" type="text/css"?>
-<?xml-stylesheet href="chrome://torbutton/skin/torbutton.css" type="text/css"?>
+<?xml-stylesheet href="chrome://i2pbutton/skin/i2pbutton.css" type="text/css"?>
 
 # All DTD information is stored in a separate file so that it can be shared by
 # hiddenWindow.xul.
@@ -102,8 +101,7 @@
   Services.scriptloader.loadSubScript("chrome://browser/content/tabbrowser.js", this);
   Services.scriptloader.loadSubScript("chrome://browser/content/search/autocomplete-popup.js", this);
   Services.scriptloader.loadSubScript("chrome://browser/content/search/searchbar.js", this);
-  Services.scriptloader.loadSubScript("chrome://torbutton/content/tor-circuit-display.js", this);
-  Services.scriptloader.loadSubScript("chrome://torbutton/content/torbutton.js", this);
+  Services.scriptloader.loadSubScript("chrome://i2pbutton/content/i2pbutton.js", this);
 
   window.onload = gBrowserInit.onLoad.bind(gBrowserInit);
   window.onunload = gBrowserInit.onUnload.bind(gBrowserInit);
@@ -111,7 +109,7 @@
 
   //onLoad Handler
   try {
-    window.addEventListener("load", torbutton_init, false);
+    window.addEventListener("load", i2pbutton_init, false);
   } catch (e) {}
 
   window.addEventListener("MozBeforeInitialXULLayout",
@@ -1205,16 +1203,6 @@
                      ondragover="newWindowButtonObserver.onDragOver(event)"
                      ondragenter="newWindowButtonObserver.onDragOver(event)"
                      ondragexit="newWindowButtonObserver.onDragExit(event)"/>
-
-      <toolbarbutton id="new-identity-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
-                     label="&torbutton.context_menu.new_identity;"
-                     oncommand="torbutton_new_identity();"
-                     tooltiptext="&torbutton.context_menu.new_identity;"/>
-
-      <toolbarbutton id="new-circuit-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
-                     label="&torbutton.context_menu.new_circuit;"
-                     oncommand="torbutton_new_circuit();"
-                     tooltiptext="&torbutton.context_menu.new_circuit;"/>
 
       <toolbarbutton id="fullscreen-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
                      observes="View:FullScreen"

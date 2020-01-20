@@ -17,11 +17,11 @@ ChromeUtils.defineModuleGetter(
 /*
   Security Level Prefs
 
-  Getters and Setters for relevant torbutton prefs
+  Getters and Setters for relevant i2pbutton prefs
 */
 const SecurityLevelPrefs = {
-  security_slider_pref : "extensions.torbutton.security_slider",
-  security_custom_pref : "extensions.torbutton.security_custom",
+  security_slider_pref : "extensions.i2pbutton.security_slider",
+  security_custom_pref : "extensions.i2pbutton.security_custom",
 
   get securitySlider() {
     try {
@@ -117,7 +117,7 @@ const SecurityLevelButton = {
     this._populateXUL(button);
     this._configUIFromPrefs(button);
 
-    this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
+    this._securityPrefsBranch = Services.prefs.getBranch("extensions.i2pbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
 
     CustomizableUI.addListener(this);
@@ -259,7 +259,7 @@ const SecurityLevelPanel = {
   },
 
   init : function() {
-    this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
+    this._securityPrefsBranch = Services.prefs.getBranch("extensions.i2pbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
   },
 
@@ -432,7 +432,7 @@ const SecurityLevelPreferences =
     this._configUIFromPrefs();
 
     // register for pref chagnes
-    this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
+    this._securityPrefsBranch = Services.prefs.getBranch("extensions.i2pbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
   },
 

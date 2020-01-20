@@ -18,9 +18,9 @@
 %reportphishDTD;
 <!ENTITY % editBookmarkOverlayDTD SYSTEM "chrome://browser/locale/places/editBookmarkOverlay.dtd">
 %editBookmarkOverlayDTD;
-<!ENTITY % torbuttonDTD SYSTEM "chrome://torbutton/locale/torbutton.dtd">
-%torbuttonDTD;
-<!ENTITY % aboutTorDTD SYSTEM "chrome://torbutton/locale/aboutTor.dtd">
+<!ENTITY % i2pbuttonDTD SYSTEM "chrome://i2pbutton/locale/i2pbutton.dtd">
+%i2pbuttonDTD;
+<!ENTITY % aboutI2pDTD SYSTEM "chrome://i2pbutton/locale/aboutI2p.dtd">
 %aboutTorDTD;
-<!ENTITY % aboutDialogDTD SYSTEM "chrome://torbutton/locale/aboutDialog.dtd">
+<!ENTITY % aboutDialogDTD SYSTEM "chrome://i2pbutton/locale/aboutDialog.dtd">
 %aboutDialogDTD;

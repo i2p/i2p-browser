@@ -1655,7 +1655,7 @@ static nsresult GetOverrideStringBundleForLocale(nsIStringBundleService* aSBS,
   NS_ENSURE_ARG(aResult);
 
   const char* kFormatStr =
-      "jar:%s!/chrome/torbutton/locale/%s/torbutton.properties";
+      "jar:%s!/chrome/i2pbutton/locale/%s/i2pbutton.properties";
   nsPrintfCString strBundleURL(kFormatStr, aTorbuttonURI, aLocale);
   nsresult rv = aSBS->CreateBundle(strBundleURL.get(), aResult);
   NS_ENSURE_SUCCESS(rv, rv);

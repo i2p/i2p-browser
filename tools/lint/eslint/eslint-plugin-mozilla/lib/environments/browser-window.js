@@ -77,8 +77,8 @@ function getGlobalScriptIncludes(scriptPath) {
         .replace("chrome://browser/content/", "browser/base/content/")
         .replace("chrome://global/content/", "toolkit/content/")
         .replace(
-          "chrome://torbutton/content/",
-          "toolkit/torproject/torbutton/chrome/content/"
+          "chrome://i2pbutton/content/",
+          "toolkit/torproject/i2pbutton/chrome/content/"
         );
 
       for (let mapping of Object.getOwnPropertyNames(MAPPINGS)) {
