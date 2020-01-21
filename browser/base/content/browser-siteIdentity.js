@@ -114,7 +114,11 @@ var gIdentityHandler = {
   },
 
   get _uriIsOnionHost() {
-    return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".onion") : false;
+    var onion = this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".onion") : false;
+    if (!onion) {
+      onion = this._uri.host.toLowerCase().endsWith(".i2p");
+    }
+    return onion;
   },
 
   // smart getters

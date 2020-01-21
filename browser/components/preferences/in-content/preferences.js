@@ -93,13 +93,18 @@ function init_all() {
     document.getElementById("template-paneSync").remove();
   }
   register_module("paneSearchResults", gSearchResultsPane);
+  /*
   if (gTorPane.enabled) {
     document.getElementById("category-tor").hidden = false;
     register_module("paneTor", gTorPane);
+
   } else {
     // Remove the pane from the DOM so it doesn't get incorrectly included in search results.
     document.getElementById("template-paneTor").remove();
-  }
+  }*/
+  try {
+    document.getElementById("template-paneTor").remove();
+  } catch (e) {}
 
   gSearchResultsPane.init();
   gMainPane.preInit();
@@ -122,7 +127,7 @@ function init_all() {
 
   gotoPref().then(() => {
     let helpButton = document.getElementById("helpButton");
-    helpButton.setAttribute("href", "https://support.torproject.org/tbb");
+    helpButton.setAttribute("href", "https://geti2p.net/en/browser");
 
     document.getElementById("addonsButton").addEventListener("click", () => {
       let mainWindow = window.docShell.rootTreeItem.domWindow;

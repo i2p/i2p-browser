@@ -2,9 +2,6 @@
 
 var EXPORTED_SYMBOLS = ["BridgeDB"];
 
-const { TorLauncherBridgeDB } = ChromeUtils.import(
-  "resource://torlauncher/modules/tl-bridgedb.jsm"
-);
 const { TorProtocolService } = ChromeUtils.import(
   "resource:///modules/TorProtocolService.jsm"
 );
@@ -84,7 +81,6 @@ var BridgeDB = {
       }
     }
 
-    this._moatRequestor = TorLauncherBridgeDB.createMoatRequestor();
 
     return this._moatRequestor
       .init(aProxyURI, meekTransport, meekClientPath, meekClientArgs)

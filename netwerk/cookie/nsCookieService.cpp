@@ -3019,6 +3019,9 @@ static bool IsSecureHost(nsIURI* aHostURI) {
     rv = aHostURI->GetAsciiHost(hostFromURI);
     if (NS_SUCCEEDED(rv)) {
       isSecure = StringEndsWith(hostFromURI, NS_LITERAL_CSTRING(".onion"));
+      if (!isSecure) {
+        isSecure = StringEndsWith(hostFromURI, NS_LITERAL_CSTRING(".i2p"));
+      }
     }
   }
   return isSecure;

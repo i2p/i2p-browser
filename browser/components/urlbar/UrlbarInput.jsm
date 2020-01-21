@@ -49,8 +49,10 @@ class UrlbarInput {
    *   Intended for use in unit tests only.
    */
   constructor(options = {}) {
-    this.textbox = options.textbox;
-    this.textbox.clickSelectsAll = UrlbarPrefs.get("clickSelectsAll");
+    try {
+      this.textbox = options.textbox;
+      this.textbox.clickSelectsAll = UrlbarPrefs.get("clickSelectsAll");
+    } catch (e) {}
 
     this.window = this.textbox.ownerGlobal;
     this.document = this.window.document;

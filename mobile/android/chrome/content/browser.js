@@ -6826,7 +6826,7 @@ var IdentityHandler = {
 
   isOnionHost: function isOnionHost() {
     try {
-      return this._uri.host.toLowerCase().endsWith(".onion");
+      return (this._uri.host.toLowerCase().endsWith(".onion") || this._uri.host.toLowerCase().endsWith(".i2p"));
     } catch (e) {
       // If something goes wrong (e.g. host is an exception
       // because this is an about: page) just fall back

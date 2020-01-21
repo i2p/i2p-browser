@@ -21,6 +21,6 @@
 <!ENTITY % i2pbuttonDTD SYSTEM "chrome://i2pbutton/locale/i2pbutton.dtd">
 %i2pbuttonDTD;
 <!ENTITY % aboutI2pDTD SYSTEM "chrome://i2pbutton/locale/aboutI2p.dtd">
-%aboutTorDTD;
+%aboutI2pDTD;
 <!ENTITY % aboutDialogDTD SYSTEM "chrome://i2pbutton/locale/aboutDialog.dtd">
 %aboutDialogDTD;

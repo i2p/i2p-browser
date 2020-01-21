@@ -9647,7 +9647,7 @@ void nsHttpChannel::SetOriginHeader() {
   if (dom::ReferrerInfo::HideOnionReferrerSource()) {
     nsAutoCString host;
     if (referrer && NS_SUCCEEDED(referrer->GetAsciiHost(host)) &&
-        StringEndsWith(host, NS_LITERAL_CSTRING(".onion")) &&
+        (StringEndsWith(host, NS_LITERAL_CSTRING(".onion")) || StringEndsWith(host, NS_LITERAL_CSTRING(".i2p"))) &&
         dom::ReferrerInfo::IsCrossOriginRequest(this)) {
       origin.AssignLiteral("null");
     }

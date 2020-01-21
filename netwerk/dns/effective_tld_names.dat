@@ -5484,6 +5484,7 @@ pro.om
 
 // onion : https://tools.ietf.org/html/rfc7686
 onion
+i2p
 
 // org : https://en.wikipedia.org/wiki/.org
 org

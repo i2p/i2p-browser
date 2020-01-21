@@ -230,7 +230,7 @@ nsresult ReferrerInfo::HandleUserXOriginSendingPolicy(nsIURI* aURI,
 
   // Send an empty referrer if xorigin and leaving a .onion domain.
   if (sUserHideOnionReferrerSource && !uriHost.Equals(referrerHost) &&
-      StringEndsWith(referrerHost, NS_LITERAL_CSTRING(".onion"))) {
+      (StringEndsWith(referrerHost, NS_LITERAL_CSTRING(".onion")) || StringEndsWith(referrerHost, NS_LITERAL_CSTRING(".i2p")))) {
     return NS_OK;
   }
 

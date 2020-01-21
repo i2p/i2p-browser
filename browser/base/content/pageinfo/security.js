@@ -64,7 +64,7 @@ var security = {
     var isInsecure = ui.state & Ci.nsIWebProgressListener.STATE_IS_INSECURE;
     var isEV = ui.state & Ci.nsIWebProgressListener.STATE_IDENTITY_EV_TOPLEVEL;
     var isOnion = false;
-    if (hostName && hostName.endsWith(".onion")) {
+    if ((hostName && hostName.endsWith(".onion")) || (hostName && hostName.endsWith(".i2p"))) {
       isOnion = true;
     }
     var secInfo = ui.secInfo;

@@ -2,14 +2,8 @@
 
 var EXPORTED_SYMBOLS = ["TorProtocolService"];
 
-const { TorLauncherUtil } = ChromeUtils.import(
-  "resource://torlauncher/modules/tl-util.jsm"
-);
 
 var TorProtocolService = {
-  _tlps: Cc["@torproject.org/torlauncher-protocol-service;1"].getService(
-    Ci.nsISupports
-  ).wrappedJSObject,
 
   // maintain a map of tor settings set by I2P Browser so that we don't
   // repeatedly set the same key/values over and over

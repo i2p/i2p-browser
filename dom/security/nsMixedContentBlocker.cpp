@@ -401,7 +401,11 @@ bool nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(nsIURI* aURL) {
   nsAutoCString host;
   nsresult rv = aURL->GetHost(host);
   NS_ENSURE_SUCCESS(rv, false);
-  return StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+  bool onion = StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+  if (!onion) {
+    onion = StringEndsWith(host, NS_LITERAL_CSTRING(".i2p"));
+  }
+  return onion;
 }
 
 bool nsMixedContentBlocker::IsPotentiallyTrustworthyOrigin(nsIURI* aURI) {
@@ -756,6 +760,9 @@ nsresult nsMixedContentBlocker::ShouldLoad(
 
     bool parentIsOnion =
         StringEndsWith(parentHost, NS_LITERAL_CSTRING(".onion"));
+    if (!parentIsOnion) {
+      parentIsOnion = StringEndsWith(parentHost, NS_LITERAL_CSTRING(".i2p"));
+    }
     if (!parentIsOnion) {
       *aDecision = ACCEPT;
       return NS_OK;

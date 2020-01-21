@@ -15,7 +15,7 @@ pref("startup.homepage_welcome_url.additional", "");
 // each update manifest should contain attributes similar to:
 //   actions="showURL"
 //   openURL="https://blog.torproject.org/i2p-browser-55a2-released"
-pref("startup.homepage_override_url", "https://blog.torproject.org/category/tags/i2p-browser");
+pref("startup.homepage_override_url", "https://geti2p.net/en/browser");
 
 // Try to nag a bit more about updates: Pop up a restart dialog an hour after the initial dialog
 pref("app.update.promptWaitTime", 3600);

@@ -984,7 +984,7 @@ nsresult nsCORSListenerProxy::UpdateChannel(nsIChannel* aChannel,
     NS_ENSURE_SUCCESS(rv, rv);
 
     if (!currentOrgin.EqualsIgnoreCase(origin.get()) &&
-        StringEndsWith(potentialOnionHost, NS_LITERAL_CSTRING(".onion"))) {
+        (StringEndsWith(potentialOnionHost, NS_LITERAL_CSTRING(".onion")) || StringEndsWith(potentialOnionHost, NS_LITERAL_CSTRING(".i2p")))) {
       origin.AssignLiteral("null");
     }
   }
