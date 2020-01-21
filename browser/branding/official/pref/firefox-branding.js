@@ -15,7 +15,7 @@ pref("app.update.promptWaitTime", 3600);
 // update" link supplied in the "An update is available" page of the update
 // wizard.
 
-pref("app.update.url.manual", "https://www.torproject.org/download/languages/");
+pref("app.update.url.manual", "");
 pref("app.update.url.details", "https://www.torproject.org/download/");
 
 // The number of days a binary is permitted to be old
