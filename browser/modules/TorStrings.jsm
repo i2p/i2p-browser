@@ -158,7 +158,7 @@ var TorStrings = {
   */
   settings: (function() {
     let tsb = new TorStringBundle(
-      ["chrome://torlauncher/locale/network-settings.dtd"],
+      ["chrome://i2pbutton/locale/network-settings.dtd"],
       ""
     );
     let getString = function(key, fallback) {

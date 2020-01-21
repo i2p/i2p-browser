@@ -246,11 +246,6 @@
 @RESPATH@/browser/chrome/browser.manifest
 @RESPATH@/browser/chrome/pdfjs.manifest
 @RESPATH@/browser/chrome/pdfjs/*
-#ifndef I2P_BROWSER_DISABLE_TOR_LAUNCHER
-@RESPATH@/browser/chrome/torlauncher.manifest
-@RESPATH@/browser/chrome/torlauncher/*
-@RESPATH@/browser/@PREF_DIR@/torlauncher-prefs.js
-#endif
 @RESPATH@/chrome/i2pbutton.manifest
 @RESPATH@/chrome/i2pbutton/*
 @RESPATH@/chrome/toolkit@JAREXT@
